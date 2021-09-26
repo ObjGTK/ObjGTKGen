@@ -1,33 +1,61 @@
 #Executable
-EXECUTABLE=coregtkgen
+EXECUTABLE=objgtkgen
 
 #Sources
-SOURCES=main.m XMLReader/XMLReader.m GIR/GIRApi.m GIR/GIRArray.m GIR/GIRBase.m GIR/GIRClass.m GIR/GIRConstant.m GIR/GIRConstructor.m GIR/GIRDoc.m GIR/GIREnumeration.m GIR/GIRField.m GIR/GIRFunction.m GIR/GIRImplements.m GIR/GIRInterface.m GIR/GIRParameter.m GIR/GIRProperty.m GIR/GIRMember.m GIR/GIRMethod.m GIR/GIRNamespace.m GIR/GIRPrerequisite.m GIR/GIRReturnValue.m GIR/GIRType.m GIR/GIRVarargs.m GIR/GIRVirtualMethod.m Generator/CGTKClassWriter.m Generator/CGTKClass.m Generator/CGTKMethod.m Generator/CGTKParameter.m Generator/CGTKUtil.m Gir2Objc.m
+SOURCES=CoreGTKGen.m \
+	XMLReader/XMLReader.m \
+	GIR/GIRApi.m \
+	GIR/GIRArray.m \
+	GIR/GIRBase.m \
+	GIR/GIRClass.m \
+	GIR/GIRConstant.m \
+	GIR/GIRConstructor.m \
+	GIR/GIRDoc.m \
+	GIR/GIREnumeration.m \
+	GIR/GIRField.m \
+	GIR/GIRFunction.m \
+	GIR/GIRImplements.m \
+	GIR/GIRInterface.m \
+	GIR/GIRParameter.m \
+	GIR/GIRProperty.m \
+	GIR/GIRMember.m \
+	GIR/GIRMethod.m \
+	GIR/GIRNamespace.m \
+	GIR/GIRPrerequisite.m \
+	GIR/GIRReturnValue.m \
+	GIR/GIRType.m \
+	GIR/GIRVarargs.m \
+	GIR/GIRVirtualMethod.m \
+	Generator/CGTKClassWriter.m \
+	Generator/CGTKClass.m \
+	Generator/CGTKMethod.m \
+	Generator/CGTKParameter.m \
+	Generator/CGTKUtil.m \
+	Gir2Objc.m \
+	Exceptions/OGTKIncorrectConfigException.m \
+	Exceptions/OGTKNoGIRAPIException.m \
+	Exceptions/OGTKNoGIRDictException.m
 
 #Objects
 OBJECTS=$(SOURCES:.m=.o)
 
 #compiler
-CC=gcc
+CC=clang
 
 #CFLAGS
-CFLAGS=-c -Wall
+#CFLAGS=-c -Wall
 
 #Objective-c specific flags
-OBJCFLAGS=`gnustep-config --objc-flags` `pkg-config --cflags gtk+-3.0`
+OBJCFLAGS=$$(objfw-config --objcflags)
 
 #Objective-c specific flags
-MACOBJCFLAGS=-framework Foundation
-
-#GNUstep dependencies
-GNUSTEPDEPS=`gnustep-config --base-libs`
+MACOBJCFLAGS=-$$(objfw-config --objcflags)
 
 #GTK dependencies
 GTKDEPS=`pkg-config --libs gtk+-3.0`
 
 #Common flags
-COMMONFLAGS=$(OBJCFLAGS) $(GNUSTEPDEPS) $(GTKDEPS)
-
+COMMONFLAGS=$(OBJCFLAGS) $(GTKDEPS)
 
 #Targets
 
@@ -56,6 +84,7 @@ clean:
 	rm -rf Generator/*.o Generator/*.d
 	rm -rf GIR/*.o GIR/*.d
 	rm -rf XMLReader/*.o XMLReader/*.d
+	rm -rf Exceptions/*.o Exceptions/*.d
 #Uncomment these if you want to also clean the generated source files
 #	rm -rf Output/CoreGTK/*.h
 #	rm -rf Output/CoreGTK/*.m

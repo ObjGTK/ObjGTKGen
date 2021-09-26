@@ -20,43 +20,42 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
+
 
 /*
  * Objective-C imports
  */
 #import <ObjFW/ObjFW.h>
 
-#import "CGTKUtil.h"
 #import "CGTKParameter.h"
+#import "CGTKUtil.h"
 
 /**
  * Abstracts Method operations
  */
-@interface CGTKMethod : NSObject
-{
-	NSString *cName;
-	NSString *cReturnType;
-	NSArray *parameters;
+@interface CGTKMethod : OFObject {
+    OFString* cName;
+    OFString* cReturnType;
+    OFArray* parameters;
 }
 
--(void)setCName:(NSString *)name;
--(NSString *)cName;
+- (void)setCName:(OFString*)name;
+- (OFString*)cName;
 
--(NSString *)name;
--(NSString *)sig;
+- (OFString*)name;
+- (OFString*)sig;
 
--(void)setCReturnType:(NSString *)returnType;
--(NSString *)cReturnType;
+- (void)setCReturnType:(OFString*)returnType;
+- (OFString*)cReturnType;
 
--(NSString *)returnType;
--(BOOL)returnsVoid;
+- (OFString*)returnType;
+- (bool)returnsVoid;
 
--(void)setParameters:(NSArray *) params;
--(NSArray *)parameters;
+- (void)setParameters:(OFArray*)params;
+- (OFArray*)parameters;
 
 @end

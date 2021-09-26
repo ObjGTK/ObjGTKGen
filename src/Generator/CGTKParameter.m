@@ -20,93 +20,79 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
  * Objective-C imports
  */
-#import "Generator/CGTKParameter.h"
+#import "CGTKParameter.h"
 
 /**
  * Abstracts Parameter operations
  */
 @implementation CGTKParameter
 
--(id)init
+- (id)init
 {
-	self = [super init];
+    self = [super init];
 
-	if(self)
-	{
-		// Do nothing
-	}
-
-	return self;
+    return self;
 }
 
--(void)setCType:(NSString *)type
+- (void)setCType:(OFString*)type
 {
-	if(cType != nil)
-	{
-		[cType release];
-	}
-	
-	if(type == nil)
-	{
-		cType = nil;
-	}
-	else
-	{
-		cType = [type retain];
-	}
+    if (cType != nil) {
+        [cType release];
+    }
+
+    if (type == nil) {
+        cType = nil;
+    } else {
+        cType = [type retain];
+    }
 }
 
--(NSString *)cType
+- (OFString*)cType
 {
-	return [[cType retain] autorelease];
+    return [[cType retain] autorelease];
 }
 
--(NSString *)type
+- (OFString*)type
 {
-	return [CGTKUtil swapTypes:[self cType]];
+    return [CGTKUtil swapTypes:[self cType]];
 }
 
--(void)setCName:(NSString *)name
+- (void)setCName:(OFString*)name
 {
-	if(cName != nil)
-	{
-		[cName release];
-	}
-	
-	if(name == nil)
-	{
-		cName = nil;
-	}
-	else
-	{
-		cName = [name retain];
-	}
+    if (cName != nil) {
+        [cName release];
+    }
+
+    if (name == nil) {
+        cName = nil;
+    } else {
+        cName = [name retain];
+    }
 }
 
--(NSString *)cName
+- (OFString*)cName
 {
-	return [[cName retain] autorelease];
+    return [[cName retain] autorelease];
 }
 
--(NSString *)name
+- (OFString*)name
 {
-	return [CGTKUtil convertUSSToCamelCase:cName];
+    return [CGTKUtil convertUSSToCamelCase:cName];
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[cType release];
-	[cName release];
-	[super dealloc];
+    [cType release];
+    [cName release];
+    [super dealloc];
 }
 
 @end

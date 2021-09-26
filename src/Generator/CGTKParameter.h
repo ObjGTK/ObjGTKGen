@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -36,18 +35,17 @@
 /**
  * Abstracts Parameter operations
  */
-@interface CGTKParameter : NSObject
-{
-	NSString *cType;
-	NSString *cName;
+@interface CGTKParameter : OFObject {
+    OFString* cType;
+    OFString* cName;
 }
 
--(void)setCType:(NSString *)type;
--(NSString *)cType;
--(NSString *)type;
+- (void)setCType:(OFString*)type;
+- (OFString*)cType;
+- (OFString*)type;
 
--(void)setCName:(NSString *)name;
--(NSString *)cName;
--(NSString *)name;
+- (void)setCName:(OFString*)name;
+- (OFString*)cName;
+- (OFString*)name;
 
 @end

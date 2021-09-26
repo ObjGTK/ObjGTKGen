@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -36,39 +35,38 @@
 /**
  * Abstracts Class operations
  */
-@interface CGTKClass : NSObject
-{
-	NSString *cName;
-	NSString *cType;
-	NSString *cParentType;
-	NSMutableArray *constructors;
-	NSMutableArray *functions;
-	NSMutableArray *methods;
+@interface CGTKClass : OFObject {
+    OFString* cName;
+    OFString* cType;
+    OFString* cParentType;
+    OFMutableArray* constructors;
+    OFMutableArray* functions;
+    OFMutableArray* methods;
 }
 
--(void)setCName:(NSString *)name;
--(NSString *)cName;
+- (void)setCName:(OFString*)name;
+- (OFString*)cName;
 
--(void)setCType:(NSString *)type;
--(NSString *)cType;
+- (void)setCType:(OFString*)type;
+- (OFString*)cType;
 
--(NSString *)type;
+- (OFString*)type;
 
--(void)setCParentType:(NSString *)type;
--(NSString *)cParentType;
+- (void)setCParentType:(OFString*)type;
+- (OFString*)cParentType;
 
--(NSString *)name;
+- (OFString*)name;
 
--(void)addConstructor:(CGTKMethod *)ctor;
--(NSArray *)constructors;
--(BOOL)hasConstructors;
+- (void)addConstructor:(CGTKMethod*)ctor;
+- (OFArray*)constructors;
+- (bool)hasConstructors;
 
--(void)addFunction:(CGTKMethod *)fun;
--(NSArray *)functions;
--(BOOL)hasFunctions;
+- (void)addFunction:(CGTKMethod*)fun;
+- (OFArray*)functions;
+- (bool)hasFunctions;
 
--(void)addMethod:(CGTKMethod *)meth;
--(NSArray *)methods;
--(BOOL)hasMethods;
+- (void)addMethod:(CGTKMethod*)meth;
+- (OFArray*)methods;
+- (bool)hasMethods;
 
 @end

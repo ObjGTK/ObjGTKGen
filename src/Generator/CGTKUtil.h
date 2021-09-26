@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -34,74 +33,72 @@
 /**
  * Provides useful utility functions for CoreGTKGen
  */
-@interface CGTKUtil : NSObject
-{
-
+@interface CGTKUtil : OFObject {
 }
 
 /**
  * Returns the underscore_separated_string in camelCase 
  */
-+(NSString *)convertUSSToCamelCase:(NSString *)input;
++ (OFString*)convertUSSToCamelCase:(OFString*)input;
 
 /**
  * Returns the underscore_separated_string in CapitalCase
  */
-+(NSString *)convertUSSToCapCase:(NSString *)input;
++ (OFString*)convertUSSToCapCase:(OFString*)input;
 
 /**
  * Returns YES if this type is configured as being swappable
  */
-+(BOOL)isTypeSwappable:(NSString *) str;
++ (BOOL)isTypeSwappable:(OFString*)str;
 
 /**
  * Attempts to swap the type or returns the input if it can't
  */
-+(NSString *)swapTypes:(NSString *) str;
++ (OFString*)swapTypes:(OFString*)str;
 
 /**
  * Converts GTK style type_new_with_param style functions into CoreGTK initWithParam inits. If func doesn't contain "New" or "new" then it will return nil.
  */
-+(NSString *)convertFunctionToInit:(NSString *)func;
++ (OFString*)convertFunctionToInit:(OFString*)func;
 
 /**
  * Returns a super constructor call for the given type. While it takes a cType it currently assumes everything is a GObject (FOR FUTURE USE).
  */
-+(NSString *)getFunctionCallForConstructorOfType:(NSString *) cType withConstructor:(NSString *) cCtor;
++ (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType withConstructor:(OFString*)cCtor;
 
 /**
  * Converts the given fromType to the toType while maintaining the name
  */
-+(NSString *)convertType:(NSString *) fromType withName:(NSString *)name toType:(NSString *) toType;
++ (OFString*)convertType:(OFString*)fromType withName:(OFString*)name toType:(OFString*)toType;
 
 /**
  * Returns the appropriate self referencing call for the type (i.e. -(type)[self TYPE] or GTK_TYPE([self GOBJECT])
  */
-+(NSString *)selfTypeMethodCall:(NSString *) type;
++ (OFString*)selfTypeMethodCall:(OFString*)type;
 
 /**
  * Adds the prefix to the trimmed method name list
  */
-+(void)addToTrimMethodName:(NSString *)val;
++ (void)addToTrimMethodName:(OFString*)val;
 
 /**
  * Trims method name (i.e. removes things like GTK_)
  */
-+(NSString *)trimMethodName:(NSString *)meth;
++ (OFString*)trimMethodName:(OFString*)meth;
 
 /**
  * Gets a list of extra imports for the class
  */
-+(NSArray *)extraImports:(NSString *)clazz;
++ (OFArray*)extraImports:(OFString*)clazz;
 
 /**
  * Gets a list of extra methods for the class
  */
-+(NSDictionary *)extraMethods:(NSString *)clazz;
++ (OFDictionary*)extraMethods:(OFString*)clazz;
 
 /**
  * Returns the configuration value for the provided key
  */
-+(id)globalConfigValueFor:(NSString *)key;
++ (id)globalConfigValueFor:(OFString*)key;
 
 @end

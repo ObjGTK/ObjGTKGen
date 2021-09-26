@@ -30,46 +30,44 @@
  */
 #import <ObjFW/ObjFW.h>
 
-#import "CGTKUtil.h"
 #import "CGTKClass.h"
+#import "CGTKUtil.h"
 
 /**
  * Functions to write in memory Class representation to file as CoreGTK source
  */
-@interface CGTKClassWriter : OFObject
-{
-
+@interface CGTKClassWriter : OFObject {
 }
 
 /**
  * Generate both header and source files based on class and save them in outputDir
  */
-+(void)generateFilesForClass:(CGTKClass *) cgtkClass inDir:(OFString *) outputDir;
++ (void)generateFilesForClass:(CGTKClass*)cgtkClass inDir:(OFString*)outputDir;
 
 /**
  * Generate header file contents based on class
  */
-+(OFString *)headerStringFor:(CGTKClass *) cgtkClass;
++ (OFString*)headerStringFor:(CGTKClass*)cgtkClass;
 
 /**
  * Generate source file contents based on class
  */
-+(OFString *)sourceStringFor:(CGTKClass *) cgtkClass;
++ (OFString*)sourceStringFor:(CGTKClass*)cgtkClass;
 
 /**
  * Generate list of paramters to pass to underlying C function
  */
-+(OFString *)generateCParameterListString:(OFArray *) params;
-+(OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType andParams:(OFArray *) params;
++ (OFString*)generateCParameterListString:(OFArray*)params;
++ (OFString*)generateCParameterListWithInstanceString:(OFString*)instanceType andParams:(OFArray*)params;
 
 /**
  * Reads the text from conf/license.txt and replaces "@@@FILENAME@@@" with fileName
  */
-+(OFString *)generateLicense:(OFString *)fileName;
++ (OFString*)generateLicense:(OFString*)fileName;
 
 /**
  * Uses the information in the method to return documentation for the method
  */
-+(OFString *)generateDocumentationForMethod:(CGTKMethod *)meth;
++ (OFString*)generateDocumentationForMethod:(CGTKMethod*)meth;
 
 @end
