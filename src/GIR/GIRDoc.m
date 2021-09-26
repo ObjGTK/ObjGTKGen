@@ -25,9 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRDoc.h"
 
 @implementation GIRDoc
@@ -36,61 +33,47 @@
 @synthesize xmlWhitespace;
 @synthesize docText;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRDoc";
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRDoc";
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"])
-		{
-			self.docText = value;
-		}
-		else if([key isEqual:@"xml:space"])
-		{
-			self.xmlSpace = value;
-		}
-		else if([key isEqual:@"xml:whitespace"])
-		{
-			self.xmlWhitespace = value;
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]) {
+            self.docText = value;
+        } else if ([key isEqual:@"xml:space"]) {
+            self.xmlSpace = value;
+        } else if ([key isEqual:@"xml:whitespace"]) {
+            self.xmlWhitespace = value;
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[xmlSpace release];
-	[xmlWhitespace release];
-	[docText release];
-	[super dealloc];
+    [xmlSpace release];
+    [xmlWhitespace release];
+    [docText release];
+    [super dealloc];
 }
 
 @end

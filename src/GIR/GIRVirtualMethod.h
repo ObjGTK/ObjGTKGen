@@ -25,15 +25,11 @@
  * See the ChangeLog files for a list of changes.
  */
 
+#import <ObjFW/ObjFW.h>
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRMethod.h"
+#import "GIRMethod.h"
 
-@interface GIRVirtualMethod : GIRMethod
-{
-
+@interface GIRVirtualMethod : GIRMethod {
 }
 
 @end

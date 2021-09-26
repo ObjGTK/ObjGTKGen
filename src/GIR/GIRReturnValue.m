@@ -25,9 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRReturnValue.h"
 
 @implementation GIRReturnValue
@@ -37,70 +34,52 @@
 @synthesize type;
 @synthesize array;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRReturnValue";
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRReturnValue";
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"])
-		{
-			// Do nothing
-		}
-		else if([key isEqual:@"transfer-ownership"])
-		{
-			self.transferOwnership = value;
-		}		
-		else if([key isEqual:@"doc"])
-		{
-			self.doc = [[GIRDoc alloc] initWithDictionary:value];
-		}			
-		else if([key isEqual:@"type"])
-		{
-			self.type = [[GIRType alloc] initWithDictionary:value];
-		}	
-		else if([key isEqual:@"array"])
-		{
-			self.array = [[GIRArray alloc] initWithDictionary:value];
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]) {
+            // Do nothing
+        } else if ([key isEqual:@"transfer-ownership"]) {
+            self.transferOwnership = value;
+        } else if ([key isEqual:@"doc"]) {
+            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"type"]) {
+            self.type = [[GIRType alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"array"]) {
+            self.array = [[GIRArray alloc] initWithDictionary:value];
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[transferOwnership release];
-	[doc release];
-	[type release];
-	[array release];
-	[super dealloc];
+    [transferOwnership release];
+    [doc release];
+    [type release];
+    [array release];
+    [super dealloc];
 }
 
 @end

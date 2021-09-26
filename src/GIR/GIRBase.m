@@ -25,10 +25,9 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRBase.h"
+#include <ObjFWRT/ObjFWRT.h>
+#include <ObjFW/OFNotImplementedException.h>
 
 @implementation GIRBase
 
@@ -37,95 +36,82 @@
 
 LogLevel __logLevel = Info;
 
-+(void)setLogLevel:(LogLevel) level
++ (void)setLogLevel:(LogLevel)level
 {
-	__logLevel = level;
+    __logLevel = level;
 }
 
-+(void)log:(NSString *)message andLevel:(LogLevel) level
++ (void)log:(OFString*)message andLevel:(LogLevel)level
 {
-	if(level >= __logLevel)
-	{
-		NSString *levelDescription = nil;
-		
-		switch(level)
-		{
-			case Debug:
-				levelDescription = @"Debug";
-			break;
-			case Info:
-				levelDescription = @"Info";
-			break;
-			case Warning:
-				levelDescription = @"Warning";
-			break;
-			case Error:
-				levelDescription = @"Error";
-			break;
-			default:
-				levelDescription = @"Unkown";
-			break;
-		}
-	
-		NSLog(@"[%@] %@", levelDescription, message);
-	}
+    if (level >= __logLevel) {
+        OFString* levelDescription = nil;
+
+        switch (level) {
+        case Debug:
+            levelDescription = @"Debug";
+            break;
+        case Info:
+            levelDescription = @"Info";
+            break;
+        case Warning:
+            levelDescription = @"Warning";
+            break;
+        case Error:
+            levelDescription = @"Error";
+            break;
+        default:
+            levelDescription = @"Unkown";
+            break;
+        }
+
+        OFLog(@"[%@] %@", levelDescription, message);
+    }
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	[NSException raise:NSInternalInconsistencyException 
-            format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+	@throw [OFNotImplementedException exceptionWithSelector:@selector(_cmd) object:self];
 }
 
--(void)processArrayOrDictionary:(id) values withClass:(Class) clazz andArray:(NSMutableArray *) array;
+- (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray*)array;
 {
-	// If the values are a dictionary call it directly
-	if([values isKindOfClass:[NSDictionary class]])
-	{
-		id obj = [[clazz alloc] init];
-		
-		if([obj conformsToProtocol:@protocol(GIRParseDictionary)])
-		{
-			[obj parseDictionary:values];
-			[array addObject:obj];
-		}
-	}
-	else if([values isKindOfClass:[NSArray class]])
-	{
-		for(id object in values)
-		{		
-			[self processArrayOrDictionary:object withClass:clazz andArray:array];
-		}
-	}
+    // If the values are a dictionary call it directly
+    if ([values isKindOfClass:[OFDictionary class]]) {
+        id obj = [[clazz alloc] init];
+
+        if ([obj conformsToProtocol:@protocol(GIRParseDictionary)]) {
+            [obj parseDictionary:values];
+            [array addObject:obj];
+        }
+    } else if ([values isKindOfClass:[OFArray class]]) {
+        for (id object in values) {
+            [self processArrayOrDictionary:object withClass:clazz andArray:array];
+        }
+    }
 }
 
--(void)logUnknownElement:(NSString *) element
+- (void)logUnknownElement:(OFString*)element
 {
-	if(unknownElements == nil)
-	{
-		unknownElements = [[NSMutableDictionary alloc] init];
-	}
-	
-	NSString *hopefullyUniqueKey = [NSString stringWithFormat:@"%@--%@", self.elementTypeName, element];
-	
-	if([unknownElements objectForKey:hopefullyUniqueKey] != nil)
-	{
-		[unknownElements setObject:hopefullyUniqueKey forKey:hopefullyUniqueKey];
-	}
-	else
-	{
-		[GIRBase log:[NSString stringWithFormat:@"[%@]: Found unknown element: [%@]", self.elementTypeName, element] andLevel:Warning];
-	}
+    if (unknownElements == nil) {
+        unknownElements = [[OFMutableDictionary alloc] init];
+    }
+
+    OFString* hopefullyUniqueKey = [OFString stringWithFormat:@"%@--%@", self.elementTypeName, element];
+
+    if ([unknownElements objectForKey:hopefullyUniqueKey] != nil) {
+        [unknownElements setObject:hopefullyUniqueKey forKey:hopefullyUniqueKey];
+    } else {
+        [GIRBase log:[OFString stringWithFormat:@"[%@]: Found unknown element: [%@]", self.elementTypeName, element] andLevel:Warning];
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[elementTypeName release];
-	if(unknownElements != nil)
-	{
-		[unknownElements release];
-	}	
-	[super dealloc];
+    [elementTypeName release];
+    if (unknownElements != nil) {
+        [unknownElements release];
+    }
+    [super dealloc];
 }
 
 @end

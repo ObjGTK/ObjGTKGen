@@ -31,7 +31,7 @@
  */
 #import "CGTKBaseBuilder.h"
 
-static BOOL CGTKBuilderDebugMode = NO;
+static bool CGTKBuilderDebugMode = NO;
 
 static void  gtkbuilder_connect_signals_handler(GtkBuilder *builder, GObject *object, const gchar *signal_name, const gchar *handler_name, GObject *connect_object, GConnectFlags flags, gpointer user_data)
 {	
@@ -71,7 +71,7 @@ static void  gtkbuilder_connect_signals_handler(GtkBuilder *builder, GObject *ob
 
 @implementation CGTKBaseBuilder
 
-+(void)setDebug:(BOOL)debugEnabled
++(void)setDebug:(bool)debugEnabled
 {
 	CGTKBuilderDebugMode = debugEnabled;
 }

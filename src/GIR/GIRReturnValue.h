@@ -25,25 +25,23 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRArray.h"
-#import "GIR/GIRBase.h"
-#import "GIR/GIRDoc.h"
-#import "GIR/GIRType.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRReturnValue : GIRBase
-{
-	NSString *transferOwnership;
-	GIRDoc *doc;
-	GIRType *type;
-	GIRArray *array;
+#import "GIRArray.h"
+#import "GIRBase.h"
+#import "GIRDoc.h"
+#import "GIRType.h"
+
+@interface GIRReturnValue : GIRBase {
+    OFString* transferOwnership;
+    GIRDoc* doc;
+    GIRType* type;
+    GIRArray* array;
 }
 
-@property (nonatomic, retain) NSString *transferOwnership;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) GIRType *type;
-@property (nonatomic, retain) GIRArray *array;
+@property (nonatomic, retain) OFString* transferOwnership;
+@property (nonatomic, retain) GIRDoc* doc;
+@property (nonatomic, retain) GIRType* type;
+@property (nonatomic, retain) GIRArray* array;
 
 @end

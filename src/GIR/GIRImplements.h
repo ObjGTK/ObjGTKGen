@@ -25,16 +25,14 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRImplements : GIRBase
-{
-	NSString *name;
+#import "GIRBase.h"
+
+@interface GIRImplements : GIRBase {
+    OFString* name;
 }
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) OFString* name;
 
 @end

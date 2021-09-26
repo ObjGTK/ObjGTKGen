@@ -25,9 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import <ObjFW/ObjFW.h>
 
 #import "CGTKMethod.h"

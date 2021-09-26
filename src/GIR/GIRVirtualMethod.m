@@ -25,57 +25,44 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRVirtualMethod.h"
 
 @implementation GIRVirtualMethod
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRVirtualMethod";
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRVirtualMethod";
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-		
-		if([super tryParseWithKey:key andValue:value])
-		{
-			// Parsed OK by GIRMethod
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([super tryParseWithKey:key andValue:value]) {
+            // Parsed OK by GIRMethod
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[super dealloc];
+    [super dealloc];
 }
 
 @end

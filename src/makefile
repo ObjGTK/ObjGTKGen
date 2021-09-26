@@ -43,19 +43,21 @@ OBJECTS=$(SOURCES:.m=.o)
 CC=clang
 
 #CFLAGS
-#CFLAGS=-c -Wall
+CFLAGS=`objfw-config --cppflags`
 
 #Objective-c specific flags
-OBJCFLAGS=$$(objfw-config --objcflags)
+OBJCFLAGS=`objfw-config --objcflags`
 
 #Objective-c specific flags
-MACOBJCFLAGS=-$$(objfw-config --objcflags)
+MACOBJCFLAGS=$(OBJCFLAGS)
 
 #GTK dependencies
 GTKDEPS=`pkg-config --libs gtk+-3.0`
 
+LIBS=`objfw-config --rpath --libs` $(GTKDEPS)
+
 #Common flags
-COMMONFLAGS=$(OBJCFLAGS) $(GTKDEPS)
+COMMONFLAGS=$(CFLAGS) $(OBJCFLAGS)
 
 #Targets
 
@@ -73,10 +75,10 @@ windows: all
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(COMMONFLAGS) -o $@
+	$(CC) $(OBJECTS) $(LIBS) -o $@
 
 %.o: %.m
-	$(CC) $(CFLAGS) $(COMMONFLAGS) $< -o $@
+	$(CC) $(COMMONFLAGS) -c -Wall $< -o $@
 
 clean: 
 	rm -rf *.o *.d $(EXECUTABLE)

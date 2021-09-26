@@ -55,7 +55,7 @@ static OFMutableDictionary* dictExtraMethods;
     OFMutableString* output = [[[OFMutableString alloc] init] autorelease];
     OFArray* inputItems = [input componentsSeparatedByString:@"_"];
 
-    BOOL previousItemWasSingleChar = NO;
+    bool previousItemWasSingleChar = false;
 
     for (OFString* item in inputItems) {
         if ([item length] > 1) {
@@ -65,17 +65,17 @@ static OFMutableDictionary* dictExtraMethods;
             } else {
                 [output appendFormat:@"%@%@", [[item substringToIndex:1] uppercaseString], [item substringFromIndex:1]];
             }
-            previousItemWasSingleChar = NO;
+            previousItemWasSingleChar = false;
         } else {
             [output appendString:[item uppercaseString]];
-            previousItemWasSingleChar = YES;
+            previousItemWasSingleChar = true;
         }
     }
 
     return output;
 }
 
-+ (BOOL)isTypeSwappable:(OFString*)str
++ (bool)isTypeSwappable:(OFString*)str
 {
     return [str isEqual:@"OFArray*"] || ![[CGTKUtil swapTypes:str] isEqual:str];
 }

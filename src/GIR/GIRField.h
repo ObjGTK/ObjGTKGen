@@ -25,28 +25,26 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRArray.h"
-#import "GIR/GIRBase.h"
-#import "GIR/GIRType.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRField : GIRBase
-{
-	NSString *name;
-	BOOL isPrivate;
-	BOOL readable;
-	int bits;
-	GIRType *type;
-	GIRArray *array;
+#import "GIRArray.h"
+#import "GIRBase.h"
+#import "GIRType.h"
+
+@interface GIRField : GIRBase {
+    OFString* name;
+    bool isPrivate;
+    bool readable;
+    int bits;
+    GIRType* type;
+    GIRArray* array;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic) BOOL isPrivate;
-@property (nonatomic) BOOL readable;
+@property (nonatomic, retain) OFString* name;
+@property (nonatomic) bool isPrivate;
+@property (nonatomic) bool readable;
 @property (nonatomic) int bits;
-@property (nonatomic, retain) GIRType *type;
-@property (nonatomic, retain) GIRArray *array;
+@property (nonatomic, retain) GIRType* type;
+@property (nonatomic, retain) GIRArray* array;
 
 @end

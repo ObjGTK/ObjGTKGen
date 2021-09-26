@@ -24,17 +24,15 @@
  * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
  */
- 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
 
-@interface GIRPrerequisite : GIRBase
-{
-	NSString *name;
+#import <ObjFW/ObjFW.h>
+
+#import "GIRBase.h"
+
+@interface GIRPrerequisite : GIRBase {
+    OFString* name;
 }
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) OFString* name;
 
 @end

@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Turn debug mode on so we can see signal connecting messages */
-	[CGTKBaseBuilder setDebug:YES];
+	[CGTKBaseBuilder setDebug:true];
 
 	/* Use signal dictionary to connect GLADE objects to Objective-C code */
 	NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:

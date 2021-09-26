@@ -25,39 +25,37 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRArray.h"
-#import "GIR/GIRBase.h"
-#import "GIR/GIRDoc.h"
-#import "GIR/GIRField.h"
-#import "GIR/GIRMethod.h"
-#import "GIR/GIRPrerequisite.h"
-#import "GIR/GIRVirtualMethod.h"
-#import "GIR/GIRProperty.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRInterface : GIRBase
-{
-	NSString *name;
-	NSString *cType;
-	NSString *cSymbolPrefix;
-	GIRDoc *doc;
-	NSMutableArray *fields;
-	NSMutableArray *methods;
-	NSMutableArray *virtualMethods;
-	NSMutableArray *properties;
-	GIRPrerequisite *prerequisite;
+#import "GIRArray.h"
+#import "GIRBase.h"
+#import "GIRDoc.h"
+#import "GIRField.h"
+#import "GIRMethod.h"
+#import "GIRPrerequisite.h"
+#import "GIRProperty.h"
+#import "GIRVirtualMethod.h"
+
+@interface GIRInterface : GIRBase {
+    OFString* name;
+    OFString* cType;
+    OFString* cSymbolPrefix;
+    GIRDoc* doc;
+    OFMutableArray* fields;
+    OFMutableArray* methods;
+    OFMutableArray* virtualMethods;
+    OFMutableArray* properties;
+    GIRPrerequisite* prerequisite;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *cType;
-@property (nonatomic, retain) NSString *cSymbolPrefix;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) NSMutableArray *fields;
-@property (nonatomic, retain) NSMutableArray *methods;
-@property (nonatomic, retain) NSMutableArray *virtualMethods;
-@property (nonatomic, retain) NSMutableArray *properties;
-@property (nonatomic, retain) GIRPrerequisite *prerequisite;
+@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString* cType;
+@property (nonatomic, retain) OFString* cSymbolPrefix;
+@property (nonatomic, retain) GIRDoc* doc;
+@property (nonatomic, retain) OFMutableArray* fields;
+@property (nonatomic, retain) OFMutableArray* methods;
+@property (nonatomic, retain) OFMutableArray* virtualMethods;
+@property (nonatomic, retain) OFMutableArray* properties;
+@property (nonatomic, retain) GIRPrerequisite* prerequisite;
 
 @end

@@ -47,9 +47,9 @@
 + (OFString*)convertUSSToCapCase:(OFString*)input;
 
 /**
- * Returns YES if this type is configured as being swappable
+ * Returns true if this type is configured as being swappable
  */
-+ (BOOL)isTypeSwappable:(OFString*)str;
++ (bool)isTypeSwappable:(OFString*)str;
 
 /**
  * Attempts to swap the type or returns the input if it can't

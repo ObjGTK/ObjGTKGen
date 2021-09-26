@@ -25,9 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIREnumeration.h"
 
 @implementation GIREnumeration
@@ -42,131 +39,99 @@
 @synthesize members;
 @synthesize functions;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIREnumeration";
-		self.members = [[NSMutableArray alloc] init];
-		self.functions = [[NSMutableArray alloc] init];
-	}
-	
-	return self;
+    self = [super init];
+
+	self.elementTypeName = @"GIREnumeration";
+	self.members = [[OFMutableArray alloc] init];
+	self.functions = [[OFMutableArray alloc] init];
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+	[self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"]
-			|| [key isEqual:@"glib:type-name"]
-			|| [key isEqual:@"glib:get-type"]
-			|| [key isEqual:@"glib:error-domain"])
-		{
-			// Do nothing
-		}	
-		else if([key isEqual:@"c:type"])
-		{
-			self.cType = value;
-		}
-		else if([key isEqual:@"name"])
-		{
-			self.name = value;
-		}
-		else if([key isEqual:@"version"])
-		{
-			self.version = value;
-		}
-		else if([key isEqual:@"deprecated-version"])
-		{
-			self.deprecatedVersion = value;
-		}
-		else if([key isEqual:@"deprecated"])
-		{
-			self.deprecated = [value isEqual:@"1"];
-		}
-		else if([key isEqual:@"doc"])
-		{
-			self.doc = [[GIRDoc alloc] initWithDictionary:value];
-		}	
-		else if([key isEqual:@"doc-deprecated"])
-		{
-			self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
-		}	
-		else if([key isEqual:@"member"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRMember class] andArray:members];
-		}
-		else if([key isEqual:@"function"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]
+            || [key isEqual:@"glib:type-name"]
+            || [key isEqual:@"glib:get-type"]
+            || [key isEqual:@"glib:error-domain"]) {
+            // Do nothing
+        } else if ([key isEqual:@"c:type"]) {
+            self.cType = value;
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else if ([key isEqual:@"version"]) {
+            self.version = value;
+        } else if ([key isEqual:@"deprecated-version"]) {
+            self.deprecatedVersion = value;
+        } else if ([key isEqual:@"deprecated"]) {
+            self.deprecated = [value isEqual:@"1"];
+        } else if ([key isEqual:@"doc"]) {
+            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"doc-deprecated"]) {
+            self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"member"]) {
+            [self processArrayOrDictionary:value withClass:[GIRMember class] andArray:members];
+        } else if ([key isEqual:@"function"]) {
+            [self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)addMemberDictionary:(id)object
+- (void)addMemberDictionary:(id)object
 {
-	[GIRBase log:@"Adding member" andLevel:Debug];
-	
-	// Create the array if this is the first time through
-	if(members == nil)
-	{
-		members = [[NSMutableArray alloc] init];
-	}
+    [GIRBase log:@"Adding member" andLevel:Debug];
 
-	if([object isKindOfClass: [NSDictionary class]])
-	{
-		[members addObject:[[GIRMember alloc] initWithDictionary:object]];
-	}
+    // Create the array if this is the first time through
+    if (members == nil) {
+        members = [[OFMutableArray alloc] init];
+    }
+
+    if ([object isKindOfClass:[OFDictionary class]]) {
+        [members addObject:[[GIRMember alloc] initWithDictionary:object]];
+    }
 }
 
--(void)addFunctionDictionary:(id)object
+- (void)addFunctionDictionary:(id)object
 {
-	[GIRBase log:@"Adding function" andLevel:Debug];
-	
-	// Create the array if this is the first time through
-	if(functions == nil)
-	{
-		functions = [[NSMutableArray alloc] init];
-	}
+    [GIRBase log:@"Adding function" andLevel:Debug];
 
-	if([object isKindOfClass: [NSDictionary class]])
-	{
-		[functions addObject:[[GIRFunction alloc] initWithDictionary:object]];
-	}
+    // Create the array if this is the first time through
+    if (functions == nil) {
+        functions = [[OFMutableArray alloc] init];
+    }
+
+    if ([object isKindOfClass:[OFDictionary class]]) {
+        [functions addObject:[[GIRFunction alloc] initWithDictionary:object]];
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[cType release];
-	[name release];
-	[version release];
-	[deprecatedVersion release];
-	[doc release];
-	[docDeprecated release];
-	[members release];
-	[functions release];
-	[super dealloc];
+    [cType release];
+    [name release];
+    [version release];
+    [deprecatedVersion release];
+    [doc release];
+    [docDeprecated release];
+    [members release];
+    [functions release];
+    [super dealloc];
 }
 
 @end

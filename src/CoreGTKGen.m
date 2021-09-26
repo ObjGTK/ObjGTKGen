@@ -49,7 +49,7 @@ OF_APPLICATION_DELEGATE(CoreGTKGen)
     GIRApi* api = [Gir2Objc firstApiFromGirFile:girFile];
 
     if (api == nil)
-        @throw [OGTKNoGIRAPIException exception]];
+        @throw [OGTKNoGIRAPIException exception];
 
     // Step 2: generate CoreGTK source files
     OFLog(@"%s", @"Attempting to generate CoreGTK...");

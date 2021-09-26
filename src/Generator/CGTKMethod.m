@@ -25,10 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "Generator/CGTKMethod.h"
+#import "CGTKMethod.h"
 
 @implementation CGTKMethod
 

@@ -39,13 +39,13 @@
 	id target;
 	SEL selector;
 	void *data;
-	BOOL retained;
+	bool retained;
 }
 
 -(id)initWithTarget:(id) target selector:(SEL) selector data:(void *) data;
 -(id)target;
 -(SEL)selector;
 -(void*)data;
--(BOOL)dataRetained;
+-(bool)dataRetained;
 
 @end

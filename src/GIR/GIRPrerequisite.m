@@ -34,55 +34,43 @@
 
 @synthesize name;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRPrerequisite";
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRPrerequisite";
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"])
-		{
-			// Do nothing
-		}	
-		else if([key isEqual:@"name"])
-		{
-			self.name = value;
-		}		
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]) {
+            // Do nothing
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[name release];
-	[super dealloc];
+    [name release];
+    [super dealloc];
 }
 
 @end

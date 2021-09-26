@@ -25,9 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRFunction.h"
 
 @implementation GIRFunction
@@ -46,119 +43,81 @@
 @synthesize parameters;
 @synthesize instanceParameters;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRFunction";
-		self.parameters = [[NSMutableArray alloc] init];
-	}
-	
-	return self;
+    self = [super init];
+
+	self.elementTypeName = @"GIRFunction";
+	self.parameters = [[OFMutableArray alloc] init];
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"])
-		{
-			// Do nothing
-		}	
-		else if([key isEqual:@"name"])
-		{
-			self.name = value;
-		}	
-		else if([key isEqual:@"c:identifier"])
-		{
-			self.cIdentifier = value;
-		}	
-		else if([key isEqual:@"moved-to"])
-		{
-			self.movedTo = value;		
-		}
-		else if([key isEqual:@"version"])
-		{
-			self.version = value;		
-		}	
-		else if([key isEqual:@"introspectable"])
-		{
-			self.introspectable = [value isEqual:@"1"];		
-		}
-		else if([key isEqual:@"deprecated"])
-		{
-			self.deprecated = [value isEqual:@"1"];		
-		}
-		else if([key isEqual:@"deprecated-version"])
-		{
-			self.deprecatedVersion = value;		
-		}
-		else if([key isEqual:@"throws"])
-		{
-			self.throws = [value isEqual:@"1"];		
-		}		
-		else if([key isEqual:@"doc-deprecated"])
-		{
-			self.doc = [[GIRDoc alloc] initWithDictionary:value];
-		}
-		else if([key isEqual:@"doc"])
-		{
-			self.doc = [[GIRDoc alloc] initWithDictionary:value];
-		}	
-		else if([key isEqual:@"return-value"])
-		{
-			self.returnValue = [[GIRReturnValue alloc] initWithDictionary:value];
-		}
-		else if([key isEqual:@"parameters"])
-		{
-			for(NSString *paramKey in value)
-			{			
-				if([paramKey isEqual:@"parameter"])
-				{
-					[self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:parameters];
-				}
-				else if([paramKey isEqual:@"instance-parameter"])
-				{
-					[self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:instanceParameters];
-				}
-			}
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]) {
+            // Do nothing
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else if ([key isEqual:@"c:identifier"]) {
+            self.cIdentifier = value;
+        } else if ([key isEqual:@"moved-to"]) {
+            self.movedTo = value;
+        } else if ([key isEqual:@"version"]) {
+            self.version = value;
+        } else if ([key isEqual:@"introspectable"]) {
+            self.introspectable = [value isEqual:@"1"];
+        } else if ([key isEqual:@"deprecated"]) {
+            self.deprecated = [value isEqual:@"1"];
+        } else if ([key isEqual:@"deprecated-version"]) {
+            self.deprecatedVersion = value;
+        } else if ([key isEqual:@"throws"]) {
+            self.throws = [value isEqual:@"1"];
+        } else if ([key isEqual:@"doc-deprecated"]) {
+            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"doc"]) {
+            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"return-value"]) {
+            self.returnValue = [[GIRReturnValue alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"parameters"]) {
+            for (OFString* paramKey in value) {
+                if ([paramKey isEqual:@"parameter"]) {
+                    [self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:parameters];
+                } else if ([paramKey isEqual:@"instance-parameter"]) {
+                    [self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:instanceParameters];
+                }
+            }
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[name release];
-	[cIdentifier release];
-	[movedTo release];
-	[version release];
-	[deprecatedVersion release];
-	[docDeprecated release];
-	[doc release];
-	[returnValue release];
-	[parameters release];
-	[instanceParameters release];
-	[super dealloc];
+    [name release];
+    [cIdentifier release];
+    [movedTo release];
+    [version release];
+    [deprecatedVersion release];
+    [docDeprecated release];
+    [doc release];
+    [returnValue release];
+    [parameters release];
+    [instanceParameters release];
+    [super dealloc];
 }
 
 @end

@@ -25,45 +25,43 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
-#import "GIR/GIRDoc.h"
-#import "GIR/GIRParameter.h"
-#import "GIR/GIRReturnValue.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRConstructor : GIRBase
-{
-	NSString *name;
-	NSString *cIdentifier;
-	NSString *version;
-	NSString *deprecatedVersion;
-	NSString *shadowedBy;
-	NSString *shadows;
-	BOOL introspectable;
-	BOOL deprecated;
-	BOOL throws;
-	GIRDoc *doc;
-	GIRDoc *docDeprecated;
-	GIRReturnValue *returnValue;
-	NSMutableArray *parameters;
-	NSMutableArray *instanceParameters;
+#import "GIRBase.h"
+#import "GIRDoc.h"
+#import "GIRParameter.h"
+#import "GIRReturnValue.h"
+
+@interface GIRConstructor : GIRBase {
+    OFString* name;
+    OFString* cIdentifier;
+    OFString* version;
+    OFString* deprecatedVersion;
+    OFString* shadowedBy;
+    OFString* shadows;
+    bool introspectable;
+    bool deprecated;
+    bool throws;
+    GIRDoc* doc;
+    GIRDoc* docDeprecated;
+    GIRReturnValue* returnValue;
+    OFMutableArray* parameters;
+    OFMutableArray* instanceParameters;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *cIdentifier;
-@property (nonatomic, retain) NSString *version;
-@property (nonatomic, retain) NSString *deprecatedVersion;
-@property (nonatomic, retain) NSString *shadowedBy;
-@property (nonatomic, retain) NSString *shadows;
-@property (nonatomic) BOOL introspectable;
-@property (nonatomic) BOOL deprecated;
-@property (nonatomic) BOOL throws;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) GIRDoc *docDeprecated;
-@property (nonatomic, retain) GIRReturnValue *returnValue;
-@property (nonatomic, retain) NSMutableArray *parameters;
-@property (nonatomic, retain) NSMutableArray *instanceParameters;
+@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString* cIdentifier;
+@property (nonatomic, retain) OFString* version;
+@property (nonatomic, retain) OFString* deprecatedVersion;
+@property (nonatomic, retain) OFString* shadowedBy;
+@property (nonatomic, retain) OFString* shadows;
+@property (nonatomic) bool introspectable;
+@property (nonatomic) bool deprecated;
+@property (nonatomic) bool throws;
+@property (nonatomic, retain) GIRDoc* doc;
+@property (nonatomic, retain) GIRDoc* docDeprecated;
+@property (nonatomic, retain) GIRReturnValue* returnValue;
+@property (nonatomic, retain) OFMutableArray* parameters;
+@property (nonatomic, retain) OFMutableArray* instanceParameters;
 
 @end

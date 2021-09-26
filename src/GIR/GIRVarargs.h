@@ -25,14 +25,11 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRVarargs : GIRBase
-{
+#import "GIRBase.h"
 
+@interface GIRVarargs : GIRBase {
 }
 
 @end

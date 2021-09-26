@@ -25,9 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRType.h"
 
 @implementation GIRType
@@ -35,61 +32,47 @@
 @synthesize cType;
 @synthesize name;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRType";
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRType";
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"]
-			|| [key isEqual:@"type"])
-		{
-			// Do nothing
-		}	
-		else if([key isEqual:@"c:type"])
-		{
-			self.cType = value;
-		}
-		else if([key isEqual:@"name"])
-		{
-			self.name = value;
-		}		
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]
+            || [key isEqual:@"type"]) {
+            // Do nothing
+        } else if ([key isEqual:@"c:type"]) {
+            self.cType = value;
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[cType release];
-	[name release];
-	[super dealloc];
+    [cType release];
+    [name release];
+    [super dealloc];
 }
 
 @end

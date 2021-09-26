@@ -25,48 +25,48 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
-#import "GIR/GIRParameter.h"
-#import "GIR/GIRReturnValue.h"
+#import <ObjFW/ObjFW.h>
+
+#import "GIRBase.h"
+#import "GIRParameter.h"
+#import "GIRReturnValue.h"
+#import "GIRDoc.h"
 
 @interface GIRMethod : GIRBase
 {
-	NSString *name;
-	NSString *cIdentifier;
-	NSString *version;
-	NSString *invoker;
+	OFString *name;
+	OFString *cIdentifier;
+	OFString *version;
+	OFString *invoker;
 	GIRReturnValue *returnValue;
 	GIRDoc *doc;
 	GIRDoc *docDeprecated;
-	BOOL deprecated;
-	NSString *deprecatedVersion;
-	BOOL throws;
-	BOOL introspectable;
-	BOOL shadowedBy;
-	BOOL shadows;
-	NSMutableArray *parameters;
-	NSMutableArray *instanceParameters;
+	bool deprecated;
+	OFString *deprecatedVersion;
+	bool throws;
+	bool introspectable;
+	bool shadowedBy;
+	bool shadows;
+	OFMutableArray *parameters;
+	OFMutableArray *instanceParameters;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *cIdentifier;
-@property (nonatomic, retain) NSString *version;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *cIdentifier;
+@property (nonatomic, retain) OFString *version;
 @property (nonatomic, retain) GIRReturnValue *returnValue;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) GIRDoc *docDeprecated;
-@property (nonatomic, retain) NSString *deprecatedVersion;
-@property (nonatomic, retain) NSString *invoker;
-@property (nonatomic) BOOL deprecated;
-@property (nonatomic) BOOL throws;
-@property (nonatomic) BOOL introspectable;
-@property (nonatomic) BOOL shadowedBy;
-@property (nonatomic) BOOL shadows;
-@property (nonatomic, retain) NSMutableArray *parameters;
-@property (nonatomic, retain) NSMutableArray *instanceParameters;
+@property (nonatomic, retain) OFString *deprecatedVersion;
+@property (nonatomic, retain) OFString *invoker;
+@property (nonatomic) bool deprecated;
+@property (nonatomic) bool throws;
+@property (nonatomic) bool introspectable;
+@property (nonatomic) bool shadowedBy;
+@property (nonatomic) bool shadows;
+@property (nonatomic, retain) OFMutableArray *parameters;
+@property (nonatomic, retain) OFMutableArray *instanceParameters;
 
--(BOOL)tryParseWithKey:(NSString *)key andValue:(id)value;
+-(bool)tryParseWithKey:(OFString *)key andValue:(id)value;
 
 @end

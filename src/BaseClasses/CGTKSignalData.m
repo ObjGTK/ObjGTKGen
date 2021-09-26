@@ -61,7 +61,7 @@
 	return data;
 }
 
-- (BOOL) dataRetained
+- (bool) dataRetained
 {
 	return retained;
 }

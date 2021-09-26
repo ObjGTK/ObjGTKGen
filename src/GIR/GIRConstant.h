@@ -25,34 +25,32 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
-#import "GIR/GIRDoc.h"
-#import "GIR/GIRType.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRConstant : GIRBase
-{
-	NSString *cType;
-	NSString *name;
-	NSString *theValue;
-	NSString *version;
-	NSString *deprecatedVersion;
-	BOOL deprecated;
-	GIRDoc *doc;
-	GIRDoc *docDeprecated;
-	GIRType *type;
+#import "GIRBase.h"
+#import "GIRDoc.h"
+#import "GIRType.h"
+
+@interface GIRConstant : GIRBase {
+    OFString* cType;
+    OFString* name;
+    OFString* theValue;
+    OFString* version;
+    OFString* deprecatedVersion;
+    bool deprecated;
+    GIRDoc* doc;
+    GIRDoc* docDeprecated;
+    GIRType* type;
 }
 
-@property (nonatomic, retain) NSString *cType;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *theValue;
-@property (nonatomic, retain) NSString *version;
-@property (nonatomic, retain) NSString *deprecatedVersion;
-@property (nonatomic) BOOL deprecated;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) GIRDoc *docDeprecated;
-@property (nonatomic, retain) GIRType *type;
+@property (nonatomic, retain) OFString* cType;
+@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString* theValue;
+@property (nonatomic, retain) OFString* version;
+@property (nonatomic, retain) OFString* deprecatedVersion;
+@property (nonatomic) bool deprecated;
+@property (nonatomic, retain) GIRDoc* doc;
+@property (nonatomic, retain) GIRDoc* docDeprecated;
+@property (nonatomic, retain) GIRType* type;
 
 @end

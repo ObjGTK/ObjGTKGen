@@ -25,56 +25,48 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/NSArray.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSObject.h>
-#import <Foundation/NSString.h>
+#import <ObjFW/ObjFW.h>
 
 /**
  * The possible log levels
  */
 typedef enum LogLevel {
-	Debug = 0,
-	Info = 1,
-	Warning = 2,
-	Error = 3
+    Debug = 0,
+    Info = 1,
+    Warning = 2,
+    Error = 3
 } LogLevel;
 
 @protocol GIRParseDictionary
--(void)parseDictionary:(NSDictionary *) dict;
+- (void)parseDictionary:(OFDictionary*)dict;
 @end
 
-@interface GIRBase : NSObject <GIRParseDictionary>
-{
-	NSString *elementTypeName;
-	NSMutableDictionary *unknownElements;
+@interface GIRBase : OFObject <GIRParseDictionary> {
+    OFString* elementTypeName;
+    OFMutableDictionary* unknownElements;
 }
 
-@property (nonatomic, retain) NSString *elementTypeName;
-@property (nonatomic, retain) NSMutableDictionary *unknownElements;
+@property (nonatomic, retain) OFString* elementTypeName;
+@property (nonatomic, retain) OFMutableDictionary* unknownElements;
 
 /**
  * Sets the (current) global log level
  */
-+(void)setLogLevel:(LogLevel) level;
++ (void)setLogLevel:(LogLevel)level;
 
 /**
  * Logs the message with the given level
  */
-+(void)log:(NSString *)message andLevel:(LogLevel) level;
++ (void)log:(OFString*)message andLevel:(LogLevel)level;
 
 /**
  * When an unknown item is discovered this will log it iff it hasn't previously been logged
  */
--(void)logUnknownElement:(NSString *) element;
+- (void)logUnknownElement:(OFString*)element;
 
 /**
  * Extracts information from the array or dictionary (values) into the provided array using the provided class type
  */
--(void)processArrayOrDictionary:(id) values withClass:(Class) clazz andArray:(NSMutableArray *) array;
+- (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray*)array;
 
 @end

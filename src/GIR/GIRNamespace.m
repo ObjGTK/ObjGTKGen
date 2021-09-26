@@ -24,10 +24,7 @@
  * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
  */
- 
-/*
- * Objective-C imports
- */
+
 #import "GIRNamespace.h"
 
 @implementation GIRNamespace
@@ -41,101 +38,75 @@
 @synthesize constants;
 @synthesize interfaces;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRNamespace";
-		self.classes = [[NSMutableArray alloc] init];
-		self.functions = [[NSMutableArray alloc] init];
-		self.enumerations = [[NSMutableArray alloc] init];
-		self.constants = [[NSMutableArray alloc] init];
-		self.interfaces = [[NSMutableArray alloc] init];
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRNamespace";
+    self.classes = [[OFMutableArray alloc] init];
+    self.functions = [[OFMutableArray alloc] init];
+    self.enumerations = [[OFMutableArray alloc] init];
+    self.constants = [[OFMutableArray alloc] init];
+    self.interfaces = [[OFMutableArray alloc] init];
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"]
-			|| [key isEqual:@"shared-library"]
-			|| [key isEqual:@"version"]
-			|| [key isEqual:@"record"]
-			|| [key isEqual:@"callback"]
-			|| [key isEqual:@"bitfield"]
-			|| [key isEqual:@"alias"])
-		{
-			// Do nothing
-		}
-		else if([key isEqual:@"name"])
-		{
-			self.name = value;
-		}
-		else if([key isEqual:@"c:symbol-prefixes"])
-		{
-			self.cSymbolPrefixes = value;
-		}
-		else if([key isEqual:@"c:identifier-prefixes"])
-		{
-			self.cIdentifierPrefixes = value;
-		}		
-		else if([key isEqual:@"class"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRClass class] andArray:classes];
-		}
-		else if([key isEqual:@"function"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
-		}
-		else if([key isEqual:@"enumeration"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIREnumeration class] andArray:enumerations];
-		}
-		else if([key isEqual:@"constant"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRConstant class] andArray:constants];
-		}
-		else if([key isEqual:@"interface"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRInterface class] andArray:interfaces];
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]
+            || [key isEqual:@"shared-library"]
+            || [key isEqual:@"version"]
+            || [key isEqual:@"record"]
+            || [key isEqual:@"callback"]
+            || [key isEqual:@"bitfield"]
+            || [key isEqual:@"alias"]) {
+            // Do nothing
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else if ([key isEqual:@"c:symbol-prefixes"]) {
+            self.cSymbolPrefixes = value;
+        } else if ([key isEqual:@"c:identifier-prefixes"]) {
+            self.cIdentifierPrefixes = value;
+        } else if ([key isEqual:@"class"]) {
+            [self processArrayOrDictionary:value withClass:[GIRClass class] andArray:classes];
+        } else if ([key isEqual:@"function"]) {
+            [self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
+        } else if ([key isEqual:@"enumeration"]) {
+            [self processArrayOrDictionary:value withClass:[GIREnumeration class] andArray:enumerations];
+        } else if ([key isEqual:@"constant"]) {
+            [self processArrayOrDictionary:value withClass:[GIRConstant class] andArray:constants];
+        } else if ([key isEqual:@"interface"]) {
+            [self processArrayOrDictionary:value withClass:[GIRInterface class] andArray:interfaces];
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[name release];
-	[cSymbolPrefixes release];
-	[cIdentifierPrefixes release];
-	[classes release];
-	[functions release];
-	[enumerations release];
-	[constants release];
-	[interfaces release];
-	[super dealloc];
+    [name release];
+    [cSymbolPrefixes release];
+    [cIdentifierPrefixes release];
+    [classes release];
+    [functions release];
+    [enumerations release];
+    [constants release];
+    [interfaces release];
+    [super dealloc];
 }
 
 @end

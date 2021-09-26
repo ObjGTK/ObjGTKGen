@@ -49,7 +49,7 @@
 /**
  * When enabled this builder will print out signal connection debug info
  */
-+(void)setDebug:(BOOL)debugEnabled;
++(void)setDebug:(bool)debugEnabled;
 
 /**
  * Similar to the other connect signals functions, this takes a dictionary key'd 

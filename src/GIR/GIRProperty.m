@@ -51,29 +51,23 @@
 {
 	self = [super init];
 	
-	if(self)
-	{
-		self.elementTypeName = @"GIRProperty";
-	}
+	self.elementTypeName = @"GIRProperty";
 	
 	return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+-(id)initWithDictionary:(OFDictionary *) dict
 {
 	self = [self init];
 	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
+	[self parseDictionary:dict];
 	
 	return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+-(void)parseDictionary:(OFDictionary *) dict
 {
-	for (NSString *key in dict)
+	for (OFString *key in dict)
 	{	
 		id value = [dict objectForKey:key];
 	

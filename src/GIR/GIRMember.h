@@ -28,20 +28,19 @@
 /*
  * Objective-C imports
  */
-#import "GIR/GIRBase.h"
-#import "GIR/GIRDoc.h"
+#import "GIRBase.h"
+#import "GIRDoc.h"
 
-@interface GIRMember : GIRBase
-{
-	NSString *cIdentifier;
-	NSString *name;
-	int	theValue;
-	GIRDoc *doc;
+@interface GIRMember : GIRBase {
+    OFString* cIdentifier;
+    OFString* name;
+    int theValue;
+    GIRDoc* doc;
 }
 
-@property (nonatomic, retain) NSString *cIdentifier;
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) OFString* cIdentifier;
+@property (nonatomic, retain) OFString* name;
 @property (nonatomic) int theValue;
-@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, retain) GIRDoc* doc;
 
 @end

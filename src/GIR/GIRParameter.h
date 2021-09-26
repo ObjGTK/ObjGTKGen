@@ -25,23 +25,22 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRArray.h"
-#import "GIR/GIRBase.h"
-#import "GIR/GIRDoc.h"
-#import "GIR/GIRType.h"
-#import "GIR/GIRVarargs.h"
+#import <ObjFW/ObjFW.h>
+
+#import "GIRArray.h"
+#import "GIRBase.h"
+#import "GIRDoc.h"
+#import "GIRType.h"
+#import "GIRVarargs.h"
 
 @interface GIRParameter : GIRBase
 {
-	NSString *name;
-	NSString *transferOwnership;
-	NSString *direction;
-	NSString *scope;
-	BOOL allowNone;
-	BOOL callerAllocates;
+	OFString *name;
+	OFString *transferOwnership;
+	OFString *direction;
+	OFString *scope;
+	bool allowNone;
+	bool callerAllocates;
 	int closure;
 	int destroy;
 	GIRDoc *doc;
@@ -50,12 +49,12 @@
 	GIRVarargs *varargs;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *transferOwnership;
-@property (nonatomic, retain) NSString *direction;
-@property (nonatomic, retain) NSString *scope;
-@property (nonatomic) BOOL allowNone;
-@property (nonatomic) BOOL callerAllocates;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *transferOwnership;
+@property (nonatomic, retain) OFString *direction;
+@property (nonatomic, retain) OFString *scope;
+@property (nonatomic) bool allowNone;
+@property (nonatomic) bool callerAllocates;
 @property (nonatomic) int closure;
 @property (nonatomic) int destroy;
 @property (nonatomic, retain) GIRDoc *doc;

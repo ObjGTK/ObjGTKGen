@@ -28,160 +28,145 @@
 /*
  * Objective-C imports
  */
-#import "Generator/CGTKClass.h"
+#import "CGTKClass.h"
 
 @implementation CGTKClass
 
--(id)init
+- (id)init
 {
-	self = [super init];
+    self = [super init];
 
-	constructors = [[OFMutableArray alloc] init];
-	functions = [[OFMutableArray alloc] init];
-	methods = [[OFMutableArray alloc] init];
+    constructors = [[OFMutableArray alloc] init];
+    functions = [[OFMutableArray alloc] init];
+    methods = [[OFMutableArray alloc] init];
 
-	return self;
+    return self;
 }
 
--(void)setCName:(OFString *)name
+- (void)setCName:(OFString*)name
 {
-	if(cName != nil)
-	{
-		[cName release];
-	}
-	
-	if(name == nil)
-	{
-		cName = nil;
-	}
-	else
-	{
-		cName = [name retain];
-	}
+    if (cName != nil) {
+        [cName release];
+    }
+
+    if (name == nil) {
+        cName = nil;
+    } else {
+        cName = [name retain];
+    }
 }
 
--(OFString *)cName
+- (OFString*)cName
 {
-	return [[cName retain] autorelease];
+    return [[cName retain] autorelease];
 }
 
--(void)setCType:(OFString *)type
+- (void)setCType:(OFString*)type
 {
-	if(cType != nil)
-	{
-		[cType release];
-	}
-	
-	if(type == nil)
-	{
-		cType = nil;
-	}
-	else
-	{
-		cType = [type retain];
-	}
+    if (cType != nil) {
+        [cType release];
+    }
+
+    if (type == nil) {
+        cType = nil;
+    } else {
+        cType = [type retain];
+    }
 }
 
--(OFString *)cType
+- (OFString*)cType
 {
-	return [[cType retain] autorelease];
+    return [[cType retain] autorelease];
 }
 
--(OFString *)type
+- (OFString*)type
 {
-	return [CGTKUtil swapTypes:cType];
+    return [CGTKUtil swapTypes:cType];
 }
 
--(void)setCParentType:(OFString *)type
+- (void)setCParentType:(OFString*)type
 {
-	if(cParentType != nil)
-	{
-		[cParentType release];
-	}
-	
-	if(type == nil)
-	{
-		cParentType = nil;
-	}
-	else
-	{
-		cParentType = [type retain];
-	}
+    if (cParentType != nil) {
+        [cParentType release];
+    }
+
+    if (type == nil) {
+        cParentType = nil;
+    } else {
+        cParentType = [type retain];
+    }
 }
 
--(OFString *)cParentType
+- (OFString*)cParentType
 {
-	return [[cParentType retain] autorelease];
+    return [[cParentType retain] autorelease];
 }
 
--(OFString *)name
+- (OFString*)name
 {
-	return [OFString stringWithFormat:@"CGTK%@", cName];
+    return [OFString stringWithFormat:@"CGTK%@", cName];
 }
 
--(void)addConstructor:(CGTKMethod *)ctor
+- (void)addConstructor:(CGTKMethod*)ctor
 {
-	if(ctor != nil)
-	{
-		[constructors addObject:ctor];
-	}
+    if (ctor != nil) {
+        [constructors addObject:ctor];
+    }
 }
 
--(OFArray *)constructors
+- (OFArray*)constructors
 {
-	return constructors;
+    return constructors;
 }
 
--(bool)hasConstructors
+- (bool)hasConstructors
 {
-	return [constructors count] != 0;
+    return [constructors count] != 0;
 }
 
--(void)addFunction:(CGTKMethod *)func
+- (void)addFunction:(CGTKMethod*)func
 {
-	if(func != nil)
-	{
-		[functions addObject:func];
-	}
+    if (func != nil) {
+        [functions addObject:func];
+    }
 }
 
--(OFArray *)functions
+- (OFArray*)functions
 {
-	return functions;
+    return functions;
 }
 
--(bool)hasFunctions
+- (bool)hasFunctions
 {
-	return [functions count] != 0;
+    return [functions count] != 0;
 }
 
--(void)addMethod:(CGTKMethod *)meth
+- (void)addMethod:(CGTKMethod*)meth
 {
-	if(meth != nil)
-	{
-		[methods addObject:meth];
-	}
+    if (meth != nil) {
+        [methods addObject:meth];
+    }
 }
 
--(OFArray *)methods
+- (OFArray*)methods
 {
-	return methods;
+    return methods;
 }
 
--(bool)hasMethods
+- (bool)hasMethods
 {
-	return [methods count] != 0;
+    return [methods count] != 0;
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[cName release];
-	[cType release];
-	[cParentType release];
-	[constructors release];
-	[functions release];
-	[methods release];
-	[super dealloc];
+    [cName release];
+    [cType release];
+    [cParentType release];
+    [constructors release];
+    [functions release];
+    [methods release];
+    [super dealloc];
 }
 
 @end
