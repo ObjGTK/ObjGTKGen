@@ -1,6 +1,5 @@
 /*
- * CGTKBaseBuilder.h
- * This file is part of CoreGTK
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,45 +10,37 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSObject.h>
-#import <Foundation/NSString.h>
+#import <ObjFW/ObjFW.h>
 
-#import "CoreGTK/CGTKBuilder.h"
-#import "CoreGTK/CGTKCallbackData.h"
-#import "CoreGTK/CGTKSignalConnector.h"
-#import "CoreGTK/CGTKWidget.h"
+#import "CGTKBuilder.h"
+#import "CGTKCallbackData.h"
+#import "CGTKSignalConnector.h"
+#import "CGTKWidget.h"
 
 /**
  * CGTKBuilder adds additional functionality to GtkBuilder
  */
-@interface CGTKBaseBuilder : NSObject
-{
-
+@interface CGTKBaseBuilder : OFObject {
 }
 
 /**
  * When enabled this builder will print out signal connection debug info
  */
-+(void)setDebug:(bool)debugEnabled;
++ (void)setDebug:(bool)debugEnabled;
 
 /**
  * Similar to the other connect signals functions, this takes a dictionary key'd 
@@ -57,7 +48,7 @@
  * associated signals as values and connects them accordingly.
  *
  * Example usage:
- *  NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys: 
+ *  OFDictionary *dict = [[OFDictionary alloc] initWithObjectsAndKeys: 
  *  [CallbackData withObject:[CGTK class] andSEL:@selector(endMainLoop)],
  *  @"mainQuit", 
  *  [CallbackData withObject:button andSEL:@selector(clicked)],
@@ -71,9 +62,9 @@
  * A CGTKBuilder to use while attaching signals
  *
  * @param objectSignalDictionary
- *  A dictionary mapping CallbackData objects to NSString signal names
+ *  A dictionary mapping CallbackData objects to OFString signal names
  */
-+(void)connectSignalsToObjectsWithBuilder:(CGTKBuilder *)builder andSignalDictionary:(NSDictionary *)objectSignalDictionary;
++ (void)connectSignalsToObjectsWithBuilder:(CGTKBuilder*)builder andSignalDictionary:(OFDictionary*)objectSignalDictionary;
 
 /**
  * Attempts to get the object witht he name returning it as a CGTKWidget. If the 
@@ -88,6 +79,6 @@
  *
  * @returns the CGTKWidget or nil
  */
-+(CGTKWidget *)getWidgetFromBuilder:(CGTKBuilder *)builder withName:(NSString *)name;
++ (CGTKWidget*)getWidgetFromBuilder:(CGTKBuilder*)builder withName:(OFString*)name;
 
 @end

@@ -1,6 +1,6 @@
 /*
  * CGTKCallbackData.h
- * This file is part of CoreGTK
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,33 +11,28 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
- #import <Foundation/NSObject.h>
+#import <ObjFW/ObjFW.h>
 
 /**
  * Holds object and selector info for gobject signal callbacks
  */
-@interface CGTKCallbackData : NSObject
-{
-	id _object;
-	SEL _sel;
+@interface CGTKCallbackData : OFObject {
+    id _object;
+    SEL _sel;
 }
 
 /**
@@ -53,7 +48,7 @@
  *
  * @returns a new CGTKCallbackData
  */
-+(id)withObject:(id)obj andSEL:(SEL)sel;
++ (id)withObject:(id)obj andSEL:(SEL)sel;
 
 /**
  * Creates and returns a new instance of CGTKCallbackData holding the object and the selector.
@@ -66,17 +61,17 @@
  *
  * @returns a new CGTKCallbackData
  */
--(id)initWithObject:(id)obj andSEL:(SEL)sel;
+- (id)initWithObject:(id)obj andSEL:(SEL)sel;
 
 /**
  * Gets the held object
  */
--(id)object;
+- (id)object;
 
 /**
  * Gets the held selector
  */
--(SEL)sel;
+- (SEL)sel;
 
 /**
  * Sets the held object
@@ -84,7 +79,7 @@
  * @param object
  *  The object to set
  */
--(void)setObject:(id)object;
+- (void)setObject:(id)object;
 
 /**
  * Sets the held selector
@@ -92,6 +87,6 @@
  * @param sel
  *  The selector to set
  */
--(void)setSel:(SEL)sel;
+- (void)setSel:(SEL)sel;
 
 @end

@@ -1,6 +1,5 @@
 /*
- * CGTKBase.m
- * This file is part of CoreGTK
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,88 +10,83 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
  * Objective-C imports
  */
-#import "CoreGTK/CGTKBase.h"
+#import "CGTKBase.h"
 
 @implementation CGTKBase
 
-+(CGTKBase *)withGtkWidget:(GtkWidget *)obj
++ (CGTKBase*)withGtkWidget:(GtkWidget*)obj
 {
-	CGTKBase *retVal = [[CGTKBase alloc] initWithGObject:(GObject *)obj];
-	return [retVal autorelease];
+    CGTKBase* retVal = [[CGTKBase alloc] initWithGObject:(GObject*)obj];
+    return [retVal autorelease];
 }
 
-+(CGTKBase *)withGObject:(GObject *)obj
++ (CGTKBase*)withGObject:(GObject*)obj
 {
-	CGTKBase *retVal = [[CGTKBase alloc] initWithGObject:obj];
-	return [retVal autorelease];
+    CGTKBase* retVal = [[CGTKBase alloc] initWithGObject:obj];
+    return [retVal autorelease];
 }
 
--(id)initWithGObject:(GObject *)obj
+- (id)initWithGObject:(GObject*)obj
 {
-	self = [super init];
-	
-	if(self)
-	{
-		[self setGObject:obj];
-	}
-	
-	return self;
+    self = [super init];
+
+    if (self) {
+        [self setGObject:obj];
+    }
+
+    return self;
 }
 
--(GtkWidget *)WIDGET
+- (GtkWidget*)WIDGET
 {
-	return GTK_WIDGET(__gObject);
+    return GTK_WIDGET(__gObject);
 }
 
--(void)setGObject:(GObject *)obj
+- (void)setGObject:(GObject*)obj
 {
-	if(__gObject != NULL)
-	{
-		// Decrease the reference count on the previously stored GObject
-		g_object_unref(__gObject);
-	}
-	
-	__gObject = obj;
-	
-	if(__gObject != NULL)
-	{
-		// Increase the reference count on the new GObject
-		g_object_ref(__gObject);
-	}
+    if (__gObject != NULL) {
+        // Decrease the reference count on the previously stored GObject
+        g_object_unref(__gObject);
+    }
+
+    __gObject = obj;
+
+    if (__gObject != NULL) {
+        // Increase the reference count on the new GObject
+        g_object_ref(__gObject);
+    }
 }
 
--(GObject *)GOBJECT
+- (GObject*)GOBJECT
 {
-	return __gObject;
+    return __gObject;
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	if(__gObject != NULL)
-	{
-		// Decrease the reference count on the previously stored GObject
-		g_object_unref(__gObject);
-		__gObject = NULL;
-	}
-	[super dealloc];
+    if (__gObject != NULL) {
+        // Decrease the reference count on the previously stored GObject
+        g_object_unref(__gObject);
+        __gObject = NULL;
+    }
+    [super dealloc];
 }
 
 @end

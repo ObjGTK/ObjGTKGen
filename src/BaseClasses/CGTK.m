@@ -1,6 +1,6 @@
 /*
  * CGTK.m
- * This file is part of CoreGTK
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,52 +11,51 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
  * Objective-C imports
  */
-#import "CoreGTK/CGTK.h"
+#import "CGTK.h"
 
 @implementation CGTK
 
-+(NSString *)coreGtkVersion
++ (OFString*)coreGtkVersion
 {
-	return @"3.22.0";
+    return @"3.38.0";
 }
 
-+(void)initWithArgc:(int *)argc andArgv:(char ***)argv
++ (void)initWithArgc:(int*)argc andArgv:(char***)argv
 {
-	gtk_init(argc, argv);
+    gtk_init(argc, argv);
 }
 
-+(int)autoInitWithArgc:(int)argc andArgv:(char *[])argv
++ (int)autoInitWithArgc:(int)argc andArgv:(char*[])argv
 {
-	[CGTK initWithArgc:&argc andArgv:&argv];
-	return argc;
+    [CGTK initWithArgc:&argc andArgv:&argv];
+    return argc;
 }
 
-+(void)main
++ (void)main
 {
-	gtk_main();
+    gtk_main();
 }
 
-+(void)mainQuit
++ (void)mainQuit
 {
-	gtk_main_quit();
+    gtk_main_quit();
 }
 
 @end

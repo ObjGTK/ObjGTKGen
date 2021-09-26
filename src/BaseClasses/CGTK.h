@@ -1,6 +1,6 @@
 /*
  * CGTK.h
- * This file is part of CoreGTK
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,39 +11,31 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/Foundation.h>
-
-#import "CoreGTK/CGTKBase.h"
+#import "CGTKBase.h"
 
 /*
  * C imports
  */
 #import <gtk/gtk.h>
- 
+
 /**
  * Global level CoreGTK functionality
  */
-@interface CGTK : NSObject
-{
-
+@interface CGTK : OFObject {
 }
 
 /**
@@ -51,7 +43,7 @@
  *
  * @return the version string
  */
-+(NSString *)coreGtkVersion;
++ (OFString*)coreGtkVersion;
 
 /**
  * Call this function before using any other GTK+ functions in your GUI 
@@ -73,7 +65,7 @@
  *  Address of the argv parameter of main(), or NULL. Any options understood by 
  *  GTK+ are stripped before return. [array length=argc][inout][allow-none]
  */
-+(void)initWithArgc:(int *)argc andArgv:(char ***)argv;
++ (void)initWithArgc:(int*)argc andArgv:(char***)argv;
 
 /**
  * Same as initWithArgc:andArgv: but does the type conversion automatically.
@@ -90,7 +82,7 @@
  *
  * @see initWithArgc:andArgv:
  */
-+(int)autoInitWithArgc:(int)argc andArgv:(char *[])argv;
++ (int)autoInitWithArgc:(int)argc andArgv:(char*[])argv;
 
 /**
  * Runs the main loop until mainQuit is called. 
@@ -99,12 +91,12 @@
  *
  * @see mainQuit
  */
-+(void)main;
++ (void)main;
 
 /**
  * Makes the innermost invocation of the main loop return when it regains 
  * control.
  */
-+(void)mainQuit;
++ (void)mainQuit;
 
 @end

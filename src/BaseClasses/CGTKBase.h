@@ -1,6 +1,6 @@
 /*
  * CGTKBase.h
- * This file is part of CoreGTK
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,25 +11,22 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
+
 #import "CGTKTypeWrapper.h"
 
 /*
@@ -40,12 +37,11 @@
 /**
  * The base class for all CoreGTK wrapper classes
  */
-@interface CGTKBase : NSObject
-{
-	/**
+@interface CGTKBase : OFObject {
+    /**
 	 * The internal GtkObject pointer
 	 */
-	GObject *__gObject;
+    GObject* __gObject;
 }
 
 /**
@@ -58,7 +54,7 @@
  *
  * @returns a new CGTKBase
  */
-+(CGTKBase *)withGObject:(GObject *)obj;
++ (CGTKBase*)withGObject:(GObject*)obj;
 
 /**
  * Returns a new instance of CGTKBase with the internal GObject set to obj
@@ -68,14 +64,14 @@
  *
  * @returns a new CGTKBase
  */
--(id)initWithGObject:(GObject *)obj;
+- (id)initWithGObject:(GObject*)obj;
 
 /**
  * Gets the internal GtkWidget
  *
  * @returns the internal GtkWidget
  */
--(GtkWidget *)WIDGET;
+- (GtkWidget*)WIDGET;
 
 /**
  * Sets the internal GObject
@@ -83,13 +79,13 @@
  * @param obj
  * 	The GObject to set internally
  */
--(void)setGObject:(GObject *)obj;
+- (void)setGObject:(GObject*)obj;
 
 /**
  * Gets the internal GObject
  *
  * @returns the internal GObject
  */
--(GObject *)GOBJECT;
+- (GObject*)GOBJECT;
 
 @end
