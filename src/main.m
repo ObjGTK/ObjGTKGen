@@ -68,7 +68,10 @@ int main(int argc, char* argv[])
 
         if ([fileMgr fileExistsAtPath:dest]) {
             OFLog(@"File [%@] already exists in destination [%@]. Removing existing file...", src, dest);
-            if (![fileMgr removeItemAtPath:dest]) {
+            
+			@try {
+				[fileMgr removeItemAtPath:dest];
+			} @catch(id exception) {
                 OFLog(@"Error removing file [%@]. Skipping file.", dest);
                 continue;
             }
