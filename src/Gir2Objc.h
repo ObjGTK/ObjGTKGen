@@ -20,16 +20,15 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
 #import "Generator/CGTKClassWriter.h"
 #import "Generator/CGTKParameter.h"
@@ -37,38 +36,41 @@
 #import "GIR/GIRApi.h"
 #import "GIR/GIRNamespace.h"
 
+#import "Exceptions/OGTKNoGIRDictException.h"
+#import "Exceptions/OGTKNoGIRAPIException.h"
+
 #import "XMLReader/XMLReader.h"
 
 /**
  * Provides functionality to convert GObject Introspection GIR files into CoreGTK source code
  */
-@interface Gir2Objc : NSObject
+@interface Gir2Objc : OFObject
 
 /**
- * Parses the girFile XML into the NSDictionary
+ * Parses the girFile XML into the OFDictionary
  */
-+(BOOL)parseGirFromFile:(NSString *) girFile intoDictionary:(NSDictionary **) girDict withError:(NSError **) parseError;
++ (void)parseGirFromFile:(OFString*)girFile intoDictionary:(OFDictionary**)girDict;
 
 /**
- * Recurses through the NSDictionary looking for the first "api" or "repository" key and then attempts to parse that into 
+ * Recurses through the OFDictionary looking for the first "api" or "repository" key and then attempts to parse that into 
  * a GIRApi. If no key is found nil is returned.
  */
-+(GIRApi *)firstApiFromDictionary:(NSDictionary *) girDict;
++ (GIRApi*)firstApiFromDictionary:(OFDictionary*)girDict;
 
 /**
  * Parses the girFile XML and then attempts to extract a GIRApi from the parsed contents. If the GIR is successfully parsed, 
  * but no valid data is found, nil is returned.
  */
-+(GIRApi *)firstApiFromGirFile:(NSString *) girFile withError:(NSError **) parseError;
++ (GIRApi*)firstApiFromGirFile:(OFString*)girFile;
 
 /**
  * Generates CoreGTK source from the GIR API level
  */
-+(BOOL)generateClassFilesFromApi:(GIRApi *) api;
++ (void)generateClassFilesFromApi:(GIRApi*)api;
 
 /**
  * Generates CoreGTK source from the GIR Namespace level
  */
-+(BOOL)generateClassFilesFromNamespace:(GIRNamespace *) namespace;
++ (void)generateClassFilesFromNamespace:(GIRNamespace*)ns;
 
 @end

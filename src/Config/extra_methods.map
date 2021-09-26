@@ -2,11 +2,10 @@
 
 GtkContainer = {
 
-"-(void)addWidget:(CGTKWidget *)widget withProperties:(NSDictionary *)properties" =
+"-(void)addWidget:(CGTKWidget *)widget withProperties:(OFDictionary *)properties" =
 "{
 	CGTKTypeWrapper *wrapper;
-	for(NSString *propName in properties)
-	{
+	for(OFString *propName in properties) {
 		wrapper = [properties objectForKey:propName];
 		
 		gtk_container_child_set_property([self CONTAINER], [widget WIDGET], [propName UTF8String], [wrapper asGValuePtr]);
@@ -17,29 +16,24 @@ GtkContainer = {
 
 GtkDialog = {
 
-"-(id)initWithTitle:(NSString *)title andParent:(CGTKWindow *)parent andFlags:(GtkDialogFlags)flags andButtonTextResponseDictionary:(NSDictionary *)buttonTextDict" = 
+"-(id)initWithTitle:(OFString *)title andParent:(CGTKWindow *)parent andFlags:(GtkDialogFlags)flags andButtonTextResponseDictionary:(OFDictionary *)buttonTextDict" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_dialog_new_with_buttons([title UTF8String], [parent WINDOW], flags, NULL, NULL)];
 
-	if(self)
-	{
-		CGTKTypeWrapper *wrapper;
-		for(NSString *text in buttonTextDict)
-		{
-			wrapper = [buttonTextDict objectForKey:text];
+	CGTKTypeWrapper *wrapper;
+	for(OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 			
-			[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
-		}
+		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
 	}
 
 	return self;
 }";
 
-"-(void)addButtons:(NSDictionary *)buttonTextDict" = 
+"-(void)addButtons:(OFDictionary *)buttonTextDict" = 
 "{
 	CGTKTypeWrapper *wrapper;
-	for(NSString *text in buttonTextDict)
-	{
+	for(OFString *text in buttonTextDict) {
 		wrapper = [buttonTextDict objectForKey:text];
 		
 		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
@@ -50,20 +44,16 @@ GtkDialog = {
 
 GtkFileChooserDialog = {
 
-"-(id)initWithTitle:(NSString *)title andParent:(CGTKWindow *)parent andAction:(GtkFileChooserAction)action andButtonTextResponseDictionary:(NSDictionary *)buttonTextDict" = 
+"-(id)initWithTitle:(OFString *)title andParent:(CGTKWindow *)parent andAction:(GtkFileChooserAction)action andButtonTextResponseDictionary:(OFDictionary *)buttonTextDict" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_file_chooser_dialog_new([title UTF8String], [parent WINDOW], action, NULL, NULL)];
 
-	if(self)
-	{
-		CGTKTypeWrapper *wrapper;
+	CGTKTypeWrapper *wrapper;
+	
+	for(OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 		
-		for(NSString *text in buttonTextDict)
-		{
-			wrapper = [buttonTextDict objectForKey:text];
-			
-			[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
-		}
+		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
 	}
 
 	return self;
@@ -73,36 +63,26 @@ GtkFileChooserDialog = {
 
 GtkMessageDialog = {
 
-"-(id)initWithParent:(CGTKWindow *)parent andFlags:(GtkDialogFlags)flags andType:(GtkMessageType)type andButtons:(GtkButtonsType)buttons andMessage:(NSString *)message" = 
+"-(id)initWithParent:(CGTKWindow *)parent andFlags:(GtkDialogFlags)flags andType:(GtkMessageType)type andButtons:(GtkButtonsType)buttons andMessage:(OFString *)message" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_message_dialog_new([parent WINDOW], flags, type, buttons, [message UTF8String], NULL)];
 
-	if(self)
-	{
-		// Do nothing
-	}
-
 	return self;
 }";
 
-"-(id)initWithParent:(CGTKWindow *)parent andFlags:(GtkDialogFlags)flags andType:(GtkMessageType)type andButtons:(GtkButtonsType)buttons andMarkup:(NSString *)markup" = 
+"-(id)initWithParent:(CGTKWindow *)parent andFlags:(GtkDialogFlags)flags andType:(GtkMessageType)type andButtons:(GtkButtonsType)buttons andMarkup:(OFString *)markup" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_message_dialog_new_with_markup([parent WINDOW], flags, type, buttons, [markup UTF8String], NULL)];
 
-	if(self)
-	{
-		// Do nothing
-	}
-
 	return self;
 }";
 
-"-(void)formatSecondaryText:(NSString *)message" = 
+"-(void)formatSecondaryText:(OFString *)message" = 
 "{
 	gtk_message_dialog_format_secondary_text([self MESSAGEDIALOG], [message UTF8String], NULL);
 }";
 
-"-(void)formatSecondaryMarkup:(NSString *)markup" = 
+"-(void)formatSecondaryMarkup:(OFString *)markup" = 
 "{
 	gtk_message_dialog_format_secondary_markup([self MESSAGEDIALOG], [markup UTF8String], NULL);
 }";
@@ -111,39 +91,31 @@ GtkMessageDialog = {
 
 GtkRecentChooserDialog = {
 
-"-(id)initWithTitle:(NSString *)title andParent:(CGTKWindow *)parent andButtonTextResponseDictionary:(NSDictionary *)buttonTextDict" = 
+"-(id)initWithTitle:(OFString *)title andParent:(CGTKWindow *)parent andButtonTextResponseDictionary:(OFDictionary *)buttonTextDict" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_recent_chooser_dialog_new([title UTF8String], [parent WINDOW], NULL, NULL)];
 
-	if(self)
-	{
-		CGTKTypeWrapper *wrapper;
+	CGTKTypeWrapper *wrapper;
+	
+	for(OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 		
-		for(NSString *text in buttonTextDict)
-		{
-			wrapper = [buttonTextDict objectForKey:text];
-			
-			[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
-		}
+		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
 	}
 
 	return self;
 }";
 
-"-(id)initForManagerWithTitle:(NSString *)title andParent:(CGTKWindow *)parent andManager:(GtkRecentManager*)manager andButtonTextResponseDictionary:(NSDictionary *)buttonTextDict" = 
+"-(id)initForManagerWithTitle:(OFString *)title andParent:(CGTKWindow *)parent andManager:(GtkRecentManager*)manager andButtonTextResponseDictionary:(OFDictionary *)buttonTextDict" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_recent_chooser_dialog_new_for_manager([title UTF8String], [parent WINDOW], manager, NULL, NULL)];
 
-	if(self)
-	{
-		CGTKTypeWrapper *wrapper;
+	CGTKTypeWrapper *wrapper;
+	
+	for(OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 		
-		for(NSString *text in buttonTextDict)
-		{
-			wrapper = [buttonTextDict objectForKey:text];
-			
-			[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
-		}
+		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
 	}
 
 	return self;
@@ -153,31 +125,26 @@ GtkRecentChooserDialog = {
 
 GtkInfoBar = {
 
-"-(id)initWithButtonTextResponseDictionary:(NSDictionary *)buttonTextDict" = 
+"-(id)initWithButtonTextResponseDictionary:(OFDictionary *)buttonTextDict" = 
 "{
 	self = [super initWithGObject:(GObject *)gtk_info_bar_new()];
 
-	if(self)
-	{
-		CGTKTypeWrapper *wrapper;
+	CGTKTypeWrapper *wrapper;
+	
+	for(OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 		
-		for(NSString *text in buttonTextDict)
-		{
-			wrapper = [buttonTextDict objectForKey:text];
-			
-			[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
-		}
+		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];
 	}
 
 	return self;
 }";
 
-"-(void)addButtonTextResponseDictionary:(NSDictionary *)buttonTextDict" = 
+"-(void)addButtonTextResponseDictionary:(OFDictionary *)buttonTextDict" = 
 "{
 	CGTKTypeWrapper *wrapper;
 	
-	for(NSString *text in buttonTextDict)
-	{
+	for(OFString *text in buttonTextDict) {
 		wrapper = [buttonTextDict objectForKey:text];
 		
 		[self addButtonWithButtonText:text andResponseId:wrapper.gintValue];

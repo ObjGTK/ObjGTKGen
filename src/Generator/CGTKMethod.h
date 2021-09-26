@@ -29,10 +29,10 @@
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
-#import "Generator/CGTKUtil.h"
-#import "Generator/CGTKParameter.h"
+#import "CGTKUtil.h"
+#import "CGTKParameter.h"
 
 /**
  * Abstracts Method operations

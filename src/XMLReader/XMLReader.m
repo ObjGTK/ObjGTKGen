@@ -3,15 +3,16 @@
 // Based on Simple XML to NSDictionary Converter by Troy Brant
 // Original source here http://troybrant.net/blog/2010/09/simple-xml-to-nsdictionary-converter/
 //
+// Ported to ObjFW by Johannes Brakensiek, 2021
+//
 
 #import "XMLReader.h"
 
-NSString *const kXMLReaderTextNodeKey = @"text";
+OFString* const kXMLReaderTextNodeKey = @"text";
 
 @interface XMLReader (Internal)
 
-- (id)initWithError:(NSError **)error;
-- (NSDictionary *)objectWithData:(NSData *)data;
+- (OFDictionary*)dictionaryForXMLString:(OFString*)string;
 
 @end
 
@@ -20,33 +21,16 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 #pragma mark -
 #pragma mark Public methods
 
-+ (NSDictionary *)dictionaryForXMLData:(NSData *)data error:(NSError **)error
++ (NSDictionary*)dictionaryForXMLString:(OFString*)string
 {
-    XMLReader *reader = [[XMLReader alloc] initWithError:error];
-    NSDictionary *rootDictionary = [reader objectWithData:data];
+    XMLReader* reader = [[XMLReader alloc] init];
+    OFDictionary* rootDictionary = [reader dictionaryForXMLString:string];
     [reader release];
     return rootDictionary;
 }
 
-+ (NSDictionary *)dictionaryForXMLString:(NSString *)string error:(NSError **)error
-{
-    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
-    return [XMLReader dictionaryForXMLData:data error:error];
-}
-
 #pragma mark -
 #pragma mark Parsing
-
-- (id)initWithError:(NSError **)error
-{
-	self = [super init];
-	
-    if (self)
-    {
-        errorPointer = error;
-    }
-    return self;
-}
 
 - (void)dealloc
 {
@@ -55,109 +39,91 @@ NSString *const kXMLReaderTextNodeKey = @"text";
     [super dealloc];
 }
 
-- (NSDictionary *)objectWithData:(NSData *)data
+- (OFDictionary*)dictionaryForXMLString:(OFString*)string
 {
     // Clear out any old data
     [dictionaryStack release];
     [textInProgress release];
-    
-    dictionaryStack = [[NSMutableArray alloc] init];
-    textInProgress = [[NSMutableString alloc] init];
-    
+
+    dictionaryStack = [[OFMutableArray alloc] init];
+    textInProgress = [[OFMutableString alloc] init];
+
     // Initialize the stack with a fresh dictionary
-    [dictionaryStack addObject:[NSMutableDictionary dictionary]];
-    
+    [dictionaryStack addObject:[OFMutableDictionary dictionary]];
+
     // Parse the XML
-    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
+    OFXMLParser* parser = [[OFXMLParser alloc] init];
     parser.delegate = self;
-    BOOL success = [parser parse];
-    
-    // Return the stack’s root dictionary on success
-    if (success)
-    {
-        NSDictionary *resultDict = [dictionaryStack objectAtIndex:0];
-        return resultDict;
-    }
-    
-    return nil;
+    [parser parseString:string];
+
+    OFDictionary* resultDict = [dictionaryStack objectAtIndex:0];
+    return resultDict;
 }
 
 #pragma mark -
-#pragma mark NSXMLParserDelegate methods
+#pragma mark OFXMLParserDelegate method
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+- (void)parser:(OFXMLParser*)parser didStartElement:(OFString*)elementName prefix:(nullable OFString*)prefix namespace:(OFString*)namespace attributes:(OFArray*)attributes
 {
     // Get the dictionary for the current level in the stack
-    NSMutableDictionary *parentDict = [dictionaryStack lastObject];
-    
+    OFMutableDictionary* parentDict = [dictionaryStack lastObject];
+
     // Create the child dictionary for the new element, and initilaize it with the attributes
-    NSMutableDictionary *childDict = [NSMutableDictionary dictionary];
-    [childDict addEntriesFromDictionary:attributeDict];
-    
+    OFMutableDictionary* childDict = [OFMutableDictionary dictionary];
+    for (OFXMLAttribute* attribute in attributes) {
+        [childDict setValue:attribute.stringValue forKey:attribute.name];
+    }
+
     // If there’s already an item for this key, it means we need to create an array
     id existingValue = [parentDict objectForKey:elementName];
-    if (existingValue)
-    {
-        NSMutableArray *array = nil;
-        if ([existingValue isKindOfClass:[NSMutableArray class]])
-        {
+    if (existingValue) {
+        OFMutableArray* array = nil;
+        if ([existingValue isKindOfClass:[OFMutableArray class]]) {
             // The array exists, so use it
-            array = (NSMutableArray *) existingValue;
-        }
-        else
-        {
+            array = (OFMutableArray*)existingValue;
+        } else {
             // Create an array if it doesn’t exist
-            array = [NSMutableArray array];
+            array = [OFMutableArray array];
             [array addObject:existingValue];
-            
+
             // Replace the child dictionary with an array of children dictionaries
             [parentDict setObject:array forKey:elementName];
         }
-        
+
         // Add the new child dictionary to the array
         [array addObject:childDict];
-    }
-    else
-    {
+    } else {
         // No existing value, so update the dictionary
         [parentDict setObject:childDict forKey:elementName];
     }
-    
+
     // Update the stack
     [dictionaryStack addObject:childDict];
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+- (void)parser:(OFXMLParser*)parser didEndElement:(OFString*)elementName prefix:(nullable OFString*)prefix namespace:(OFString*)namespace
 {
     // Update the parent dict with text info
-    NSMutableDictionary *dictInProgress = [dictionaryStack lastObject];
-    
+    OFMutableDictionary* dictInProgress = [dictionaryStack lastObject];
+
     // Set the text property
-    if ([textInProgress length] > 0)
-    {
+    if ([textInProgress length] > 0) {
         // Get rid of leading + trailing whitespace
         [dictInProgress setObject:textInProgress forKey:kXMLReaderTextNodeKey];
-        
+
         // Reset the text
         [textInProgress release];
-        textInProgress = [[NSMutableString alloc] init];
+        textInProgress = [[OFMutableString alloc] init];
     }
-    
+
     // Pop the current dict
     [dictionaryStack removeLastObject];
 }
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+- (void)parser:(OFXMLParser*)parser foundCharacters:(OFString*)string
 {
     // Build the text value
     [textInProgress appendString:string];
 }
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-    // Set the error pointer to the parser’s error object
-    *errorPointer = parseError;
-}
-
 @end
-

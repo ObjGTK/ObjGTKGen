@@ -28,7 +28,7 @@
 /*
  * Objective-C imports
  */
-#import "Generator/CGTKClassWriter.h"
+#import "CGTKClassWriter.h"
 
 @implementation CGTKClassWriter
 

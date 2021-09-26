@@ -29,9 +29,9 @@
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
-#import "Generator/CGTKMethod.h"
+#import "CGTKMethod.h"
 
 /**
  * Abstracts Class operations

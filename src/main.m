@@ -20,131 +20,70 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/NSAutoreleasePool.h>
-#import <Foundation/NSFileManager.h>
-#import <Foundation/NSString.h>
+#import <ObjFW/ObjFW.h>
 
+#import "Exceptions/OGTKIncorrectConfigException.h"
+#import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Generator/CGTKClassWriter.h"
 #import "Gir2Objc.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	/*
-	 * Step 1: parse GIR file
-	 */
-	
-	NSString *girFile = [CGTKUtil globalConfigValueFor:@"girFile"];
-	NSError *parseError = nil;
-	
-	NSLog(@"Attempting to parse GIR file...");
-	GIRApi *api = [Gir2Objc firstApiFromGirFile: girFile withError: &parseError];
-	
-	if(api == nil)
-	{
-		// Check if it failed due to a parsing error
-		if(parseError != nil)
-		{
-			NSLog(@"Failed to parse GIR file!");
-			NSLog(@"%@", parseError);
-		}
-		// If there wasn't a file parsing error then it failed turning the NSDictionary into the GIRApi
-		else
-		{
-			NSLog(@"Failed to convert dictionary into GIRApi!");
-		}
-	}
-	else
-	{
-		NSLog(@"Finished converting dictionary into GIRApi.");
-	}
-		
-	if(api != nil)
-	{
-		/*
-		 * Step 2: generate CoreGTK source files
-		 */
-	
-		NSLog(@"Attempting to generate CoreGTK...");
-		[Gir2Objc generateClassFilesFromApi:api];
-		NSLog(@"Process complete");
-		
-		/*
-		 * Step 3: copy CoreGTK base files
-		 */
-		
-		NSString *baseClassPath = [CGTKUtil globalConfigValueFor:@"baseClassDir"];
-		NSString *outputDir = [CGTKUtil globalConfigValueFor:@"outputDir"];
-	
-		if(baseClassPath != nil && outputDir != nil)
-		{
-			NSLog(@"Attempting to copy CoreGTK base class files...");
-			NSFileManager *fileMgr = [NSFileManager defaultManager];
-	
-			if ([fileMgr isReadableFileAtPath:baseClassPath] && [fileMgr isWritableFileAtPath:outputDir])
-			{			
-				NSError *error = nil;
-				NSArray *srcDirContents = [fileMgr contentsOfDirectoryAtPath:baseClassPath error:&error];
-			
-				if(error != nil)
-				{
-					NSLog(@"Error: %@", error);
-				}
-				else
-				{
-					for(NSString *srcFile in srcDirContents)
-					{
-						NSString *src = [baseClassPath stringByAppendingPathComponent:[srcFile lastPathComponent]];
-						NSString *dest = [outputDir stringByAppendingPathComponent:
-										  [srcFile lastPathComponent]];
+    // Step 1: parse GIR file
 
-						if([fileMgr fileExistsAtPath:dest])
-						{
-							NSLog(@"File [%@] already exists in destination [%@]. Removing existing file...", src, dest);
-							if(![fileMgr removeItemAtPath:dest error:&error])
-							{
-								NSLog(@"Error removing file [%@]: %@. Skipping file.", dest, error);
-								continue;
-							}
-						}
-						
-						NSLog(@"Copying file [%@] to [%@]...", src, dest);
-						if(![fileMgr copyItemAtPath:src
-											    toPath:dest
-											     error:&error])
-						{
-							NSLog(@"Error: %@", error);
-						}
-					}
-				}
-			}
-			else
-			{
-				NSLog(@"Cannot read/write from directories!");
-			}
-			NSLog(@"Process complete");
-		}
-		
-		// Release memory
-	    [baseClassPath release];
-    	[outputDir release];
+    OFString* girFile = [CGTKUtil globalConfigValueFor:@"girFile"];
+
+    OFLog(@"%s", @"Attempting to parse GIR file...");
+    GIRApi* api = [Gir2Objc firstApiFromGirFile:girFile];
+
+    if (api == nil)
+        @throw [OGTKNoGIRAPIException exception]];
+
+    // Step 2: generate CoreGTK source files
+    OFLog(@"%s", @"Attempting to generate CoreGTK...");
+    [Gir2Objc generateClassFilesFromApi:api];
+    OFLog(@"%s", @"Process complete");
+
+    // Step 3: copy CoreGTK base files
+    OFString* baseClassPath = [CGTKUtil globalConfigValueFor:@"baseClassDir"];
+    OFString* outputDir = [CGTKUtil globalConfigValueFor:@"outputDir"];
+
+    if (baseClassPath == nil || outputDir == nil)
+        @throw [OGTKIncorrectConfigException exception];
+
+    OFLog(@"%s", @"Attempting to copy CoreGTK base class files...");
+    OFFileManager* fileMgr = [OFFileManager defaultManager];
+
+    OFArray* srcDirContents = [fileMgr contentsOfDirectoryAtPath:baseClassPath];
+
+    for (OFString* srcFile in srcDirContents) {
+        OFString* src = [baseClassPath stringByAppendingPathComponent:[srcFile lastPathComponent]];
+        OFString* dest = [outputDir stringByAppendingPathComponent:
+                                        [srcFile lastPathComponent]];
+
+        if ([fileMgr fileExistsAtPath:dest]) {
+            OFLog(@"File [%@] already exists in destination [%@]. Removing existing file...", src, dest);
+            if (![fileMgr removeItemAtPath:dest]) {
+                OFLog(@"Error removing file [%@]. Skipping file.", dest);
+                continue;
+            }
+        }
+
+        OFLog(@"Copying file [%@] to [%@]...", src, dest);
+        [fileMgr copyItemAtPath:src toPath:dest];
     }
-    	
-	/*
-	 * Release allocated memory
-	 */
-	[pool release];
-	
-	// Return success
-	return 0;
+
+    OFLog(@"%s", @"Process complete");
+
+    // Release memory
+    [baseClassPath release];
+    [outputDir release];
+
+    // Return success
+    return 0;
 }

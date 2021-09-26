@@ -29,9 +29,9 @@
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
-#import "Generator/CGTKUtil.h"
+#import "CGTKUtil.h"
 
 /**
  * Abstracts Parameter operations

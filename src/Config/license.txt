@@ -1,6 +1,6 @@
 /*
  * @@@FILENAME@@@
- * This file is part of CoreGTK
+ * This file is part of ObjGTK which is based upon CoreGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,8 +20,7 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2021. See the AUTHORS file for a
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
  * list of people on the CoreGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */

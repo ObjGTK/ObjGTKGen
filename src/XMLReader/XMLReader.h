@@ -4,17 +4,13 @@
 // Original source here http://troybrant.net/blog/2010/09/simple-xml-to-nsdictionary-converter/
 //
 
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
-@interface XMLReader : NSObject
-{
-    NSMutableArray *dictionaryStack;
-    NSMutableString *textInProgress;
-    NSError **errorPointer;
+@interface XMLReader : OFObject <OFXMLParserDelegate> {
+    OFMutableArray* dictionaryStack;
+    OFMutableString* textInProgress;
 }
 
-+ (NSDictionary *)dictionaryForXMLData:(NSData *)data error:(NSError **)errorPointer;
-+ (NSDictionary *)dictionaryForXMLString:(NSString *)string error:(NSError **)errorPointer;
++ (OFDictionary*)dictionaryForXMLString:(OFString*)string;
 
 @end
-

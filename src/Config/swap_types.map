@@ -1,14 +1,14 @@
 {	
 Atk.Object = CGTKBase;
-BOOL = gboolean;
-"const gchar*" = NSString*;
-gboolean = BOOL;
-gchar* = NSString*;
+bool = gboolean;
+"const gchar*" = OFString*;
+gboolean = bool;
+gchar* = OFString*;
 Gio.Application = CGTKBase;
 GObject.InitiallyUnowned = CGTKBase;
 GObject.Object = CGTKBase;
 Gtk = CGTK;
-NSString* = "const gchar*";
+OFString* = "const gchar*";
 	
 CGTKAboutDialog = AboutDialog;
 CGTKAccelLabel = AccelLabel;

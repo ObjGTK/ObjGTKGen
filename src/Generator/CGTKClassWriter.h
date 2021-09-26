@@ -20,24 +20,23 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
-#import "Generator/CGTKUtil.h"
-#import "Generator/CGTKClass.h"
+#import "CGTKUtil.h"
+#import "CGTKClass.h"
 
 /**
  * Functions to write in memory Class representation to file as CoreGTK source
  */
-@interface CGTKClassWriter : NSObject
+@interface CGTKClassWriter : OFObject
 {
 
 }
@@ -45,32 +44,32 @@
 /**
  * Generate both header and source files based on class and save them in outputDir
  */
-+(void)generateFilesForClass:(CGTKClass *) cgtkClass inDir:(NSString *) outputDir;
++(void)generateFilesForClass:(CGTKClass *) cgtkClass inDir:(OFString *) outputDir;
 
 /**
  * Generate header file contents based on class
  */
-+(NSString *)headerStringFor:(CGTKClass *) cgtkClass;
++(OFString *)headerStringFor:(CGTKClass *) cgtkClass;
 
 /**
  * Generate source file contents based on class
  */
-+(NSString *)sourceStringFor:(CGTKClass *) cgtkClass;
++(OFString *)sourceStringFor:(CGTKClass *) cgtkClass;
 
 /**
  * Generate list of paramters to pass to underlying C function
  */
-+(NSString *)generateCParameterListString:(NSArray *) params;
-+(NSString *)generateCParameterListWithInstanceString:(NSString *)instanceType andParams:(NSArray *) params;
++(OFString *)generateCParameterListString:(OFArray *) params;
++(OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType andParams:(OFArray *) params;
 
 /**
  * Reads the text from conf/license.txt and replaces "@@@FILENAME@@@" with fileName
  */
-+(NSString *)generateLicense:(NSString *)fileName;
++(OFString *)generateLicense:(OFString *)fileName;
 
 /**
  * Uses the information in the method to return documentation for the method
  */
-+(NSString *)generateDocumentationForMethod:(CGTKMethod *)meth;
++(OFString *)generateDocumentationForMethod:(CGTKMethod *)meth;
 
 @end

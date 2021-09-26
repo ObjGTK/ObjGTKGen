@@ -29,7 +29,7 @@
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
 /**
  * Provides useful utility functions for CoreGTKGen
