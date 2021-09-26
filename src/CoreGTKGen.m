@@ -1,5 +1,5 @@
 /*
- * main.h
+ * CoreGTKGen.m
  * This file is part of CoreGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -32,7 +32,14 @@
 #import "Generator/CGTKClassWriter.h"
 #import "Gir2Objc.h"
 
-int main(int argc, char* argv[])
+@interface CoreGTKGen : OFObject <OFApplicationDelegate>
+@end
+
+OF_APPLICATION_DELEGATE(CoreGTKGen)
+
+@implementation CoreGTKGen
+
+- (void)applicationDidFinishLaunching
 {
     // Step 1: parse GIR file
 
@@ -87,6 +94,7 @@ int main(int argc, char* argv[])
     [baseClassPath release];
     [outputDir release];
 
-    // Return success
-    return 0;
+    [OFApplication terminate];
 }
+
+@end
