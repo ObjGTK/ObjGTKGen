@@ -20,22 +20,19 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
  * Objective-C imports
  */
-#import <Foundation/Foundation.h>
-
 #import "Generator/CGTKClassWriter.h"
 
 @implementation CGTKClassWriter
 
-+(void)generateFilesForClass:(CGTKClass *) cgtkClass inDir:(NSString *) outputDir
++(void)generateFilesForClass:(CGTKClass *) cgtkClass inDir:(OFString *) outputDir
 {
 	NSError *error = nil;
 	
