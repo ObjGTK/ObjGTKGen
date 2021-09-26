@@ -1,6 +1,6 @@
 /*
  * GIRDoc.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -67,15 +66,15 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"])
+		if([key isEqual:@"text"])
 		{
 			self.docText = value;
 		}
-		else if([key isEqualToString:@"xml:space"])
+		else if([key isEqual:@"xml:space"])
 		{
 			self.xmlSpace = value;
 		}
-		else if([key isEqualToString:@"xml:whitespace"])
+		else if([key isEqual:@"xml:whitespace"])
 		{
 			self.xmlWhitespace = value;
 		}

@@ -1,6 +1,6 @@
 /*
  * GIRInterface.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -78,47 +77,47 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"]
-			|| [key isEqualToString:@"glib:type-name"]
-			|| [key isEqualToString:@"glib:type-struct"]
-			|| [key isEqualToString:@"glib:signal"]
-			|| [key isEqualToString:@"glib:get-type"])
+		if([key isEqual:@"text"]
+			|| [key isEqual:@"glib:type-name"]
+			|| [key isEqual:@"glib:type-struct"]
+			|| [key isEqual:@"glib:signal"]
+			|| [key isEqual:@"glib:get-type"])
 		{
 			// Do nothing
 		}
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}
-		else if([key isEqualToString:@"c:type"])
+		else if([key isEqual:@"c:type"])
 		{
 			self.cType = value;
 		}
-		else if([key isEqualToString:@"c:symbol-prefix"])
+		else if([key isEqual:@"c:symbol-prefix"])
 		{
 			self.cSymbolPrefix = value;
 		}
-		else if([key isEqualToString:@"doc"])
+		else if([key isEqual:@"doc"])
 		{
 			self.doc = [[GIRDoc alloc] initWithDictionary:value];
 		}
-		else if([key isEqualToString:@"fields"])
+		else if([key isEqual:@"fields"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRField class] andArray:fields];
 		}
-		else if([key isEqualToString:@"method"])
+		else if([key isEqual:@"method"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRMethod class] andArray:methods];
 		}
-		else if([key isEqualToString:@"virtual-method"])
+		else if([key isEqual:@"virtual-method"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRMethod class] andArray:virtualMethods];
 		}
-		else if([key isEqualToString:@"property"])
+		else if([key isEqual:@"property"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRProperty class] andArray:properties];
 		}
-		else if([key isEqualToString:@"prerequisite"])
+		else if([key isEqual:@"prerequisite"])
 		{
 			self.prerequisite = [[GIRPrerequisite alloc] initWithDictionary:value];
 		}

@@ -1,6 +1,6 @@
 /*
  * GIRArray.h
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,33 +20,30 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
-#import "GIR/GIRBase.h"
-#import "GIR/GIRType.h"
+#import <ObjFW/ObjFW.h>
 
-@interface GIRArray : GIRBase
-{
-	NSString *cType;
-	NSString *name;
-	int length;
-	int fixedSize;
-	BOOL zeroTerminated;
-	GIRType *type;
+#import "GIRBase.h"
+#import "GIRType.h"
+
+@interface GIRArray : GIRBase {
+    OFString* cType;
+    OFString* name;
+    int length;
+    int fixedSize;
+    bool zeroTerminated;
+    GIRType* type;
 }
 
-@property (nonatomic, retain) NSString *cType;
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) OFString* cType;
+@property (nonatomic, retain) OFString* name;
 @property (nonatomic) int length;
 @property (nonatomic) int fixedSize;
-@property (nonatomic) BOOL zeroTerminated;
-@property (nonatomic, retain) GIRType *type;
+@property (nonatomic) bool zeroTerminated;
+@property (nonatomic, retain) GIRType* type;
 
 @end

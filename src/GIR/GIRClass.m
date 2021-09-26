@@ -1,6 +1,6 @@
 /*
  * GIRClass.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -86,67 +85,67 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"]
-			|| [key isEqualToString:@"glib:type-name"]
-			|| [key isEqualToString:@"glib:type-struct"]
-			|| [key isEqualToString:@"glib:get-type"]
-			|| [key isEqualToString:@"glib:signal"])
+		if([key isEqual:@"text"]
+			|| [key isEqual:@"glib:type-name"]
+			|| [key isEqual:@"glib:type-struct"]
+			|| [key isEqual:@"glib:get-type"]
+			|| [key isEqual:@"glib:signal"])
 		{
 			// Do nothing
 		}
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}
-		else if([key isEqualToString:@"c:type"])
+		else if([key isEqual:@"c:type"])
 		{
 			self.cType = value;
 		}
-		else if([key isEqualToString:@"c:symbol-prefix"])
+		else if([key isEqual:@"c:symbol-prefix"])
 		{
 			self.cSymbolPrefix = value;
 		}
-		else if([key isEqualToString:@"parent"])
+		else if([key isEqual:@"parent"])
 		{
 			self.parent = value;
 		}	
-		else if([key isEqualToString:@"version"])
+		else if([key isEqual:@"version"])
 		{
 			self.version = value;
 		}	
-		else if([key isEqualToString:@"abstract"])
+		else if([key isEqual:@"abstract"])
 		{
-			self.abstract = [value isEqualToString:@"1"];
+			self.abstract = [value isEqual:@"1"];
 		}
-		else if([key isEqualToString:@"doc"])
+		else if([key isEqual:@"doc"])
 		{
 			self.doc = [[GIRDoc alloc] initWithDictionary:value];
 		}	
-		else if([key isEqualToString:@"constructor"])
+		else if([key isEqual:@"constructor"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRConstructor class] andArray:constructors];
 		}
-		else if([key isEqualToString:@"field"])
+		else if([key isEqual:@"field"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRField class] andArray:fields];
 		}
-		else if([key isEqualToString:@"method"])
+		else if([key isEqual:@"method"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRMethod class] andArray:methods];
 		}
-		else if([key isEqualToString:@"virtual-method"])
+		else if([key isEqual:@"virtual-method"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRVirtualMethod class] andArray:virtualMethods];
 		}
-		else if([key isEqualToString:@"property"])
+		else if([key isEqual:@"property"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRProperty class] andArray:properties];
 		}
-		else if([key isEqualToString:@"implements"])
+		else if([key isEqual:@"implements"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRImplements class] andArray:implements];
 		}
-		else if([key isEqualToString:@"function"])
+		else if([key isEqual:@"function"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
 		}

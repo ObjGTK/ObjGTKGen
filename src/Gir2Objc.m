@@ -61,7 +61,7 @@
     for (OFString* key in girDict) {
         id value = [girDict objectForKey:key];
 
-        if ([key isEqualToString:@"api"] || [key isEqualToString:@"repository"]) {
+        if ([key isEqual:@"api"] || [key isEqual:@"repository"]) {
             return [[[GIRApi alloc] initWithDictionary:value] autorelease];
         } else if ([value isKindOfClass:[OFDictionary class]]) {
             return [Gir2Objc firstApiFromDictionary:value];

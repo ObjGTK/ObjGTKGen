@@ -1,6 +1,6 @@
 /*
  * GIRApi.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,15 +20,11 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRApi.h"
 
 @implementation GIRApi
@@ -37,71 +33,57 @@
 @synthesize cInclude;
 @synthesize namespaces;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{
-		self.elementTypeName = @"GIRApi";
-		self.namespaces = [[NSMutableArray alloc] init];
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRApi";
+    self.namespaces = [[OFMutableArray alloc] init];
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    if (self) {
+        [self parseDictionary:dict];
+    }
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{
-		id value = [dict objectForKey:key];
-		
-		if([key isEqualToString:@"text"]
-			|| [key isEqualToString:@"include"]
-			|| [key isEqualToString:@"xmlns:glib"]
-			|| [key isEqualToString:@"xmlns:c"]
-			|| [key isEqualToString:@"xmlns"]
-			|| [key isEqualToString:@"package"])
-		{
-			// Do nothing
-		}
-		else if([key isEqualToString:@"version"])
-		{
-			self.version = value;
-		}
-		else if([key isEqualToString:@"c:include"])
-		{
-			self.cInclude = value;
-		}
-		else if([key isEqualToString:@"namespace"])
-		{
-			[self processArrayOrDictionary:value withClass:[GIRNamespace class] andArray:namespaces];
-		}
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]
+            || [key isEqual:@"include"]
+            || [key isEqual:@"xmlns:glib"]
+            || [key isEqual:@"xmlns:c"]
+            || [key isEqual:@"xmlns"]
+            || [key isEqual:@"package"]) {
+            // Do nothing
+        } else if ([key isEqual:@"version"]) {
+            self.version = value;
+        } else if ([key isEqual:@"c:include"]) {
+            self.cInclude = value;
+        } else if ([key isEqual:@"namespace"]) {
+            [self processArrayOrDictionary:value withClass:[GIRNamespace class] andArray:namespaces];
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[version release];
-	[cInclude release];
-	[namespaces release];
-	[super dealloc];
+    [version release];
+    [cInclude release];
+    [namespaces release];
+    [super dealloc];
 }
 
 @end

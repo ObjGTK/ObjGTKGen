@@ -1,6 +1,6 @@
 /*
  * GIRNamespace.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
  
 /*
@@ -77,45 +76,45 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"]
-			|| [key isEqualToString:@"shared-library"]
-			|| [key isEqualToString:@"version"]
-			|| [key isEqualToString:@"record"]
-			|| [key isEqualToString:@"callback"]
-			|| [key isEqualToString:@"bitfield"]
-			|| [key isEqualToString:@"alias"])
+		if([key isEqual:@"text"]
+			|| [key isEqual:@"shared-library"]
+			|| [key isEqual:@"version"]
+			|| [key isEqual:@"record"]
+			|| [key isEqual:@"callback"]
+			|| [key isEqual:@"bitfield"]
+			|| [key isEqual:@"alias"])
 		{
 			// Do nothing
 		}
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}
-		else if([key isEqualToString:@"c:symbol-prefixes"])
+		else if([key isEqual:@"c:symbol-prefixes"])
 		{
 			self.cSymbolPrefixes = value;
 		}
-		else if([key isEqualToString:@"c:identifier-prefixes"])
+		else if([key isEqual:@"c:identifier-prefixes"])
 		{
 			self.cIdentifierPrefixes = value;
 		}		
-		else if([key isEqualToString:@"class"])
+		else if([key isEqual:@"class"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRClass class] andArray:classes];
 		}
-		else if([key isEqualToString:@"function"])
+		else if([key isEqual:@"function"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
 		}
-		else if([key isEqualToString:@"enumeration"])
+		else if([key isEqual:@"enumeration"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIREnumeration class] andArray:enumerations];
 		}
-		else if([key isEqualToString:@"constant"])
+		else if([key isEqual:@"constant"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRConstant class] andArray:constants];
 		}
-		else if([key isEqualToString:@"interface"])
+		else if([key isEqual:@"interface"])
 		{
 			[self processArrayOrDictionary:value withClass:[GIRInterface class] andArray:interfaces];
 		}

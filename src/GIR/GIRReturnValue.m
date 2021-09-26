@@ -1,6 +1,6 @@
 /*
  * GIRReturnValue.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -68,23 +67,23 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"])
+		if([key isEqual:@"text"])
 		{
 			// Do nothing
 		}
-		else if([key isEqualToString:@"transfer-ownership"])
+		else if([key isEqual:@"transfer-ownership"])
 		{
 			self.transferOwnership = value;
 		}		
-		else if([key isEqualToString:@"doc"])
+		else if([key isEqual:@"doc"])
 		{
 			self.doc = [[GIRDoc alloc] initWithDictionary:value];
 		}			
-		else if([key isEqualToString:@"type"])
+		else if([key isEqual:@"type"])
 		{
 			self.type = [[GIRType alloc] initWithDictionary:value];
 		}	
-		else if([key isEqualToString:@"array"])
+		else if([key isEqual:@"array"])
 		{
 			self.array = [[GIRArray alloc] initWithDictionary:value];
 		}

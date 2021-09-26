@@ -77,7 +77,7 @@ static OFMutableDictionary* dictExtraMethods;
 
 + (BOOL)isTypeSwappable:(OFString*)str
 {
-    return [str isEqualToString:@"OFArray*"] || ![[CGTKUtil swapTypes:str] isEqualToString:str];
+    return [str isEqual:@"OFArray*"] || ![[CGTKUtil swapTypes:str] isEqual:str];
 }
 
 + (OFString*)convertFunctionToInit:(OFString*)func
@@ -151,7 +151,7 @@ static OFMutableDictionary* dictExtraMethods;
         OFMutableString* result = [[OFMutableString alloc] init];
 
         // Special logic for GTK_GL_AREA
-        if ([type isEqualToString:@"GtkGLArea"]) {
+        if ([type isEqual:@"GtkGLArea"]) {
             [result appendString:@"GTK_GL_AREA"];
         } else {
             // Special logic for things like GtkHSV

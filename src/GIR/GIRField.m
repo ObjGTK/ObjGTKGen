@@ -1,6 +1,6 @@
 /*
  * GIRField.h
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -70,31 +69,31 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"])
+		if([key isEqual:@"text"])
 		{
 			// Do nothing
 		}	
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}	
-		else if([key isEqualToString:@"private"])
+		else if([key isEqual:@"private"])
 		{
-			self.isPrivate = [value isEqualToString:@"1"];
+			self.isPrivate = [value isEqual:@"1"];
 		}	
-		else if([key isEqualToString:@"readable"])
+		else if([key isEqual:@"readable"])
 		{
-			self.readable = [value isEqualToString:@"1"];
+			self.readable = [value isEqual:@"1"];
 		}	
-		else if([key isEqualToString:@"bits"])
+		else if([key isEqual:@"bits"])
 		{
 			self.bits = [value intValue];
 		}		
-		else if([key isEqualToString:@"type"])
+		else if([key isEqual:@"type"])
 		{
 			self.type = [[GIRType alloc] initWithDictionary:value];
 		}	
-		else if([key isEqualToString:@"array"])
+		else if([key isEqual:@"array"])
 		{
 			self.array = [[GIRArray alloc] initWithDictionary:value];
 		}

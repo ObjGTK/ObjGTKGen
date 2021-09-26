@@ -1,6 +1,6 @@
 /*
  * GIRApi.h
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,31 +20,24 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/NSArray.h>
-#import <Foundation/NSObject.h>
-#import <Foundation/NSString.h>
+#import <ObjFW/ObjFW.h>
 
-#import "GIR/GIRNamespace.h"
-#import "GIR/GIRBase.h"
+#import "GIRBase.h"
+#import "GIRNamespace.h"
 
-@interface GIRApi : GIRBase
-{
-	NSString *version;
-	NSString *cInclude;
-	NSMutableArray *namespaces;
+@interface GIRApi : GIRBase {
+    OFString* version;
+    OFString* cInclude;
+    OFMutableArray* namespaces;
 }
 
-@property (nonatomic, retain) NSString *version;
-@property (nonatomic, retain) NSString *cInclude;
-@property (nonatomic, retain) NSMutableArray *namespaces;
+@property (nonatomic, retain) OFString* version;
+@property (nonatomic, retain) OFString* cInclude;
+@property (nonatomic, retain) OFMutableArray* namespaces;
 
 @end

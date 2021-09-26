@@ -127,23 +127,23 @@
 
 - (bool)returnsVoid
 {
-    return [cReturnType isEqualToString:@"void"];
+    return [cReturnType isEqual:@"void"];
 }
 
 - (void)setParameters:(OFArray*)params
 {
     // Hacky fix to get around issue with missing GError parameter from GIR file
-    if ([[self cName] isEqualToString:@"gtk_window_set_icon_from_file"]
-        || [[self cName] isEqualToString:@"gtk_window_set_default_icon_from_file"]
-        || [[self cName] isEqualToString:@"gtk_builder_add_from_file"]
-        || [[self cName] isEqualToString:@"gtk_builder_add_from_resource"]
-        || [[self cName] isEqualToString:@"gtk_builder_add_from_string"]
-        || [[self cName] isEqualToString:@"gtk_builder_add_objects_from_file"]
-        || [[self cName] isEqualToString:@"gtk_builder_add_objects_from_resource"]
-        || [[self cName] isEqualToString:@"gtk_builder_add_objects_from_string"]
-        || [[self cName] isEqualToString:@"gtk_builder_extend_with_template"]
-        || [[self cName] isEqualToString:@"gtk_builder_value_from_string"]
-        || [[self cName] isEqualToString:@"gtk_builder_value_from_string_type"]) {
+    if ([[self cName] isEqual:@"gtk_window_set_icon_from_file"]
+        || [[self cName] isEqual:@"gtk_window_set_default_icon_from_file"]
+        || [[self cName] isEqual:@"gtk_builder_add_from_file"]
+        || [[self cName] isEqual:@"gtk_builder_add_from_resource"]
+        || [[self cName] isEqual:@"gtk_builder_add_from_string"]
+        || [[self cName] isEqual:@"gtk_builder_add_objects_from_file"]
+        || [[self cName] isEqual:@"gtk_builder_add_objects_from_resource"]
+        || [[self cName] isEqual:@"gtk_builder_add_objects_from_string"]
+        || [[self cName] isEqual:@"gtk_builder_extend_with_template"]
+        || [[self cName] isEqual:@"gtk_builder_value_from_string"]
+        || [[self cName] isEqual:@"gtk_builder_value_from_string_type"]) {
         CGTKParameter* param = [[CGTKParameter alloc] init];
         [param setCType:@"GError**"];
         [param setCName:@"err"];

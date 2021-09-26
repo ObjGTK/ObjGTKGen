@@ -1,6 +1,6 @@
 /*
  * GIRConstant.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -73,44 +72,44 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"]
-			|| [key isEqualToString:@"type"])
+		if([key isEqual:@"text"]
+			|| [key isEqual:@"type"])
 		{
 			// Do nothing
 		}	
-		else if([key isEqualToString:@"c:type"])
+		else if([key isEqual:@"c:type"])
 		{
 			self.cType = value;
 		}
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}	
-		else if([key isEqualToString:@"value"])
+		else if([key isEqual:@"value"])
 		{
 			self.theValue = value;
 		}
-		else if([key isEqualToString:@"version"])
+		else if([key isEqual:@"version"])
 		{
 			self.version = value;
 		}
-		else if([key isEqualToString:@"deprecated-version"])
+		else if([key isEqual:@"deprecated-version"])
 		{
 			self.deprecatedVersion = value;
 		}
-		else if([key isEqualToString:@"deprecated"])
+		else if([key isEqual:@"deprecated"])
 		{
-			self.deprecated = [value isEqualToString:@"1"];
+			self.deprecated = [value isEqual:@"1"];
 		}
-		else if([key isEqualToString:@"doc"])
+		else if([key isEqual:@"doc"])
 		{
 			self.doc = [[GIRDoc alloc] initWithDictionary:value];
 		}
-		else if([key isEqualToString:@"doc-deprecated"])
+		else if([key isEqual:@"doc-deprecated"])
 		{
 			self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
 		}
-		else if([key isEqualToString:@"type"])
+		else if([key isEqual:@"type"])
 		{
 			self.type = [[GIRType alloc] initWithDictionary:value];
 		}			

@@ -1,6 +1,6 @@
 /*
  * GIRMember.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -68,24 +67,24 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"]
-			|| [key isEqualToString:@"glib:nick"])
+		if([key isEqual:@"text"]
+			|| [key isEqual:@"glib:nick"])
 		{
 			// Do nothing
 		}	
-		else if([key isEqualToString:@"c:identifier"])
+		else if([key isEqual:@"c:identifier"])
 		{
 			self.cIdentifier = value;
 		}
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}
-		else if([key isEqualToString:@"value"])
+		else if([key isEqual:@"value"])
 		{
 			self.theValue = [value intValue];
 		}	
-		else if([key isEqualToString:@"doc"])
+		else if([key isEqual:@"doc"])
 		{
 			self.doc = [[GIRDoc alloc] initWithDictionary:value];
 		}	

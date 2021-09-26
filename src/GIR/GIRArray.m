@@ -1,6 +1,6 @@
 /*
  * GIRArray.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,15 +20,11 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
-/*
- * Objective-C imports
- */
 #import "GIRArray.h"
 
 @implementation GIRArray
@@ -40,77 +36,57 @@
 @synthesize zeroTerminated;
 @synthesize type;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	if(self)
-	{	
-		self.elementTypeName = @"GIRArray";
-	}
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRArray";
+
+    return self;
 }
 
--(id)initWithDictionary:(NSDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	if(self)
-	{
-		[self parseDictionary:dict];
-	}
-	
-	return self;
+    self = [self init];
+
+    if (self) {
+        [self parseDictionary:dict];
+    }
+
+    return self;
 }
 
--(void)parseDictionary:(NSDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (NSString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqualToString:@"text"])
-		{
-			// Do nothing
-		}	
-		else if([key isEqualToString:@"c:type"])
-		{
-			self.cType = value;
-		}
-		else if([key isEqualToString:@"name"])
-		{
-			self.name = value;
-		}
-		else if([key isEqualToString:@"length"])
-		{
-			self.length = [value intValue];
-		}
-		else if([key isEqualToString:@"fixed-size"])
-		{
-			self.fixedSize = [value intValue];
-		}
-		else if([key isEqualToString:@"zero-terminated"])
-		{
-			self.zeroTerminated = [value isEqualToString:@"1"];
-		}
-		else if([key isEqualToString:@"type"])
-		{
-			self.type = [[GIRType alloc] initWithDictionary:value];
-		}		
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]) {
+            // Do nothing
+        } else if ([key isEqual:@"c:type"]) {
+            self.cType = value;
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else if ([key isEqual:@"length"]) {
+            self.length = [value intValue];
+        } else if ([key isEqual:@"fixed-size"]) {
+            self.fixedSize = [value intValue];
+        } else if ([key isEqual:@"zero-terminated"]) {
+            self.zeroTerminated = [value isEqual:@"1"];
+        } else if ([key isEqual:@"type"]) {
+            self.type = [[GIRType alloc] initWithDictionary:value];
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[cType release];
-	[name release];
-	[type release];
-	[super dealloc];
+    [cType release];
+    [name release];
+    [type release];
+    [super dealloc];
 }
 
 @end

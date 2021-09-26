@@ -1,6 +1,6 @@
 /*
  * GIRProperty.m
- * This file is part of gir2objc
+ * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -20,10 +20,9 @@
  */
 
 /*
- * Modified by the gir2objc Team, 2017. See the AUTHORS file for a
- * list of people on the gir2objc Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
- *
  */
 
 /*
@@ -78,63 +77,63 @@
 	{	
 		id value = [dict objectForKey:key];
 	
-		if([key isEqualToString:@"text"])
+		if([key isEqual:@"text"])
 		{
 			// Do nothing
 		}
-		else if([key isEqualToString:@"name"])
+		else if([key isEqual:@"name"])
 		{
 			self.name = value;
 		}
-		else if([key isEqualToString:@"transfer-ownership"])
+		else if([key isEqual:@"transfer-ownership"])
 		{
 			self.transferOwnership = value;
 		}
-		else if([key isEqualToString:@"version"])
+		else if([key isEqual:@"version"])
 		{
 			self.version = value;
 		}
-		else if([key isEqualToString:@"deprecated-version"])
+		else if([key isEqual:@"deprecated-version"])
 		{
 			self.deprecatedVersion = value;
 		}
-		else if([key isEqualToString:@"doc"])
+		else if([key isEqual:@"doc"])
 		{
 			self.doc = [[GIRDoc alloc] initWithDictionary:value];
 		}
-		else if([key isEqualToString:@"doc-deprecated"])
+		else if([key isEqual:@"doc-deprecated"])
 		{
 			self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
 		}
-		else if([key isEqualToString:@"type"])
+		else if([key isEqual:@"type"])
 		{
 			self.type = [[GIRType alloc] initWithDictionary:value];
 		}
-		else if([key isEqualToString:@"allow-none"])
+		else if([key isEqual:@"allow-none"])
 		{
-			self.allowNone = [value isEqualToString:@"1"];
+			self.allowNone = [value isEqual:@"1"];
 		}
-		else if([key isEqualToString:@"construct-only"])
+		else if([key isEqual:@"construct-only"])
 		{
-			self.constructOnly = [value isEqualToString:@"1"];
+			self.constructOnly = [value isEqual:@"1"];
 		}
-		else if([key isEqualToString:@"readable"])
+		else if([key isEqual:@"readable"])
 		{
-			self.readable = [value isEqualToString:@"1"];
+			self.readable = [value isEqual:@"1"];
 		}	
-		else if([key isEqualToString:@"deprecated"])
+		else if([key isEqual:@"deprecated"])
 		{
-			self.deprecated = [value isEqualToString:@"1"];
+			self.deprecated = [value isEqual:@"1"];
 		}		
-		else if([key isEqualToString:@"construct"])
+		else if([key isEqual:@"construct"])
 		{
 			self.construct = value;
 		}
-		else if([key isEqualToString:@"writable"])
+		else if([key isEqual:@"writable"])
 		{
 			self.writable = value;
 		}
-		else if([key isEqualToString:@"array"])
+		else if([key isEqual:@"array"])
 		{
 			self.array = [[GIRArray alloc] initWithDictionary:value];
 		}				
