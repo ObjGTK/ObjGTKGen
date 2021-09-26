@@ -29,6 +29,8 @@
  * Objective-C imports
  */
 #import "CGTKUtil.h"
+#include <ObjFW/OFObject.h>
+#include <ObjFW/OFString.h>
 
 @implementation CGTKUtil
 
@@ -161,7 +163,7 @@ static OFMutableDictionary* dictExtraMethods;
                 // Current character
                 OFString* currentChar = [type substringWithRange:OFRangeMake(i, 1)];
 
-                if (i != 0 && [[OFCharacterSet uppercaseLetterCharacterSet] characterIsMember:[currentChar characterAtIndex:0]] && countBetweenUnderscores > 1) {
+                if (i != 0 && [CGTKUtil isUppercase:currentChar] && countBetweenUnderscores > 1) {
                     [result appendFormat:@"_%@", [currentChar uppercaseString]];
                     countBetweenUnderscores = 0;
                 } else {
@@ -177,6 +179,15 @@ static OFMutableDictionary* dictExtraMethods;
     } else {
         return type;
     }
+}
+
++ (bool)isUppercase:(OFString*)character
+{
+    OFUnichar myCharacter = [character characterAtIndex:0];
+    if(myCharacter >= 'A' && myCharacter <= 'Z')
+        return true;
+
+    return false;
 }
 
 + (OFString*)swapTypes:(OFString*)str
