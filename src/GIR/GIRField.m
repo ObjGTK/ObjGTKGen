@@ -68,7 +68,7 @@
         } else if ([key isEqual:@"readable"]) {
             self.readable = [value isEqual:@"1"];
         } else if ([key isEqual:@"bits"]) {
-            self.bits = [value intValue];
+            self.bits = [value longLongValue];
         } else if ([key isEqual:@"type"]) {
             self.type = [[GIRType alloc] initWithDictionary:value];
         } else if ([key isEqual:@"array"]) {

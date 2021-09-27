@@ -65,7 +65,7 @@
         } else if ([key isEqual:@"name"]) {
             self.name = value;
         } else if ([key isEqual:@"value"]) {
-            self.theValue = [value intValue];
+            self.theValue = [value longLongValue];
         } else if ([key isEqual:@"doc"]) {
             self.doc = [[GIRDoc alloc] initWithDictionary:value];
         } else {

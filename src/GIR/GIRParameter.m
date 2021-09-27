@@ -80,9 +80,9 @@
         } else if ([key isEqual:@"caller-allocates"]) {
             self.callerAllocates = [value isEqual:@"1"];
         } else if ([key isEqual:@"closure"]) {
-            self.closure = [value intValue];
+            self.closure = [value longLongValue];
         } else if ([key isEqual:@"destroy"]) {
-            self.destroy = [value intValue];
+            self.destroy = [value longLongValue];
         } else if ([key isEqual:@"doc"]) {
             self.doc = [[GIRDoc alloc] initWithDictionary:value];
         } else if ([key isEqual:@"type"]) {

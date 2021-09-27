@@ -34,13 +34,13 @@
 @interface GIRMember : GIRBase {
     OFString* cIdentifier;
     OFString* name;
-    int theValue;
+    long theValue;
     GIRDoc* doc;
 }
 
 @property (nonatomic, retain) OFString* cIdentifier;
 @property (nonatomic, retain) OFString* name;
-@property (nonatomic) int theValue;
+@property (nonatomic) long theValue;
 @property (nonatomic, retain) GIRDoc* doc;
 
 @end

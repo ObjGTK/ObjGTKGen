@@ -41,8 +41,8 @@
 	OFString *scope;
 	bool allowNone;
 	bool callerAllocates;
-	int closure;
-	int destroy;
+	long closure;
+	long destroy;
 	GIRDoc *doc;
 	GIRType *type;
 	GIRArray *array;
@@ -55,8 +55,8 @@
 @property (nonatomic, retain) OFString *scope;
 @property (nonatomic) bool allowNone;
 @property (nonatomic) bool callerAllocates;
-@property (nonatomic) int closure;
-@property (nonatomic) int destroy;
+@property (nonatomic) long closure;
+@property (nonatomic) long destroy;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) GIRType *type;
 @property (nonatomic, retain) GIRArray *array;

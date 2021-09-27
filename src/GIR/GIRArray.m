@@ -68,9 +68,9 @@
         } else if ([key isEqual:@"name"]) {
             self.name = value;
         } else if ([key isEqual:@"length"]) {
-            self.length = [value intValue];
+            self.length = [value longLongValue];
         } else if ([key isEqual:@"fixed-size"]) {
-            self.fixedSize = [value intValue];
+            self.fixedSize = [value longLongValue];
         } else if ([key isEqual:@"zero-terminated"]) {
             self.zeroTerminated = [value isEqual:@"1"];
         } else if ([key isEqual:@"type"]) {
