@@ -45,16 +45,16 @@ OF_APPLICATION_DELEGATE(CoreGTKGen)
 
     OFString* girFile = [CGTKUtil globalConfigValueFor:@"girFile"];
 
-    OFLog(@"%s", @"Attempting to parse GIR file...");
+    OFLog(@"%@", @"Attempting to parse GIR file...");
     GIRApi* api = [Gir2Objc firstApiFromGirFile:girFile];
 
     if (api == nil)
         @throw [OGTKNoGIRAPIException exception];
 
     // Step 2: generate CoreGTK source files
-    OFLog(@"%s", @"Attempting to generate CoreGTK...");
+    OFLog(@"%@", @"Attempting to generate CoreGTK...");
     [Gir2Objc generateClassFilesFromApi:api];
-    OFLog(@"%s", @"Process complete");
+    OFLog(@"%@", @"Process complete");
 
     // Step 3: copy CoreGTK base files
     OFString* baseClassPath = [CGTKUtil globalConfigValueFor:@"baseClassDir"];
@@ -63,7 +63,7 @@ OF_APPLICATION_DELEGATE(CoreGTKGen)
     if (baseClassPath == nil || outputDir == nil)
         @throw [OGTKIncorrectConfigException exception];
 
-    OFLog(@"%s", @"Attempting to copy CoreGTK base class files...");
+    OFLog(@"%@", @"Attempting to copy CoreGTK base class files...");
     OFFileManager* fileMgr = [OFFileManager defaultManager];
 
     OFArray* srcDirContents = [fileMgr contentsOfDirectoryAtPath:baseClassPath];
@@ -88,7 +88,7 @@ OF_APPLICATION_DELEGATE(CoreGTKGen)
         [fileMgr copyItemAtPath:src toPath:dest];
     }
 
-    OFLog(@"%s", @"Process complete");
+    OFLog(@"%@", @"Process complete");
 
     // Release memory
     [baseClassPath release];

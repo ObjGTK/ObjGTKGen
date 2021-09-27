@@ -26,8 +26,6 @@
  */
 
 #import "GIRBase.h"
-#include <ObjFWRT/ObjFWRT.h>
-#include <ObjFW/OFNotImplementedException.h>
 
 @implementation GIRBase
 
