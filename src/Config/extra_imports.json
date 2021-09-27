@@ -1,0 +1,40 @@
+{
+  "CGTKMenuButton": [
+    "\"CGTKMenu.h\""
+  ],
+  "CGTKTextMark": [
+  ],
+  "GtkBuilder": [
+    "\"CGTKWidget.h\""
+  ],
+  "CGTKStyleContext": [
+  ],
+  "CGTKClipboard": [
+    "\"CGTKTextBuffer.h\""
+  ],
+  "CGTKContainer": [
+    "\"CGTKAdjustment.h\""
+  ],
+  "CGTKTextBuffer": [
+    "\"CGTKTextChildAnchor.h\"",
+    "\"CGTKTextTag.h\"",
+    "\"CGTKTextTagTable.h\"",
+    "\"CGTKTextMark.h\""
+  ],
+  "CGTKWindow": [
+    "\"CGTKWindowGroup.h\""
+  ],
+  "CGTKApplication": [
+    "\"CGTKWindow.h\""
+  ],
+  "CGTKWidget": [
+    "\"CGTKAccelGroup.h\"",
+    "\"CGTKClipboard.h\"",
+    "\"CGTKRcStyle.h\"",
+    "\"CGTKSettings.h\"",
+    "\"CGTKStyle.h\"",
+    "\"CGTKStyleContext.h\""
+  ],
+  "CGTKSettings": [
+  ]
+}

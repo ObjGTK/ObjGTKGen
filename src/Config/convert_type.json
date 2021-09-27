@@ -1,0 +1,18 @@
+{
+  "bool": {
+    "gboolean": "%@"
+  },
+  "gchar*": {
+    "OFString*": "[OFString stringWithUTF8String:%@]"
+  },
+  "OFString*": {
+    "const gchar*": "[%@ UTF8String]",
+    "gchar*": "[%@ UTF8String]"
+  },
+  "gboolean": {
+    "bool": "%@"
+  },
+  "const gchar*": {
+    "OFString*": "[OFString stringWithUTF8String:%@]"
+  }
+}

@@ -1,6 +1,6 @@
 {
     "const gchar*" = {
-	OFString* = "[OFString stringWithUTF8String:%@]";
+	"OFString*" = "[OFString stringWithUTF8String:%@]";
     };
     
     bool = {
@@ -11,11 +11,11 @@
     bool = "%@";
     };
     
-    gchar* = {
-    OFString* = "[OFString stringWithUTF8String:%@]";
+    "gchar*" = {
+    "OFString*" = "[OFString stringWithUTF8String:%@]";
     };
     
-    OFString* = {
+    "OFString*" = {
     "gchar*" = "[%@ UTF8String]";
     "const gchar*" = "[%@ UTF8String]";
     };
