@@ -29,8 +29,6 @@
  * Objective-C imports
  */
 #import "CGTKUtil.h"
-#include <ObjFW/OFObject.h>
-#include <ObjFW/OFString.h>
 
 @implementation CGTKUtil
 
@@ -193,7 +191,7 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFString*)swapTypes:(OFString*)str
 {
     if (dictSwapTypes == nil) {
-        dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.map"];
+        dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.json"];
     }
 
     OFString* val = [dictSwapTypes objectForKey:str];
@@ -204,7 +202,7 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFString*)convertType:(OFString*)fromType withName:(OFString*)name toType:(OFString*)toType
 {
     if (dictConvertType == nil) {
-        dictConvertType = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/convert_type.map"];
+        dictConvertType = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/convert_type.json"];
     }
 
     OFMutableDictionary* outerDict = [dictConvertType objectForKey:fromType];
@@ -233,7 +231,7 @@ static OFMutableDictionary* dictExtraMethods;
 + (id)globalConfigValueFor:(OFString*)key
 {
     if (dictGlobalConf == nil) {
-        dictGlobalConf = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/global_conf.map"];
+        dictGlobalConf = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/global_conf.json"];
     }
 
     return [dictGlobalConf objectForKey:key];
@@ -242,7 +240,7 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFArray*)extraImports:(OFString*)clazz
 {
     if (dictExtraImports == nil) {
-        dictExtraImports = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/extra_imports.map"];
+        dictExtraImports = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/extra_imports.json"];
     }
 
     return [dictExtraImports objectForKey:clazz];
@@ -251,7 +249,7 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFDictionary*)extraMethods:(OFString*)clazz
 {
     if (dictExtraMethods == nil) {
-        dictExtraMethods = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/extra_methods.map"];
+        dictExtraMethods = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/extra_methods.json"];
     }
 
     return [dictExtraMethods objectForKey:clazz];

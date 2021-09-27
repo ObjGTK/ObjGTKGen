@@ -31,6 +31,7 @@ SOURCES=CoreGTKGen.m \
 	Generator/CGTKMethod.m \
 	Generator/CGTKParameter.m \
 	Generator/CGTKUtil.m \
+	Generator/OFDictionary+JsonContentsOfFile.m \
 	Gir2Objc.m \
 	Exceptions/OGTKIncorrectConfigException.m \
 	Exceptions/OGTKNoGIRAPIException.m \

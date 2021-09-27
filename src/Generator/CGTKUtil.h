@@ -25,10 +25,8 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import <ObjFW/ObjFW.h>
+#import "OFDictionary+JsonContentsOfFile.h"
 
 /**
  * Provides useful utility functions for CoreGTKGen
@@ -45,6 +43,11 @@
  * Returns the underscore_separated_string in CapitalCase
  */
 + (OFString*)convertUSSToCapCase:(OFString*)input;
+
+/**
+ * Tests if a character is uppercase
+ */
++ (bool)isUppercase:(OFString*)character;
 
 /**
  * Returns true if this type is configured as being swappable

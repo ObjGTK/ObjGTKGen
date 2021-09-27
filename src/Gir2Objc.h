@@ -25,13 +25,11 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
- */
 #import <ObjFW/ObjFW.h>
 
 #import "Generator/CGTKClassWriter.h"
 #import "Generator/CGTKParameter.h"
+#import "Generator/CGTKUtil.h"
 
 #import "GIR/GIRApi.h"
 #import "GIR/GIRNamespace.h"

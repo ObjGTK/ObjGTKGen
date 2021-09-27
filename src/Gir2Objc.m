@@ -111,7 +111,7 @@
             // Current character
             OFString* currentChar = [clazz substringWithRange:OFRangeMake(i, 1)];
 
-            if (i != 0 && [[OFCharacterSet uppercaseLetterCharacterSet] characterIsMember:[currentChar characterAtIndex:0]]) {
+            if (i != 0 && [CGTKUtil isUppercase:currentChar]) {
                 [result appendFormat:@"_%@", [currentChar lowercaseString]];
             } else {
                 [result appendString:[currentChar lowercaseString]];
