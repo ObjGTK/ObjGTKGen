@@ -29,6 +29,7 @@
  * Objective-C imports
  */
 #import "CGTKUtil.h"
+#include <ObjFW/OFString.h>
 
 @implementation CGTKUtil
 

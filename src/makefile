@@ -79,7 +79,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LIBS) -o $@
 
 %.o: %.m
-	$(CC) $(COMMONFLAGS) -c -Wall $< -o $@
+	$(CC) $(COMMONFLAGS) -g -c -Wall $< -o $@
 
 clean: 
 	rm -rf *.o *.d $(EXECUTABLE)
