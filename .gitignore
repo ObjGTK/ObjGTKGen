@@ -2,3 +2,5 @@
 build
 objgtkgen
 .DS_Store
+Output/CoreGTK
+Output/ObjGTK

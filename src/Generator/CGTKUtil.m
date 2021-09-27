@@ -29,7 +29,6 @@
  * Objective-C imports
  */
 #import "CGTKUtil.h"
-#include <ObjFW/OFString.h>
 
 @implementation CGTKUtil
 
@@ -194,6 +193,12 @@ static OFMutableDictionary* dictExtraMethods;
     if (dictSwapTypes == nil) {
         dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.json"];
     }
+
+    OFLog(@"The key is: %@", str);
+
+    // TODO There should be no nil value arriving here - parsing problems!
+    if(str == nil)
+        return @"nil";
 
     OFString* val = [dictSwapTypes objectForKey:str];
 
