@@ -7,6 +7,8 @@
 //
 
 #import "XMLReader.h"
+#include <ObjFW/OFString.h>
+#include <ObjFW/OFObject.h>
 
 OFString* const kXMLReaderTextNodeKey = @"text";
 
@@ -70,8 +72,17 @@ OFString* const kXMLReaderTextNodeKey = @"text";
 
     // Create the child dictionary for the new element, and initilaize it with the attributes
     OFMutableDictionary* childDict = [OFMutableDictionary dictionary];
+    OFString* attributeName;
     for (OFXMLAttribute* attribute in attributes) {
-        [childDict setValue:attribute.stringValue forKey:attribute.name];
+        if(attribute.namespace) {
+            if([attribute.namespace isEqual:@"http://www.gtk.org/introspection/c/1.0"])
+                attributeName = [OFString stringWithFormat:@"c:%@", attribute.name];
+            else if([attribute.namespace isEqual:@"http://www.w3.org/XML/1998/namespace"])
+                attributeName = [OFString stringWithFormat:@"xml:%@", attribute.name];
+        } else {
+            attributeName = [OFString stringWithString:attribute.name];
+        }
+        [childDict setValue:attribute.stringValue forKey:attributeName];
     }
 
     // If there’s already an item for this key, it means we need to create an array

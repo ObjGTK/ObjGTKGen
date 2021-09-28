@@ -194,12 +194,6 @@ static OFMutableDictionary* dictExtraMethods;
         dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.json"];
     }
 
-    OFLog(@"The key is: %@", str);
-
-    // TODO There should be no nil value arriving here - parsing problems!
-    if(str == nil)
-        return @"nil";
-
     OFString* val = [dictSwapTypes objectForKey:str];
 
     return (val == nil) ? str : val;
