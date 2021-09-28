@@ -53,12 +53,7 @@
 - (void)parseDictionary:(OFDictionary*)dict
 {
     for (OFString* key in dict) {
-        id value = nil;
-        // TODO What is meant in the GIR file when we receive an array here?
-        if([dict isKindOfClass: [OFArray class]])
-            value = [dict objectAtIndex:1];
-        else
-            value = [dict objectForKey:key];
+        id value = [dict objectForKey:key];
 
         if ([key isEqual:@"text"]
             || [key isEqual:@"type"]) {

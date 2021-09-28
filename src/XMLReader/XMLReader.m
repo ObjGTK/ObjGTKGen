@@ -7,8 +7,6 @@
 //
 
 #import "XMLReader.h"
-#include <ObjFW/OFString.h>
-#include <ObjFW/OFObject.h>
 
 OFString* const kXMLReaderTextNodeKey = @"text";
 
