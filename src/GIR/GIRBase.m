@@ -71,6 +71,11 @@ LogLevel __logLevel = Info;
 	@throw [OFNotImplementedException exceptionWithSelector:@selector(_cmd) object:self];
 }
 
+- (instancetype)initWithDictionary:(OFDictionary*)dict
+{
+	@throw [OFNotImplementedException exceptionWithSelector:@selector(_cmd) object:self];
+}
+
 - (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray*)array;
 {
     // If the values are a dictionary call it directly

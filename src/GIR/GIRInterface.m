@@ -48,7 +48,6 @@
     self.methods = [[OFMutableArray alloc] init];
     self.virtualMethods = [[OFMutableArray alloc] init];
     self.properties = [[OFMutableArray alloc] init];
-    self.prerequisite = [[OFMutableArray alloc] init];
 
     return self;
 }

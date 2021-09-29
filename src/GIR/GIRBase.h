@@ -39,6 +39,7 @@ typedef enum LogLevel {
 
 @protocol GIRParseDictionary
 - (void)parseDictionary:(OFDictionary*)dict;
+- (instancetype)initWithDictionary:(OFDictionary*)dict;
 @end
 
 @interface GIRBase : OFObject <GIRParseDictionary> {

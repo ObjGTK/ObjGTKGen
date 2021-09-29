@@ -47,8 +47,9 @@
 {
     self = [super init];
 
-	self.elementTypeName = @"GIRFunction";
-	self.parameters = [[OFMutableArray alloc] init];
+	elementTypeName = @"GIRFunction";
+	parameters = [OFMutableArray array];
+    instanceParameters =  [OFMutableArray array];
 
     return self;
 }
