@@ -62,9 +62,10 @@
 
     if (extraImports != nil) {
         for (OFString* imp in extraImports) {
-            // TODO here we still have nil values
-            //OFLog(@"%s", imp);
-            [output appendFormat:@"#import %@\n", imp];
+            if(imp != nil) {
+                OFLog(@"%s", imp);
+                [output appendFormat:@"#import %@\n", imp];
+            }
         }
     }
 

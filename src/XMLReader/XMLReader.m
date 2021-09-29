@@ -79,6 +79,8 @@ OFString* const kXMLReaderTextNodeKey = @"text";
                 attributeName = [OFString stringWithFormat:@"xml:%@", attribute.name];
             else if([attribute.namespace isEqual:@"http://www.gtk.org/introspection/glib/1.0"])
                 attributeName = [OFString stringWithFormat:@"glib:%@", attribute.name];
+            else if([attribute.namespace isEqual:@"http://www.w3.org/2000/xmlns/"])
+                attributeName = [OFString stringWithFormat:@"xmlns:%@", attribute.name];
             else {
                 OFLog(@"Unknown namespace %@ for attribute %@", attribute.namespace, attribute.name);
                 attributeName = [OFString stringWithString:attribute.name];

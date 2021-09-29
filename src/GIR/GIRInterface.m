@@ -86,7 +86,7 @@
         } else if ([key isEqual:@"method"]) {
             [self processArrayOrDictionary:value withClass:[GIRMethod class] andArray:methods];
         } else if ([key isEqual:@"virtual-method"]) {
-            [self processArrayOrDictionary:value withClass:[GIRMethod class] andArray:virtualMethods];
+            [self processArrayOrDictionary:value withClass:[GIRVirtualMethod class] andArray:virtualMethods];
         } else if ([key isEqual:@"property"]) {
             [self processArrayOrDictionary:value withClass:[GIRProperty class] andArray:properties];
         } else if ([key isEqual:@"prerequisite"]) {
