@@ -169,7 +169,7 @@
 
         [output appendFormat:@"\tself = %@;\n\n", [CGTKUtil getFunctionCallForConstructorOfType:[cgtkClass cType] withConstructor:[OFString stringWithFormat:@"%@(%@)", [ctor cName], [CGTKClassWriter generateCParameterListString:[ctor parameters]]]]];
 
-        [output appendString:@"\tif(self)\n\t{\n\t\t//Do nothing\n\t}\n\n\treturn self;\n"];
+        [output appendString:@"\treturn self;\n"];
 
         [output appendString:@"}\n\n"];
     }

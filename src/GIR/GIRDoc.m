@@ -56,7 +56,10 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]) {
+        if ([key isEqual:@"filename"] ||
+            [key isEqual:@"line"]) {
+                // do nothing - suppress warning
+        } else if ([key isEqual:@"text"]) {
             self.docText = value;
         } else if ([key isEqual:@"xml:space"]) {
             self.xmlSpace = value;
