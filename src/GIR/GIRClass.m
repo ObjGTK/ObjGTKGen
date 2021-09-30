@@ -48,14 +48,14 @@
 {
     self = [super init];
 
-	self.elementTypeName = @"GIRClass";
-	self.constructors = [[OFMutableArray alloc] init];
-	self.fields = [[OFMutableArray alloc] init];
-	self.methods = [[OFMutableArray alloc] init];
-	self.virtualMethods = [[OFMutableArray alloc] init];
-	self.properties = [[OFMutableArray alloc] init];
-	self.implements = [[OFMutableArray alloc] init];
-	self.functions = [[OFMutableArray alloc] init];
+	elementTypeName = @"GIRClass";
+	constructors = [[OFMutableArray alloc] init];
+	fields = [[OFMutableArray alloc] init];
+    methods = [[OFMutableArray alloc] init];
+	virtualMethods = [[OFMutableArray alloc] init];
+	properties = [[OFMutableArray alloc] init];
+	implements = [[OFMutableArray alloc] init];
+	functions = [[OFMutableArray alloc] init];
 
     return self;
 }
@@ -64,9 +64,7 @@
 {
     self = [self init];
 
-    if (self) {
-        [self parseDictionary:dict];
-    }
+    [self parseDictionary:dict];
 
     return self;
 }
