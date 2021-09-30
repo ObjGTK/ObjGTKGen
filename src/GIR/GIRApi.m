@@ -37,8 +37,8 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRApi";
-    self.namespaces = [[OFMutableArray alloc] init];
+    elementTypeName = @"GIRApi";
+    namespaces = [[OFMutableArray alloc] init];
 
     return self;
 }
@@ -47,9 +47,7 @@
 {
     self = [self init];
 
-    if (self) {
-        [self parseDictionary:dict];
-    }
+    [self parseDictionary:dict];
 
     return self;
 }

@@ -32,16 +32,16 @@
 @synthesize elementTypeName;
 @synthesize unknownElements;
 
-LogLevel __logLevel = Info;
+LogLevel _logLevel = Info;
 
 + (void)setLogLevel:(LogLevel)level
 {
-    __logLevel = level;
+    _logLevel = level;
 }
 
 + (void)log:(OFString*)message andLevel:(LogLevel)level
 {
-    if (level >= __logLevel) {
+    if (level >= _logLevel) {
         OFString* levelDescription = nil;
 
         switch (level) {
@@ -68,19 +68,19 @@ LogLevel __logLevel = Info;
 
 - (void)parseDictionary:(OFDictionary*)dict
 {
-	@throw [OFNotImplementedException exceptionWithSelector:@selector(_cmd) object:self];
+	OF_UNRECOGNIZED_SELECTOR
 }
 
 - (instancetype)initWithDictionary:(OFDictionary*)dict
 {
-	@throw [OFNotImplementedException exceptionWithSelector:@selector(_cmd) object:self];
+	OF_INVALID_INIT_METHOD
 }
 
 - (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray*)array;
 {
     // If the values are a dictionary call it directly
     if ([values isKindOfClass:[OFDictionary class]]) {
-        id obj = [[clazz alloc] init];
+        id obj = [[[clazz alloc] init] autorelease];
 
         if ([obj conformsToProtocol:@protocol(GIRParseDictionary)]) {
             [obj parseDictionary:values];
@@ -90,7 +90,8 @@ LogLevel __logLevel = Info;
         for (id object in values) {
             [self processArrayOrDictionary:object withClass:clazz andArray:array];
         }
-    }
+    } else
+        @throw [OFInvalidArgumentException exception];
 }
 
 - (void)logUnknownElement:(OFString*)element

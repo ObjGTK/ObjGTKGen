@@ -51,14 +51,14 @@
 	OFMutableArray *instanceParameters;
 }
 
-@property (nonatomic, retain) OFString *name;
-@property (nonatomic, retain) OFString *cIdentifier;
-@property (nonatomic, retain) OFString *version;
+@property (nonatomic, copy) OFString *name;
+@property (nonatomic, copy) OFString *cIdentifier;
+@property (nonatomic, copy) OFString *version;
 @property (nonatomic, retain) GIRReturnValue *returnValue;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) GIRDoc *docDeprecated;
-@property (nonatomic, retain) OFString *deprecatedVersion;
-@property (nonatomic, retain) OFString *invoker;
+@property (nonatomic, copy) OFString *deprecatedVersion;
+@property (nonatomic, copy) OFString *invoker;
 @property (nonatomic) bool deprecated;
 @property (nonatomic) bool throws;
 @property (nonatomic) bool introspectable;

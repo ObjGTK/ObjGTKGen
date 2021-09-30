@@ -54,11 +54,11 @@
     OFMutableArray* functions;
 }
 
-@property (nonatomic, retain) OFString* name;
-@property (nonatomic, retain) OFString* cType;
-@property (nonatomic, retain) OFString* cSymbolPrefix;
-@property (nonatomic, retain) OFString* parent;
-@property (nonatomic, retain) OFString* version;
+@property (nonatomic, copy) OFString* name;
+@property (nonatomic, copy) OFString* cType;
+@property (nonatomic, copy) OFString* cSymbolPrefix;
+@property (nonatomic, copy) OFString* parent;
+@property (nonatomic, copy) OFString* version;
 @property (nonatomic) bool abstract;
 @property (nonatomic, retain) GIRDoc* doc;
 @property (nonatomic, retain) OFMutableArray* constructors;

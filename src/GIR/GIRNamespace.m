@@ -42,12 +42,12 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRNamespace";
-    self.classes = [[OFMutableArray alloc] init];
-    self.functions = [[OFMutableArray alloc] init];
-    self.enumerations = [[OFMutableArray alloc] init];
-    self.constants = [[OFMutableArray alloc] init];
-    self.interfaces = [[OFMutableArray alloc] init];
+    elementTypeName = @"GIRNamespace";
+    classes = [[OFMutableArray alloc] init];
+    functions = [[OFMutableArray alloc] init];
+    enumerations = [[OFMutableArray alloc] init];
+    constants = [[OFMutableArray alloc] init];
+    interfaces = [[OFMutableArray alloc] init];
 
     return self;
 }

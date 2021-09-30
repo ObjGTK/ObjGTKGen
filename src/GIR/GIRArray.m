@@ -40,7 +40,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRArray";
+    elementTypeName = @"GIRArray";
 
     return self;
 }

@@ -47,7 +47,7 @@ typedef enum LogLevel {
     OFMutableDictionary* unknownElements;
 }
 
-@property (nonatomic, retain) OFString* elementTypeName;
+@property (nonatomic, copy) OFString* elementTypeName;
 @property (nonatomic, retain) OFMutableDictionary* unknownElements;
 
 /**
