@@ -96,14 +96,14 @@ LogLevel _logLevel = Info;
 
 - (void)logUnknownElement:(OFString*)element
 {
-    if (unknownElements == nil) {
-        unknownElements = [[OFMutableDictionary alloc] init];
+    if (self.unknownElements == nil) {
+        self.unknownElements = [[OFMutableDictionary alloc] init];
     }
 
     OFString* hopefullyUniqueKey = [OFString stringWithFormat:@"%@--%@", self.elementTypeName, element];
 
-    if ([unknownElements objectForKey:hopefullyUniqueKey] != nil) {
-        [unknownElements setObject:hopefullyUniqueKey forKey:hopefullyUniqueKey];
+    if ([self.unknownElements objectForKey:hopefullyUniqueKey] != nil) {
+        [self.unknownElements setObject:hopefullyUniqueKey forKey:hopefullyUniqueKey];
     } else {
         [GIRBase log:[OFString stringWithFormat:@"[%@]: Found unknown element: [%@]", self.elementTypeName, element] andLevel:Warning];
     }

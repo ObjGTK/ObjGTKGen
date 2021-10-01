@@ -48,8 +48,8 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRConstructor";
-    self.parameters = [[OFMutableArray alloc] init];
+    elementTypeName = @"GIRConstructor";
+    parameters = [[OFMutableArray alloc] init];
 
     return self;
 }

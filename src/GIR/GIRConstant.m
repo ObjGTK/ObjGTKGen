@@ -43,7 +43,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRConstant";
+    elementTypeName = @"GIRConstant";
 
     return self;
 }
