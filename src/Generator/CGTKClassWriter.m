@@ -29,7 +29,6 @@
  * Objective-C imports
  */
 #import "CGTKClassWriter.h"
-#include <ObjFW/OFStdIOStream.h>
 
 @implementation CGTKClassWriter
 
