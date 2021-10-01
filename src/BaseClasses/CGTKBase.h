@@ -41,7 +41,7 @@
     /**
 	 * The internal GtkObject pointer
 	 */
-    GObject* __gObject;
+    GObject* _gObject;
 }
 
 /**

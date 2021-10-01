@@ -29,6 +29,7 @@
  * Objective-C imports
  */
 #import "CGTKClassWriter.h"
+#include <ObjFW/OFStdIOStream.h>
 
 @implementation CGTKClassWriter
 
@@ -52,18 +53,19 @@
 {
     OFMutableString* output = [[OFMutableString alloc] init];
 
+    OFLog(@"Writing header file for class %@.", [cgtkClass name]);
     [output appendString:[CGTKClassWriter generateLicense:[OFString stringWithFormat:@"%@.h", [cgtkClass name]]]];
 
     // Imports
     [output appendString:@"\n/*\n * Objective-C imports\n */\n"];
-    [output appendFormat:@"#import \"CoreGTK/%@.h\"\n", [CGTKUtil swapTypes:[cgtkClass cParentType]]];
+    [output appendFormat:@"#import \"%@.h\"\n", [CGTKUtil swapTypes:[cgtkClass cParentType]]];
 
     OFArray* extraImports = [CGTKUtil extraImports:[cgtkClass type]];
 
     if (extraImports != nil) {
         for (OFString* imp in extraImports) {
             if(imp != nil) {
-                OFLog(@"%s", imp);
+                OFLog(@"%@", imp);
                 [output appendFormat:@"#import %@\n", imp];
             }
         }
@@ -120,11 +122,12 @@
 {
     OFMutableString* output = [[OFMutableString alloc] init];
 
+    OFLog(@"Writing implementation file for class %@.", [cgtkClass name]);
     [output appendString:[CGTKClassWriter generateLicense:[OFString stringWithFormat:@"%@.m", [cgtkClass name]]]];
 
     // Imports
     [output appendString:@"\n/*\n * Objective-C imports\n */\n"];
-    [output appendFormat:@"#import \"CoreGTK/%@.h\"\n\n", [cgtkClass name]];
+    [output appendFormat:@"#import \"%@.h\"\n\n", [cgtkClass name]];
 
     // Implementation declaration
     [output appendFormat:@"@implementation %@\n\n", [cgtkClass name]];

@@ -1,5 +1,5 @@
 /*
- * main.m
+ * HelloWorld.m
  * This file is part of CoreGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -20,16 +20,13 @@
  */
 
 /*
- * Modified by the CoreGTK Team, 2017. See the AUTHORS file for a
- * list of people on the CoreGTK Team.
+ * Modified by the ObjGTK Team, 2021. See the AUTHORS file for a
+ * list of people on the ObjGTK Team.
  * See the ChangeLog files for a list of changes.
  *
  */
 
-/*
- * Objective-C imports
- */
-#import <Foundation/Foundation.h>
+#import <ObjFW/ObjFW.h>
 
 #import "CoreGTK/CGTKBaseBuilder.h"
 #import "CoreGTK/CGTKBuilder.h"
@@ -39,7 +36,8 @@
 #import "CoreGTK/CGTKSignalConnector.h"
 #import "CoreGTK/CGTKWindow.h"
 
-@interface HelloWorld : NSObject
+@interface HelloWorld : OFObject
+
 /* This is a callback function. The data arguments are ignored
  * in this example. More callbacks below. */
 +(void)hello;
@@ -55,13 +53,10 @@
 
 @end
 
-
 @implementation HelloWorld
 
 int main(int argc, char *argv[])
 {	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
 	/* This is called in all GTK applications. Arguments are parsed
     * from the command line and are returned to the application. */
     [CGTK autoInitWithArgc:argc andArgv:argv];
@@ -71,13 +66,7 @@ int main(int argc, char *argv[])
 	
 	// Show GLADE example
 	[HelloWorld gladeExample];
-	
-	/*
-	 * Release allocated memory
-	 */	
-	[pool release];
-	
-	// Return success
+
 	return 0;
 }
 
@@ -85,9 +74,7 @@ int main(int argc, char *argv[])
  * This is an example program showing some CoreGTK features
  */
 +(void) standardExample//(int argc, char *argv[])
-{
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	/* We could use also CGTKWidget here instead */
     CGTKWindow *window;
     CGTKButton *button;
@@ -105,7 +92,7 @@ int main(int argc, char *argv[])
 	[window setBorderWidth:10];
 	
 	/* Sets the title text of the window */
-	[window setTitle:@"Now supporting GTK+ 3.22!"];
+	[window setTitle:@"This is ObjGTK supporting GTK+ 3.24 (elementary OS)!"];
 	
 	/* Sets the default size to 400x300 */	
 	[window setDefaultSizeWithWidth:400 andHeight:300];
@@ -148,7 +135,7 @@ int main(int argc, char *argv[])
 	
 	if([builder addFromFileWithFilename:@"gladeExample.glade" andErr:NULL] == 0)
 	{
-		NSLog(@"Error loading GUI file");
+		OFLog(@"Error loading GUI file");
 		return;
 	}
 
@@ -156,10 +143,10 @@ int main(int argc, char *argv[])
 	[CGTKBaseBuilder setDebug:true];
 
 	/* Use signal dictionary to connect GLADE objects to Objective-C code */
-	NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:
-		             [CGTKCallbackData withObject:[CGTK class] andSEL:@selector(mainQuit)], @"endGtkLoop",
-		             [CGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(hello)], @"on_button1_clicked",
-		             [CGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(goodbye)], @"on_button2_clicked",
+	OFDictionary *dic = [[OFDictionary alloc] initWithKeysAndObjects:
+		             @"endGtkLoop", [CGTKCallbackData withObject:[CGTK class] andSEL:@selector(mainQuit)],
+		             @"on_button1_clicked", [CGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(hello)],
+		             @"on_button2_clicked", [CGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(goodbye)],
 		             nil];
 
 	/* CGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C code */
@@ -188,7 +175,7 @@ int main(int argc, char *argv[])
  */
 +(void)hello
 {
-    NSLog(@"Hello World");
+    OFLog(@"Hello World");
 }
 
 /*
@@ -196,7 +183,7 @@ int main(int argc, char *argv[])
  */
 +(void)goodbye
 {
-    NSLog(@"Goodbye!");
+    OFLog(@"Goodbye!");
 }
 
 /*

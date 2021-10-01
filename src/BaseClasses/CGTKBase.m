@@ -47,44 +47,42 @@
 {
     self = [super init];
 
-    if (self) {
-        [self setGObject:obj];
-    }
+    [self setGObject:obj];
 
     return self;
 }
 
 - (GtkWidget*)WIDGET
 {
-    return GTK_WIDGET(__gObject);
+    return GTK_WIDGET(_gObject);
 }
 
 - (void)setGObject:(GObject*)obj
 {
-    if (__gObject != NULL) {
+    if (_gObject != NULL) {
         // Decrease the reference count on the previously stored GObject
-        g_object_unref(__gObject);
+        g_object_unref(_gObject);
     }
 
-    __gObject = obj;
+    _gObject = obj;
 
-    if (__gObject != NULL) {
+    if (_gObject != NULL) {
         // Increase the reference count on the new GObject
-        g_object_ref(__gObject);
+        g_object_ref(_gObject);
     }
 }
 
 - (GObject*)GOBJECT
 {
-    return __gObject;
+    return _gObject;
 }
 
 - (void)dealloc
 {
-    if (__gObject != NULL) {
+    if (_gObject != NULL) {
         // Decrease the reference count on the previously stored GObject
-        g_object_unref(__gObject);
-        __gObject = NULL;
+        g_object_unref(_gObject);
+        _gObject = NULL;
     }
     [super dealloc];
 }

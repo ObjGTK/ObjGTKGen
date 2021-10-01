@@ -44,7 +44,7 @@ OBJECTS=$(SOURCES:.m=.o)
 CC=clang
 
 #CFLAGS
-CFLAGS=`objfw-config --cppflags`
+CFLAGS=`objfw-config --cppflags` -g -O0 -c -Wall
 
 #Objective-c specific flags
 OBJCFLAGS=`objfw-config --objcflags`
@@ -79,7 +79,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LIBS) -o $@
 
 %.o: %.m
-	$(CC) $(COMMONFLAGS) -g -O0 -c -Wall $< -o $@
+	$(CC) $(COMMONFLAGS) $< -o $@
 
 clean: 
 	rm -rf *.o *.d $(EXECUTABLE)
