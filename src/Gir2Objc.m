@@ -219,7 +219,7 @@
 
         // Set methods
         for (GIRMethod* meth in clazz.methods) {
-            bool foundVarArgs = true;
+            bool foundVarArgs = false;
 
             // First need to check for varargs in list of parameters
             for (GIRParameter* param in meth.parameters) {
