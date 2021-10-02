@@ -133,7 +133,7 @@ static OFMutableDictionary* dictExtraMethods;
 
 + (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType withConstructor:(OFString*)cCtor
 {
-    return [OFString stringWithFormat:@"[super initWithGObject:(GObject *)%@]", cCtor];
+    return [OFString stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
 }
 
 + (OFString*)selfTypeMethodCall:(OFString*)type;
@@ -212,7 +212,7 @@ static OFMutableDictionary* dictExtraMethods;
     if (outerDict == nil) {
         if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"CGTK"]) {
             // Converting from Gtk -> CGTK
-            return [OFString stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject *)%@]", [toType substringWithRange:OFRangeMake(0, [toType length] - 1)], name];
+            return [OFString stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]", [toType substringWithRange:OFRangeMake(0, [toType length] - 1)], name];
         } else if ([fromType hasPrefix:@"CGTK"] && [toType hasPrefix:@"Gtk"]) {
             // Converting from CGTK -> Gtk
             return [OFString stringWithFormat:@"[%@ %@]", name, [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)] uppercaseString]];

@@ -1,0 +1,17 @@
+{
+    "dont_swap_types": [
+        "void",
+        "gint",
+        "gint*",
+        "guint*",
+        "guint",
+        "guint32",
+        "int",
+        "uint",
+        "GList",
+        "GError",
+        "GList*",
+        "GError**",
+        "cairo_region_t*"
+    ]
+}
