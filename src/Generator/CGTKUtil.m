@@ -188,6 +188,7 @@ static OFMutableDictionary* dictExtraMethods;
     return false;
 }
 
+// TODO Transform this to generic code
 + (OFString*)swapTypes:(OFString*)str
 {
     if (dictSwapTypes == nil) {
@@ -199,6 +200,7 @@ static OFMutableDictionary* dictExtraMethods;
     return (val == nil) ? str : val;
 }
 
+// TODO Move this mapping from json file to code
 + (OFString*)convertType:(OFString*)fromType withName:(OFString*)name toType:(OFString*)toType
 {
     if (dictConvertType == nil) {
