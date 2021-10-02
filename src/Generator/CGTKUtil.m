@@ -195,6 +195,9 @@ static OFMutableDictionary* dictExtraMethods;
         dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.json"];
     }
 
+    if(str == nil)
+        return @"nil";
+
     OFString* val = [dictSwapTypes objectForKey:str];
 
     return (val == nil) ? str : val;

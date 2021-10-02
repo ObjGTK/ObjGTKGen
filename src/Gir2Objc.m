@@ -99,17 +99,15 @@
     if (ns == nil)
         @throw [OGTKNoGIRAPIException exception];
 
-    OFArray* classesToGen = [CGTKUtil globalConfigValueFor:@"classesToGen"];
-
     // Pre-load arrTrimMethodName (in GTKUtil) from info in classesToGen
     // In order to do this we must convert from something like
     // ScaleButton to gtk_scale_button
-    for (OFString* clazz in classesToGen) {
+    for (GIRClass* clazz in ns.classes) {
         OFMutableString* result = [[OFMutableString alloc] init];
 
-        for (i = 0; i < [clazz length]; i++) {
+        for (i = 0; i < [clazz.name length]; i++) {
             // Current character
-            OFString* currentChar = [clazz substringWithRange:OFRangeMake(i, 1)];
+            OFString* currentChar = [clazz.name substringWithRange:OFRangeMake(i, 1)];
 
             if (i != 0 && [CGTKUtil isUppercase:currentChar]) {
                 [result appendFormat:@"_%@", [currentChar lowercaseString]];
@@ -122,10 +120,6 @@
     }
 
     for (GIRClass* clazz in ns.classes) {
-        if (![classesToGen containsObject:clazz.name]) {
-            continue;
-        }
-
         CGTKClass* cgtkClass = [[CGTKClass alloc] init];
 
         // Set basic class properties
