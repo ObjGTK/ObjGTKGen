@@ -71,7 +71,7 @@
     else if ([parameters count] == 1) {
         CGTKParameter* p = [parameters objectAtIndex:0];
 
-        return [OFString stringWithFormat:@"%@:(%@) %@",
+        return [OFString stringWithFormat:@"%@:(%@)%@",
                          [self name],
                          [p type],
                          [p name]];
@@ -89,7 +89,7 @@
                 [output appendString:@" and"];
             }
 
-            [output appendFormat:@"%@:(%@) %@",
+            [output appendFormat:@"%@:(%@)%@",
                     [CGTKUtil convertUSSToCapCase:[p name]],
                     [p type],
                     [p name]];

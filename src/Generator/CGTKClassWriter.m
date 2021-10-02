@@ -80,7 +80,7 @@
         [output appendString:@"/**\n * Functions\n */\n"];
 
         for (CGTKMethod* func in [cgtkClass functions]) {
-            [output appendFormat:@"+(%@)%@;\n", [func returnType], [func sig]];
+            [output appendFormat:@"+ (%@)%@;\n", [func returnType], [func sig]];
         }
     }
 
@@ -89,14 +89,14 @@
 
         // Constructor declarations
         for (CGTKMethod* ctor in [cgtkClass constructors]) {
-            [output appendFormat:@"-(id)%@;\n", [CGTKUtil convertFunctionToInit:[ctor sig]]];
+            [output appendFormat:@"- (id)%@;\n", [CGTKUtil convertFunctionToInit:[ctor sig]]];
         }
     }
 
     [output appendString:@"\n/**\n * Methods\n */\n\n"];
 
     // Self type method declaration
-    [output appendFormat:@"-(%@*)%@;\n", [cgtkClass cType], [[cgtkClass cName] uppercaseString]];
+    [output appendFormat:@"- (%@*)%@;\n", [cgtkClass cType], [[cgtkClass cName] uppercaseString]];
 
     OFDictionary* extraMethods = [CGTKUtil extraMethods:[cgtkClass type]];
 
@@ -108,7 +108,7 @@
 
     for (CGTKMethod* meth in [cgtkClass methods]) {
         [output appendFormat:@"\n%@\n", [CGTKClassWriter generateDocumentationForMethod:meth]];
-        [output appendFormat:@"-(%@)%@;\n", [meth returnType], [meth sig]];
+        [output appendFormat:@"- (%@)%@;\n", [meth returnType], [meth sig]];
     }
 
     // End interface
@@ -133,7 +133,7 @@
 
     // Function implementations
     for (CGTKMethod* func in [cgtkClass functions]) {
-        [output appendFormat:@"+(%@)%@", [func returnType], [func sig]];
+        [output appendFormat:@"+ (%@)%@", [func returnType], [func sig]];
 
         [output appendString:@"\n{\n"];
 
@@ -166,7 +166,7 @@
 
     // Constructor implementations
     for (CGTKMethod* ctor in [cgtkClass constructors]) {
-        [output appendFormat:@"-(id)%@", [CGTKUtil convertFunctionToInit:[ctor sig]]];
+        [output appendFormat:@"- (id)%@", [CGTKUtil convertFunctionToInit:[ctor sig]]];
 
         [output appendString:@"\n{\n"];
 
@@ -178,10 +178,10 @@
     }
 
     // Self type method implementation
-    [output appendFormat:@"-(%@*)%@\n{\n\treturn %@;\n}\n\n", [cgtkClass cType], [[cgtkClass cName] uppercaseString], [CGTKUtil selfTypeMethodCall:[cgtkClass cType]]];
+    [output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n", [cgtkClass cType], [[cgtkClass cName] uppercaseString], [CGTKUtil selfTypeMethodCall:[cgtkClass cType]]];
 
     for (CGTKMethod* meth in [cgtkClass methods]) {
-        [output appendFormat:@"-(%@)%@", [meth returnType], [meth sig]];
+        [output appendFormat:@"- (%@)%@", [meth returnType], [meth sig]];
 
         [output appendString:@"\n{\n"];
 
@@ -270,7 +270,7 @@
 
     OFMutableString* doc = [[OFMutableString alloc] init];
 
-    [doc appendFormat:@"/**\n * -(%@*)%@;\n *\n", [meth returnType], [meth sig]];
+    [doc appendFormat:@"/**\n * - (%@*)%@;\n *\n", [meth returnType], [meth sig]];
 
     if ([meth.parameters count] > 0) {
         for (i = 0; i < [meth.parameters count]; i++) {
