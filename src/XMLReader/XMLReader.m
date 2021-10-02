@@ -9,6 +9,10 @@
 #import "XMLReader.h"
 
 OFString* const kXMLReaderTextNodeKey = @"text";
+OFString* const kXMLNSForPrefixC = @"http://www.gtk.org/introspection/c/1.0";
+OFString* const kXMLNSForPrefixXml = @"http://www.w3.org/XML/1998/namespace";
+OFString* const kXMLNSForPrefixGlib = @"http://www.gtk.org/introspection/glib/1.0";
+OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 
 @interface XMLReader (Internal)
 
@@ -72,23 +76,9 @@ OFString* const kXMLReaderTextNodeKey = @"text";
     OFMutableDictionary* childDict = [OFMutableDictionary dictionary];
     OFString* attributeName;
     for (OFXMLAttribute* attribute in attributes) {
-        if(attribute.namespace) {
-            if([attribute.namespace isEqual:@"http://www.gtk.org/introspection/c/1.0"])
-                attributeName = [OFString stringWithFormat:@"c:%@", attribute.name];
-            else if([attribute.namespace isEqual:@"http://www.w3.org/XML/1998/namespace"])
-                attributeName = [OFString stringWithFormat:@"xml:%@", attribute.name];
-            else if([attribute.namespace isEqual:@"http://www.gtk.org/introspection/glib/1.0"])
-                attributeName = [OFString stringWithFormat:@"glib:%@", attribute.name];
-            else if([attribute.namespace isEqual:@"http://www.w3.org/2000/xmlns/"])
-                attributeName = [OFString stringWithFormat:@"xmlns:%@", attribute.name];
-            else {
-                OFLog(@"Unknown namespace %@ for attribute %@", attribute.namespace, attribute.name);
-                attributeName = [OFString stringWithString:attribute.name];
-            }
-        } else {
-            attributeName = [OFString stringWithString:attribute.name];
-        }
-        [childDict setValue:attribute.stringValue forKey:attributeName];
+        attributeName = [[self reAddPrefixesToAttributes:attribute] retain];
+        [childDict setValue:attribute.stringValue
+                     forKey:attributeName];
     }
 
     // If there’s already an item for this key, it means we need to create an array
@@ -116,6 +106,30 @@ OFString* const kXMLReaderTextNodeKey = @"text";
 
     // Update the stack
     [dictionaryStack addObject:childDict];
+}
+
+- (OFString*)reAddPrefixesToAttributes:(OFXMLAttribute*)attribute
+{
+    // Prefixes are added for namespace binding
+    if (!attribute.namespace)
+        return [[OFString stringWithString:attribute.name] autorelease];
+
+    OFString* attributeName;
+
+    if ([attribute.namespace isEqual:kXMLNSForPrefixC])
+        attributeName = [OFString stringWithFormat:@"c:%@", attribute.name];
+    else if ([attribute.namespace isEqual:kXMLNSForPrefixXml])
+        attributeName = [OFString stringWithFormat:@"xml:%@", attribute.name];
+    else if ([attribute.namespace isEqual:kXMLNSForPrefixGlib])
+        attributeName = [OFString stringWithFormat:@"glib:%@", attribute.name];
+    else if ([attribute.namespace isEqual:kXMLNSForPrefixXmlns])
+        attributeName = [OFString stringWithFormat:@"xmlns:%@", attribute.name];
+    else {
+        OFLog(@"Unknown namespace %@ for attribute %@", attribute.namespace, attribute.name);
+        attributeName = [OFString stringWithString:attribute.name];
+    }
+
+    return [attributeName autorelease];
 }
 
 - (void)parser:(OFXMLParser*)parser didEndElement:(OFString*)elementName prefix:(nullable OFString*)prefix namespace:(OFString*)namespace
