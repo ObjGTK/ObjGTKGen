@@ -72,7 +72,7 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
     // Get the dictionary for the current level in the stack
     OFMutableDictionary* parentDict = [dictionaryStack lastObject];
 
-    // Create the child dictionary for the new element, and initilaize it with the attributes
+    // Create the child dictionary for the new element, and initialize it with the attributes
     OFMutableDictionary* childDict = [OFMutableDictionary dictionary];
     OFString* attributeName;
     for (OFXMLAttribute* attribute in attributes) {

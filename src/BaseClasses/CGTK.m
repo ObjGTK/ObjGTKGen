@@ -34,7 +34,7 @@
 
 + (OFString*)coreGtkVersion
 {
-    return @"3.38.0";
+    return @"3.24.0";
 }
 
 + (void)initWithArgc:(int*)argc andArgv:(char***)argv
