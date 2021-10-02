@@ -129,7 +129,7 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
         attributeName = [OFString stringWithString:attribute.name];
     }
 
-    return [attributeName autorelease];
+    return attributeName;
 }
 
 - (void)parser:(OFXMLParser*)parser didEndElement:(OFString*)elementName prefix:(nullable OFString*)prefix namespace:(OFString*)namespace
