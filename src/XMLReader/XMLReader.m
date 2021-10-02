@@ -76,7 +76,7 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
     OFMutableDictionary* childDict = [OFMutableDictionary dictionary];
     OFString* attributeName;
     for (OFXMLAttribute* attribute in attributes) {
-        attributeName = [[self reAddPrefixeToAttribute:attribute] retain];
+        attributeName = [[self reAddPrefixToAttribute:attribute] retain];
         [childDict setValue:attribute.stringValue
                      forKey:attributeName];
     }
@@ -108,7 +108,7 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
     [dictionaryStack addObject:childDict];
 }
 
-- (OFString*)reAddPrefixeToAttribute:(OFXMLAttribute*)attribute
+- (OFString*)reAddPrefixToAttribute:(OFXMLAttribute*)attribute
 {
     // Prefixes are added for namespace binding
     if (!attribute.namespace)
