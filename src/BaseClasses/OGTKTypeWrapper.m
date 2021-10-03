@@ -32,7 +32,7 @@
  */
 @implementation OGTKTypeWrapper
 
-@synthesize gintValue;
+@synthesize gintValue, ptrValue;
 
 - (const GValue*)asGValuePtr
 {

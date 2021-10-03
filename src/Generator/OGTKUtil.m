@@ -204,7 +204,7 @@ static OFMutableDictionary* dictExtraMethods;
 {
     if (dictSwapTypes == nil) {
         dictSwapTypes = [[OFMutableDictionary alloc]
-            initWithContentsOfFile:@"Config/swap_types.json"];
+            ogtk_initWithJsonDictionaryOfFile:@"Config/swap_types.json"];
     }
 
     if (str == nil)
@@ -253,7 +253,7 @@ static OFMutableDictionary* dictExtraMethods;
 {
     if (dictGlobalConf == nil) {
         dictGlobalConf = [[OFMutableDictionary alloc]
-            initWithContentsOfFile:@"Config/global_conf.json"];
+            ogtk_initWithJsonDictionaryOfFile:@"Config/global_conf.json"];
     }
 
     return [dictGlobalConf objectForKey:key];
@@ -263,7 +263,7 @@ static OFMutableDictionary* dictExtraMethods;
 {
     if (dictExtraImports == nil) {
         dictExtraImports = [[OFMutableDictionary alloc]
-            initWithContentsOfFile:@"Config/extra_imports.json"];
+            ogtk_initWithJsonDictionaryOfFile:@"Config/extra_imports.json"];
     }
 
     return [dictExtraImports objectForKey:clazz];
@@ -273,7 +273,7 @@ static OFMutableDictionary* dictExtraMethods;
 {
     if (dictExtraMethods == nil) {
         dictExtraMethods = [[OFMutableDictionary alloc]
-            initWithContentsOfFile:@"Config/extra_methods.json"];
+            ogtk_initWithJsonDictionaryOfFile:@"Config/extra_methods.json"];
     }
 
     return [dictExtraMethods objectForKey:clazz];

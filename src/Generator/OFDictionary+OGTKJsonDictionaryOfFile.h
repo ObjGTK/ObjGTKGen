@@ -1,8 +1,8 @@
 /*
- * OGTKTypeWrapper.h
- * This file is part of ObjGTK
+ * OFDictionary+OGTKJsonDictionaryOfFile.h
+ * This file is part of ObjGTKGen
  *
- * Copyright (C) 2017 - Tyler Burton
+ * Copyright (C) 2021 - Johannes Brakensiek
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -11,12 +11,12 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -26,24 +26,9 @@
  */
 
 #import <ObjFW/ObjFW.h>
-#import <gtk/gtk.h>
 
-/**
- * Provides functions for wrapping GTK types
- */
-@interface OGTKTypeWrapper : OFObject {
-    void* ptrValue;
-    gint gintValue;
-}
+@interface OFDictionary (OGTKJsonDictionaryOfFile)
 
-@property (nonatomic) gint gintValue;
-@property (nonatomic) void* ptrValue;
-
-/**
- * Returns the stored ptrValue as a GValue*
- *
- * @returns GValue*
- */
-- (const GValue*)asGValuePtr;
+- (instancetype)ogtk_initWithJsonDictionaryOfFile:(OFString*)filePath;
 
 @end

@@ -31,7 +31,7 @@ SOURCES=ObjGTKGen.m \
 	Generator/OGTKMethod.m \
 	Generator/OGTKParameter.m \
 	Generator/OGTKUtil.m \
-	Generator/OFDictionary+JsonContentsOfFile.m \
+	Generator/OFDictionary+OGTKJsonDictionaryOfFile.m \
 	Gir2Objc.m \
 	Exceptions/OGTKIncorrectConfigException.m \
 	Exceptions/OGTKNoGIRAPIException.m \
