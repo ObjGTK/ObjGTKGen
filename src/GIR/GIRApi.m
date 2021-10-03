@@ -37,8 +37,13 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRApi";
-    namespaces = [[OFMutableArray alloc] init];
+    @try {
+        elementTypeName = @"GIRApi";
+        namespaces = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -47,7 +52,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

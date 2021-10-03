@@ -43,9 +43,14 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIREnumeration";
-    self.members = [[OFMutableArray alloc] init];
-    self.functions = [[OFMutableArray alloc] init];
+    @try {
+        elementTypeName = @"GIREnumeration";
+        members = [[OFMutableArray alloc] init];
+        functions = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -54,7 +59,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -79,9 +89,10 @@
         } else if ([key isEqual:@"deprecated"]) {
             self.deprecated = [value isEqual:@"1"];
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"doc-deprecated"]) {
-            self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
+            self.docDeprecated =
+                [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"member"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRMember class]
@@ -106,7 +117,8 @@
     }
 
     if ([object isKindOfClass:[OFDictionary class]]) {
-        [members addObject:[[GIRMember alloc] initWithDictionary:object]];
+        [members addObject:[[[GIRMember alloc] initWithDictionary:object]
+                               autorelease]];
     }
 }
 
@@ -120,7 +132,8 @@
     }
 
     if ([object isKindOfClass:[OFDictionary class]]) {
-        [functions addObject:[[GIRFunction alloc] initWithDictionary:object]];
+        [functions addObject:[[[GIRFunction alloc] initWithDictionary:object]
+                                 autorelease]];
     }
 }
 

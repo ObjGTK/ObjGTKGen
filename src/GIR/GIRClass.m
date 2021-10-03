@@ -64,7 +64,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -93,7 +98,7 @@
         } else if ([key isEqual:@"abstract"]) {
             self.abstract = [value isEqual:@"1"];
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"constructor"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRConstructor class]

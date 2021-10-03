@@ -49,8 +49,11 @@
 {
     self = [self init];
 
-    if (self) {
+    @try {
         [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
     }
 
     return self;

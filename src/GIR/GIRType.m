@@ -36,7 +36,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRType";
+    elementTypeName = @"GIRType";
 
     return self;
 }
@@ -45,7 +45,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

@@ -34,7 +34,8 @@
 {
     *girDict = nil;
 
-    OFString* girContents = [[OFString alloc] initWithContentsOfFile:girFile];
+    OFString* girContents =
+        [[[OFString alloc] initWithContentsOfFile:girFile] autorelease];
 
     if (girContents == nil) {
         @throw [[OFReadFailedException alloc] initWithObject:girFile
@@ -240,9 +241,10 @@
                     [objcMeth setCReturnType:meth.returnValue.type.cType];
                 }
 
-                OFMutableArray* paramArray = [[OFMutableArray alloc] init];
+                OFMutableArray* paramArray = [OFMutableArray array];
                 for (GIRParameter* param in meth.parameters) {
-                    OGTKParameter* objcParam = [[OGTKParameter alloc] init];
+                    OGTKParameter* objcParam =
+                        [[[OGTKParameter alloc] init] autorelease];
 
                     if (param.type == nil && param.array != nil) {
                         [objcParam setCType:param.array.cType];
@@ -252,10 +254,8 @@
 
                     [objcParam setCName:param.name];
                     [paramArray addObject:objcParam];
-                    [objcParam release];
                 }
                 [objcMeth setParameters:paramArray];
-                [paramArray release];
 
                 [cgtkClass addMethod:objcMeth];
                 [objcMeth release];

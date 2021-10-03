@@ -51,7 +51,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRProperty";
+    elementTypeName = @"GIRProperty";
 
     return self;
 }
@@ -60,7 +60,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -83,9 +88,11 @@
         } else if ([key isEqual:@"doc"]) {
             self.doc = [[GIRDoc alloc] initWithDictionary:value];
         } else if ([key isEqual:@"doc-deprecated"]) {
-            self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
+            self.docDeprecated =
+                [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"type"]) {
-            self.type = [[GIRType alloc] initWithDictionary:value];
+            self.type =
+                [[[GIRType alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"allow-none"]) {
             self.allowNone = [value isEqual:@"1"];
         } else if ([key isEqual:@"construct-only"]) {
@@ -99,7 +106,8 @@
         } else if ([key isEqual:@"writable"]) {
             self.writable = value;
         } else if ([key isEqual:@"array"]) {
-            self.array = [[GIRArray alloc] initWithDictionary:value];
+            self.array =
+                [[[GIRArray alloc] initWithDictionary:value] autorelease];
         } else {
             [self logUnknownElement:key];
         }

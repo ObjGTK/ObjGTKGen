@@ -40,7 +40,12 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRField";
+    @try {
+        self.elementTypeName = @"GIRField";
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -49,7 +54,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -70,9 +80,11 @@
         } else if ([key isEqual:@"bits"]) {
             self.bits = [value longLongValue];
         } else if ([key isEqual:@"type"]) {
-            self.type = [[GIRType alloc] initWithDictionary:value];
+            self.type =
+                [[[GIRType alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"array"]) {
-            self.array = [[GIRArray alloc] initWithDictionary:value];
+            self.array =
+                [[[GIRArray alloc] initWithDictionary:value] autorelease];
         } else {
             [self logUnknownElement:key];
         }

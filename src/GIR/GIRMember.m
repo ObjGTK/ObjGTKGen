@@ -38,7 +38,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRMember";
+    elementTypeName = @"GIRMember";
 
     return self;
 }
@@ -47,7 +47,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -66,7 +71,7 @@
         } else if ([key isEqual:@"value"]) {
             self.theValue = [value longLongValue];
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else {
             [self logUnknownElement:key];
         }
