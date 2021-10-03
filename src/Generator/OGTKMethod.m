@@ -28,144 +28,94 @@
 #import "OGTKMethod.h"
 
 @implementation OGTKMethod
-
-- (id)init
-{
-    self = [super init];
-
-    return self;
-}
-
-- (void)setCName:(OFString*)name
-{
-    if (cName != nil) {
-        [cName release];
-    }
-
-    if (name == nil) {
-        cName = nil;
-    } else {
-        cName = [name retain];
-    }
-}
-
-- (OFString*)cName
-{
-    return [[cName retain] autorelease];
-}
+@synthesize cName = _cName, cReturnType = _cReturnType;
 
 - (OFString*)name
 {
-    return [OGTKUtil convertUSSToCamelCase:[OGTKUtil trimMethodName:cName]];
+    return [OGTKUtil convertUSSToCamelCase:[OGTKUtil trimMethodName:_cName]];
 }
 
 - (OFString*)sig
 {
-    int i;
-
     // C method with no parameters
-    if (parameters == nil || [parameters count] == 0) {
-        return [OFString stringWithFormat:@"%@", [self name]];
+    if (_parameters.count == 0) {
+        return self.name;
     }
     // C method with only one parameter
-    else if ([parameters count] == 1) {
-        OGTKParameter* p = [parameters objectAtIndex:0];
+    else if (_parameters.count == 1) {
+        OGTKParameter* p = [_parameters objectAtIndex:0];
 
-        return [OFString
-            stringWithFormat:@"%@:(%@)%@", [self name], [p type], [p name]];
+        return
+            [OFString stringWithFormat:@"%@:(%@)%@", self.name, p.type, p.name];
     }
     // C method with multiple parameters
     else {
-        OFMutableString* output = [[OFMutableString alloc] init];
+        OFMutableString* output =
+            [OFMutableString stringWithFormat:@"%@With", self.name];
 
-        [output
-            appendString:[OFString stringWithFormat:@"%@With", [self name]]];
-
-        for (i = 0; i < [parameters count]; i++) {
-            OGTKParameter* p = [parameters objectAtIndex:i];
-
-            if (i != 0) {
+        bool first = true;
+        for (OGTKParameter* p in _parameters) {
+            if (first)
+                first = false;
+            else
                 [output appendString:@" and"];
-            }
 
             [output appendFormat:@"%@:(%@)%@",
-                    [OGTKUtil convertUSSToCapCase:[p name]], [p type],
-                    [p name]];
+                    [OGTKUtil convertUSSToCapCase:p.name], p.type, p.name];
         }
 
-        return [output autorelease];
+        return output;
     }
-}
-
-- (void)setCReturnType:(OFString*)returnType
-{
-    if (cReturnType != nil) {
-        [cReturnType release];
-    }
-
-    if (returnType == nil) {
-        cReturnType = nil;
-    } else {
-        cReturnType = [returnType retain];
-    }
-}
-
-- (OFString*)cReturnType
-{
-    return [[cReturnType retain] autorelease];
 }
 
 - (OFString*)returnType
 {
-    return [OGTKUtil swapTypes:cReturnType];
+    return [OGTKUtil swapTypes:_cReturnType];
 }
 
 - (bool)returnsVoid
 {
-    return [cReturnType isEqual:@"void"];
+    return [_cReturnType isEqual:@"void"];
 }
 
 - (void)setParameters:(OFArray*)params
 {
+    OFMutableArray* mutParams = [[params mutableCopy] autorelease];
+
     // Hacky fix to get around issue with missing GError parameter from GIR file
-    if ([[self cName] isEqual:@"gtk_window_set_icon_from_file"] ||
-        [[self cName] isEqual:@"gtk_window_set_default_icon_from_file"] ||
-        [[self cName] isEqual:@"gtk_builder_add_from_file"] ||
-        [[self cName] isEqual:@"gtk_builder_add_from_resource"] ||
-        [[self cName] isEqual:@"gtk_builder_add_from_string"] ||
-        [[self cName] isEqual:@"gtk_builder_add_objects_from_file"] ||
-        [[self cName] isEqual:@"gtk_builder_add_objects_from_resource"] ||
-        [[self cName] isEqual:@"gtk_builder_add_objects_from_string"] ||
-        [[self cName] isEqual:@"gtk_builder_extend_with_template"] ||
-        [[self cName] isEqual:@"gtk_builder_value_from_string"] ||
-        [[self cName] isEqual:@"gtk_builder_value_from_string_type"]) {
-        OGTKParameter* param = [[OGTKParameter alloc] init];
-        [param setCType:@"GError**"];
-        [param setCName:@"err"];
-
-        OFMutableArray* hackyArray =
-            [[[OFMutableArray alloc] init] autorelease];
-        [hackyArray addObjectsFromArray:params];
-        [hackyArray addObject:param];
-
-        [param release];
-
-        params = hackyArray;
+    if ([_cName isEqual:@"gtk_window_set_icon_from_file"] ||
+        [_cName isEqual:@"gtk_window_set_default_icon_from_file"] ||
+        [_cName isEqual:@"gtk_builder_add_from_file"] ||
+        [_cName isEqual:@"gtk_builder_add_from_resource"] ||
+        [_cName isEqual:@"gtk_builder_add_from_string"] ||
+        [_cName isEqual:@"gtk_builder_add_objects_from_file"] ||
+        [_cName isEqual:@"gtk_builder_add_objects_from_resource"] ||
+        [_cName isEqual:@"gtk_builder_add_objects_from_string"] ||
+        [_cName isEqual:@"gtk_builder_extend_with_template"] ||
+        [_cName isEqual:@"gtk_builder_value_from_string"] ||
+        [_cName isEqual:@"gtk_builder_value_from_string_type"]) {
+        OGTKParameter* param = [[[OGTKParameter alloc] init] autorelease];
+        param.cType = @"GError**";
+        param.cName = @"err";
+        [mutParams addObject:param];
     }
 
-    parameters = [params retain];
+    [_parameters release];
+    [mutParams makeImmutable];
+    _parameters = [mutParams copy];
 }
 
 - (OFArray*)parameters
 {
-    return [[parameters retain] autorelease];
+    return [[_parameters copy] autorelease];
 }
 
 - (void)dealloc
 {
-    [cName release];
-    [cReturnType release];
-    [parameters release];
+    [_cName release];
+    [_cReturnType release];
+    [_parameters release];
+
     [super dealloc];
 }
 

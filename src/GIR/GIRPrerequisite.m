@@ -34,12 +34,12 @@
 
 @synthesize name;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRPrerequisite";
+        _elementTypeName = @"GIRPrerequisite";
     } @catch (id e) {
         [self release];
         @throw e;
@@ -79,7 +79,8 @@
 
 - (void)dealloc
 {
-    [name release];
+    [_name release];
+
     [super dealloc];
 }
 

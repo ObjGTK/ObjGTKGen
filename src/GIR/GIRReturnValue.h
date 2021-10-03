@@ -33,10 +33,10 @@
 #import "GIRType.h"
 
 @interface GIRReturnValue : GIRBase {
-    OFString* transferOwnership;
-    GIRDoc* doc;
-    GIRType* type;
-    GIRArray* array;
+    OFString* _transferOwnership;
+    GIRDoc* _doc;
+    GIRType* _type;
+    GIRArray* _array;
 }
 
 @property (nonatomic, retain) OFString* transferOwnership;

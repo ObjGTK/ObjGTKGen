@@ -29,34 +29,34 @@
 
 @implementation GIRClass
 
-@synthesize name;
-@synthesize cType;
-@synthesize cSymbolPrefix;
-@synthesize parent;
-@synthesize version;
-@synthesize abstract;
-@synthesize doc;
-@synthesize constructors;
-@synthesize fields;
-@synthesize methods;
-@synthesize virtualMethods;
-@synthesize properties;
-@synthesize implements;
-@synthesize functions;
+@synthesize name = _name;
+@synthesize cType = _cType;
+@synthesize cSymbolPrefix = _cSymbolPrefix;
+@synthesize parent = _parent;
+@synthesize version = _version;
+@synthesize abstract = _abstract;
+@synthesize doc = _doc;
+@synthesize constructors = _constructors;
+@synthesize fields = _fields;
+@synthesize methods = _methods;
+@synthesize virtualMethods = _virtualMethods;
+@synthesize properties = _properties;
+@synthesize implements = _implements;
+@synthesize functions = _functions;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRClass";
-        constructors = [[OFMutableArray alloc] init];
-        fields = [[OFMutableArray alloc] init];
-        methods = [[OFMutableArray alloc] init];
-        virtualMethods = [[OFMutableArray alloc] init];
-        properties = [[OFMutableArray alloc] init];
-        implements = [[OFMutableArray alloc] init];
-        functions = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIRClass";
+        _constructors = [[OFMutableArray alloc] init];
+        _fields = [[OFMutableArray alloc] init];
+        _methods = [[OFMutableArray alloc] init];
+        _virtualMethods = [[OFMutableArray alloc] init];
+        _properties = [[OFMutableArray alloc] init];
+        _implements = [[OFMutableArray alloc] init];
+        _functions = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -107,31 +107,31 @@
         } else if ([key isEqual:@"constructor"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRConstructor class]
-                                  andArray:constructors];
+                                  andArray:_constructors];
         } else if ([key isEqual:@"field"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRField class]
-                                  andArray:fields];
+                                  andArray:_fields];
         } else if ([key isEqual:@"method"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRMethod class]
-                                  andArray:methods];
+                                  andArray:_methods];
         } else if ([key isEqual:@"virtual-method"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRVirtualMethod class]
-                                  andArray:virtualMethods];
+                                  andArray:_virtualMethods];
         } else if ([key isEqual:@"property"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRProperty class]
-                                  andArray:properties];
+                                  andArray:_properties];
         } else if ([key isEqual:@"implements"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRImplements class]
-                                  andArray:implements];
+                                  andArray:_implements];
         } else if ([key isEqual:@"function"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRFunction class]
-                                  andArray:functions];
+                                  andArray:_functions];
         } else {
             [self logUnknownElement:key];
         }
@@ -140,19 +140,20 @@
 
 - (void)dealloc
 {
-    [name release];
-    [cType release];
-    [cSymbolPrefix release];
-    [parent release];
-    [version release];
-    [doc release];
-    [constructors release];
-    [fields release];
-    [methods release];
-    [virtualMethods release];
-    [properties release];
-    [implements release];
-    [functions release];
+    [_name release];
+    [_cType release];
+    [_cSymbolPrefix release];
+    [_parent release];
+    [_version release];
+    [_doc release];
+    [_constructors release];
+    [_fields release];
+    [_methods release];
+    [_virtualMethods release];
+    [_properties release];
+    [_implements release];
+    [_functions release];
+
     [super dealloc];
 }
 

@@ -29,22 +29,22 @@
 
 @implementation GIRConstant
 
-@synthesize cType;
-@synthesize name;
-@synthesize theValue;
-@synthesize version;
-@synthesize deprecatedVersion;
-@synthesize deprecated;
-@synthesize doc;
-@synthesize docDeprecated;
-@synthesize type;
+@synthesize cType = _cType;
+@synthesize name = _name;
+@synthesize theValue = _theValue;
+@synthesize version = _version;
+@synthesize deprecatedVersion = _deprecatedVersion;
+@synthesize deprecated = _deprecated;
+@synthesize doc = _doc;
+@synthesize docDeprecated = _docDeprecated;
+@synthesize type = _type;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRConstant";
+        _elementTypeName = @"GIRConstant";
     } @catch (id e) {
         [self release];
         @throw e;
@@ -88,7 +88,7 @@
         } else if ([key isEqual:@"deprecated"]) {
             self.deprecated = [value isEqual:@"1"];
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"doc-deprecated"]) {
             self.docDeprecated =
                 [[[GIRDoc alloc] initWithDictionary:value] autorelease];
@@ -103,14 +103,15 @@
 
 - (void)dealloc
 {
-    [cType release];
-    [name release];
-    [theValue release];
-    [version release];
-    [deprecatedVersion release];
-    [doc release];
-    [docDeprecated release];
-    [type release];
+    [_cType release];
+    [_name release];
+    [_theValue release];
+    [_version release];
+    [_deprecatedVersion release];
+    [_doc release];
+    [_docDeprecated release];
+    [_type release];
+
     [super dealloc];
 }
 

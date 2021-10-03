@@ -29,7 +29,6 @@
 
 #import "GIRMethod.h"
 
-@interface GIRVirtualMethod : GIRMethod {
-}
+@interface GIRVirtualMethod : GIRMethod
 
 @end

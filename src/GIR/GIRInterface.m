@@ -29,26 +29,26 @@
 
 @implementation GIRInterface
 
-@synthesize name;
-@synthesize cType;
-@synthesize cSymbolPrefix;
-@synthesize doc;
-@synthesize fields;
-@synthesize methods;
-@synthesize virtualMethods;
-@synthesize properties;
-@synthesize prerequisite;
+@synthesize name = _name;
+@synthesize cType = _cType;
+@synthesize cSymbolPrefix = _cSymbolPrefix;
+@synthesize doc = _doc;
+@synthesize fields = _fields;
+@synthesize methods = _methods;
+@synthesize virtualMethods = _virtualMethods;
+@synthesize properties = _properties;
+@synthesize prerequisite = _prerequisite;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRInterface";
-        fields = [[OFMutableArray alloc] init];
-        methods = [[OFMutableArray alloc] init];
-        virtualMethods = [[OFMutableArray alloc] init];
-        properties = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIRInterface";
+        _fields = [[OFMutableArray alloc] init];
+        _methods = [[OFMutableArray alloc] init];
+        _virtualMethods = [[OFMutableArray alloc] init];
+        _properties = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -92,19 +92,19 @@
         } else if ([key isEqual:@"fields"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRField class]
-                                  andArray:fields];
+                                  andArray:_fields];
         } else if ([key isEqual:@"method"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRMethod class]
-                                  andArray:methods];
+                                  andArray:_methods];
         } else if ([key isEqual:@"virtual-method"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRVirtualMethod class]
-                                  andArray:virtualMethods];
+                                  andArray:_virtualMethods];
         } else if ([key isEqual:@"property"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRProperty class]
-                                  andArray:properties];
+                                  andArray:_properties];
         } else if ([key isEqual:@"prerequisite"]) {
             self.prerequisite = [[[GIRPrerequisite alloc]
                 initWithDictionary:value] autorelease];
@@ -116,15 +116,16 @@
 
 - (void)dealloc
 {
-    [name release];
-    [cType release];
-    [cSymbolPrefix release];
-    [doc release];
-    [fields release];
-    [methods release];
-    [virtualMethods release];
-    [properties release];
-    [prerequisite release];
+    [_name release];
+    [_cType release];
+    [_cSymbolPrefix release];
+    [_doc release];
+    [_fields release];
+    [_methods release];
+    [_virtualMethods release];
+    [_properties release];
+    [_prerequisite release];
+
     [super dealloc];
 }
 

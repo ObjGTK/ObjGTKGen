@@ -29,11 +29,11 @@
 
 @implementation GIRVirtualMethod
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRVirtualMethod";
+    _elementTypeName = @"GIRVirtualMethod";
 
     return self;
 }
@@ -63,11 +63,6 @@
             [self logUnknownElement:key];
         }
     }
-}
-
-- (void)dealloc
-{
-    [super dealloc];
 }
 
 @end

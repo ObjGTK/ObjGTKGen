@@ -29,19 +29,19 @@
 
 @implementation GIRBase
 
-@synthesize elementTypeName;
-@synthesize unknownElements;
+@synthesize elementTypeName = _elementTypeName;
+@synthesize unknownElements = _unknownElements;
 
-LogLevel _logLevel = Info;
+static LogLevel logLevel = Info;
 
 + (void)setLogLevel:(LogLevel)level
 {
-    _logLevel = level;
+    logLevel = level;
 }
 
 + (void)log:(OFString*)message andLevel:(LogLevel)level
 {
-    if (level >= _logLevel) {
+    if (level >= logLevel) {
         OFString* levelDescription = nil;
 
         switch (level) {
@@ -120,10 +120,9 @@ LogLevel _logLevel = Info;
 
 - (void)dealloc
 {
-    [elementTypeName release];
-    if (unknownElements != nil) {
-        [unknownElements release];
-    }
+    [_elementTypeName release];
+    [_unknownElements release];
+
     [super dealloc];
 }
 

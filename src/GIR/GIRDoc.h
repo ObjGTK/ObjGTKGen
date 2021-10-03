@@ -30,9 +30,9 @@
 #import "GIRBase.h"
 
 @interface GIRDoc : GIRBase {
-    OFString* xmlSpace;
-    OFString* xmlWhitespace;
-    OFString* docText;
+    OFString* _xmlSpace;
+    OFString* _xmlWhitespace;
+    OFString* _docText;
 }
 
 @property (nonatomic, retain) OFString* xmlSpace;

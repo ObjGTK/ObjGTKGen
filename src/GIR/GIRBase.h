@@ -38,8 +38,8 @@ typedef enum LogLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 } LogLevel;
 @end
 
 @interface GIRBase : OFObject <GIRParseDictionary> {
-    OFString* elementTypeName;
-    OFMutableDictionary* unknownElements;
+    OFString* _elementTypeName;
+    OFMutableDictionary* _unknownElements;
 }
 
 @property (nonatomic, copy) OFString* elementTypeName;

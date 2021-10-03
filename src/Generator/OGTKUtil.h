@@ -32,8 +32,7 @@
 /**
  * Provides useful utility functions for ObjGTKGen
  */
-@interface OGTKUtil : OFObject {
-}
+@interface OGTKUtil : OFObject
 
 /**
  * Returns the underscore_separated_string in camelCase

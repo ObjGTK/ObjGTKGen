@@ -30,7 +30,7 @@
 #import "GIRBase.h"
 
 @interface GIRImplements : GIRBase {
-    OFString* name;
+    OFString* _name;
 }
 
 @property (nonatomic, retain) OFString* name;

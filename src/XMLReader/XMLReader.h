@@ -8,8 +8,8 @@
 #import <ObjFW/ObjFW.h>
 
 @interface XMLReader : OFObject <OFXMLParserDelegate> {
-    OFMutableArray* dictionaryStack;
-    OFMutableString* textInProgress;
+    OFMutableArray* _dictionaryStack;
+    OFMutableString* _textInProgress;
 }
 
 + (OFDictionary*)dictionaryForXMLString:(OFString*)string;

@@ -35,14 +35,14 @@
 #import "GIRInterface.h"
 
 @interface GIRNamespace : GIRBase {
-    OFString* name;
-    OFString* cSymbolPrefixes;
-    OFString* cIdentifierPrefixes;
-    OFMutableArray* classes;
-    OFMutableArray* functions;
-    OFMutableArray* enumerations;
-    OFMutableArray* constants;
-    OFMutableArray* interfaces;
+    OFString* _name;
+    OFString* _cSymbolPrefixes;
+    OFString* _cIdentifierPrefixes;
+    OFMutableArray* _classes;
+    OFMutableArray* _functions;
+    OFMutableArray* _enumerations;
+    OFMutableArray* _constants;
+    OFMutableArray* _interfaces;
 }
 
 @property (nonatomic, retain) OFString* name;

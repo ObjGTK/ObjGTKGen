@@ -34,24 +34,17 @@
  * Abstracts Method operations
  */
 @interface OGTKMethod : OFObject {
-    OFString* cName;
-    OFString* cReturnType;
-    OFArray* parameters;
+    OFString* _cName;
+    OFString* _cReturnType;
+    OFArray* _parameters;
 }
 
-- (void)setCName:(OFString*)name;
-- (OFString*)cName;
-
-- (OFString*)name;
-- (OFString*)sig;
-
-- (void)setCReturnType:(OFString*)returnType;
-- (OFString*)cReturnType;
-
-- (OFString*)returnType;
-- (bool)returnsVoid;
-
-- (void)setParameters:(OFArray*)params;
-- (OFArray*)parameters;
+@property (copy, nonatomic) OFString* cName;
+@property (readonly, nonatomic) OFString* name;
+@property (readonly, nonatomic) OFString* sig;
+@property (copy, nonatomic) OFString* cReturnType;
+@property (readonly, nonatomic) OFString* returnType;
+@property (readonly, nonatomic) bool returnsVoid;
+@property (copy, nonatomic) OFArray* parameters;
 
 @end

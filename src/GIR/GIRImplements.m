@@ -29,13 +29,13 @@
 
 @implementation GIRImplements
 
-@synthesize name;
+@synthesize name = _name;
 
 - (id)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRImplements";
+    _elementTypeName = @"GIRImplements";
 
     return self;
 }
@@ -71,7 +71,8 @@
 
 - (void)dealloc
 {
-    [name release];
+    [_name release];
+
     [super dealloc];
 }
 

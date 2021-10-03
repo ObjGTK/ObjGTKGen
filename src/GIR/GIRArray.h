@@ -31,12 +31,12 @@
 #import "GIRType.h"
 
 @interface GIRArray : GIRBase {
-    OFString* cType;
-    OFString* name;
-    int length;
-    int fixedSize;
-    bool zeroTerminated;
-    GIRType* type;
+    OFString* _cType;
+    OFString* _name;
+    int _length;
+    int _fixedSize;
+    bool _zeroTerminated;
+    GIRType* _type;
 }
 
 @property (nonatomic, retain) OFString* cType;

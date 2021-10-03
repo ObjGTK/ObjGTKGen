@@ -29,28 +29,28 @@
 
 @implementation GIRConstructor
 
-@synthesize name;
-@synthesize cIdentifier;
-@synthesize version;
-@synthesize deprecatedVersion;
-@synthesize shadowedBy;
-@synthesize shadows;
-@synthesize introspectable;
-@synthesize deprecated;
-@synthesize throws;
-@synthesize doc;
-@synthesize docDeprecated;
-@synthesize returnValue;
-@synthesize parameters;
-@synthesize instanceParameters;
+@synthesize name = _name;
+@synthesize cIdentifier = _cIdentifier;
+@synthesize version = _version;
+@synthesize deprecatedVersion = _deprecatedVersion;
+@synthesize shadowedBy = _shadowedBy;
+@synthesize shadows = _shadows;
+@synthesize introspectable = _introspectable;
+@synthesize deprecated = _deprecated;
+@synthesize throws = _throws;
+@synthesize doc = _doc;
+@synthesize docDeprecated = _docDeprecated;
+@synthesize returnValue = _returnValue;
+@synthesize parameters = _parameters;
+@synthesize instanceParameters = _instanceParameters;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRConstructor";
-        parameters = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIRConstructor";
+        _parameters = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -110,11 +110,11 @@
                 if ([paramKey isEqual:@"parameter"]) {
                     [self processArrayOrDictionary:[value objectForKey:paramKey]
                                          withClass:[GIRParameter class]
-                                          andArray:parameters];
+                                          andArray:_parameters];
                 } else if ([paramKey isEqual:@"instance-parameter"]) {
                     [self processArrayOrDictionary:[value objectForKey:paramKey]
                                          withClass:[GIRParameter class]
-                                          andArray:instanceParameters];
+                                          andArray:_instanceParameters];
                 }
             }
         } else {
@@ -125,16 +125,17 @@
 
 - (void)dealloc
 {
-    [name release];
-    [cIdentifier release];
-    [version release];
-    [deprecatedVersion release];
-    [shadowedBy release];
-    [shadows release];
-    [doc release];
-    [docDeprecated release];
-    [parameters release];
-    [instanceParameters release];
+    [_name release];
+    [_cIdentifier release];
+    [_version release];
+    [_deprecatedVersion release];
+    [_shadowedBy release];
+    [_shadows release];
+    [_doc release];
+    [_docDeprecated release];
+    [_parameters release];
+    [_instanceParameters release];
+
     [super dealloc];
 }
 

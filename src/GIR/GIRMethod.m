@@ -29,30 +29,30 @@
 
 @implementation GIRMethod
 
-@synthesize name;
-@synthesize cIdentifier;
-@synthesize version;
-@synthesize returnValue;
-@synthesize doc;
-@synthesize docDeprecated;
-@synthesize deprecated;
-@synthesize deprecatedVersion;
-@synthesize invoker;
-@synthesize throws;
-@synthesize introspectable;
-@synthesize shadowedBy;
-@synthesize shadows;
-@synthesize parameters;
-@synthesize instanceParameters;
+@synthesize name = _name;
+@synthesize cIdentifier = _cIdentifier;
+@synthesize version = _version;
+@synthesize returnValue = _returnValue;
+@synthesize doc = _doc;
+@synthesize docDeprecated = _docDeprecated;
+@synthesize deprecated = _deprecated;
+@synthesize deprecatedVersion = _deprecatedVersion;
+@synthesize invoker = _invoker;
+@synthesize throws = _throws;
+@synthesize introspectable = _introspectable;
+@synthesize shadowedBy = _shadowedBy;
+@synthesize shadows = _shadows;
+@synthesize parameters = _parameters;
+@synthesize instanceParameters = _instanceParameters;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRMethod";
-        parameters = [[OFMutableArray alloc] init];
-        instanceParameters = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIRMethod";
+        _parameters = [[OFMutableArray alloc] init];
+        _instanceParameters = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -123,11 +123,11 @@
             if ([paramKey isEqual:@"parameter"]) {
                 [self processArrayOrDictionary:[value objectForKey:paramKey]
                                      withClass:[GIRParameter class]
-                                      andArray:parameters];
+                                      andArray:_parameters];
             } else if ([paramKey isEqual:@"instance-parameter"]) {
                 [self processArrayOrDictionary:[value objectForKey:paramKey]
                                      withClass:[GIRParameter class]
-                                      andArray:instanceParameters];
+                                      andArray:_instanceParameters];
             }
         }
     } else {
@@ -139,16 +139,17 @@
 
 - (void)dealloc
 {
-    [name release];
-    [cIdentifier release];
-    [version release];
-    [returnValue release];
-    [deprecatedVersion release];
-    [invoker release];
-    [doc release];
-    [docDeprecated release];
-    [parameters release];
-    [instanceParameters release];
+    [_name release];
+    [_cIdentifier release];
+    [_version release];
+    [_returnValue release];
+    [_deprecatedVersion release];
+    [_invoker release];
+    [_doc release];
+    [_docDeprecated release];
+    [_parameters release];
+    [_instanceParameters release];
+
     [super dealloc];
 }
 

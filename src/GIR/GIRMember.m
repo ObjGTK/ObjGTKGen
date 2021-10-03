@@ -29,16 +29,16 @@
 
 @implementation GIRMember
 
-@synthesize cIdentifier;
-@synthesize name;
-@synthesize theValue;
-@synthesize doc;
+@synthesize cIdentifier = _cIdentifier;
+@synthesize name = _name;
+@synthesize theValue = _theValue;
+@synthesize doc = _doc;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRMember";
+    _elementTypeName = @"GIRMember";
 
     return self;
 }
@@ -80,9 +80,10 @@
 
 - (void)dealloc
 {
-    [cIdentifier release];
-    [name release];
-    [doc release];
+    [_cIdentifier release];
+    [_name release];
+    [_doc release];
+
     [super dealloc];
 }
 

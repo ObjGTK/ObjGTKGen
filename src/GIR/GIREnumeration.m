@@ -29,24 +29,24 @@
 
 @implementation GIREnumeration
 
-@synthesize cType;
-@synthesize name;
-@synthesize version;
-@synthesize deprecatedVersion;
-@synthesize deprecated;
-@synthesize doc;
-@synthesize docDeprecated;
-@synthesize members;
-@synthesize functions;
+@synthesize cType = _cType;
+@synthesize name = _name;
+@synthesize version = _version;
+@synthesize deprecatedVersion = _deprecatedVersion;
+@synthesize deprecated = _deprecated;
+@synthesize doc = _doc;
+@synthesize docDeprecated = _docDeprecated;
+@synthesize members = _members;
+@synthesize functions = _functions;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIREnumeration";
-        members = [[OFMutableArray alloc] init];
-        functions = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIREnumeration";
+        _members = [[OFMutableArray alloc] init];
+        _functions = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -96,11 +96,11 @@
         } else if ([key isEqual:@"member"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRMember class]
-                                  andArray:members];
+                                  andArray:_members];
         } else if ([key isEqual:@"function"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRFunction class]
-                                  andArray:functions];
+                                  andArray:_functions];
         } else {
             [self logUnknownElement:key];
         }
@@ -112,13 +112,13 @@
     [GIRBase log:@"Adding member" andLevel:Debug];
 
     // Create the array if this is the first time through
-    if (members == nil) {
-        members = [[OFMutableArray alloc] init];
+    if (_members == nil) {
+        _members = [[OFMutableArray alloc] init];
     }
 
     if ([object isKindOfClass:[OFDictionary class]]) {
-        [members addObject:[[[GIRMember alloc] initWithDictionary:object]
-                               autorelease]];
+        [_members addObject:[[[GIRMember alloc] initWithDictionary:object]
+                                autorelease]];
     }
 }
 
@@ -127,26 +127,27 @@
     [GIRBase log:@"Adding function" andLevel:Debug];
 
     // Create the array if this is the first time through
-    if (functions == nil) {
-        functions = [[OFMutableArray alloc] init];
+    if (_functions == nil) {
+        _functions = [[OFMutableArray alloc] init];
     }
 
     if ([object isKindOfClass:[OFDictionary class]]) {
-        [functions addObject:[[[GIRFunction alloc] initWithDictionary:object]
-                                 autorelease]];
+        [_functions addObject:[[[GIRFunction alloc] initWithDictionary:object]
+                                  autorelease]];
     }
 }
 
 - (void)dealloc
 {
-    [cType release];
-    [name release];
-    [version release];
-    [deprecatedVersion release];
-    [doc release];
-    [docDeprecated release];
-    [members release];
-    [functions release];
+    [_cType release];
+    [_name release];
+    [_version release];
+    [_deprecatedVersion release];
+    [_doc release];
+    [_docDeprecated release];
+    [_members release];
+    [_functions release];
+
     [super dealloc];
 }
 

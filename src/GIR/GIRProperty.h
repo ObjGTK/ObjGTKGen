@@ -33,20 +33,20 @@
 #import "GIRType.h"
 
 @interface GIRProperty : GIRBase {
-    OFString* name;
-    OFString* transferOwnership;
-    OFString* version;
-    OFString* deprecatedVersion;
-    GIRDoc* doc;
-    GIRDoc* docDeprecated;
-    GIRType* type;
-    bool allowNone;
-    bool constructOnly;
-    bool readable;
-    bool deprecated;
-    OFString* construct;
-    OFString* writable;
-    GIRArray* array;
+    OFString* _name;
+    OFString* _transferOwnership;
+    OFString* _version;
+    OFString* _deprecatedVersion;
+    GIRDoc* _doc;
+    GIRDoc* _docDeprecated;
+    GIRType* _type;
+    bool _allowNone;
+    bool _constructOnly;
+    bool _readable;
+    bool _deprecated;
+    OFString* _construct;
+    OFString* _writable;
+    GIRArray* _array;
 }
 
 @property (nonatomic, retain) OFString* name;

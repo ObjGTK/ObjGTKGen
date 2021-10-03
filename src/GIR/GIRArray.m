@@ -29,19 +29,19 @@
 
 @implementation GIRArray
 
-@synthesize cType;
-@synthesize name;
-@synthesize length;
-@synthesize fixedSize;
-@synthesize zeroTerminated;
-@synthesize type;
+@synthesize cType = _cType;
+@synthesize name = _name;
+@synthesize length = _length;
+@synthesize fixedSize = _fixedSize;
+@synthesize zeroTerminated = _zeroTerminated;
+@synthesize type = _type;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRArray";
+        _elementTypeName = @"GIRArray";
     } @catch (id e) {
         [self release];
         @throw e;
@@ -82,7 +82,8 @@
         } else if ([key isEqual:@"zero-terminated"]) {
             self.zeroTerminated = [value isEqual:@"1"];
         } else if ([key isEqual:@"type"]) {
-            self.type = [[GIRType alloc] initWithDictionary:value];
+            self.type =
+                [[[GIRType alloc] initWithDictionary:value] autorelease];
         } else {
             [self logUnknownElement:key];
         }
@@ -91,9 +92,10 @@
 
 - (void)dealloc
 {
-    [cType release];
-    [name release];
-    [type release];
+    [_cType release];
+    [_name release];
+    [_type release];
+
     [super dealloc];
 }
 

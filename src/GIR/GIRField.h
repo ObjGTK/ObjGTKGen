@@ -32,12 +32,12 @@
 #import "GIRType.h"
 
 @interface GIRField : GIRBase {
-    OFString* name;
-    bool isPrivate;
-    bool readable;
-    int bits;
-    GIRType* type;
-    GIRArray* array;
+    OFString* _name;
+    bool _isPrivate;
+    bool _readable;
+    int _bits;
+    GIRType* _type;
+    GIRArray* _array;
 }
 
 @property (nonatomic, retain) OFString* name;

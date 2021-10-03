@@ -38,20 +38,20 @@
 #import "GIRVirtualMethod.h"
 
 @interface GIRClass : GIRBase {
-    OFString* name;
-    OFString* cType;
-    OFString* cSymbolPrefix;
-    OFString* parent;
-    OFString* version;
-    bool abstract;
-    GIRDoc* doc;
-    OFMutableArray* constructors;
-    OFMutableArray* fields;
-    OFMutableArray* methods;
-    OFMutableArray* virtualMethods;
-    OFMutableArray* properties;
-    OFMutableArray* implements;
-    OFMutableArray* functions;
+    OFString* _name;
+    OFString* _cType;
+    OFString* _cSymbolPrefix;
+    OFString* _parent;
+    OFString* _version;
+    bool _abstract;
+    GIRDoc* _doc;
+    OFMutableArray* _constructors;
+    OFMutableArray* _fields;
+    OFMutableArray* _methods;
+    OFMutableArray* _virtualMethods;
+    OFMutableArray* _properties;
+    OFMutableArray* _implements;
+    OFMutableArray* _functions;
 }
 
 @property (nonatomic, copy) OFString* name;
