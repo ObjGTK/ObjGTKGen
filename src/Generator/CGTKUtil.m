@@ -33,7 +33,6 @@
 @implementation CGTKUtil
 
 static OFMutableArray* arrTrimMethodName;
-static OFMutableDictionary* dictConvertType;
 static OFMutableDictionary* dictGlobalConf;
 static OFMutableDictionary* dictSwapTypes;
 static OFMutableDictionary* dictExtraImports;
@@ -182,7 +181,7 @@ static OFMutableDictionary* dictExtraMethods;
 + (bool)isUppercase:(OFString*)character
 {
     OFUnichar myCharacter = [character characterAtIndex:0];
-    if(myCharacter >= 'A' && myCharacter <= 'Z')
+    if (myCharacter >= 'A' && myCharacter <= 'Z')
         return true;
 
     return false;
@@ -195,42 +194,36 @@ static OFMutableDictionary* dictExtraMethods;
         dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.json"];
     }
 
-    if(str == nil)
-       @throw [OGTKReceivedNilExpectedStringException exception];
+    if (str == nil)
+        @throw [OGTKReceivedNilExpectedStringException exception];
 
     OFString* val = [dictSwapTypes objectForKey:str];
 
     return (val == nil) ? str : val;
 }
 
-// TODO Move this mapping from json file to code
 + (OFString*)convertType:(OFString*)fromType withName:(OFString*)name toType:(OFString*)toType
 {
-    if (dictConvertType == nil) {
-        dictConvertType = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/convert_type.json"];
+    // Try to return conversion for string types first
+    if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"])
+        && [toType isEqual:@"OFString*"]) {
+        return [OFString stringWithFormat:@"[OFString stringWithUTF8String:%@]", name];
+    } else if ([fromType isEqual:@"OFString*"]
+        && ([toType isEqual:@"gchar*"] || [toType isEqual:@"const gchar*"])) {
+        return [OFString stringWithFormat:@"[%@ UTF8String]", name];
     }
 
-    OFMutableDictionary* outerDict = [dictConvertType objectForKey:fromType];
-
-    if (outerDict == nil) {
-        if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"CGTK"]) {
-            // Converting from Gtk -> CGTK
-            return [OFString stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]", [toType substringWithRange:OFRangeMake(0, [toType length] - 1)], name];
-        } else if ([fromType hasPrefix:@"CGTK"] && [toType hasPrefix:@"Gtk"]) {
-            // Converting from CGTK -> Gtk
-            return [OFString stringWithFormat:@"[%@ %@]", name, [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)] uppercaseString]];
-        } else {
-            return name;
-        }
+    // Then try to return generic Gtk type conversion
+    if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"CGTK"]) {
+        // Converting from Gtk -> CGTK
+        return [OFString stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]", [toType substringWithRange:OFRangeMake(0, [toType length] - 1)], name];
+    } else if ([fromType hasPrefix:@"CGTK"] && [toType hasPrefix:@"Gtk"]) {
+        // Converting from CGTK -> Gtk
+        return [OFString stringWithFormat:@"[%@ %@]", name, [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)] uppercaseString]];
     }
 
-    OFString* val = [outerDict objectForKey:toType];
-
-    if (val == nil) {
-        return name;
-    } else {
-        return [OFString stringWithFormat:val, name];
-    }
+    // Otherwise don't do any conversion (including bool types, as ObjFW uses the stdc bool type)
+    return name;
 }
 
 + (id)globalConfigValueFor:(OFString*)key
