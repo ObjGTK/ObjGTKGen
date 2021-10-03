@@ -38,7 +38,12 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRPrerequisite";
+    @try {
+        elementTypeName = @"GIRPrerequisite";
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

@@ -40,7 +40,12 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRArray";
+    @try {
+        elementTypeName = @"GIRArray";
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

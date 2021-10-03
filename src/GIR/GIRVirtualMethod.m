@@ -33,7 +33,12 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRVirtualMethod";
+    @try {
+        elementTypeName = @"GIRVirtualMethod";
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

@@ -38,7 +38,12 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRReturnValue";
+    @try {
+        elementTypeName = @"GIRReturnValue";
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

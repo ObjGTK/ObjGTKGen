@@ -40,7 +40,12 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRField";
+    @try {
+        elementTypeName = @"GIRField";
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
