@@ -27,6 +27,7 @@
 
 #import <ObjFW/ObjFW.h>
 #import "OFDictionary+JsonContentsOfFile.h"
+#import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 /**
  * Provides useful utility functions for CoreGTKGen

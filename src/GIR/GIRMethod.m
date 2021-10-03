@@ -78,7 +78,8 @@
 
 - (bool)tryParseWithKey:(OFString*)key andValue:(id)value
 {
-    if ([key isEqual:@"text"]) {
+    if ([key isEqual:@"text"]
+        || [key isEqual:@"source-position"]) {
         // Do nothing
     } else if ([key isEqual:@"name"]) {
         self.name = value;

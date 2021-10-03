@@ -65,7 +65,10 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]) {
+        // TODO: Check if we need nullable or optional
+        if ([key isEqual:@"text"]
+            || [key isEqual:@"nullable"]
+            || [key isEqual:@"optional"]) {
             // Do nothing
         } else if ([key isEqual:@"name"]) {
             self.name = value;

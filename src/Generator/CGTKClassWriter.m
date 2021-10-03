@@ -29,6 +29,7 @@
  * Objective-C imports
  */
 #import "CGTKClassWriter.h"
+#include <ObjFW/OFStdIOStream.h>
 
 @implementation CGTKClassWriter
 
@@ -39,20 +40,24 @@
         [fileManager createDirectoryAtPath:outputDir createParents:true];
     }
 
-    // Header
-    OFString* hFilename = [[outputDir stringByAppendingPathComponent:[cgtkClass name]] stringByAppendingString:@".h"];
-    [[CGTKClassWriter headerStringFor:cgtkClass] writeToFile:hFilename];
+    @try {
+        // Header
+        OFString* hFilename = [[outputDir stringByAppendingPathComponent:[cgtkClass name]] stringByAppendingString:@".h"];
+        [[CGTKClassWriter headerStringFor:cgtkClass] writeToFile:hFilename];
 
-    // Source
-    OFString* sFilename = [[outputDir stringByAppendingPathComponent:[cgtkClass name]] stringByAppendingString:@".m"];
-    [[CGTKClassWriter sourceStringFor:cgtkClass] writeToFile:sFilename];
+        // Source
+        OFString* sFilename = [[outputDir stringByAppendingPathComponent:[cgtkClass name]] stringByAppendingString:@".m"];
+        [[CGTKClassWriter sourceStringFor:cgtkClass] writeToFile:sFilename];
+    } @catch (id e) {
+        OFLog(@"Warning: Cannot generate file for definition for class %@. Definition may be incorrect. Skipping…", cgtkClass.name);
+    }
 }
 
 + (OFString*)headerStringFor:(CGTKClass*)cgtkClass
 {
     OFMutableString* output = [[OFMutableString alloc] init];
 
-    OFLog(@"Writing header file for class %@.", [cgtkClass name]);
+    //OFLog(@"Writing header file for class %@.", [cgtkClass name]);
     [output appendString:[CGTKClassWriter generateLicense:[OFString stringWithFormat:@"%@.h", [cgtkClass name]]]];
 
     // Imports
@@ -63,8 +68,7 @@
 
     if (extraImports != nil) {
         for (OFString* imp in extraImports) {
-            if(imp != nil) {
-                OFLog(@"%@", imp);
+            if (imp != nil) {
                 [output appendFormat:@"#import %@\n", imp];
             }
         }
@@ -121,7 +125,7 @@
 {
     OFMutableString* output = [[OFMutableString alloc] init];
 
-    OFLog(@"Writing implementation file for class %@.", [cgtkClass name]);
+    //OFLog(@"Writing implementation file for class %@.", [cgtkClass name]);
     [output appendString:[CGTKClassWriter generateLicense:[OFString stringWithFormat:@"%@.m", [cgtkClass name]]]];
 
     // Imports

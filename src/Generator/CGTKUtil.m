@@ -196,7 +196,7 @@ static OFMutableDictionary* dictExtraMethods;
     }
 
     if(str == nil)
-        return @"nil";
+       @throw [OGTKReceivedNilExpectedStringException exception];
 
     OFString* val = [dictSwapTypes objectForKey:str];
 

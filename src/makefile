@@ -35,7 +35,8 @@ SOURCES=CoreGTKGen.m \
 	Gir2Objc.m \
 	Exceptions/OGTKIncorrectConfigException.m \
 	Exceptions/OGTKNoGIRAPIException.m \
-	Exceptions/OGTKNoGIRDictException.m
+	Exceptions/OGTKNoGIRDictException.m \
+	Exceptions/OGTKReceivedNilExpectedStringException.m
 
 #Objects
 OBJECTS=$(SOURCES:.m=.o)

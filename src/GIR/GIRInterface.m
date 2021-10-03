@@ -70,7 +70,10 @@
             || [key isEqual:@"glib:type-name"]
             || [key isEqual:@"glib:type-struct"]
             || [key isEqual:@"glib:signal"]
-            || [key isEqual:@"glib:get-type"]) {
+            || [key isEqual:@"glib:get-type"]
+            || [key isEqual:@"source-position"]
+            || [key isEqual:@"version"]
+            || [key isEqual:@"signal"]) {
             // Do nothing
         } else if ([key isEqual:@"name"]) {
             self.name = value;

@@ -74,11 +74,14 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
+        // TODO: Do we need signal?
         if ([key isEqual:@"text"]
             || [key isEqual:@"glib:type-name"]
             || [key isEqual:@"glib:type-struct"]
             || [key isEqual:@"glib:get-type"]
-            || [key isEqual:@"glib:signal"]) {
+            || [key isEqual:@"glib:signal"]
+            || [key isEqual:@"source-position"]
+            || [key isEqual:@"signal"]) {
             // Do nothing
         } else if ([key isEqual:@"name"]) {
             self.name = value;
