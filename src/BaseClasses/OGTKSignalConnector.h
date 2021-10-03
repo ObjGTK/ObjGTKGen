@@ -38,7 +38,8 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
 }
 
 /**
- * Connects a GCallback function to a signal for a particular object. The GCallback function redirects the call to the Objective-C target and selector.
+ * Connects a GCallback function to a signal for a particular object. The
+ * GCallback function redirects the call to the Objective-C target and selector.
  *
  * @param object
  *  The instance to connect to
@@ -57,6 +58,10 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
  *
  * @returns a new OGTKCallbackData
  */
-+ (void)connectGpointer:(gpointer)object withSignal:(OFString*)name toTarget:(id)target withSelector:(SEL)selector andData:(gpointer)data;
++ (void)connectGpointer:(gpointer)object
+             withSignal:(OFString*)name
+               toTarget:(id)target
+           withSelector:(SEL)selector
+                andData:(gpointer)data;
 
 @end

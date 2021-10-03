@@ -28,45 +28,44 @@
 #import <ObjFW/ObjFW.h>
 
 #import "GIRBase.h"
+#import "GIRDoc.h"
 #import "GIRParameter.h"
 #import "GIRReturnValue.h"
-#import "GIRDoc.h"
 
-@interface GIRMethod : GIRBase
-{
-	OFString *name;
-	OFString *cIdentifier;
-	OFString *version;
-	OFString *invoker;
-	GIRReturnValue *returnValue;
-	GIRDoc *doc;
-	GIRDoc *docDeprecated;
-	bool deprecated;
-	OFString *deprecatedVersion;
-	bool throws;
-	bool introspectable;
-	bool shadowedBy;
-	bool shadows;
-	OFMutableArray *parameters;
-	OFMutableArray *instanceParameters;
+@interface GIRMethod : GIRBase {
+    OFString* name;
+    OFString* cIdentifier;
+    OFString* version;
+    OFString* invoker;
+    GIRReturnValue* returnValue;
+    GIRDoc* doc;
+    GIRDoc* docDeprecated;
+    bool deprecated;
+    OFString* deprecatedVersion;
+    bool throws;
+    bool introspectable;
+    bool shadowedBy;
+    bool shadows;
+    OFMutableArray* parameters;
+    OFMutableArray* instanceParameters;
 }
 
-@property (nonatomic, copy) OFString *name;
-@property (nonatomic, copy) OFString *cIdentifier;
-@property (nonatomic, copy) OFString *version;
-@property (nonatomic, retain) GIRReturnValue *returnValue;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) GIRDoc *docDeprecated;
-@property (nonatomic, copy) OFString *deprecatedVersion;
-@property (nonatomic, copy) OFString *invoker;
+@property (nonatomic, copy) OFString* name;
+@property (nonatomic, copy) OFString* cIdentifier;
+@property (nonatomic, copy) OFString* version;
+@property (nonatomic, retain) GIRReturnValue* returnValue;
+@property (nonatomic, retain) GIRDoc* doc;
+@property (nonatomic, retain) GIRDoc* docDeprecated;
+@property (nonatomic, copy) OFString* deprecatedVersion;
+@property (nonatomic, copy) OFString* invoker;
 @property (nonatomic) bool deprecated;
 @property (nonatomic) bool throws;
 @property (nonatomic) bool introspectable;
 @property (nonatomic) bool shadowedBy;
 @property (nonatomic) bool shadows;
-@property (nonatomic, retain) OFMutableArray *parameters;
-@property (nonatomic, retain) OFMutableArray *instanceParameters;
+@property (nonatomic, retain) OFMutableArray* parameters;
+@property (nonatomic, retain) OFMutableArray* instanceParameters;
 
--(bool)tryParseWithKey:(OFString *)key andValue:(id)value;
+- (bool)tryParseWithKey:(OFString*)key andValue:(id)value;
 
 @end

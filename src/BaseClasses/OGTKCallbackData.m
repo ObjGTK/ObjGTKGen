@@ -42,7 +42,8 @@
 
 + (id)withObject:(id)obj andSEL:(SEL)sel
 {
-    return [[[OGTKCallbackData alloc] initWithObject:obj andSEL:sel] autorelease];
+    return [[[OGTKCallbackData alloc] initWithObject:obj
+                                              andSEL:sel] autorelease];
 }
 
 - (void)dealloc

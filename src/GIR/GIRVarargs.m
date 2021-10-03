@@ -50,10 +50,9 @@
 - (void)parseDictionary:(OFDictionary*)dict
 {
     for (OFString* key in dict) {
-        //id value = [dict objectForKey:key];
+        // id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]
-            || [key isEqual:@"type"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"type"]) {
             // Do nothing
         } else {
             [self logUnknownElement:key];

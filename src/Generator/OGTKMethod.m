@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -71,16 +71,15 @@
     else if ([parameters count] == 1) {
         OGTKParameter* p = [parameters objectAtIndex:0];
 
-        return [OFString stringWithFormat:@"%@:(%@)%@",
-                         [self name],
-                         [p type],
-                         [p name]];
+        return [OFString
+            stringWithFormat:@"%@:(%@)%@", [self name], [p type], [p name]];
     }
     // C method with multiple parameters
     else {
         OFMutableString* output = [[OFMutableString alloc] init];
 
-        [output appendString:[OFString stringWithFormat:@"%@With", [self name]]];
+        [output
+            appendString:[OFString stringWithFormat:@"%@With", [self name]]];
 
         for (i = 0; i < [parameters count]; i++) {
             OGTKParameter* p = [parameters objectAtIndex:i];
@@ -90,8 +89,7 @@
             }
 
             [output appendFormat:@"%@:(%@)%@",
-                    [OGTKUtil convertUSSToCapCase:[p name]],
-                    [p type],
+                    [OGTKUtil convertUSSToCapCase:[p name]], [p type],
                     [p name]];
         }
 
@@ -130,22 +128,23 @@
 - (void)setParameters:(OFArray*)params
 {
     // Hacky fix to get around issue with missing GError parameter from GIR file
-    if ([[self cName] isEqual:@"gtk_window_set_icon_from_file"]
-        || [[self cName] isEqual:@"gtk_window_set_default_icon_from_file"]
-        || [[self cName] isEqual:@"gtk_builder_add_from_file"]
-        || [[self cName] isEqual:@"gtk_builder_add_from_resource"]
-        || [[self cName] isEqual:@"gtk_builder_add_from_string"]
-        || [[self cName] isEqual:@"gtk_builder_add_objects_from_file"]
-        || [[self cName] isEqual:@"gtk_builder_add_objects_from_resource"]
-        || [[self cName] isEqual:@"gtk_builder_add_objects_from_string"]
-        || [[self cName] isEqual:@"gtk_builder_extend_with_template"]
-        || [[self cName] isEqual:@"gtk_builder_value_from_string"]
-        || [[self cName] isEqual:@"gtk_builder_value_from_string_type"]) {
+    if ([[self cName] isEqual:@"gtk_window_set_icon_from_file"] ||
+        [[self cName] isEqual:@"gtk_window_set_default_icon_from_file"] ||
+        [[self cName] isEqual:@"gtk_builder_add_from_file"] ||
+        [[self cName] isEqual:@"gtk_builder_add_from_resource"] ||
+        [[self cName] isEqual:@"gtk_builder_add_from_string"] ||
+        [[self cName] isEqual:@"gtk_builder_add_objects_from_file"] ||
+        [[self cName] isEqual:@"gtk_builder_add_objects_from_resource"] ||
+        [[self cName] isEqual:@"gtk_builder_add_objects_from_string"] ||
+        [[self cName] isEqual:@"gtk_builder_extend_with_template"] ||
+        [[self cName] isEqual:@"gtk_builder_value_from_string"] ||
+        [[self cName] isEqual:@"gtk_builder_value_from_string_type"]) {
         OGTKParameter* param = [[OGTKParameter alloc] init];
         [param setCType:@"GError**"];
         [param setCName:@"err"];
 
-        OFMutableArray* hackyArray = [[[OFMutableArray alloc] init] autorelease];
+        OFMutableArray* hackyArray =
+            [[[OFMutableArray alloc] init] autorelease];
         [hackyArray addObjectsFromArray:params];
         [hackyArray addObject:param];
 

@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -40,7 +40,8 @@
 }
 
 /**
- * Generate both header and source files based on class and save them in outputDir
+ * Generate both header and source files based on class and save them in
+ * outputDir
  */
 + (void)generateFilesForClass:(OGTKClass*)cgtkClass inDir:(OFString*)outputDir;
 
@@ -58,10 +59,12 @@
  * Generate list of paramters to pass to underlying C function
  */
 + (OFString*)generateCParameterListString:(OFArray*)params;
-+ (OFString*)generateCParameterListWithInstanceString:(OFString*)instanceType andParams:(OFArray*)params;
++ (OFString*)generateCParameterListWithInstanceString:(OFString*)instanceType
+                                            andParams:(OFArray*)params;
 
 /**
- * Reads the text from conf/license.txt and replaces "@@@FILENAME@@@" with fileName
+ * Reads the text from conf/license.txt and replaces "@@@FILENAME@@@" with
+ * fileName
  */
 + (OFString*)generateLicense:(OFString*)fileName;
 

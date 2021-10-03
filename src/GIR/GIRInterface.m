@@ -66,14 +66,10 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]
-            || [key isEqual:@"glib:type-name"]
-            || [key isEqual:@"glib:type-struct"]
-            || [key isEqual:@"glib:signal"]
-            || [key isEqual:@"glib:get-type"]
-            || [key isEqual:@"source-position"]
-            || [key isEqual:@"version"]
-            || [key isEqual:@"signal"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
+            [key isEqual:@"glib:type-struct"] || [key isEqual:@"glib:signal"] ||
+            [key isEqual:@"glib:get-type"] || [key isEqual:@"source-position"]
+            || [key isEqual:@"version"] || [key isEqual:@"signal"]) {
             // Do nothing
         } else if ([key isEqual:@"name"]) {
             self.name = value;
@@ -84,15 +80,24 @@
         } else if ([key isEqual:@"doc"]) {
             self.doc = [[GIRDoc alloc] initWithDictionary:value];
         } else if ([key isEqual:@"fields"]) {
-            [self processArrayOrDictionary:value withClass:[GIRField class] andArray:fields];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRField class]
+                                  andArray:fields];
         } else if ([key isEqual:@"method"]) {
-            [self processArrayOrDictionary:value withClass:[GIRMethod class] andArray:methods];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRMethod class]
+                                  andArray:methods];
         } else if ([key isEqual:@"virtual-method"]) {
-            [self processArrayOrDictionary:value withClass:[GIRVirtualMethod class] andArray:virtualMethods];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRVirtualMethod class]
+                                  andArray:virtualMethods];
         } else if ([key isEqual:@"property"]) {
-            [self processArrayOrDictionary:value withClass:[GIRProperty class] andArray:properties];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRProperty class]
+                                  andArray:properties];
         } else if ([key isEqual:@"prerequisite"]) {
-            self.prerequisite = [[GIRPrerequisite alloc] initWithDictionary:value];
+            self.prerequisite =
+                [[GIRPrerequisite alloc] initWithDictionary:value];
         } else {
             [self logUnknownElement:key];
         }

@@ -47,110 +47,78 @@
 @synthesize writable;
 @synthesize array;
 
--(id)init
+- (id)init
 {
-	self = [super init];
-	
-	self.elementTypeName = @"GIRProperty";
-	
-	return self;
+    self = [super init];
+
+    self.elementTypeName = @"GIRProperty";
+
+    return self;
 }
 
--(id)initWithDictionary:(OFDictionary *) dict
+- (id)initWithDictionary:(OFDictionary*)dict
 {
-	self = [self init];
-	
-	[self parseDictionary:dict];
-	
-	return self;
+    self = [self init];
+
+    [self parseDictionary:dict];
+
+    return self;
 }
 
--(void)parseDictionary:(OFDictionary *) dict
+- (void)parseDictionary:(OFDictionary*)dict
 {
-	for (OFString *key in dict)
-	{	
-		id value = [dict objectForKey:key];
-	
-		if([key isEqual:@"text"])
-		{
-			// Do nothing
-		}
-		else if([key isEqual:@"name"])
-		{
-			self.name = value;
-		}
-		else if([key isEqual:@"transfer-ownership"])
-		{
-			self.transferOwnership = value;
-		}
-		else if([key isEqual:@"version"])
-		{
-			self.version = value;
-		}
-		else if([key isEqual:@"deprecated-version"])
-		{
-			self.deprecatedVersion = value;
-		}
-		else if([key isEqual:@"doc"])
-		{
-			self.doc = [[GIRDoc alloc] initWithDictionary:value];
-		}
-		else if([key isEqual:@"doc-deprecated"])
-		{
-			self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
-		}
-		else if([key isEqual:@"type"])
-		{
-			self.type = [[GIRType alloc] initWithDictionary:value];
-		}
-		else if([key isEqual:@"allow-none"])
-		{
-			self.allowNone = [value isEqual:@"1"];
-		}
-		else if([key isEqual:@"construct-only"])
-		{
-			self.constructOnly = [value isEqual:@"1"];
-		}
-		else if([key isEqual:@"readable"])
-		{
-			self.readable = [value isEqual:@"1"];
-		}	
-		else if([key isEqual:@"deprecated"])
-		{
-			self.deprecated = [value isEqual:@"1"];
-		}		
-		else if([key isEqual:@"construct"])
-		{
-			self.construct = value;
-		}
-		else if([key isEqual:@"writable"])
-		{
-			self.writable = value;
-		}
-		else if([key isEqual:@"array"])
-		{
-			self.array = [[GIRArray alloc] initWithDictionary:value];
-		}				
-		else
-		{
-			[self logUnknownElement:key];
-		}
-	}	
+    for (OFString* key in dict) {
+        id value = [dict objectForKey:key];
+
+        if ([key isEqual:@"text"]) {
+            // Do nothing
+        } else if ([key isEqual:@"name"]) {
+            self.name = value;
+        } else if ([key isEqual:@"transfer-ownership"]) {
+            self.transferOwnership = value;
+        } else if ([key isEqual:@"version"]) {
+            self.version = value;
+        } else if ([key isEqual:@"deprecated-version"]) {
+            self.deprecatedVersion = value;
+        } else if ([key isEqual:@"doc"]) {
+            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"doc-deprecated"]) {
+            self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"type"]) {
+            self.type = [[GIRType alloc] initWithDictionary:value];
+        } else if ([key isEqual:@"allow-none"]) {
+            self.allowNone = [value isEqual:@"1"];
+        } else if ([key isEqual:@"construct-only"]) {
+            self.constructOnly = [value isEqual:@"1"];
+        } else if ([key isEqual:@"readable"]) {
+            self.readable = [value isEqual:@"1"];
+        } else if ([key isEqual:@"deprecated"]) {
+            self.deprecated = [value isEqual:@"1"];
+        } else if ([key isEqual:@"construct"]) {
+            self.construct = value;
+        } else if ([key isEqual:@"writable"]) {
+            self.writable = value;
+        } else if ([key isEqual:@"array"]) {
+            self.array = [[GIRArray alloc] initWithDictionary:value];
+        } else {
+            [self logUnknownElement:key];
+        }
+    }
 }
 
--(void)dealloc
+- (void)dealloc
 {
-	[name release];
-	[transferOwnership release];
-	[version release];
-	[deprecatedVersion release];
-	[doc release];
-	[docDeprecated release];
-	[type release];
-	[construct release];
-	[writable release];
-	[array release];
-	[super dealloc];
+    [name release];
+    [transferOwnership release];
+    [version release];
+    [deprecatedVersion release];
+    [doc release];
+    [docDeprecated release];
+    [type release];
+    [construct release];
+    [writable release];
+    [array release];
+    [super dealloc];
 }
 
 @end

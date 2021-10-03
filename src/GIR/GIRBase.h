@@ -30,12 +30,7 @@
 /**
  * The possible log levels
  */
-typedef enum LogLevel {
-    Debug = 0,
-    Info = 1,
-    Warning = 2,
-    Error = 3
-} LogLevel;
+typedef enum LogLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 } LogLevel;
 
 @protocol GIRParseDictionary
 - (void)parseDictionary:(OFDictionary*)dict;
@@ -61,13 +56,17 @@ typedef enum LogLevel {
 + (void)log:(OFString*)message andLevel:(LogLevel)level;
 
 /**
- * When an unknown item is discovered this will log it iff it hasn't previously been logged
+ * When an unknown item is discovered this will log it iff it hasn't previously
+ * been logged
  */
 - (void)logUnknownElement:(OFString*)element;
 
 /**
- * Extracts information from the array or dictionary (values) into the provided array using the provided class type
+ * Extracts information from the array or dictionary (values) into the provided
+ * array using the provided class type
  */
-- (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray*)array;
+- (void)processArrayOrDictionary:(id)values
+                       withClass:(Class)clazz
+                        andArray:(OFMutableArray*)array;
 
 @end

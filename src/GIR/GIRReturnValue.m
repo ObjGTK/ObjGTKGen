@@ -58,8 +58,7 @@
         id value = [dict objectForKey:key];
 
         // TODO: Do we nee nullable?
-        if ([key isEqual:@"text"]
-            || [key isEqual:@"nullable"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"nullable"]) {
             // Do nothing
         } else if ([key isEqual:@"transfer-ownership"]) {
             self.transferOwnership = value;

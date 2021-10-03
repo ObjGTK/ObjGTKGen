@@ -43,17 +43,17 @@
 + (void)setDebug:(bool)debugEnabled;
 
 /**
- * Similar to the other connect signals functions, this takes a dictionary key'd 
- * on CallbackData objects (configured with class/selectors) and their 
+ * Similar to the other connect signals functions, this takes a dictionary key'd
+ * on CallbackData objects (configured with class/selectors) and their
  * associated signals as values and connects them accordingly.
  *
  * Example usage:
- *  OFDictionary *dict = [[OFDictionary alloc] initWithObjectsAndKeys: 
+ *  OFDictionary *dict = [[OFDictionary alloc] initWithObjectsAndKeys:
  *  [CallbackData withObject:[OGTK class] andSEL:@selector(endMainLoop)],
- *  @"mainQuit", 
+ *  @"mainQuit",
  *  [CallbackData withObject:button andSEL:@selector(clicked)],
- *  @"on_button1_activate", 
- *  [CallbackData withObject:button andSEL:@selector(clicked)], 
+ *  @"on_button1_activate",
+ *  [CallbackData withObject:button andSEL:@selector(clicked)],
  *  @"on_button2_clicked", nil];
  *
  * [builder connectSignalsToObjects:dict];
@@ -64,10 +64,12 @@
  * @param objectSignalDictionary
  *  A dictionary mapping CallbackData objects to OFString signal names
  */
-+ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder andSignalDictionary:(OFDictionary*)objectSignalDictionary;
++ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder
+                       andSignalDictionary:
+                           (OFDictionary*)objectSignalDictionary;
 
 /**
- * Attempts to get the object witht he name returning it as a OGTKWidget. If the 
+ * Attempts to get the object witht he name returning it as a OGTKWidget. If the
  * object is not found or not compatible with OGTKWidget this will return nil.
  *
  *
@@ -79,6 +81,7 @@
  *
  * @returns the OGTKWidget or nil
  */
-+ (OGTKWidget*)getWidgetFromBuilder:(OGTKBuilder*)builder withName:(OFString*)name;
++ (OGTKWidget*)getWidgetFromBuilder:(OGTKBuilder*)builder
+                           withName:(OFString*)name;
 
 @end

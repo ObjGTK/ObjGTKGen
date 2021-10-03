@@ -29,16 +29,20 @@
 
 static bool OGTKBuilderDebugMode = false;
 
-static void gtkbuilder_connect_signals_handler(GtkBuilder* builder, GObject* object, const gchar* signal_name, const gchar* handler_name, GObject* connect_object, GConnectFlags flags, gpointer user_data)
+static void gtkbuilder_connect_signals_handler(GtkBuilder* builder,
+    GObject* object, const gchar* signal_name, const gchar* handler_name,
+    GObject* connect_object, GConnectFlags flags, gpointer user_data)
 {
     if (OGTKBuilderDebugMode) {
         OFLog(@"Signal_name = %@", [OFString stringWithUTF8String:signal_name]);
-        OFLog(@"Handlers_name = %@", [OFString stringWithUTF8String:handler_name]);
+        OFLog(@"Handlers_name = %@",
+            [OFString stringWithUTF8String:handler_name]);
     }
 
     OFDictionary* objectSignalDictionary = (OFDictionary*)user_data;
 
-    id callbackData = [objectSignalDictionary objectForKey:[OFString stringWithUTF8String:handler_name]];
+    id callbackData = [objectSignalDictionary
+        objectForKey:[OFString stringWithUTF8String:handler_name]];
 
     id obj = [callbackData object];
     SEL sel = [callbackData sel];
@@ -55,7 +59,12 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder* builder, GObject* obj
         }
 
         // Connect to Objective-C method
-        [OGTKSignalConnector connectGpointer:object withSignal:[OFString stringWithUTF8String:signal_name] toTarget:obj withSelector:sel andData:NULL];
+        [OGTKSignalConnector
+            connectGpointer:object
+                 withSignal:[OFString stringWithUTF8String:signal_name]
+                   toTarget:obj
+               withSelector:sel
+                    andData:NULL];
     }
 }
 
@@ -66,12 +75,16 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder* builder, GObject* obj
     OGTKBuilderDebugMode = debugEnabled;
 }
 
-+ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder andSignalDictionary:(OFDictionary*)objectSignalDictionary;
++ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder
+                       andSignalDictionary:
+                           (OFDictionary*)objectSignalDictionary;
 {
-    gtk_builder_connect_signals_full([builder BUILDER], &gtkbuilder_connect_signals_handler, objectSignalDictionary);
+    gtk_builder_connect_signals_full([builder BUILDER],
+        &gtkbuilder_connect_signals_handler, objectSignalDictionary);
 }
 
-+ (OGTKWidget*)getWidgetFromBuilder:(OGTKBuilder*)builder withName:(OFString*)name
++ (OGTKWidget*)getWidgetFromBuilder:(OGTKBuilder*)builder
+                           withName:(OFString*)name
 {
     GObject* obj = gtk_builder_get_object([builder BUILDER], [name UTF8String]);
 

@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -29,22 +29,25 @@
 
 @implementation Gir2Objc
 
-+ (void)parseGirFromFile:(OFString*)girFile intoDictionary:(OFDictionary**)girDict;
++ (void)parseGirFromFile:(OFString*)girFile
+          intoDictionary:(OFDictionary**)girDict;
 {
     *girDict = nil;
 
     OFString* girContents = [[OFString alloc] initWithContentsOfFile:girFile];
 
     if (girContents == nil) {
-        @throw [[OFReadFailedException alloc] initWithObject:girFile requestedLength:0 errNo:0];
+        @throw [[OFReadFailedException alloc] initWithObject:girFile
+                                             requestedLength:0
+                                                       errNo:0];
     }
 
     @try {
         // Parse the XML into a dictionary
         *girDict = [XMLReader dictionaryForXMLString:girContents];
-    }
-    @catch (id exception) {
-        // On error, if a dictionary was still created, clean it up before returning
+    } @catch (id exception) {
+        // On error, if a dictionary was still created, clean it up before
+        // returning
         if (*girDict != nil) {
             [*girDict release];
         }
@@ -107,7 +110,8 @@
 
         for (i = 0; i < [clazz.name length]; i++) {
             // Current character
-            OFString* currentChar = [clazz.name substringWithRange:OFRangeMake(i, 1)];
+            OFString* currentChar =
+                [clazz.name substringWithRange:OFRangeMake(i, 1)];
 
             if (i != 0 && [OGTKUtil isUppercase:currentChar]) {
                 [result appendFormat:@"_%@", [currentChar lowercaseString]];
@@ -116,7 +120,8 @@
             }
         }
 
-        [OGTKUtil addToTrimMethodName:[OFString stringWithFormat:@"gtk_%@", result]];
+        [OGTKUtil
+            addToTrimMethodName:[OFString stringWithFormat:@"gtk_%@", result]];
     }
 
     for (GIRClass* clazz in ns.classes) {
@@ -183,7 +188,8 @@
                 OGTKMethod* objcFunc = [[OGTKMethod alloc] init];
                 [objcFunc setCName:func.cIdentifier];
 
-                if (func.returnValue.type == nil && func.returnValue.array != nil) {
+                if (func.returnValue.type == nil
+                    && func.returnValue.array != nil) {
                     [objcFunc setCReturnType:func.returnValue.array.cType];
                 } else {
                     [objcFunc setCReturnType:func.returnValue.type.cType];
@@ -227,7 +233,8 @@
                 OGTKMethod* objcMeth = [[OGTKMethod alloc] init];
                 [objcMeth setCName:meth.cIdentifier];
 
-                if (meth.returnValue.type == nil && meth.returnValue.array != nil) {
+                if (meth.returnValue.type == nil
+                    && meth.returnValue.array != nil) {
                     [objcMeth setCReturnType:meth.returnValue.array.cType];
                 } else {
                     [objcMeth setCReturnType:meth.returnValue.type.cType];
@@ -255,7 +262,9 @@
             }
         }
 
-        [OGTKClassWriter generateFilesForClass:cgtkClass inDir:[OGTKUtil globalConfigValueFor:@"outputDir"]];
+        [OGTKClassWriter
+            generateFilesForClass:cgtkClass
+                            inDir:[OGTKUtil globalConfigValueFor:@"outputDir"]];
 
         [cgtkClass release];
     }

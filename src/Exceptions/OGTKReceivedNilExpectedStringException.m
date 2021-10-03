@@ -13,7 +13,8 @@
 
 - (OFString*)description
 {
-    return @"Wrong format: Received nil value as parameter but expected instance of OFString.";
+    return @"Wrong format: Received nil value as parameter but expected "
+           @"instance of OFString.";
 }
 
 @end

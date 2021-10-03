@@ -33,33 +33,32 @@
 #import "GIRType.h"
 #import "GIRVarargs.h"
 
-@interface GIRParameter : GIRBase
-{
-	OFString *name;
-	OFString *transferOwnership;
-	OFString *direction;
-	OFString *scope;
-	bool allowNone;
-	bool callerAllocates;
-	long closure;
-	long destroy;
-	GIRDoc *doc;
-	GIRType *type;
-	GIRArray *array;
-	GIRVarargs *varargs;
+@interface GIRParameter : GIRBase {
+    OFString* name;
+    OFString* transferOwnership;
+    OFString* direction;
+    OFString* scope;
+    bool allowNone;
+    bool callerAllocates;
+    long closure;
+    long destroy;
+    GIRDoc* doc;
+    GIRType* type;
+    GIRArray* array;
+    GIRVarargs* varargs;
 }
 
-@property (nonatomic, retain) OFString *name;
-@property (nonatomic, retain) OFString *transferOwnership;
-@property (nonatomic, retain) OFString *direction;
-@property (nonatomic, retain) OFString *scope;
+@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString* transferOwnership;
+@property (nonatomic, retain) OFString* direction;
+@property (nonatomic, retain) OFString* scope;
 @property (nonatomic) bool allowNone;
 @property (nonatomic) bool callerAllocates;
 @property (nonatomic) long closure;
 @property (nonatomic) long destroy;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) GIRType *type;
-@property (nonatomic, retain) GIRArray *array;
-@property (nonatomic, retain) GIRVarargs *varargs;
+@property (nonatomic, retain) GIRDoc* doc;
+@property (nonatomic, retain) GIRType* type;
+@property (nonatomic, retain) GIRArray* array;
+@property (nonatomic, retain) GIRVarargs* varargs;
 
 @end
