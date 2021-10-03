@@ -43,7 +43,7 @@
  *
  * @return the version string
  */
-+ (OFString*)coreGtkVersion;
++ (OFString*)objGtkVersion;
 
 /**
  * Call this function before using any other GTK+ functions in your GUI 

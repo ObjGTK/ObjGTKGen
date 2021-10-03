@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
     [window setBorderWidth:10];
 
     /* Sets the title text of the window */
-    [window setTitle:@"This is ObjGTK supporting GTK+ 3.24 (elementary OS)!"];
+    [window setTitle:[OFString stringWithFormat:@"This is ObjGTK supporting GTK+ %@ (elementary OS)!", [OGTK objGtkVersion]]];
 
     /* Sets the default size to 400x300 */
     [window setDefaultSizeWithWidth:400 andHeight:300];

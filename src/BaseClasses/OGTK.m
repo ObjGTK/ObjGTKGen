@@ -32,9 +32,9 @@
 
 @implementation OGTK
 
-+ (OFString*)coreGtkVersion
++ (OFString*)objGtkVersion
 {
-    return @"3.24.0";
+    return @"3.24.20";
 }
 
 + (void)initWithArgc:(int*)argc andArgv:(char***)argv
