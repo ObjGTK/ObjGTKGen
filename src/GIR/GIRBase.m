@@ -101,7 +101,7 @@ LogLevel _logLevel = Info;
 - (void)logUnknownElement:(OFString*)element
 {
     if (self.unknownElements == nil) {
-        self.unknownElements = [[OFMutableDictionary alloc] init];
+        self.unknownElements = [OFMutableDictionary dictionary];
     }
 
     OFString* hopefullyUniqueKey =

@@ -63,7 +63,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -92,12 +97,12 @@
         } else if ([key isEqual:@"throws"]) {
             self.throws = [value isEqual:@"1"];
         } else if ([key isEqual:@"doc-deprecated"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"return-value"]) {
             self.returnValue =
-                [[GIRReturnValue alloc] initWithDictionary:value];
+                [[[GIRReturnValue alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"parameters"]) {
             for (OFString* paramKey in value) {
                 if ([paramKey isEqual:@"parameter"]) {

@@ -36,9 +36,14 @@
 {
     self = [super init];
 
-    constructors = [[OFMutableArray alloc] init];
-    functions = [[OFMutableArray alloc] init];
-    methods = [[OFMutableArray alloc] init];
+    @try {
+        constructors = [[OFMutableArray alloc] init];
+        functions = [[OFMutableArray alloc] init];
+        methods = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

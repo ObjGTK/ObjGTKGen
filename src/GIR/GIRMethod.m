@@ -65,7 +65,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -92,11 +97,13 @@
     } else if ([key isEqual:@"version"]) {
         self.version = value;
     } else if ([key isEqual:@"return-value"]) {
-        self.returnValue = [[GIRReturnValue alloc] initWithDictionary:value];
+        self.returnValue =
+            [[[GIRReturnValue alloc] initWithDictionary:value] autorelease];
     } else if ([key isEqual:@"doc"]) {
-        self.doc = [[GIRDoc alloc] initWithDictionary:value];
+        self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
     } else if ([key isEqual:@"doc-deprecated"]) {
-        self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
+        self.docDeprecated =
+            [[[GIRDoc alloc] initWithDictionary:value] autorelease];
     } else if ([key isEqual:@"deprecated"]) {
         self.deprecated = [value isEqual:@"1"];
     } else if ([key isEqual:@"deprecated-version"]) {
