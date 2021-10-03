@@ -62,9 +62,8 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]
-            || [key isEqual:@"type"]
-            || [key isEqual:@"source-position"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"type"] ||
+            [key isEqual:@"source-position"]) {
             // Do nothing
         } else if ([key isEqual:@"c:type"]) {
             self.cType = value;

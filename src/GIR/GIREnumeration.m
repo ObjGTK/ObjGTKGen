@@ -43,9 +43,9 @@
 {
     self = [super init];
 
-	self.elementTypeName = @"GIREnumeration";
-	self.members = [[OFMutableArray alloc] init];
-	self.functions = [[OFMutableArray alloc] init];
+    self.elementTypeName = @"GIREnumeration";
+    self.members = [[OFMutableArray alloc] init];
+    self.functions = [[OFMutableArray alloc] init];
 
     return self;
 }
@@ -54,7 +54,7 @@
 {
     self = [self init];
 
-	[self parseDictionary:dict];
+    [self parseDictionary:dict];
 
     return self;
 }
@@ -64,10 +64,9 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]
-            || [key isEqual:@"glib:type-name"]
-            || [key isEqual:@"glib:get-type"]
-            || [key isEqual:@"glib:error-domain"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
+            [key isEqual:@"glib:get-type"] ||
+            [key isEqual:@"glib:error-domain"]) {
             // Do nothing
         } else if ([key isEqual:@"c:type"]) {
             self.cType = value;
@@ -84,9 +83,13 @@
         } else if ([key isEqual:@"doc-deprecated"]) {
             self.docDeprecated = [[GIRDoc alloc] initWithDictionary:value];
         } else if ([key isEqual:@"member"]) {
-            [self processArrayOrDictionary:value withClass:[GIRMember class] andArray:members];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRMember class]
+                                  andArray:members];
         } else if ([key isEqual:@"function"]) {
-            [self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRFunction class]
+                                  andArray:functions];
         } else {
             [self logUnknownElement:key];
         }

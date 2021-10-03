@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -58,7 +58,7 @@
 int main(int argc, char* argv[])
 {
     /* This is called in all GTK applications. Arguments are parsed
-    * from the command line and are returned to the application. */
+     * from the command line and are returned to the application. */
     [OGTK autoInitWithArgc:argc andArgv:argv];
 
     // Show standard example
@@ -82,7 +82,8 @@ int main(int argc, char* argv[])
     /* Create a new window */
     window = [[OGTKWindow alloc] init:GTK_WINDOW_TOPLEVEL];
 
-    /* Here we connect the "destroy" event to a signal handler in the HelloWorld class */
+    /* Here we connect the "destroy" event to a signal handler in the HelloWorld
+     * class */
     [OGTKSignalConnector connectGpointer:[window WIDGET]
                               withSignal:@"destroy"
                                 toTarget:[OGTK class]
@@ -93,7 +94,11 @@ int main(int argc, char* argv[])
     [window setBorderWidth:10];
 
     /* Sets the title text of the window */
-    [window setTitle:[OFString stringWithFormat:@"This is ObjGTK supporting GTK+ %@ (elementary OS)!", [OGTK objGtkVersion]]];
+    [window
+        setTitle:[OFString
+                     stringWithFormat:
+                         @"This is ObjGTK supporting GTK+ %@ (elementary OS)!",
+                     [OGTK objGtkVersion]]];
 
     /* Sets the default size to 400x300 */
     [window setDefaultSizeWithWidth:400 andHeight:300];
@@ -124,8 +129,8 @@ int main(int argc, char* argv[])
     [OGTK main];
 
     /*
-	 * Release allocated memory
-	 */
+     * Release allocated memory
+     */
     [window release];
 }
 
@@ -137,7 +142,8 @@ int main(int argc, char* argv[])
     /* Create a builder to load GLADE file */
     OGTKBuilder* builder = [[OGTKBuilder alloc] init];
 
-    if ([builder addFromFileWithFilename:@"gladeExample.glade" andErr:NULL] == 0) {
+    if ([builder addFromFileWithFilename:@"gladeExample.glade" andErr:NULL]
+        == 0) {
         OFLog(@"Error loading GUI file");
         return;
     }
@@ -146,24 +152,32 @@ int main(int argc, char* argv[])
     [OGTKBaseBuilder setDebug:true];
 
     /* Use signal dictionary to connect GLADE objects to Objective-C code */
-    OFDictionary* dic = [[OFDictionary alloc] initWithKeysAndObjects:
-                                                  @"endGtkLoop", [OGTKCallbackData withObject:[OGTK class] andSEL:@selector(mainQuit)],
-                                              @"on_button1_clicked", [OGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(hello)],
-                                              @"on_button2_clicked", [OGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(goodbye)],
-                                              nil];
+    OFDictionary* dic = [[OFDictionary alloc]
+        initWithKeysAndObjects:@"endGtkLoop",
+        [OGTKCallbackData withObject:[OGTK class] andSEL:@selector(mainQuit)],
+        @"on_button1_clicked",
+        [OGTKCallbackData withObject:[HelloWorld class]
+                              andSEL:@selector(hello)],
+        @"on_button2_clicked",
+        [OGTKCallbackData withObject:[HelloWorld class]
+                              andSEL:@selector(goodbye)],
+        nil];
 
-    /* OGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C code */
-    [OGTKBaseBuilder connectSignalsToObjectsWithBuilder:builder andSignalDictionary:dic];
+    /* OGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C
+     * code */
+    [OGTKBaseBuilder connectSignalsToObjectsWithBuilder:builder
+                                    andSignalDictionary:dic];
 
     /* window is autoreleased */
-    OGTKWidget* window = [OGTKBaseBuilder getWidgetFromBuilder:builder withName:@"window1"];
+    OGTKWidget* window = [OGTKBaseBuilder getWidgetFromBuilder:builder
+                                                      withName:@"window1"];
     if (window != nil) {
         [window showAll];
     }
 
     /*
-	 * Release allocated memory
-	 */
+     * Release allocated memory
+     */
     [builder release];
 
     /* All GTK applications must have a [OGTK main] call. Control ends here

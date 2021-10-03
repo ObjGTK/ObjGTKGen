@@ -49,9 +49,9 @@
 {
     self = [super init];
 
-	elementTypeName = @"GIRMethod";
-	parameters = [OFMutableArray array];
-	instanceParameters = [OFMutableArray array];
+    elementTypeName = @"GIRMethod";
+    parameters = [OFMutableArray array];
+    instanceParameters = [OFMutableArray array];
 
     return self;
 }
@@ -78,8 +78,7 @@
 
 - (bool)tryParseWithKey:(OFString*)key andValue:(id)value
 {
-    if ([key isEqual:@"text"]
-        || [key isEqual:@"source-position"]) {
+    if ([key isEqual:@"text"] || [key isEqual:@"source-position"]) {
         // Do nothing
     } else if ([key isEqual:@"name"]) {
         self.name = value;
@@ -110,9 +109,13 @@
     } else if ([key isEqual:@"parameters"]) {
         for (OFString* paramKey in value) {
             if ([paramKey isEqual:@"parameter"]) {
-                [self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:parameters];
+                [self processArrayOrDictionary:[value objectForKey:paramKey]
+                                     withClass:[GIRParameter class]
+                                      andArray:parameters];
             } else if ([paramKey isEqual:@"instance-parameter"]) {
-                [self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:instanceParameters];
+                [self processArrayOrDictionary:[value objectForKey:paramKey]
+                                     withClass:[GIRParameter class]
+                                      andArray:instanceParameters];
             }
         }
     } else {

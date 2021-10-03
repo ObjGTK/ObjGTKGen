@@ -47,9 +47,9 @@
 {
     self = [super init];
 
-	elementTypeName = @"GIRFunction";
-	parameters = [OFMutableArray array];
-    instanceParameters =  [OFMutableArray array];
+    elementTypeName = @"GIRFunction";
+    parameters = [OFMutableArray array];
+    instanceParameters = [OFMutableArray array];
 
     return self;
 }
@@ -68,8 +68,7 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"] ||
-            [key isEqual:@"source-position"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"source-position"]) {
             // Do nothing
         } else if ([key isEqual:@"name"]) {
             self.name = value;
@@ -92,13 +91,18 @@
         } else if ([key isEqual:@"doc"]) {
             self.doc = [[GIRDoc alloc] initWithDictionary:value];
         } else if ([key isEqual:@"return-value"]) {
-            self.returnValue = [[GIRReturnValue alloc] initWithDictionary:value];
+            self.returnValue =
+                [[GIRReturnValue alloc] initWithDictionary:value];
         } else if ([key isEqual:@"parameters"]) {
             for (OFString* paramKey in value) {
                 if ([paramKey isEqual:@"parameter"]) {
-                    [self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:parameters];
+                    [self processArrayOrDictionary:[value objectForKey:paramKey]
+                                         withClass:[GIRParameter class]
+                                          andArray:parameters];
                 } else if ([paramKey isEqual:@"instance-parameter"]) {
-                    [self processArrayOrDictionary:[value objectForKey:paramKey] withClass:[GIRParameter class] andArray:instanceParameters];
+                    [self processArrayOrDictionary:[value objectForKey:paramKey]
+                                         withClass:[GIRParameter class]
+                                          andArray:instanceParameters];
                 }
             }
         } else {

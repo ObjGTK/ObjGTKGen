@@ -36,7 +36,8 @@
 }
 
 /**
- * Creates and returns a new instance of OGTKCallbackData holding the object and the selector.
+ * Creates and returns a new instance of OGTKCallbackData holding the object and
+ * the selector.
  *
  * Note this returned instance is autoreleased.
  *
@@ -51,7 +52,8 @@
 + (id)withObject:(id)obj andSEL:(SEL)sel;
 
 /**
- * Creates and returns a new instance of OGTKCallbackData holding the object and the selector.
+ * Creates and returns a new instance of OGTKCallbackData holding the object and
+ * the selector.
  *
  * @param obj
  *  The object to hold

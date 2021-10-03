@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -25,9 +25,9 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import <ObjFW/ObjFW.h>
-#import "OFDictionary+JsonContentsOfFile.h"
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
+#import "OFDictionary+JsonContentsOfFile.h"
+#import <ObjFW/ObjFW.h>
 
 /**
  * Provides useful utility functions for ObjGTKGen
@@ -36,7 +36,7 @@
 }
 
 /**
- * Returns the underscore_separated_string in camelCase 
+ * Returns the underscore_separated_string in camelCase
  */
 + (OFString*)convertUSSToCamelCase:(OFString*)input;
 
@@ -61,22 +61,29 @@
 + (OFString*)swapTypes:(OFString*)str;
 
 /**
- * Converts GTK style type_new_with_param style functions into ObjGTK initWithParam inits. If func doesn't contain "New" or "new" then it will return nil.
+ * Converts GTK style type_new_with_param style functions into ObjGTK
+ * initWithParam inits. If func doesn't contain "New" or "new" then it will
+ * return nil.
  */
 + (OFString*)convertFunctionToInit:(OFString*)func;
 
 /**
- * Returns a super constructor call for the given type. While it takes a cType it currently assumes everything is a GObject (FOR FUTURE USE).
+ * Returns a super constructor call for the given type. While it takes a cType
+ * it currently assumes everything is a GObject (FOR FUTURE USE).
  */
-+ (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType withConstructor:(OFString*)cCtor;
++ (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType
+                                 withConstructor:(OFString*)cCtor;
 
 /**
  * Converts the given fromType to the toType while maintaining the name
  */
-+ (OFString*)convertType:(OFString*)fromType withName:(OFString*)name toType:(OFString*)toType;
++ (OFString*)convertType:(OFString*)fromType
+                withName:(OFString*)name
+                  toType:(OFString*)toType;
 
 /**
- * Returns the appropriate self referencing call for the type (i.e. -(type)[self TYPE] or GTK_TYPE([self GOBJECT])
+ * Returns the appropriate self referencing call for the type (i.e. -(type)[self
+ * TYPE] or GTK_TYPE([self GOBJECT])
  */
 + (OFString*)selfTypeMethodCall:(OFString*)type;
 

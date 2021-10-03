@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -43,7 +43,9 @@ static OFMutableDictionary* dictExtraMethods;
     OFString* output = [self convertUSSToCapCase:input];
 
     if ([output length] > 1) {
-        return [OFString stringWithFormat:@"%@%@", [[output substringToIndex:1] lowercaseString], [output substringFromIndex:1]];
+        return [OFString stringWithFormat:@"%@%@",
+                         [[output substringToIndex:1] lowercaseString],
+                         [output substringFromIndex:1]];
     } else {
         return [output lowercaseString];
     }
@@ -62,7 +64,9 @@ static OFMutableDictionary* dictExtraMethods;
             if (previousItemWasSingleChar) {
                 [output appendString:item];
             } else {
-                [output appendFormat:@"%@%@", [[item substringToIndex:1] uppercaseString], [item substringFromIndex:1]];
+                [output appendFormat:@"%@%@",
+                        [[item substringToIndex:1] uppercaseString],
+                        [item substringFromIndex:1]];
             }
             previousItemWasSingleChar = false;
         } else {
@@ -89,7 +93,8 @@ static OFMutableDictionary* dictExtraMethods;
     if (range.location == OFNotFound) {
         return nil;
     } else {
-        return [OFString stringWithFormat:@"init%@", [func substringFromIndex:range.location + 3]];
+        return [OFString stringWithFormat:@"init%@",
+                         [func substringFromIndex:range.location + 3]];
     }
 }
 
@@ -130,9 +135,11 @@ static OFMutableDictionary* dictExtraMethods;
     return meth;
 }
 
-+ (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType withConstructor:(OFString*)cCtor
++ (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType
+                                 withConstructor:(OFString*)cCtor
 {
-    return [OFString stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
+    return [OFString
+        stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
 }
 
 + (OFString*)selfTypeMethodCall:(OFString*)type;
@@ -143,7 +150,10 @@ static OFMutableDictionary* dictExtraMethods;
     if ([type hasPrefix:@"OGTK"]) {
         type = [OGTKUtil swapTypes:type];
 
-        return [OFString stringWithFormat:@"[self %@]", [[type substringWithRange:OFRangeMake(3, [type length] - 3)] uppercaseString]];
+        return [OFString
+            stringWithFormat:@"[self %@]",
+            [[type substringWithRange:OFRangeMake(3, [type length] - 3)]
+                uppercaseString]];
     }
     // Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
     else if ([type hasPrefix:@"Gtk"]) {
@@ -158,9 +168,11 @@ static OFMutableDictionary* dictExtraMethods;
 
             for (i = 0; i < [type length]; i++) {
                 // Current character
-                OFString* currentChar = [type substringWithRange:OFRangeMake(i, 1)];
+                OFString* currentChar =
+                    [type substringWithRange:OFRangeMake(i, 1)];
 
-                if (i != 0 && [OGTKUtil isUppercase:currentChar] && countBetweenUnderscores > 1) {
+                if (i != 0 && [OGTKUtil isUppercase:currentChar]
+                    && countBetweenUnderscores > 1) {
                     [result appendFormat:@"_%@", [currentChar uppercaseString]];
                     countBetweenUnderscores = 0;
                 } else {
@@ -191,7 +203,8 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFString*)swapTypes:(OFString*)str
 {
     if (dictSwapTypes == nil) {
-        dictSwapTypes = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/swap_types.json"];
+        dictSwapTypes = [[OFMutableDictionary alloc]
+            initWithContentsOfFile:@"Config/swap_types.json"];
     }
 
     if (str == nil)
@@ -202,12 +215,15 @@ static OFMutableDictionary* dictExtraMethods;
     return (val == nil) ? str : val;
 }
 
-+ (OFString*)convertType:(OFString*)fromType withName:(OFString*)name toType:(OFString*)toType
++ (OFString*)convertType:(OFString*)fromType
+                withName:(OFString*)name
+                  toType:(OFString*)toType
 {
     // Try to return conversion for string types first
-    if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"])
-        && [toType isEqual:@"OFString*"]) {
-        return [OFString stringWithFormat:@"[OFString stringWithUTF8String:%@]", name];
+    if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"]) &&
+        [toType isEqual:@"OFString*"]) {
+        return [OFString
+            stringWithFormat:@"[OFString stringWithUTF8String:%@]", name];
     } else if ([fromType isEqual:@"OFString*"]
         && ([toType isEqual:@"gchar*"] || [toType isEqual:@"const gchar*"])) {
         return [OFString stringWithFormat:@"[%@ UTF8String]", name];
@@ -216,20 +232,28 @@ static OFMutableDictionary* dictExtraMethods;
     // Then try to return generic Gtk type conversion
     if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"OGTK"]) {
         // Converting from Gtk -> OGTK
-        return [OFString stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]", [toType substringWithRange:OFRangeMake(0, [toType length] - 1)], name];
+        return [OFString
+            stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]",
+            [toType substringWithRange:OFRangeMake(0, [toType length] - 1)],
+            name];
     } else if ([fromType hasPrefix:@"OGTK"] && [toType hasPrefix:@"Gtk"]) {
         // Converting from OGTK -> Gtk
-        return [OFString stringWithFormat:@"[%@ %@]", name, [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)] uppercaseString]];
+        return [OFString
+            stringWithFormat:@"[%@ %@]", name,
+            [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)]
+                uppercaseString]];
     }
 
-    // Otherwise don't do any conversion (including bool types, as ObjFW uses the stdc bool type)
+    // Otherwise don't do any conversion (including bool types, as ObjFW uses
+    // the stdc bool type)
     return name;
 }
 
 + (id)globalConfigValueFor:(OFString*)key
 {
     if (dictGlobalConf == nil) {
-        dictGlobalConf = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/global_conf.json"];
+        dictGlobalConf = [[OFMutableDictionary alloc]
+            initWithContentsOfFile:@"Config/global_conf.json"];
     }
 
     return [dictGlobalConf objectForKey:key];
@@ -238,7 +262,8 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFArray*)extraImports:(OFString*)clazz
 {
     if (dictExtraImports == nil) {
-        dictExtraImports = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/extra_imports.json"];
+        dictExtraImports = [[OFMutableDictionary alloc]
+            initWithContentsOfFile:@"Config/extra_imports.json"];
     }
 
     return [dictExtraImports objectForKey:clazz];
@@ -247,7 +272,8 @@ static OFMutableDictionary* dictExtraMethods;
 + (OFDictionary*)extraMethods:(OFString*)clazz
 {
     if (dictExtraMethods == nil) {
-        dictExtraMethods = [[OFMutableDictionary alloc] initWithContentsOfFile:@"Config/extra_methods.json"];
+        dictExtraMethods = [[OFMutableDictionary alloc]
+            initWithContentsOfFile:@"Config/extra_methods.json"];
     }
 
     return [dictExtraMethods objectForKey:clazz];

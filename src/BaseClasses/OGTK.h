@@ -46,23 +46,23 @@
 + (OFString*)objGtkVersion;
 
 /**
- * Call this function before using any other GTK+ functions in your GUI 
- * applications. It will initialize everything needed to operate the toolkit and 
+ * Call this function before using any other GTK+ functions in your GUI
+ * applications. It will initialize everything needed to operate the toolkit and
  * parses some standard command line options.
  *
- * Although you are expected to pass the argc, argv parameters from main() to 
- * this function, it is possible to pass NULL if argv is not available or 
+ * Although you are expected to pass the argc, argv parameters from main() to
+ * this function, it is possible to pass NULL if argv is not available or
  * commandline handling is not required.
  *
- * argc and argv are adjusted accordingly so your own code will never see those 
+ * argc and argv are adjusted accordingly so your own code will never see those
  * standard arguments.
- * 
+ *
  * @param argc
- *  Address of the argc parameter of your main() function (or 0 if argv is 
+ *  Address of the argc parameter of your main() function (or 0 if argv is
  *  NULL). This will be changed if any arguments were handled. [inout]
  *
  * @param argv
- *  Address of the argv parameter of main(), or NULL. Any options understood by 
+ *  Address of the argv parameter of main(), or NULL. Any options understood by
  *  GTK+ are stripped before return. [array length=argc][inout][allow-none]
  */
 + (void)initWithArgc:(int*)argc andArgv:(char***)argv;
@@ -71,11 +71,11 @@
  * Same as initWithArgc:andArgv: but does the type conversion automatically.
  *
  * @param argc
- *  Address of the argc parameter of your main() function (or 0 if argv is 
+ *  Address of the argc parameter of your main() function (or 0 if argv is
  *  NULL). This will be changed if any arguments were handled. [inout]
  *
  * @param argv
- *  Address of the argv parameter of main(), or NULL. Any options understood by 
+ *  Address of the argv parameter of main(), or NULL. Any options understood by
  *  GTK+ are stripped before return. [array length=argc][inout][allow-none]
  *
  * @returns modified argc value
@@ -85,8 +85,8 @@
 + (int)autoInitWithArgc:(int)argc andArgv:(char*[])argv;
 
 /**
- * Runs the main loop until mainQuit is called. 
- * You can nest calls to main. In that case mainQuit will make the innermost 
+ * Runs the main loop until mainQuit is called.
+ * You can nest calls to main. In that case mainQuit will make the innermost
  * invocation of the main loop return.
  *
  * @see mainQuit
@@ -94,7 +94,7 @@
 + (void)main;
 
 /**
- * Makes the innermost invocation of the main loop return when it regains 
+ * Makes the innermost invocation of the main loop return when it regains
  * control.
  */
 + (void)mainQuit;

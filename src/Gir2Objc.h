@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -34,30 +34,34 @@
 #import "GIR/GIRApi.h"
 #import "GIR/GIRNamespace.h"
 
-#import "Exceptions/OGTKNoGIRDictException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
+#import "Exceptions/OGTKNoGIRDictException.h"
 
 #import "XMLReader/XMLReader.h"
 
 /**
- * Provides functionality to convert GObject Introspection GIR files into ObjGTK source code
+ * Provides functionality to convert GObject Introspection GIR files into ObjGTK
+ * source code
  */
 @interface Gir2Objc : OFObject
 
 /**
  * Parses the girFile XML into the OFDictionary
  */
-+ (void)parseGirFromFile:(OFString*)girFile intoDictionary:(OFDictionary**)girDict;
++ (void)parseGirFromFile:(OFString*)girFile
+          intoDictionary:(OFDictionary**)girDict;
 
 /**
- * Recurses through the OFDictionary looking for the first "api" or "repository" key and then attempts to parse that into 
- * a GIRApi. If no key is found nil is returned.
+ * Recurses through the OFDictionary looking for the first "api" or "repository"
+ * key and then attempts to parse that into a GIRApi. If no key is found nil is
+ * returned.
  */
 + (GIRApi*)firstApiFromDictionary:(OFDictionary*)girDict;
 
 /**
- * Parses the girFile XML and then attempts to extract a GIRApi from the parsed contents. If the GIR is successfully parsed, 
- * but no valid data is found, nil is returned.
+ * Parses the girFile XML and then attempts to extract a GIRApi from the parsed
+ * contents. If the GIR is successfully parsed, but no valid data is found, nil
+ * is returned.
  */
 + (GIRApi*)firstApiFromGirFile:(OFString*)girFile;
 

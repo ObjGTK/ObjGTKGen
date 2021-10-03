@@ -39,8 +39,8 @@
  */
 @interface OGTKBase : OFObject {
     /**
-	 * The internal GtkObject pointer
-	 */
+     * The internal GtkObject pointer
+     */
     GObject* _gObject;
 }
 

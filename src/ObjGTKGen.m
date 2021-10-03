@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
 /*
@@ -69,16 +69,19 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
     OFArray* srcDirContents = [fileMgr contentsOfDirectoryAtPath:baseClassPath];
 
     for (OFString* srcFile in srcDirContents) {
-        OFString* src = [baseClassPath stringByAppendingPathComponent:[srcFile lastPathComponent]];
-        OFString* dest = [outputDir stringByAppendingPathComponent:
-                                        [srcFile lastPathComponent]];
+        OFString* src = [baseClassPath
+            stringByAppendingPathComponent:[srcFile lastPathComponent]];
+        OFString* dest = [outputDir
+            stringByAppendingPathComponent:[srcFile lastPathComponent]];
 
         if ([fileMgr fileExistsAtPath:dest]) {
-            OFLog(@"File [%@] already exists in destination [%@]. Removing existing file...", src, dest);
-            
-			@try {
-				[fileMgr removeItemAtPath:dest];
-			} @catch(id exception) {
+            OFLog(@"File [%@] already exists in destination [%@]. Removing "
+                  @"existing file...",
+                src, dest);
+
+            @try {
+                [fileMgr removeItemAtPath:dest];
+            } @catch (id exception) {
                 OFLog(@"Error removing file [%@]. Skipping file.", dest);
                 continue;
             }

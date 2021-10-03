@@ -66,14 +66,10 @@
     for (OFString* key in dict) {
         id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]
-            || [key isEqual:@"shared-library"]
-            || [key isEqual:@"version"]
-            || [key isEqual:@"record"]
-            || [key isEqual:@"callback"]
-            || [key isEqual:@"bitfield"]
-            || [key isEqual:@"alias"]
-            || [key isEqual:@"function-macro"]) {
+        if ([key isEqual:@"text"] || [key isEqual:@"shared-library"] ||
+            [key isEqual:@"version"] || [key isEqual:@"record"] ||
+            [key isEqual:@"callback"] || [key isEqual:@"bitfield"] ||
+            [key isEqual:@"alias"] || [key isEqual:@"function-macro"]) {
             // Do nothing
         } else if ([key isEqual:@"name"]) {
             self.name = value;
@@ -82,15 +78,25 @@
         } else if ([key isEqual:@"c:identifier-prefixes"]) {
             self.cIdentifierPrefixes = value;
         } else if ([key isEqual:@"class"]) {
-            [self processArrayOrDictionary:value withClass:[GIRClass class] andArray:classes];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRClass class]
+                                  andArray:classes];
         } else if ([key isEqual:@"function"]) {
-            [self processArrayOrDictionary:value withClass:[GIRFunction class] andArray:functions];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRFunction class]
+                                  andArray:functions];
         } else if ([key isEqual:@"enumeration"]) {
-            [self processArrayOrDictionary:value withClass:[GIREnumeration class] andArray:enumerations];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIREnumeration class]
+                                  andArray:enumerations];
         } else if ([key isEqual:@"constant"]) {
-            [self processArrayOrDictionary:value withClass:[GIRConstant class] andArray:constants];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRConstant class]
+                                  andArray:constants];
         } else if ([key isEqual:@"interface"]) {
-            [self processArrayOrDictionary:value withClass:[GIRInterface class] andArray:interfaces];
+            [self processArrayOrDictionary:value
+                                 withClass:[GIRInterface class]
+                                  andArray:interfaces];
         } else {
             [self logUnknownElement:key];
         }

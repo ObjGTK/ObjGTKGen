@@ -37,15 +37,25 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data)
 
 @implementation OGTKSignalConnector
 
-+ (void)connectGpointer:(gpointer)object withSignal:(OFString*)name toTarget:(id)target withSelector:(SEL)selector andData:(gpointer)data
++ (void)connectGpointer:(gpointer)object
+             withSignal:(OFString*)name
+               toTarget:(id)target
+           withSelector:(SEL)selector
+                andData:(gpointer)data
 {
     /*
-	 * Don't release this or else we could seg fault! (Note that to avoid memory leaks in the case of a short-lived GUI, the application should 
-	 * maintain references to the OGTKSignalData elsewhere and release it there when it is no longer needed.)
-	 */
-    OGTKSignalData* signalData = [[OGTKSignalData alloc] initWithTarget:(id)target selector:selector data:data];
+     * Don't release this or else we could seg fault! (Note that to avoid memory
+     * leaks in the case of a short-lived GUI, the application should maintain
+     * references to the OGTKSignalData elsewhere and release it there when it
+     * is no longer needed.)
+     */
+    OGTKSignalData* signalData =
+        [[OGTKSignalData alloc] initWithTarget:(id)target
+                                      selector:selector
+                                          data:data];
 
-    g_signal_connect(object, [name UTF8String], G_CALLBACK(gsignal_forwarder), signalData);
+    g_signal_connect(
+        object, [name UTF8String], G_CALLBACK(gsignal_forwarder), signalData);
 }
 
 @end

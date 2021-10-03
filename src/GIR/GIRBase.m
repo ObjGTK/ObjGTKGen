@@ -68,15 +68,17 @@ LogLevel _logLevel = Info;
 
 - (void)parseDictionary:(OFDictionary*)dict
 {
-	OF_UNRECOGNIZED_SELECTOR
+    OF_UNRECOGNIZED_SELECTOR
 }
 
 - (instancetype)initWithDictionary:(OFDictionary*)dict
 {
-	OF_INVALID_INIT_METHOD
+    OF_INVALID_INIT_METHOD
 }
 
-- (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray*)array;
+- (void)processArrayOrDictionary:(id)values
+                       withClass:(Class)clazz
+                        andArray:(OFMutableArray*)array;
 {
     // If the values are a dictionary call it directly
     if ([values isKindOfClass:[OFDictionary class]]) {
@@ -88,7 +90,9 @@ LogLevel _logLevel = Info;
         }
     } else if ([values isKindOfClass:[OFArray class]]) {
         for (id object in values) {
-            [self processArrayOrDictionary:object withClass:clazz andArray:array];
+            [self processArrayOrDictionary:object
+                                 withClass:clazz
+                                  andArray:array];
         }
     } else
         @throw [OFInvalidArgumentException exception];
@@ -100,12 +104,17 @@ LogLevel _logLevel = Info;
         self.unknownElements = [[OFMutableDictionary alloc] init];
     }
 
-    OFString* hopefullyUniqueKey = [OFString stringWithFormat:@"%@--%@", self.elementTypeName, element];
+    OFString* hopefullyUniqueKey =
+        [OFString stringWithFormat:@"%@--%@", self.elementTypeName, element];
 
     if ([self.unknownElements objectForKey:hopefullyUniqueKey] != nil) {
-        [self.unknownElements setObject:hopefullyUniqueKey forKey:hopefullyUniqueKey];
+        [self.unknownElements setObject:hopefullyUniqueKey
+                                 forKey:hopefullyUniqueKey];
     } else {
-        [GIRBase log:[OFString stringWithFormat:@"[%@]: Found unknown element: [%@]", self.elementTypeName, element] andLevel:Warning];
+        [GIRBase log:[OFString
+                         stringWithFormat:@"[%@]: Found unknown element: [%@]",
+                         self.elementTypeName, element]
+            andLevel:Warning];
     }
 }
 

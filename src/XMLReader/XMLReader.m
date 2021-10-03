@@ -1,7 +1,8 @@
 //
 // XMLReader.m
 // Based on Simple XML to NSDictionary Converter by Troy Brant
-// Original source here http://troybrant.net/blog/2010/09/simple-xml-to-nsdictionary-converter/
+// Original source here
+// http://troybrant.net/blog/2010/09/simple-xml-to-nsdictionary-converter/
 //
 // Ported to ObjFW by Johannes Brakensiek, 2021
 //
@@ -11,7 +12,8 @@
 OFString* const kXMLReaderTextNodeKey = @"text";
 OFString* const kXMLNSForPrefixC = @"http://www.gtk.org/introspection/c/1.0";
 OFString* const kXMLNSForPrefixXml = @"http://www.w3.org/XML/1998/namespace";
-OFString* const kXMLNSForPrefixGlib = @"http://www.gtk.org/introspection/glib/1.0";
+OFString* const kXMLNSForPrefixGlib
+    = @"http://www.gtk.org/introspection/glib/1.0";
 OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 
 @interface XMLReader (Internal)
@@ -67,21 +69,26 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 #pragma mark -
 #pragma mark OFXMLParserDelegate method
 
-- (void)parser:(OFXMLParser*)parser didStartElement:(OFString*)elementName prefix:(nullable OFString*)prefix namespace:(OFString*)namespace attributes:(OFArray*)attributes
+- (void)parser:(OFXMLParser*)parser
+    didStartElement:(OFString*)elementName
+             prefix:(nullable OFString*)prefix
+          namespace:(OFString*)namespace
+         attributes:(OFArray*)attributes
 {
     // Get the dictionary for the current level in the stack
     OFMutableDictionary* parentDict = [dictionaryStack lastObject];
 
-    // Create the child dictionary for the new element, and initialize it with the attributes
+    // Create the child dictionary for the new element, and initialize it with
+    // the attributes
     OFMutableDictionary* childDict = [OFMutableDictionary dictionary];
     OFString* attributeName;
     for (OFXMLAttribute* attribute in attributes) {
         attributeName = [self reAddPrefixToAttribute:attribute];
-        [childDict setValue:attribute.stringValue
-                     forKey:attributeName];
+        [childDict setValue:attribute.stringValue forKey:attributeName];
     }
 
-    // If there’s already an item for this key, it means we need to create an array
+    // If there’s already an item for this key, it means we need to create an
+    // array
     id existingValue = [parentDict objectForKey:elementName];
     if (existingValue) {
         OFMutableArray* array = nil;
@@ -93,7 +100,8 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
             array = [OFMutableArray array];
             [array addObject:existingValue];
 
-            // Replace the child dictionary with an array of children dictionaries
+            // Replace the child dictionary with an array of children
+            // dictionaries
             [parentDict setObject:array forKey:elementName];
         }
 
@@ -125,14 +133,18 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
     else if ([attribute.namespace isEqual:kXMLNSForPrefixXmlns])
         attributeName = [OFString stringWithFormat:@"xmlns:%@", attribute.name];
     else {
-        OFLog(@"Unknown namespace %@ for attribute %@", attribute.namespace, attribute.name);
+        OFLog(@"Unknown namespace %@ for attribute %@", attribute.namespace,
+            attribute.name);
         attributeName = [OFString stringWithString:attribute.name];
     }
 
     return attributeName;
 }
 
-- (void)parser:(OFXMLParser*)parser didEndElement:(OFString*)elementName prefix:(nullable OFString*)prefix namespace:(OFString*)namespace
+- (void)parser:(OFXMLParser*)parser
+    didEndElement:(OFString*)elementName
+           prefix:(nullable OFString*)prefix
+        namespace:(OFString*)namespace
 {
     // Update the parent dict with text info
     OFMutableDictionary* dictInProgress = [dictionaryStack lastObject];
