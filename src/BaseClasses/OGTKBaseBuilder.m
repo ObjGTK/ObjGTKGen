@@ -45,7 +45,7 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder* builder,
         objectForKey:[OFString stringWithUTF8String:handler_name]];
 
     id obj = [callbackData object];
-    SEL sel = [callbackData sel];
+    SEL sel = [callbackData selector];
 
     if (obj == nil && object != NULL) {
         if (OGTKBuilderDebugMode) {

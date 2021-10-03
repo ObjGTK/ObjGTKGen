@@ -48,11 +48,11 @@
  *
  * Example usage:
  *  OFDictionary *dict = [[OFDictionary alloc] initWithObjectsAndKeys:
- *  [CallbackData withObject:[OGTK class] andSEL:@selector(endMainLoop)],
+ *  [CallbackData withObject:[OGTK class] selector:@selector(endMainLoop)],
  *  @"mainQuit",
- *  [CallbackData withObject:button andSEL:@selector(clicked)],
+ *  [CallbackData withObject:button selector:@selector(clicked)],
  *  @"on_button1_activate",
- *  [CallbackData withObject:button andSEL:@selector(clicked)],
+ *  [CallbackData withObject:button selector:@selector(clicked)],
  *  @"on_button2_clicked", nil];
  *
  * [builder connectSignalsToObjects:dict];

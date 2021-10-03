@@ -154,13 +154,14 @@ int main(int argc, char* argv[])
     /* Use signal dictionary to connect GLADE objects to Objective-C code */
     OFDictionary* dic = [[OFDictionary alloc]
         initWithKeysAndObjects:@"endGtkLoop",
-        [OGTKCallbackData withObject:[OGTK class] andSEL:@selector(mainQuit)],
+        [OGTKCallbackData callbackWithObject:[OGTK class]
+                                    selector:@selector(mainQuit)],
         @"on_button1_clicked",
-        [OGTKCallbackData withObject:[HelloWorld class]
-                              andSEL:@selector(hello)],
+        [OGTKCallbackData callbackWithObject:[HelloWorld class]
+                                    selector:@selector(hello)],
         @"on_button2_clicked",
-        [OGTKCallbackData withObject:[HelloWorld class]
-                              andSEL:@selector(goodbye)],
+        [OGTKCallbackData callbackWithObject:[HelloWorld class]
+                                    selector:@selector(goodbye)],
         nil];
 
     /* OGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C

@@ -54,7 +54,7 @@
  * @param object
  *  The object to hold
  *
- * @param selelector
+ * @param selector
  *  The selector to hold
  *
  * @returns a new OGTKCallbackData

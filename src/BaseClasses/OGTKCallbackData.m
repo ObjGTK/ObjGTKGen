@@ -30,13 +30,13 @@
 @implementation OGTKCallbackData
 @synthesize object = _object, selector = _selector;
 
-+ (instancetype)callbackWithObject:(id)obj selector:(SEL)sel
++ (instancetype)callbackWithObject:(id)object selector:(SEL)selector
 {
     return [[[OGTKCallbackData alloc] initWithObject:object
                                             selector:selector] autorelease];
 }
 
-- (instancetype)initWithObject:(id)obj andSEL:(SEL)sel
+- (instancetype)initWithObject:(id)object selector:(SEL)selector
 {
     self = [super init];
 
