@@ -34,8 +34,7 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
 /**
  * Provides functions for GCallback signal connecting
  */
-@interface OGTKSignalConnector : OFObject {
-}
+@interface OGTKSignalConnector : OFObject
 
 /**
  * Connects a GCallback function to a signal for a particular object. The

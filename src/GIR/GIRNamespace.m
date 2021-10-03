@@ -30,25 +30,25 @@
 @implementation GIRNamespace
 
 @synthesize name;
-@synthesize cSymbolPrefixes;
-@synthesize cIdentifierPrefixes;
-@synthesize classes;
-@synthesize functions;
-@synthesize enumerations;
-@synthesize constants;
-@synthesize interfaces;
+@synthesize cSymbolPrefixes = _cSymbolPrefixes;
+@synthesize cIdentifierPrefixes = _cIdentifierPrefixes;
+@synthesize classes = _classes;
+@synthesize functions = _functions;
+@synthesize enumerations = _enumerations;
+@synthesize constants = _constants;
+@synthesize interfaces = _interfaces;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRNamespace";
-        classes = [[OFMutableArray alloc] init];
-        functions = [[OFMutableArray alloc] init];
-        enumerations = [[OFMutableArray alloc] init];
-        constants = [[OFMutableArray alloc] init];
-        interfaces = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIRNamespace";
+        _classes = [[OFMutableArray alloc] init];
+        _functions = [[OFMutableArray alloc] init];
+        _enumerations = [[OFMutableArray alloc] init];
+        _constants = [[OFMutableArray alloc] init];
+        _interfaces = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -57,7 +57,7 @@
     return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (instancetype)initWithDictionary:(OFDictionary*)dict
 {
     self = [self init];
 
@@ -90,23 +90,23 @@
         } else if ([key isEqual:@"class"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRClass class]
-                                  andArray:classes];
+                                  andArray:_classes];
         } else if ([key isEqual:@"function"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRFunction class]
-                                  andArray:functions];
+                                  andArray:_functions];
         } else if ([key isEqual:@"enumeration"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIREnumeration class]
-                                  andArray:enumerations];
+                                  andArray:_enumerations];
         } else if ([key isEqual:@"constant"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRConstant class]
-                                  andArray:constants];
+                                  andArray:_constants];
         } else if ([key isEqual:@"interface"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRInterface class]
-                                  andArray:interfaces];
+                                  andArray:_interfaces];
         } else {
             [self logUnknownElement:key];
         }
@@ -115,14 +115,15 @@
 
 - (void)dealloc
 {
-    [name release];
-    [cSymbolPrefixes release];
-    [cIdentifierPrefixes release];
-    [classes release];
-    [functions release];
-    [enumerations release];
-    [constants release];
-    [interfaces release];
+    [_name release];
+    [_cSymbolPrefixes release];
+    [_cIdentifierPrefixes release];
+    [_classes release];
+    [_functions release];
+    [_enumerations release];
+    [_constants release];
+    [_interfaces release];
+
     [super dealloc];
 }
 

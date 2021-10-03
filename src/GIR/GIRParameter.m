@@ -29,25 +29,25 @@
 
 @implementation GIRParameter
 
-@synthesize name;
-@synthesize transferOwnership;
-@synthesize direction;
-@synthesize scope;
-@synthesize allowNone;
-@synthesize callerAllocates;
-@synthesize closure;
-@synthesize destroy;
-@synthesize doc;
-@synthesize type;
-@synthesize array;
-@synthesize varargs;
+@synthesize name = _name;
+@synthesize transferOwnership = _transferOwnership;
+@synthesize direction = _direction;
+@synthesize scope = _scope;
+@synthesize allowNone = _allowNone;
+@synthesize callerAllocates = _callerAllocates;
+@synthesize closure = _closure;
+@synthesize destroy = _destroy;
+@synthesize doc = _doc;
+@synthesize type = _type;
+@synthesize array = _array;
+@synthesize varargs = _varargs;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRParameter";
+        _elementTypeName = @"GIRParameter";
     } @catch (id e) {
         [self release];
         @throw e;
@@ -114,14 +114,15 @@
 
 - (void)dealloc
 {
-    [name release];
-    [transferOwnership release];
-    [direction release];
-    [scope release];
-    [doc release];
-    [type release];
-    [array release];
-    [varargs release];
+    [_name release];
+    [_transferOwnership release];
+    [_direction release];
+    [_scope release];
+    [_doc release];
+    [_type release];
+    [_array release];
+    [_varargs release];
+
     [super dealloc];
 }
 

@@ -34,18 +34,18 @@
 #import "GIRVarargs.h"
 
 @interface GIRParameter : GIRBase {
-    OFString* name;
-    OFString* transferOwnership;
-    OFString* direction;
-    OFString* scope;
-    bool allowNone;
-    bool callerAllocates;
-    long closure;
-    long destroy;
-    GIRDoc* doc;
-    GIRType* type;
-    GIRArray* array;
-    GIRVarargs* varargs;
+    OFString* _name;
+    OFString* _transferOwnership;
+    OFString* _direction;
+    OFString* _scope;
+    bool _allowNone;
+    bool _callerAllocates;
+    long _closure;
+    long _destroy;
+    GIRDoc* _doc;
+    GIRType* _type;
+    GIRArray* _array;
+    GIRVarargs* _varargs;
 }
 
 @property (nonatomic, retain) OFString* name;

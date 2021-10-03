@@ -31,15 +31,16 @@
 #import "OGTKClass.h"
 
 @implementation OGTKClass
+@synthesize cName = _cName, cType = _cType, cParentType = _cParentType;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        constructors = [[OFMutableArray alloc] init];
-        functions = [[OFMutableArray alloc] init];
-        methods = [[OFMutableArray alloc] init];
+        _constructors = [[OFMutableArray alloc] init];
+        _functions = [[OFMutableArray alloc] init];
+        _methods = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -48,129 +49,76 @@
     return self;
 }
 
-- (void)setCName:(OFString*)name
-{
-    if (cName != nil) {
-        [cName release];
-    }
-
-    if (name == nil) {
-        cName = nil;
-    } else {
-        cName = [name retain];
-    }
-}
-
-- (OFString*)cName
-{
-    return [[cName retain] autorelease];
-}
-
-- (void)setCType:(OFString*)type
-{
-    if (cType != nil) {
-        [cType release];
-    }
-
-    if (type == nil) {
-        cType = nil;
-    } else {
-        cType = [type retain];
-    }
-}
-
-- (OFString*)cType
-{
-    return [[cType retain] autorelease];
-}
-
 - (OFString*)type
 {
-    return [OGTKUtil swapTypes:cType];
-}
-
-- (void)setCParentType:(OFString*)type
-{
-    if (cParentType != nil) {
-        [cParentType release];
-    }
-
-    if (type == nil) {
-        cParentType = nil;
-    } else {
-        cParentType = [type retain];
-    }
-}
-
-- (OFString*)cParentType
-{
-    return [[cParentType retain] autorelease];
+    return [OGTKUtil swapTypes:_cType];
 }
 
 - (OFString*)name
 {
-    return [OFString stringWithFormat:@"OGTK%@", cName];
+    return [OFString stringWithFormat:@"OGTK%@", _cName];
 }
 
-- (void)addConstructor:(OGTKMethod*)ctor
+- (void)addConstructor:(OGTKMethod*)constructor
 {
-    if (ctor != nil) {
-        [constructors addObject:ctor];
+    if (constructor != nil) {
+        [_constructors addObject:constructor];
     }
 }
 
 - (OFArray*)constructors
 {
-    return constructors;
+    return [[_constructors copy] autorelease];
 }
 
 - (bool)hasConstructors
 {
-    return [constructors count] != 0;
+    return (_constructors.count > 0);
 }
 
-- (void)addFunction:(OGTKMethod*)func
+- (void)addFunction:(OGTKMethod*)function
 {
-    if (func != nil) {
-        [functions addObject:func];
+    if (function != nil) {
+        [_functions addObject:function];
     }
 }
 
 - (OFArray*)functions
 {
-    return functions;
+    return [[_functions copy] autorelease];
 }
 
 - (bool)hasFunctions
 {
-    return [functions count] != 0;
+    return (_functions.count > 0);
 }
 
-- (void)addMethod:(OGTKMethod*)meth
+- (void)addMethod:(OGTKMethod*)method
 {
-    if (meth != nil) {
-        [methods addObject:meth];
+    if (method != nil) {
+        [_methods addObject:method];
     }
 }
 
 - (OFArray*)methods
 {
-    return methods;
+    return [[_methods copy] autorelease];
 }
 
 - (bool)hasMethods
 {
-    return [methods count] != 0;
+    return (_methods.count > 0);
 }
 
 - (void)dealloc
 {
-    [cName release];
-    [cType release];
-    [cParentType release];
-    [constructors release];
-    [functions release];
-    [methods release];
+    [_cName release];
+    [_cType release];
+    [_cParentType release];
+    [_constructors release];
+    [_functions release];
+    [_methods release];
+
     [super dealloc];
 }
 

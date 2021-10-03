@@ -33,15 +33,15 @@
 #import "GIRMember.h"
 
 @interface GIREnumeration : GIRBase {
-    OFString* cType;
-    OFString* name;
-    OFString* version;
-    OFString* deprecatedVersion;
-    bool deprecated;
-    GIRDoc* doc;
-    GIRDoc* docDeprecated;
-    OFMutableArray* members;
-    OFMutableArray* functions;
+    OFString* _cType;
+    OFString* _name;
+    OFString* _version;
+    OFString* _deprecatedVersion;
+    bool _deprecated;
+    GIRDoc* _doc;
+    GIRDoc* _docDeprecated;
+    OFMutableArray* _members;
+    OFMutableArray* _functions;
 }
 
 @property (nonatomic, retain) OFString* cType;

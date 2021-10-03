@@ -29,18 +29,18 @@
 
 @implementation GIRField
 
-@synthesize name;
-@synthesize isPrivate;
-@synthesize readable;
-@synthesize bits;
-@synthesize type;
-@synthesize array;
+@synthesize name = _name;
+@synthesize isPrivate = _isPrivate;
+@synthesize readable = _readable;
+@synthesize bits = _bits;
+@synthesize type = _type;
+@synthesize array = _array;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRField";
+    _elementTypeName = @"GIRField";
 
     return self;
 }
@@ -88,9 +88,10 @@
 
 - (void)dealloc
 {
-    [name release];
-    [type release];
-    [array release];
+    [_name release];
+    [_type release];
+    [_array release];
+
     [super dealloc];
 }
 

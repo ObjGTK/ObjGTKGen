@@ -32,8 +32,18 @@
  */
 @interface OGTKCallbackData : OFObject {
     id _object;
-    SEL _sel;
+    SEL _selector;
 }
+
+/**
+ * The held object.
+ */
+@property (retain, nonatomic) id object;
+
+/**
+ * The held selector.
+ */
+@property (nonatomic) SEL selector;
 
 /**
  * Creates and returns a new instance of OGTKCallbackData holding the object and
@@ -41,54 +51,28 @@
  *
  * Note this returned instance is autoreleased.
  *
- * @param obj
+ * @param object
  *  The object to hold
  *
- * @param sel
+ * @param selelector
  *  The selector to hold
  *
  * @returns a new OGTKCallbackData
  */
-+ (id)withObject:(id)obj andSEL:(SEL)sel;
++ (instancetype)callbackWithObject:(id)object selector:(SEL)selector;
 
 /**
  * Creates and returns a new instance of OGTKCallbackData holding the object and
  * the selector.
  *
- * @param obj
+ * @param object
  *  The object to hold
  *
- * @param sel
+ * @param selector
  *  The selector to hold
  *
  * @returns a new OGTKCallbackData
  */
-- (id)initWithObject:(id)obj andSEL:(SEL)sel;
-
-/**
- * Gets the held object
- */
-- (id)object;
-
-/**
- * Gets the held selector
- */
-- (SEL)sel;
-
-/**
- * Sets the held object
- *
- * @param object
- *  The object to set
- */
-- (void)setObject:(id)object;
-
-/**
- * Sets the held selector
- *
- * @param sel
- *  The selector to set
- */
-- (void)setSel:(SEL)sel;
+- (instancetype)initWithObject:(id)object selector:(SEL)selector;
 
 @end

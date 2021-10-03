@@ -35,8 +35,7 @@
 /**
  * Global level CoreGTK functionality
  */
-@interface OGTK : OFObject {
-}
+@interface OGTK : OFObject
 
 /**
  * Returns the CoreGTK version string

@@ -31,16 +31,19 @@
  * Wraps GCallback signal data
  */
 @interface OGTKSignalData : OFObject {
-    id target;
-    SEL selector;
-    void* data;
-    bool retained;
+    id _target;
+    SEL _selector;
+    void* _data;
+    bool _retained;
 }
 
-- (id)initWithTarget:(id)target selector:(SEL)selector data:(void*)data;
-- (id)target;
-- (SEL)selector;
-- (void*)data;
-- (bool)dataRetained;
+@property (readonly, nonatomic) id target;
+@property (readonly) SEL selector;
+@property (readonly) void* data;
+@property (readonly, getter=isDataRetained) bool dataRetained;
+
+- (instancetype)initWithTarget:(id)target
+                      selector:(SEL)selector
+                          data:(void*)data;
 
 @end

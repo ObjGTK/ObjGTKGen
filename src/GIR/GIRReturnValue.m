@@ -29,17 +29,17 @@
 
 @implementation GIRReturnValue
 
-@synthesize transferOwnership;
-@synthesize doc;
-@synthesize type;
-@synthesize array;
+@synthesize transferOwnership = _transferOwnership;
+@synthesize doc = _doc;
+@synthesize type = _type;
+@synthesize array = _array;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRReturnValue";
+        _elementTypeName = @"GIRReturnValue";
     } @catch (id e) {
         [self release];
         @throw e;
@@ -88,10 +88,11 @@
 
 - (void)dealloc
 {
-    [transferOwnership release];
-    [doc release];
-    [type release];
-    [array release];
+    [_transferOwnership release];
+    [_doc release];
+    [_type release];
+    [_array release];
+
     [super dealloc];
 }
 

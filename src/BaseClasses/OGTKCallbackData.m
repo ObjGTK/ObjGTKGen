@@ -28,52 +28,29 @@
 #import "OGTKCallbackData.h"
 
 @implementation OGTKCallbackData
+@synthesize object = _object, selector = _selector;
 
-- (id)initWithObject:(id)obj andSEL:(SEL)sel
++ (instancetype)callbackWithObject:(id)obj selector:(SEL)sel
 {
-    self = [super init];
-    _object = obj;
-    _sel = sel;
-
-    [_object retain];
-
-    return self;
+    return [[[OGTKCallbackData alloc] initWithObject:object
+                                            selector:selector] autorelease];
 }
 
-+ (id)withObject:(id)obj andSEL:(SEL)sel
+- (instancetype)initWithObject:(id)obj andSEL:(SEL)sel
 {
-    return [[[OGTKCallbackData alloc] initWithObject:obj
-                                              andSEL:sel] autorelease];
+    self = [super init];
+
+    _object = [object retain];
+    _selector = selector;
+
+    return self;
 }
 
 - (void)dealloc
 {
     [_object release];
+
     [super dealloc];
-}
-
-- (id)object
-{
-    return [[_object retain] autorelease];
-}
-
-- (SEL)sel
-{
-    return _sel;
-}
-
-- (void)setObject:(id)object
-{
-    if (_object != nil) {
-        [_object release];
-    }
-
-    _object = object;
-}
-
-- (void)setSel:(SEL)sel
-{
-    _sel = sel;
 }
 
 @end

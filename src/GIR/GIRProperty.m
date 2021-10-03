@@ -32,26 +32,26 @@
 
 @implementation GIRProperty
 
-@synthesize name;
-@synthesize transferOwnership;
-@synthesize version;
-@synthesize deprecatedVersion;
-@synthesize doc;
-@synthesize docDeprecated;
-@synthesize type;
-@synthesize allowNone;
-@synthesize constructOnly;
-@synthesize readable;
-@synthesize deprecated;
-@synthesize construct;
-@synthesize writable;
-@synthesize array;
+@synthesize name = _name;
+@synthesize transferOwnership = _transferOwnership;
+@synthesize version = _version;
+@synthesize deprecatedVersion = _deprecatedVersion;
+@synthesize doc = _doc;
+@synthesize docDeprecated = _docDeprecated;
+@synthesize type = _type;
+@synthesize allowNone = _allowNone;
+@synthesize constructOnly = _constructOnly;
+@synthesize readable = _readable;
+@synthesize deprecated = _deprecated;
+@synthesize construct = _construct;
+@synthesize writable = _writable;
+@synthesize array = _array;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRProperty";
+    _elementTypeName = @"GIRProperty";
 
     return self;
 }
@@ -86,7 +86,7 @@
         } else if ([key isEqual:@"deprecated-version"]) {
             self.deprecatedVersion = value;
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"doc-deprecated"]) {
             self.docDeprecated =
                 [[[GIRDoc alloc] initWithDictionary:value] autorelease];
@@ -116,16 +116,17 @@
 
 - (void)dealloc
 {
-    [name release];
-    [transferOwnership release];
-    [version release];
-    [deprecatedVersion release];
-    [doc release];
-    [docDeprecated release];
-    [type release];
-    [construct release];
-    [writable release];
-    [array release];
+    [_name release];
+    [_transferOwnership release];
+    [_version release];
+    [_deprecatedVersion release];
+    [_doc release];
+    [_docDeprecated release];
+    [_type release];
+    [_construct release];
+    [_writable release];
+    [_array release];
+
     [super dealloc];
 }
 

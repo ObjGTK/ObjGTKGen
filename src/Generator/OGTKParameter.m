@@ -31,64 +31,23 @@
  * Abstracts Parameter operations
  */
 @implementation OGTKParameter
-
-- (id)init
-{
-    self = [super init];
-
-    return self;
-}
-
-- (void)setCType:(OFString*)type
-{
-    if (cType != nil) {
-        [cType release];
-    }
-
-    if (type == nil) {
-        cType = nil;
-    } else {
-        cType = [type retain];
-    }
-}
-
-- (OFString*)cType
-{
-    return [[cType retain] autorelease];
-}
+@synthesize cType = _cType, cName = _cName;
 
 - (OFString*)type
 {
-    return [OGTKUtil swapTypes:[self cType]];
-}
-
-- (void)setCName:(OFString*)name
-{
-    if (cName != nil) {
-        [cName release];
-    }
-
-    if (name == nil) {
-        cName = nil;
-    } else {
-        cName = [name retain];
-    }
-}
-
-- (OFString*)cName
-{
-    return [[cName retain] autorelease];
+    return [OGTKUtil swapTypes:_cType];
 }
 
 - (OFString*)name
 {
-    return [OGTKUtil convertUSSToCamelCase:cName];
+    return [OGTKUtil convertUSSToCamelCase:_cName];
 }
 
 - (void)dealloc
 {
-    [cType release];
-    [cName release];
+    [_cType release];
+    [_cName release];
+
     [super dealloc];
 }
 

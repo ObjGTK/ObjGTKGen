@@ -29,9 +29,8 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 
 + (NSDictionary*)dictionaryForXMLString:(OFString*)string
 {
-    XMLReader* reader = [[XMLReader alloc] init];
+    XMLReader* reader = [[[XMLReader alloc] init] autorelease];
     OFDictionary* rootDictionary = [reader dictionaryForXMLString:string];
-    [reader release];
     return rootDictionary;
 }
 
@@ -40,30 +39,32 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 
 - (void)dealloc
 {
-    [dictionaryStack release];
-    [textInProgress release];
+    [_dictionaryStack release];
+    [_textInProgress release];
+
     [super dealloc];
 }
 
 - (OFDictionary*)dictionaryForXMLString:(OFString*)string
 {
     // Clear out any old data
-    [dictionaryStack release];
-    [textInProgress release];
+    [_dictionaryStack release];
+    [_textInProgress release];
+    _dictionaryStack = nil;
+    _textInProgress = nil;
 
-    dictionaryStack = [[OFMutableArray alloc] init];
-    textInProgress = [[OFMutableString alloc] init];
+    _dictionaryStack = [[OFMutableArray alloc] init];
+    _textInProgress = [[OFMutableString alloc] init];
 
     // Initialize the stack with a fresh dictionary
-    [dictionaryStack addObject:[OFMutableDictionary dictionary]];
+    [_dictionaryStack addObject:[OFMutableDictionary dictionary]];
 
     // Parse the XML
-    OFXMLParser* parser = [[OFXMLParser alloc] init];
+    OFXMLParser* parser = [OFXMLParser parser];
     parser.delegate = self;
     [parser parseString:string];
 
-    OFDictionary* resultDict = [dictionaryStack objectAtIndex:0];
-    return resultDict;
+    return [_dictionaryStack objectAtIndex:0];
 }
 
 #pragma mark -
@@ -76,7 +77,7 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
          attributes:(OFArray*)attributes
 {
     // Get the dictionary for the current level in the stack
-    OFMutableDictionary* parentDict = [dictionaryStack lastObject];
+    OFMutableDictionary* parentDict = [_dictionaryStack lastObject];
 
     // Create the child dictionary for the new element, and initialize it with
     // the attributes
@@ -113,14 +114,14 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
     }
 
     // Update the stack
-    [dictionaryStack addObject:childDict];
+    [_dictionaryStack addObject:childDict];
 }
 
 - (OFString*)reAddPrefixToAttribute:(OFXMLAttribute*)attribute
 {
     // Prefixes are added for namespace binding
     if (!attribute.namespace)
-        return [OFString stringWithString:attribute.name];
+        return attribute.name;
 
     OFString* attributeName;
 
@@ -135,7 +136,7 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
     else {
         OFLog(@"Unknown namespace %@ for attribute %@", attribute.namespace,
             attribute.name);
-        attributeName = [OFString stringWithString:attribute.name];
+        attributeName = attribute.name;
     }
 
     return attributeName;
@@ -147,26 +148,27 @@ OFString* const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
         namespace:(OFString*)namespace
 {
     // Update the parent dict with text info
-    OFMutableDictionary* dictInProgress = [dictionaryStack lastObject];
+    OFMutableDictionary* dictInProgress = [_dictionaryStack lastObject];
 
     // Set the text property
-    if ([textInProgress length] > 0) {
+    if ([_textInProgress length] > 0) {
         // Get rid of leading + trailing whitespace
-        [dictInProgress setObject:textInProgress forKey:kXMLReaderTextNodeKey];
+        [dictInProgress setObject:_textInProgress forKey:kXMLReaderTextNodeKey];
 
         // Reset the text
-        [textInProgress release];
-        textInProgress = [[OFMutableString alloc] init];
+        [_textInProgress release];
+        _textInProgress = nil;
+        _textInProgress = [[OFMutableString alloc] init];
     }
 
     // Pop the current dict
-    [dictionaryStack removeLastObject];
+    [_dictionaryStack removeLastObject];
 }
 
 - (void)parser:(OFXMLParser*)parser foundCharacters:(OFString*)string
 {
     // Build the text value
-    [textInProgress appendString:string];
+    [_textInProgress appendString:string];
 }
 
 @end

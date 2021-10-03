@@ -29,14 +29,14 @@
 
 @implementation GIRType
 
-@synthesize cType;
-@synthesize name;
+@synthesize cType = _cType;
+@synthesize name = _name;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRType";
+    _elementTypeName = @"GIRType";
 
     return self;
 }
@@ -74,8 +74,9 @@
 
 - (void)dealloc
 {
-    [cType release];
-    [name release];
+    [_cType release];
+    [_name release];
+
     [super dealloc];
 }
 

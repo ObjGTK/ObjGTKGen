@@ -34,8 +34,7 @@
 /**
  * OGTKBuilder adds additional functionality to GtkBuilder
  */
-@interface OGTKBaseBuilder : OFObject {
-}
+@interface OGTKBaseBuilder : OFObject
 
 /**
  * When enabled this builder will print out signal connection debug info

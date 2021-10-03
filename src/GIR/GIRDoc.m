@@ -29,15 +29,15 @@
 
 @implementation GIRDoc
 
-@synthesize xmlSpace;
-@synthesize xmlWhitespace;
-@synthesize docText;
+@synthesize xmlSpace = _xmlSpace;
+@synthesize xmlWhitespace = _xmlWhitespace;
+@synthesize docText = _docText;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRDoc";
+    _elementTypeName = @"GIRDoc";
 
     return self;
 }
@@ -77,9 +77,10 @@
 
 - (void)dealloc
 {
-    [xmlSpace release];
-    [xmlWhitespace release];
-    [docText release];
+    [_xmlSpace release];
+    [_xmlWhitespace release];
+    [_docText release];
+
     [super dealloc];
 }
 

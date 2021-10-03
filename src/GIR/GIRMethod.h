@@ -33,21 +33,21 @@
 #import "GIRReturnValue.h"
 
 @interface GIRMethod : GIRBase {
-    OFString* name;
-    OFString* cIdentifier;
-    OFString* version;
-    OFString* invoker;
-    GIRReturnValue* returnValue;
-    GIRDoc* doc;
-    GIRDoc* docDeprecated;
-    bool deprecated;
-    OFString* deprecatedVersion;
-    bool throws;
-    bool introspectable;
-    bool shadowedBy;
-    bool shadows;
-    OFMutableArray* parameters;
-    OFMutableArray* instanceParameters;
+    OFString* _name;
+    OFString* _cIdentifier;
+    OFString* _version;
+    OFString* _invoker;
+    GIRReturnValue* _returnValue;
+    GIRDoc* _doc;
+    GIRDoc* _docDeprecated;
+    bool _deprecated;
+    OFString* _deprecatedVersion;
+    bool _throws;
+    bool _introspectable;
+    bool _shadowedBy;
+    bool _shadows;
+    OFMutableArray* _parameters;
+    OFMutableArray* _instanceParameters;
 }
 
 @property (nonatomic, copy) OFString* name;

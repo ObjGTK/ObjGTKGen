@@ -36,8 +36,7 @@
 /**
  * Functions to write in memory Class representation to file as ObjGTK source
  */
-@interface OGTKClassWriter : OFObject {
-}
+@interface OGTKClassWriter : OFObject
 
 /**
  * Generate both header and source files based on class and save them in

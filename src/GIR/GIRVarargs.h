@@ -29,7 +29,6 @@
 
 #import "GIRBase.h"
 
-@interface GIRVarargs : GIRBase {
-}
+@interface GIRVarargs : GIRBase
 
 @end

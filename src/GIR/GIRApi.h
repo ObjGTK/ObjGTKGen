@@ -31,13 +31,13 @@
 #import "GIRNamespace.h"
 
 @interface GIRApi : GIRBase {
-    OFString* version;
-    OFString* cInclude;
-    OFMutableArray* namespaces;
+    OFString* _version;
+    OFString* _cInclude;
+    OFMutableArray* _namespaces;
 }
 
 @property (nonatomic, retain) OFString* version;
 @property (nonatomic, retain) OFString* cInclude;
-@property (nonatomic, retain) OFMutableArray* namespaces;
+@property (nonatomic, retain) OFArray* namespaces;
 
 @end

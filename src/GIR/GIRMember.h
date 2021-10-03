@@ -32,10 +32,10 @@
 #import "GIRDoc.h"
 
 @interface GIRMember : GIRBase {
-    OFString* cIdentifier;
-    OFString* name;
-    long theValue;
-    GIRDoc* doc;
+    OFString* _cIdentifier;
+    OFString* _name;
+    long _theValue;
+    GIRDoc* _doc;
 }
 
 @property (nonatomic, retain) OFString* cIdentifier;

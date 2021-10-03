@@ -29,11 +29,11 @@
 
 @implementation GIRVarargs
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
-    elementTypeName = @"GIRVarargs";
+    _elementTypeName = @"GIRVarargs";
 
     return self;
 }
@@ -63,11 +63,6 @@
             [self logUnknownElement:key];
         }
     }
-}
-
-- (void)dealloc
-{
-    [super dealloc];
 }
 
 @end

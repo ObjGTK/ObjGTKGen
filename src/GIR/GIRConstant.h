@@ -32,15 +32,15 @@
 #import "GIRType.h"
 
 @interface GIRConstant : GIRBase {
-    OFString* cType;
-    OFString* name;
-    OFString* theValue;
-    OFString* version;
-    OFString* deprecatedVersion;
-    bool deprecated;
-    GIRDoc* doc;
-    GIRDoc* docDeprecated;
-    GIRType* type;
+    OFString* _cType;
+    OFString* _name;
+    OFString* _theValue;
+    OFString* _version;
+    OFString* _deprecatedVersion;
+    bool _deprecated;
+    GIRDoc* _doc;
+    GIRDoc* _docDeprecated;
+    GIRType* _type;
 }
 
 @property (nonatomic, retain) OFString* cType;

@@ -33,37 +33,28 @@
  * Abstracts Class operations
  */
 @interface OGTKClass : OFObject {
-    OFString* cName;
-    OFString* cType;
-    OFString* cParentType;
-    OFMutableArray* constructors;
-    OFMutableArray* functions;
-    OFMutableArray* methods;
+    OFString* _cName;
+    OFString* _cType;
+    OFString* _cParentType;
+    OFMutableArray* _constructors;
+    OFMutableArray* _functions;
+    OFMutableArray* _methods;
 }
 
-- (void)setCName:(OFString*)name;
-- (OFString*)cName;
-
-- (void)setCType:(OFString*)type;
-- (OFString*)cType;
-
-- (OFString*)type;
-
-- (void)setCParentType:(OFString*)type;
-- (OFString*)cParentType;
-
-- (OFString*)name;
+@property (copy, nonatomic) OFString* cName;
+@property (copy, nonatomic) OFString* cType;
+@property (readonly, nonatomic) OFString* type;
+@property (copy, nonatomic) OFString* cParentType;
+@property (readonly, nonatomic) OFString* name;
+@property (readonly, nonatomic) OFArray* constructors;
+@property (readonly, nonatomic) bool hasConstructors;
+@property (readonly, nonatomic) OFArray* functions;
+@property (readonly, nonatomic) bool hasFunctions;
+@property (readonly, nonatomic) OFArray* methods;
+@property (readonly, nonatomic) bool hasMethods;
 
 - (void)addConstructor:(OGTKMethod*)ctor;
-- (OFArray*)constructors;
-- (bool)hasConstructors;
-
 - (void)addFunction:(OGTKMethod*)fun;
-- (OFArray*)functions;
-- (bool)hasFunctions;
-
 - (void)addMethod:(OGTKMethod*)meth;
-- (OFArray*)methods;
-- (bool)hasMethods;
 
 @end

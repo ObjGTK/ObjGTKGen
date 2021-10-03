@@ -29,17 +29,16 @@
 
 @implementation GIRApi
 
-@synthesize version;
-@synthesize cInclude;
-@synthesize namespaces;
+@synthesize version = _version;
+@synthesize cInclude = _cInclude;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
 
     @try {
-        elementTypeName = @"GIRApi";
-        namespaces = [[OFMutableArray alloc] init];
+        _elementTypeName = @"GIRApi";
+        _namespaces = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -78,18 +77,24 @@
         } else if ([key isEqual:@"namespace"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRNamespace class]
-                                  andArray:namespaces];
+                                  andArray:_namespaces];
         } else {
             [self logUnknownElement:key];
         }
     }
 }
 
+- (OFArray*)namespaces
+{
+    return [[_namespaces copy] autorelease];
+}
+
 - (void)dealloc
 {
-    [version release];
-    [cInclude release];
-    [namespaces release];
+    [_version release];
+    [_cInclude release];
+    [_namespaces release];
+
     [super dealloc];
 }
 
