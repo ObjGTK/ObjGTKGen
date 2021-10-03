@@ -60,7 +60,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -91,13 +96,16 @@
         } else if ([key isEqual:@"destroy"]) {
             self.destroy = [value longLongValue];
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"type"]) {
-            self.type = [[GIRType alloc] initWithDictionary:value];
+            self.type =
+                [[[GIRType alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"array"]) {
-            self.array = [[GIRArray alloc] initWithDictionary:value];
+            self.array =
+                [[[GIRArray alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"varargs"]) {
-            self.varargs = [[GIRVarargs alloc] initWithDictionary:value];
+            self.varargs =
+                [[[GIRVarargs alloc] initWithDictionary:value] autorelease];
         } else {
             [self logUnknownElement:key];
         }

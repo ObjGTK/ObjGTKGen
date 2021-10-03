@@ -35,12 +35,7 @@
 {
     self = [super init];
 
-    @try {
-        elementTypeName = @"GIRImplements";
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+    elementTypeName = @"GIRImplements";
 
     return self;
 }
@@ -49,7 +44,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

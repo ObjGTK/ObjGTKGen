@@ -61,7 +61,12 @@
 {
     self = [self init];
 
-    [self parseDictionary:dict];
+    @try {
+        [self parseDictionary:dict];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }
@@ -83,7 +88,7 @@
         } else if ([key isEqual:@"c:symbol-prefix"]) {
             self.cSymbolPrefix = value;
         } else if ([key isEqual:@"doc"]) {
-            self.doc = [[GIRDoc alloc] initWithDictionary:value];
+            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
         } else if ([key isEqual:@"fields"]) {
             [self processArrayOrDictionary:value
                                  withClass:[GIRField class]
@@ -101,8 +106,8 @@
                                  withClass:[GIRProperty class]
                                   andArray:properties];
         } else if ([key isEqual:@"prerequisite"]) {
-            self.prerequisite =
-                [[GIRPrerequisite alloc] initWithDictionary:value];
+            self.prerequisite = [[[GIRPrerequisite alloc]
+                initWithDictionary:value] autorelease];
         } else {
             [self logUnknownElement:key];
         }

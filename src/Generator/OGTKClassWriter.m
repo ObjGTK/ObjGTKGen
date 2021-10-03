@@ -283,31 +283,26 @@
 
 + (OFString*)generateCParameterListString:(OFArray*)params
 {
-    int i;
-    OFMutableString* paramsOutput = [[OFMutableString alloc] init];
+    OFMutableString* paramsOutput = [OFMutableString string];
 
-    if (params != nil && [params count] > 0) {
-        OGTKParameter* p;
-        for (i = 0; i < [params count]; i++) {
-            p = [params objectAtIndex:i];
-            [paramsOutput appendString:[OGTKUtil convertType:[p type]
-                                                    withName:[p name]
-                                                      toType:[p cType]]];
+    size_t i = 0, count = params.count;
+    for (OGTKParameter* param in params) {
+        [paramsOutput appendString:[OGTKUtil convertType:param.type
+                                                withName:param.name
+                                                  toType:param.cType]];
 
-            if (i < [params count] - 1) {
-                [paramsOutput appendString:@", "];
-            }
-        }
+        if (i++ < count - 1)
+            [paramsOutput appendString:@", "];
     }
 
-    return [paramsOutput autorelease];
+    return paramsOutput;
 }
 
 + (OFString*)generateCParameterListWithInstanceString:(OFString*)instanceType
                                             andParams:(OFArray*)params
 {
     int i;
-    OFMutableString* paramsOutput = [[OFMutableString alloc] init];
+    OFMutableString* paramsOutput = [OFMutableString string];
 
     [paramsOutput appendString:[OGTKUtil selfTypeMethodCall:instanceType]];
 
