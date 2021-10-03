@@ -38,7 +38,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRPrerequisite";
+    elementTypeName = @"GIRPrerequisite";
 
     return self;
 }

@@ -48,8 +48,13 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRConstructor";
-    parameters = [[OFMutableArray alloc] init];
+    @try {
+        elementTypeName = @"GIRConstructor";
+        parameters = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

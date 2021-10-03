@@ -42,13 +42,17 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRNamespace";
-    classes = [[OFMutableArray alloc] init];
-    functions = [[OFMutableArray alloc] init];
-    enumerations = [[OFMutableArray alloc] init];
-    constants = [[OFMutableArray alloc] init];
-    interfaces = [[OFMutableArray alloc] init];
-
+    @try {
+        elementTypeName = @"GIRNamespace";
+        classes = [[OFMutableArray alloc] init];
+        functions = [[OFMutableArray alloc] init];
+        enumerations = [[OFMutableArray alloc] init];
+        constants = [[OFMutableArray alloc] init];
+        interfaces = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
     return self;
 }
 

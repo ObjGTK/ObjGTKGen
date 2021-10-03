@@ -40,7 +40,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRField";
+    elementTypeName = @"GIRField";
 
     return self;
 }

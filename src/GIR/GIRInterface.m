@@ -43,11 +43,16 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRInterface";
-    self.fields = [[OFMutableArray alloc] init];
-    self.methods = [[OFMutableArray alloc] init];
-    self.virtualMethods = [[OFMutableArray alloc] init];
-    self.properties = [[OFMutableArray alloc] init];
+    @try {
+        elementTypeName = @"GIRInterface";
+        fields = [[OFMutableArray alloc] init];
+        methods = [[OFMutableArray alloc] init];
+        virtualMethods = [[OFMutableArray alloc] init];
+        properties = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

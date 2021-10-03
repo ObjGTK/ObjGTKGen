@@ -33,7 +33,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRVirtualMethod";
+    elementTypeName = @"GIRVirtualMethod";
 
     return self;
 }

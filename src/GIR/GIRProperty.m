@@ -51,7 +51,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRProperty";
+    elementTypeName = @"GIRProperty";
 
     return self;
 }

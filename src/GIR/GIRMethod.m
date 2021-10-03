@@ -49,9 +49,14 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRMethod";
-    parameters = [OFMutableArray array];
-    instanceParameters = [OFMutableArray array];
+    @try {
+        elementTypeName = @"GIRMethod";
+        parameters = [[OFMutableArray alloc] init];
+        instanceParameters = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

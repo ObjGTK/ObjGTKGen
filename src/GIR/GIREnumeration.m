@@ -43,10 +43,14 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIREnumeration";
-    self.members = [[OFMutableArray alloc] init];
-    self.functions = [[OFMutableArray alloc] init];
-
+    @try {
+        elementTypeName = @"GIREnumeration";
+        members = [[OFMutableArray alloc] init];
+        functions = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
     return self;
 }
 

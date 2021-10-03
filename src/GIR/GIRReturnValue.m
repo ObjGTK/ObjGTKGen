@@ -38,7 +38,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRReturnValue";
+    elementTypeName = @"GIRReturnValue";
 
     return self;
 }

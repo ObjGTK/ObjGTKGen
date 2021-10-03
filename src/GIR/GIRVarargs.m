@@ -33,7 +33,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRVarargs";
+    elementTypeName = @"GIRVarargs";
 
     return self;
 }

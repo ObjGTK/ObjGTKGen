@@ -48,14 +48,19 @@
 {
     self = [super init];
 
-    elementTypeName = @"GIRClass";
-    constructors = [[OFMutableArray alloc] init];
-    fields = [[OFMutableArray alloc] init];
-    methods = [[OFMutableArray alloc] init];
-    virtualMethods = [[OFMutableArray alloc] init];
-    properties = [[OFMutableArray alloc] init];
-    implements = [[OFMutableArray alloc] init];
-    functions = [[OFMutableArray alloc] init];
+    @try {
+        elementTypeName = @"GIRClass";
+        constructors = [[OFMutableArray alloc] init];
+        fields = [[OFMutableArray alloc] init];
+        methods = [[OFMutableArray alloc] init];
+        virtualMethods = [[OFMutableArray alloc] init];
+        properties = [[OFMutableArray alloc] init];
+        implements = [[OFMutableArray alloc] init];
+        functions = [[OFMutableArray alloc] init];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

@@ -35,7 +35,7 @@
 {
     self = [super init];
 
-    self.elementTypeName = @"GIRImplements";
+    elementTypeName = @"GIRImplements";
 
     return self;
 }
