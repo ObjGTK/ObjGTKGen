@@ -1,5 +1,5 @@
 /*
- * CGTKCallbackData.m
+ * OGTKCallbackData.m
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,9 +25,9 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKCallbackData.h"
+#import "OGTKCallbackData.h"
 
-@implementation CGTKCallbackData
+@implementation OGTKCallbackData
 
 - (id)initWithObject:(id)obj andSEL:(SEL)sel
 {
@@ -42,7 +42,7 @@
 
 + (id)withObject:(id)obj andSEL:(SEL)sel
 {
-    return [[[CGTKCallbackData alloc] initWithObject:obj andSEL:sel] autorelease];
+    return [[[OGTKCallbackData alloc] initWithObject:obj andSEL:sel] autorelease];
 }
 
 - (void)dealloc

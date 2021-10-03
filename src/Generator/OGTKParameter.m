@@ -1,6 +1,6 @@
 /*
- * CGTKParameter.m
- * This file is part of CoreGTKGen
+ * OGTKParameter.m
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -25,12 +25,12 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKParameter.h"
+#import "OGTKParameter.h"
 
 /**
  * Abstracts Parameter operations
  */
-@implementation CGTKParameter
+@implementation OGTKParameter
 
 - (id)init
 {
@@ -59,7 +59,7 @@
 
 - (OFString*)type
 {
-    return [CGTKUtil swapTypes:[self cType]];
+    return [OGTKUtil swapTypes:[self cType]];
 }
 
 - (void)setCName:(OFString*)name
@@ -82,7 +82,7 @@
 
 - (OFString*)name
 {
-    return [CGTKUtil convertUSSToCamelCase:cName];
+    return [OGTKUtil convertUSSToCamelCase:cName];
 }
 
 - (void)dealloc

@@ -1,6 +1,6 @@
 /*
- * CGTKTypeWrapper.h
- * This file is part of ObjGTK
+ * OGTKMethod.h
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -11,12 +11,12 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /*
@@ -26,23 +26,32 @@
  */
 
 #import <ObjFW/ObjFW.h>
-#import <gtk/gtk.h>
+
+#import "OGTKParameter.h"
+#import "OGTKUtil.h"
 
 /**
- * Provides functions for wrapping GTK types
+ * Abstracts Method operations
  */
-@interface CGTKTypeWrapper : OFObject {
-    void* ptrValue;
-    gint gintValue;
+@interface OGTKMethod : OFObject {
+    OFString* cName;
+    OFString* cReturnType;
+    OFArray* parameters;
 }
 
-@property (nonatomic) gint gintValue;
+- (void)setCName:(OFString*)name;
+- (OFString*)cName;
 
-/**
- * Returns the stored ptrValue as a GValue*
- *
- * @returns GValue*
- */
-- (const GValue*)asGValuePtr;
+- (OFString*)name;
+- (OFString*)sig;
+
+- (void)setCReturnType:(OFString*)returnType;
+- (OFString*)cReturnType;
+
+- (OFString*)returnType;
+- (bool)returnsVoid;
+
+- (void)setParameters:(OFArray*)params;
+- (OFArray*)parameters;
 
 @end

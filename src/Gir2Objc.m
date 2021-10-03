@@ -1,6 +1,6 @@
 /*
  * Gir2Objc.h
- * This file is part of CoreGTKGen
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -109,18 +109,18 @@
             // Current character
             OFString* currentChar = [clazz.name substringWithRange:OFRangeMake(i, 1)];
 
-            if (i != 0 && [CGTKUtil isUppercase:currentChar]) {
+            if (i != 0 && [OGTKUtil isUppercase:currentChar]) {
                 [result appendFormat:@"_%@", [currentChar lowercaseString]];
             } else {
                 [result appendString:[currentChar lowercaseString]];
             }
         }
 
-        [CGTKUtil addToTrimMethodName:[OFString stringWithFormat:@"gtk_%@", result]];
+        [OGTKUtil addToTrimMethodName:[OFString stringWithFormat:@"gtk_%@", result]];
     }
 
     for (GIRClass* clazz in ns.classes) {
-        CGTKClass* cgtkClass = [[CGTKClass alloc] init];
+        OGTKClass* cgtkClass = [[OGTKClass alloc] init];
 
         // Set basic class properties
         [cgtkClass setCName:clazz.name];
@@ -141,13 +141,13 @@
 
             // Don't handle VarArgs constructors
             if (!foundVarArgs) {
-                CGTKMethod* objcCtor = [[CGTKMethod alloc] init];
+                OGTKMethod* objcCtor = [[OGTKMethod alloc] init];
                 [objcCtor setCName:ctor.cIdentifier];
                 [objcCtor setCReturnType:ctor.returnValue.type.cType];
 
                 OFMutableArray* paramArray = [[OFMutableArray alloc] init];
                 for (GIRParameter* param in ctor.parameters) {
-                    CGTKParameter* objcParam = [[CGTKParameter alloc] init];
+                    OGTKParameter* objcParam = [[OGTKParameter alloc] init];
 
                     if (param.type == nil && param.array != nil) {
                         [objcParam setCType:param.array.cType];
@@ -180,7 +180,7 @@
             }
 
             if (!foundVarArgs) {
-                CGTKMethod* objcFunc = [[CGTKMethod alloc] init];
+                OGTKMethod* objcFunc = [[OGTKMethod alloc] init];
                 [objcFunc setCName:func.cIdentifier];
 
                 if (func.returnValue.type == nil && func.returnValue.array != nil) {
@@ -191,7 +191,7 @@
 
                 OFMutableArray* paramArray = [[OFMutableArray alloc] init];
                 for (GIRParameter* param in func.parameters) {
-                    CGTKParameter* objcParam = [[CGTKParameter alloc] init];
+                    OGTKParameter* objcParam = [[OGTKParameter alloc] init];
 
                     if (param.type == nil && param.array != nil) {
                         [objcParam setCType:param.array.cType];
@@ -224,7 +224,7 @@
             }
 
             if (!foundVarArgs) {
-                CGTKMethod* objcMeth = [[CGTKMethod alloc] init];
+                OGTKMethod* objcMeth = [[OGTKMethod alloc] init];
                 [objcMeth setCName:meth.cIdentifier];
 
                 if (meth.returnValue.type == nil && meth.returnValue.array != nil) {
@@ -235,7 +235,7 @@
 
                 OFMutableArray* paramArray = [[OFMutableArray alloc] init];
                 for (GIRParameter* param in meth.parameters) {
-                    CGTKParameter* objcParam = [[CGTKParameter alloc] init];
+                    OGTKParameter* objcParam = [[OGTKParameter alloc] init];
 
                     if (param.type == nil && param.array != nil) {
                         [objcParam setCType:param.array.cType];
@@ -255,7 +255,7 @@
             }
         }
 
-        [CGTKClassWriter generateFilesForClass:cgtkClass inDir:[CGTKUtil globalConfigValueFor:@"outputDir"]];
+        [OGTKClassWriter generateFilesForClass:cgtkClass inDir:[OGTKUtil globalConfigValueFor:@"outputDir"]];
 
         [cgtkClass release];
     }

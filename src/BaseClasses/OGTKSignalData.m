@@ -1,5 +1,5 @@
 /*
- * CGTKSignalData.m
+ * OGTKSignalData.m
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,9 +25,9 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKSignalData.h"
+#import "OGTKSignalData.h"
 
-@implementation CGTKSignalData : OFObject
+@implementation OGTKSignalData : OFObject
 
 - (id)initWithTarget:(id)_target selector:(SEL)_selector data:(void*)_data
 {

@@ -1,5 +1,5 @@
 /*
- * CGTKTypeWrapper.m
+ * OGTKSignalConnector.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,18 +25,38 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKTypeWrapper.h"
+#import "OGTKSignalData.h"
+#import <ObjFW/ObjFW.h>
+#import <gtk/gtk.h>
+
+void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
 
 /**
- * Provides functions for wrapping GTK types
+ * Provides functions for GCallback signal connecting
  */
-@implementation CGTKTypeWrapper
-
-@synthesize gintValue;
-
-- (const GValue*)asGValuePtr
-{
-    return (const GValue*)ptrValue;
+@interface OGTKSignalConnector : OFObject {
 }
+
+/**
+ * Connects a GCallback function to a signal for a particular object. The GCallback function redirects the call to the Objective-C target and selector.
+ *
+ * @param object
+ *  The instance to connect to
+ *
+ * @param name
+ *  The signal name to connect (a string in the form of "signal-name::detail"
+ *
+ * @param target
+ *  The Objective-C class to callback to
+ *
+ * @param sel
+ *  The selector
+ *
+ * @param data
+ *  The data to pass to c_handler calls
+ *
+ * @returns a new OGTKCallbackData
+ */
++ (void)connectGpointer:(gpointer)object withSignal:(OFString*)name toTarget:(id)target withSelector:(SEL)selector andData:(gpointer)data;
 
 @end

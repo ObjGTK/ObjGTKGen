@@ -26,15 +26,15 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "CGTKBuilder.h"
-#import "CGTKCallbackData.h"
-#import "CGTKSignalConnector.h"
-#import "CGTKWidget.h"
+#import "OGTKBuilder.h"
+#import "OGTKCallbackData.h"
+#import "OGTKSignalConnector.h"
+#import "OGTKWidget.h"
 
 /**
- * CGTKBuilder adds additional functionality to GtkBuilder
+ * OGTKBuilder adds additional functionality to GtkBuilder
  */
-@interface CGTKBaseBuilder : OFObject {
+@interface OGTKBaseBuilder : OFObject {
 }
 
 /**
@@ -49,7 +49,7 @@
  *
  * Example usage:
  *  OFDictionary *dict = [[OFDictionary alloc] initWithObjectsAndKeys: 
- *  [CallbackData withObject:[CGTK class] andSEL:@selector(endMainLoop)],
+ *  [CallbackData withObject:[OGTK class] andSEL:@selector(endMainLoop)],
  *  @"mainQuit", 
  *  [CallbackData withObject:button andSEL:@selector(clicked)],
  *  @"on_button1_activate", 
@@ -59,16 +59,16 @@
  * [builder connectSignalsToObjects:dict];
  *
  * @param builder
- * A CGTKBuilder to use while attaching signals
+ * A OGTKBuilder to use while attaching signals
  *
  * @param objectSignalDictionary
  *  A dictionary mapping CallbackData objects to OFString signal names
  */
-+ (void)connectSignalsToObjectsWithBuilder:(CGTKBuilder*)builder andSignalDictionary:(OFDictionary*)objectSignalDictionary;
++ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder andSignalDictionary:(OFDictionary*)objectSignalDictionary;
 
 /**
- * Attempts to get the object witht he name returning it as a CGTKWidget. If the 
- * object is not found or not compatible with CGTKWidget this will return nil.
+ * Attempts to get the object witht he name returning it as a OGTKWidget. If the 
+ * object is not found or not compatible with OGTKWidget this will return nil.
  *
  *
  * @param builder
@@ -77,8 +77,8 @@
  * @param name
  *  the name of the object to return
  *
- * @returns the CGTKWidget or nil
+ * @returns the OGTKWidget or nil
  */
-+ (CGTKWidget*)getWidgetFromBuilder:(CGTKBuilder*)builder withName:(OFString*)name;
++ (OGTKWidget*)getWidgetFromBuilder:(OGTKBuilder*)builder withName:(OFString*)name;
 
 @end

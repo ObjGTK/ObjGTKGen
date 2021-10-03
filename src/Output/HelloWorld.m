@@ -28,13 +28,13 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "CoreGTK/CGTK.h"
-#import "CoreGTK/CGTKBaseBuilder.h"
-#import "CoreGTK/CGTKBuilder.h"
-#import "CoreGTK/CGTKButton.h"
-#import "CoreGTK/CGTKCallbackData.h"
-#import "CoreGTK/CGTKSignalConnector.h"
-#import "CoreGTK/CGTKWindow.h"
+#import "ObjGTK/OGTK.h"
+#import "ObjGTK/OGTKBaseBuilder.h"
+#import "ObjGTK/OGTKBuilder.h"
+#import "ObjGTK/OGTKButton.h"
+#import "ObjGTK/OGTKCallbackData.h"
+#import "ObjGTK/OGTKSignalConnector.h"
+#import "ObjGTK/OGTKWindow.h"
 
 @interface HelloWorld : OFObject
 
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 {
     /* This is called in all GTK applications. Arguments are parsed
     * from the command line and are returned to the application. */
-    [CGTK autoInitWithArgc:argc andArgv:argv];
+    [OGTK autoInitWithArgc:argc andArgv:argv];
 
     // Show standard example
     [HelloWorld standardExample];
@@ -71,21 +71,21 @@ int main(int argc, char* argv[])
 }
 
 /*
- * This is an example program showing some CoreGTK features
+ * This is an example program showing some ObjGTK features
  */
 + (void)standardExample //(int argc, char *argv[])
 {
-    /* We could use also CGTKWidget here instead */
-    CGTKWindow* window;
-    CGTKButton* button;
+    /* We could use also OGTKWidget here instead */
+    OGTKWindow* window;
+    OGTKButton* button;
 
     /* Create a new window */
-    window = [[CGTKWindow alloc] init:GTK_WINDOW_TOPLEVEL];
+    window = [[OGTKWindow alloc] init:GTK_WINDOW_TOPLEVEL];
 
     /* Here we connect the "destroy" event to a signal handler in the HelloWorld class */
-    [CGTKSignalConnector connectGpointer:[window WIDGET]
+    [OGTKSignalConnector connectGpointer:[window WIDGET]
                               withSignal:@"destroy"
-                                toTarget:[CGTK class]
+                                toTarget:[OGTK class]
                             withSelector:@selector(mainQuit)
                                  andData:NULL];
 
@@ -99,11 +99,11 @@ int main(int argc, char* argv[])
     [window setDefaultSizeWithWidth:400 andHeight:300];
 
     /* Creates a new button with the label "Hello World" */
-    button = [[CGTKButton alloc] initWithLabel:@"Hello World"];
+    button = [[OGTKButton alloc] initWithLabel:@"Hello World"];
 
     /* When the button receives the "clicked" signal, it will call the
      * function hello() in the HelloWorld class (below) */
-    [CGTKSignalConnector connectGpointer:[button WIDGET]
+    [OGTKSignalConnector connectGpointer:[button WIDGET]
                               withSignal:@"clicked"
                                 toTarget:[HelloWorld class]
                             withSelector:@selector(hello)
@@ -118,10 +118,10 @@ int main(int argc, char* argv[])
     /* and the window */
     [window show];
 
-    /* All GTK applications must have a [CGTK main] call. Control ends here
+    /* All GTK applications must have a [OGTK main] call. Control ends here
      * and waits for an event to occur (like a key press or
      * mouse event). */
-    [CGTK main];
+    [OGTK main];
 
     /*
 	 * Release allocated memory
@@ -130,12 +130,12 @@ int main(int argc, char* argv[])
 }
 
 /*
- * This is an example program showing how to use GLADE with CoreGTK
+ * This is an example program showing how to use GLADE with ObjGTK
  */
 + (void)gladeExample
 {
     /* Create a builder to load GLADE file */
-    CGTKBuilder* builder = [[CGTKBuilder alloc] init];
+    OGTKBuilder* builder = [[OGTKBuilder alloc] init];
 
     if ([builder addFromFileWithFilename:@"gladeExample.glade" andErr:NULL] == 0) {
         OFLog(@"Error loading GUI file");
@@ -143,20 +143,20 @@ int main(int argc, char* argv[])
     }
 
     /* Turn debug mode on so we can see signal connecting messages */
-    [CGTKBaseBuilder setDebug:true];
+    [OGTKBaseBuilder setDebug:true];
 
     /* Use signal dictionary to connect GLADE objects to Objective-C code */
     OFDictionary* dic = [[OFDictionary alloc] initWithKeysAndObjects:
-                                                  @"endGtkLoop", [CGTKCallbackData withObject:[CGTK class] andSEL:@selector(mainQuit)],
-                                              @"on_button1_clicked", [CGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(hello)],
-                                              @"on_button2_clicked", [CGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(goodbye)],
+                                                  @"endGtkLoop", [OGTKCallbackData withObject:[OGTK class] andSEL:@selector(mainQuit)],
+                                              @"on_button1_clicked", [OGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(hello)],
+                                              @"on_button2_clicked", [OGTKCallbackData withObject:[HelloWorld class] andSEL:@selector(goodbye)],
                                               nil];
 
-    /* CGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C code */
-    [CGTKBaseBuilder connectSignalsToObjectsWithBuilder:builder andSignalDictionary:dic];
+    /* OGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C code */
+    [OGTKBaseBuilder connectSignalsToObjectsWithBuilder:builder andSignalDictionary:dic];
 
     /* window is autoreleased */
-    CGTKWidget* window = [CGTKBaseBuilder getWidgetFromBuilder:builder withName:@"window1"];
+    OGTKWidget* window = [OGTKBaseBuilder getWidgetFromBuilder:builder withName:@"window1"];
     if (window != nil) {
         [window showAll];
     }
@@ -166,10 +166,10 @@ int main(int argc, char* argv[])
 	 */
     [builder release];
 
-    /* All GTK applications must have a [CGTK main] call. Control ends here
+    /* All GTK applications must have a [OGTK main] call. Control ends here
      * and waits for an event to occur (like a key press or
      * mouse event). */
-    [CGTK main];
+    [OGTK main];
 }
 
 /*
@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
  */
 + (void)destroy
 {
-    [CGTK mainQuit];
+    [OGTK mainQuit];
 }
 
 @end

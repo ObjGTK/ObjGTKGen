@@ -1,6 +1,6 @@
 /*
- * CGTKMethod.m
- * This file is part of CoreGTKGen
+ * OGTKMethod.m
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -25,9 +25,9 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKMethod.h"
+#import "OGTKMethod.h"
 
-@implementation CGTKMethod
+@implementation OGTKMethod
 
 - (id)init
 {
@@ -56,7 +56,7 @@
 
 - (OFString*)name
 {
-    return [CGTKUtil convertUSSToCamelCase:[CGTKUtil trimMethodName:cName]];
+    return [OGTKUtil convertUSSToCamelCase:[OGTKUtil trimMethodName:cName]];
 }
 
 - (OFString*)sig
@@ -69,7 +69,7 @@
     }
     // C method with only one parameter
     else if ([parameters count] == 1) {
-        CGTKParameter* p = [parameters objectAtIndex:0];
+        OGTKParameter* p = [parameters objectAtIndex:0];
 
         return [OFString stringWithFormat:@"%@:(%@)%@",
                          [self name],
@@ -83,14 +83,14 @@
         [output appendString:[OFString stringWithFormat:@"%@With", [self name]]];
 
         for (i = 0; i < [parameters count]; i++) {
-            CGTKParameter* p = [parameters objectAtIndex:i];
+            OGTKParameter* p = [parameters objectAtIndex:i];
 
             if (i != 0) {
                 [output appendString:@" and"];
             }
 
             [output appendFormat:@"%@:(%@)%@",
-                    [CGTKUtil convertUSSToCapCase:[p name]],
+                    [OGTKUtil convertUSSToCapCase:[p name]],
                     [p type],
                     [p name]];
         }
@@ -119,7 +119,7 @@
 
 - (OFString*)returnType
 {
-    return [CGTKUtil swapTypes:cReturnType];
+    return [OGTKUtil swapTypes:cReturnType];
 }
 
 - (bool)returnsVoid
@@ -141,7 +141,7 @@
         || [[self cName] isEqual:@"gtk_builder_extend_with_template"]
         || [[self cName] isEqual:@"gtk_builder_value_from_string"]
         || [[self cName] isEqual:@"gtk_builder_value_from_string_type"]) {
-        CGTKParameter* param = [[CGTKParameter alloc] init];
+        OGTKParameter* param = [[OGTKParameter alloc] init];
         [param setCType:@"GError**"];
         [param setCName:@"err"];
 

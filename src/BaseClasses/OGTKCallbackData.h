@@ -1,5 +1,5 @@
 /*
- * CGTKSignalConnector.h
+ * OGTKCallbackData.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,38 +25,68 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKSignalData.h"
 #import <ObjFW/ObjFW.h>
-#import <gtk/gtk.h>
-
-void gsignal_forwarder(gpointer gtk, CGTKSignalData* data);
 
 /**
- * Provides functions for GCallback signal connecting
+ * Holds object and selector info for gobject signal callbacks
  */
-@interface CGTKSignalConnector : OFObject {
+@interface OGTKCallbackData : OFObject {
+    id _object;
+    SEL _sel;
 }
 
 /**
- * Connects a GCallback function to a signal for a particular object. The GCallback function redirects the call to the Objective-C target and selector.
+ * Creates and returns a new instance of OGTKCallbackData holding the object and the selector.
  *
- * @param object
- *  The instance to connect to
+ * Note this returned instance is autoreleased.
  *
- * @param name
- *  The signal name to connect (a string in the form of "signal-name::detail"
- *
- * @param target
- *  The Objective-C class to callback to
+ * @param obj
+ *  The object to hold
  *
  * @param sel
- *  The selector
+ *  The selector to hold
  *
- * @param data
- *  The data to pass to c_handler calls
- *
- * @returns a new CGTKCallbackData
+ * @returns a new OGTKCallbackData
  */
-+ (void)connectGpointer:(gpointer)object withSignal:(OFString*)name toTarget:(id)target withSelector:(SEL)selector andData:(gpointer)data;
++ (id)withObject:(id)obj andSEL:(SEL)sel;
+
+/**
+ * Creates and returns a new instance of OGTKCallbackData holding the object and the selector.
+ *
+ * @param obj
+ *  The object to hold
+ *
+ * @param sel
+ *  The selector to hold
+ *
+ * @returns a new OGTKCallbackData
+ */
+- (id)initWithObject:(id)obj andSEL:(SEL)sel;
+
+/**
+ * Gets the held object
+ */
+- (id)object;
+
+/**
+ * Gets the held selector
+ */
+- (SEL)sel;
+
+/**
+ * Sets the held object
+ *
+ * @param object
+ *  The object to set
+ */
+- (void)setObject:(id)object;
+
+/**
+ * Sets the held selector
+ *
+ * @param sel
+ *  The selector to set
+ */
+- (void)setSel:(SEL)sel;
 
 @end

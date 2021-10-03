@@ -1,5 +1,5 @@
 /*
- * CGTKSignalData.h
+ * OGTKSignalData.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -30,7 +30,7 @@
 /**
  * Wraps GCallback signal data
  */
-@interface CGTKSignalData : OFObject {
+@interface OGTKSignalData : OFObject {
     id target;
     SEL selector;
     void* data;

@@ -1,40 +1,40 @@
 {
-  "CGTKMenuButton": [
-    "\"CGTKMenu.h\""
+  "OGTKMenuButton": [
+    "\"OGTKMenu.h\""
   ],
-  "CGTKTextMark": [
+  "OGTKTextMark": [
   ],
   "GtkBuilder": [
-    "\"CGTKWidget.h\""
+    "\"OGTKWidget.h\""
   ],
-  "CGTKStyleContext": [
+  "OGTKStyleContext": [
   ],
-  "CGTKClipboard": [
-    "\"CGTKTextBuffer.h\""
+  "OGTKClipboard": [
+    "\"OGTKTextBuffer.h\""
   ],
-  "CGTKContainer": [
-    "\"CGTKAdjustment.h\""
+  "OGTKContainer": [
+    "\"OGTKAdjustment.h\""
   ],
-  "CGTKTextBuffer": [
-    "\"CGTKTextChildAnchor.h\"",
-    "\"CGTKTextTag.h\"",
-    "\"CGTKTextTagTable.h\"",
-    "\"CGTKTextMark.h\""
+  "OGTKTextBuffer": [
+    "\"OGTKTextChildAnchor.h\"",
+    "\"OGTKTextTag.h\"",
+    "\"OGTKTextTagTable.h\"",
+    "\"OGTKTextMark.h\""
   ],
-  "CGTKWindow": [
-    "\"CGTKWindowGroup.h\""
+  "OGTKWindow": [
+    "\"OGTKWindowGroup.h\""
   ],
-  "CGTKApplication": [
-    "\"CGTKWindow.h\""
+  "OGTKApplication": [
+    "\"OGTKWindow.h\""
   ],
-  "CGTKWidget": [
-    "\"CGTKAccelGroup.h\"",
-    "\"CGTKClipboard.h\"",
-    "\"CGTKRcStyle.h\"",
-    "\"CGTKSettings.h\"",
-    "\"CGTKStyle.h\"",
-    "\"CGTKStyleContext.h\""
+  "OGTKWidget": [
+    "\"OGTKAccelGroup.h\"",
+    "\"OGTKClipboard.h\"",
+    "\"OGTKRcStyle.h\"",
+    "\"OGTKSettings.h\"",
+    "\"OGTKStyle.h\"",
+    "\"OGTKStyleContext.h\""
   ],
-  "CGTKSettings": [
+  "OGTKSettings": [
   ]
 }

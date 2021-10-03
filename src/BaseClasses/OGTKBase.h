@@ -1,5 +1,5 @@
 /*
- * CGTKBase.h
+ * OGTKBase.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -27,7 +27,7 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "CGTKTypeWrapper.h"
+#import "OGTKTypeWrapper.h"
 
 /*
  * C imports
@@ -37,7 +37,7 @@
 /**
  * The base class for all CoreGTK wrapper classes
  */
-@interface CGTKBase : OFObject {
+@interface OGTKBase : OFObject {
     /**
 	 * The internal GtkObject pointer
 	 */
@@ -45,24 +45,24 @@
 }
 
 /**
- * Returns a new instance of CGTKBase with the internal GObject set to obj
+ * Returns a new instance of OGTKBase with the internal GObject set to obj
  *
  * Note: the returned object is autoreleased
  *
  * @param obj
  * 	The internal GObject to use
  *
- * @returns a new CGTKBase
+ * @returns a new OGTKBase
  */
-+ (CGTKBase*)withGObject:(GObject*)obj;
++ (OGTKBase*)withGObject:(GObject*)obj;
 
 /**
- * Returns a new instance of CGTKBase with the internal GObject set to obj
+ * Returns a new instance of OGTKBase with the internal GObject set to obj
  *
  * @param obj
  * 	The internal GObject to use
  *
- * @returns a new CGTKBase
+ * @returns a new OGTKBase
  */
 - (id)initWithGObject:(GObject*)obj;
 

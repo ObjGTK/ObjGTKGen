@@ -1,6 +1,6 @@
 /*
- * CGTKClass.h
- * This file is part of CoreGTKGen
+ * OGTKParameter.h
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -27,43 +27,22 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "CGTKMethod.h"
+#import "OGTKUtil.h"
 
 /**
- * Abstracts Class operations
+ * Abstracts Parameter operations
  */
-@interface CGTKClass : OFObject {
-    OFString* cName;
+@interface OGTKParameter : OFObject {
     OFString* cType;
-    OFString* cParentType;
-    OFMutableArray* constructors;
-    OFMutableArray* functions;
-    OFMutableArray* methods;
+    OFString* cName;
 }
-
-- (void)setCName:(OFString*)name;
-- (OFString*)cName;
 
 - (void)setCType:(OFString*)type;
 - (OFString*)cType;
-
 - (OFString*)type;
 
-- (void)setCParentType:(OFString*)type;
-- (OFString*)cParentType;
-
+- (void)setCName:(OFString*)name;
+- (OFString*)cName;
 - (OFString*)name;
-
-- (void)addConstructor:(CGTKMethod*)ctor;
-- (OFArray*)constructors;
-- (bool)hasConstructors;
-
-- (void)addFunction:(CGTKMethod*)fun;
-- (OFArray*)functions;
-- (bool)hasFunctions;
-
-- (void)addMethod:(CGTKMethod*)meth;
-- (OFArray*)methods;
-- (bool)hasMethods;
 
 @end

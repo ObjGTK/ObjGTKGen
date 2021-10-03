@@ -1,6 +1,6 @@
 /*
- * CGTKUtil.h
- * This file is part of CoreGTKGen
+ * OGTKUtil.h
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -30,9 +30,9 @@
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 /**
- * Provides useful utility functions for CoreGTKGen
+ * Provides useful utility functions for ObjGTKGen
  */
-@interface CGTKUtil : OFObject {
+@interface OGTKUtil : OFObject {
 }
 
 /**
@@ -61,7 +61,7 @@
 + (OFString*)swapTypes:(OFString*)str;
 
 /**
- * Converts GTK style type_new_with_param style functions into CoreGTK initWithParam inits. If func doesn't contain "New" or "new" then it will return nil.
+ * Converts GTK style type_new_with_param style functions into ObjGTK initWithParam inits. If func doesn't contain "New" or "new" then it will return nil.
  */
 + (OFString*)convertFunctionToInit:(OFString*)func;
 

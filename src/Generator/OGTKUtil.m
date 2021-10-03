@@ -1,6 +1,6 @@
 /*
- * CGTKUtil.m
- * This file is part of CoreGTKGen
+ * OGTKUtil.m
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -28,9 +28,9 @@
 /*
  * Objective-C imports
  */
-#import "CGTKUtil.h"
+#import "OGTKUtil.h"
 
-@implementation CGTKUtil
+@implementation OGTKUtil
 
 static OFMutableArray* arrTrimMethodName;
 static OFMutableDictionary* dictGlobalConf;
@@ -76,7 +76,7 @@ static OFMutableDictionary* dictExtraMethods;
 
 + (bool)isTypeSwappable:(OFString*)str
 {
-    return [str isEqual:@"OFArray*"] || ![[CGTKUtil swapTypes:str] isEqual:str];
+    return [str isEqual:@"OFArray*"] || ![[OGTKUtil swapTypes:str] isEqual:str];
 }
 
 + (OFString*)convertFunctionToInit:(OFString*)func
@@ -139,9 +139,9 @@ static OFMutableDictionary* dictExtraMethods;
 {
     int i = 0;
 
-    // Convert CGTKFooBar into [self FOOBAR]
-    if ([type hasPrefix:@"CGTK"]) {
-        type = [CGTKUtil swapTypes:type];
+    // Convert OGTKFooBar into [self FOOBAR]
+    if ([type hasPrefix:@"OGTK"]) {
+        type = [OGTKUtil swapTypes:type];
 
         return [OFString stringWithFormat:@"[self %@]", [[type substringWithRange:OFRangeMake(3, [type length] - 3)] uppercaseString]];
     }
@@ -160,7 +160,7 @@ static OFMutableDictionary* dictExtraMethods;
                 // Current character
                 OFString* currentChar = [type substringWithRange:OFRangeMake(i, 1)];
 
-                if (i != 0 && [CGTKUtil isUppercase:currentChar] && countBetweenUnderscores > 1) {
+                if (i != 0 && [OGTKUtil isUppercase:currentChar] && countBetweenUnderscores > 1) {
                     [result appendFormat:@"_%@", [currentChar uppercaseString]];
                     countBetweenUnderscores = 0;
                 } else {
@@ -214,11 +214,11 @@ static OFMutableDictionary* dictExtraMethods;
     }
 
     // Then try to return generic Gtk type conversion
-    if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"CGTK"]) {
-        // Converting from Gtk -> CGTK
+    if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"OGTK"]) {
+        // Converting from Gtk -> OGTK
         return [OFString stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]", [toType substringWithRange:OFRangeMake(0, [toType length] - 1)], name];
-    } else if ([fromType hasPrefix:@"CGTK"] && [toType hasPrefix:@"Gtk"]) {
-        // Converting from CGTK -> Gtk
+    } else if ([fromType hasPrefix:@"OGTK"] && [toType hasPrefix:@"Gtk"]) {
+        // Converting from OGTK -> Gtk
         return [OFString stringWithFormat:@"[%@ %@]", name, [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)] uppercaseString]];
     }
 

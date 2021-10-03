@@ -1,6 +1,6 @@
 /*
- * CGTKClass.m
- * This file is part of CoreGTKGen
+ * OGTKClass.m
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -28,9 +28,9 @@
 /*
  * Objective-C imports
  */
-#import "CGTKClass.h"
+#import "OGTKClass.h"
 
-@implementation CGTKClass
+@implementation OGTKClass
 
 - (id)init
 {
@@ -81,7 +81,7 @@
 
 - (OFString*)type
 {
-    return [CGTKUtil swapTypes:cType];
+    return [OGTKUtil swapTypes:cType];
 }
 
 - (void)setCParentType:(OFString*)type
@@ -104,10 +104,10 @@
 
 - (OFString*)name
 {
-    return [OFString stringWithFormat:@"CGTK%@", cName];
+    return [OFString stringWithFormat:@"OGTK%@", cName];
 }
 
-- (void)addConstructor:(CGTKMethod*)ctor
+- (void)addConstructor:(OGTKMethod*)ctor
 {
     if (ctor != nil) {
         [constructors addObject:ctor];
@@ -124,7 +124,7 @@
     return [constructors count] != 0;
 }
 
-- (void)addFunction:(CGTKMethod*)func
+- (void)addFunction:(OGTKMethod*)func
 {
     if (func != nil) {
         [functions addObject:func];
@@ -141,7 +141,7 @@
     return [functions count] != 0;
 }
 
-- (void)addMethod:(CGTKMethod*)meth
+- (void)addMethod:(OGTKMethod*)meth
 {
     if (meth != nil) {
         [methods addObject:meth];

@@ -1,6 +1,6 @@
 /*
- * CoreGTKGen.m
- * This file is part of CoreGTKGen
+ * ObjGTKGen.m
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -29,21 +29,21 @@
 
 #import "Exceptions/OGTKIncorrectConfigException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
-#import "Generator/CGTKClassWriter.h"
+#import "Generator/OGTKClassWriter.h"
 #import "Gir2Objc.h"
 
-@interface CoreGTKGen : OFObject <OFApplicationDelegate>
+@interface ObjGTKGen : OFObject <OFApplicationDelegate>
 @end
 
-OF_APPLICATION_DELEGATE(CoreGTKGen)
+OF_APPLICATION_DELEGATE(ObjGTKGen)
 
-@implementation CoreGTKGen
+@implementation ObjGTKGen
 
 - (void)applicationDidFinishLaunching
 {
     // Step 1: parse GIR file
 
-    OFString* girFile = [CGTKUtil globalConfigValueFor:@"girFile"];
+    OFString* girFile = [OGTKUtil globalConfigValueFor:@"girFile"];
 
     OFLog(@"%@", @"Attempting to parse GIR file...");
     GIRApi* api = [Gir2Objc firstApiFromGirFile:girFile];
@@ -51,19 +51,19 @@ OF_APPLICATION_DELEGATE(CoreGTKGen)
     if (api == nil)
         @throw [OGTKNoGIRAPIException exception];
 
-    // Step 2: generate CoreGTK source files
-    OFLog(@"%@", @"Attempting to generate CoreGTK...");
+    // Step 2: generate ObjGTK source files
+    OFLog(@"%@", @"Attempting to generate ObjGTK...");
     [Gir2Objc generateClassFilesFromApi:api];
     OFLog(@"%@", @"Process complete");
 
-    // Step 3: copy CoreGTK base files
-    OFString* baseClassPath = [CGTKUtil globalConfigValueFor:@"baseClassDir"];
-    OFString* outputDir = [CGTKUtil globalConfigValueFor:@"outputDir"];
+    // Step 3: copy ObjGTK base files
+    OFString* baseClassPath = [OGTKUtil globalConfigValueFor:@"baseClassDir"];
+    OFString* outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 
     if (baseClassPath == nil || outputDir == nil)
         @throw [OGTKIncorrectConfigException exception];
 
-    OFLog(@"%@", @"Attempting to copy CoreGTK base class files...");
+    OFLog(@"%@", @"Attempting to copy ObjGTK base class files...");
     OFFileManager* fileMgr = [OFFileManager defaultManager];
 
     OFArray* srcDirContents = [fileMgr contentsOfDirectoryAtPath:baseClassPath];

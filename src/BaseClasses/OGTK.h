@@ -1,5 +1,5 @@
 /*
- * CGTK.h
+ * OGTK.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,7 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKBase.h"
+#import "OGTKBase.h"
 
 /*
  * C imports
@@ -35,7 +35,7 @@
 /**
  * Global level CoreGTK functionality
  */
-@interface CGTK : OFObject {
+@interface OGTK : OFObject {
 }
 
 /**

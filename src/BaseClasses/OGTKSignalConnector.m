@@ -1,5 +1,5 @@
 /*
- * CGTKSignalConnector.m
+ * OGTKSignalConnector.m
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,25 +25,25 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "CGTKSignalConnector.h"
+#import "OGTKSignalConnector.h"
 
 /**
  * Redirects g_signall callbacks to Objective-C class/methods
  */
-void gsignal_forwarder(gpointer gtk, CGTKSignalData* data)
+void gsignal_forwarder(gpointer gtk, OGTKSignalData* data)
 {
     [[data target] performSelector:[data selector]];
 }
 
-@implementation CGTKSignalConnector
+@implementation OGTKSignalConnector
 
 + (void)connectGpointer:(gpointer)object withSignal:(OFString*)name toTarget:(id)target withSelector:(SEL)selector andData:(gpointer)data
 {
     /*
 	 * Don't release this or else we could seg fault! (Note that to avoid memory leaks in the case of a short-lived GUI, the application should 
-	 * maintain references to the CGTKSignalData elsewhere and release it there when it is no longer needed.)
+	 * maintain references to the OGTKSignalData elsewhere and release it there when it is no longer needed.)
 	 */
-    CGTKSignalData* signalData = [[CGTKSignalData alloc] initWithTarget:(id)target selector:selector data:data];
+    OGTKSignalData* signalData = [[OGTKSignalData alloc] initWithTarget:(id)target selector:selector data:data];
 
     g_signal_connect(object, [name UTF8String], G_CALLBACK(gsignal_forwarder), signalData);
 }

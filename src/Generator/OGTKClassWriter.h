@@ -1,6 +1,6 @@
 /*
- * CGTKClassWriter.h
- * This file is part of CoreGTKGen
+ * OGTKClassWriter.h
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -30,29 +30,29 @@
  */
 #import <ObjFW/ObjFW.h>
 
-#import "CGTKClass.h"
-#import "CGTKUtil.h"
+#import "OGTKClass.h"
+#import "OGTKUtil.h"
 
 /**
- * Functions to write in memory Class representation to file as CoreGTK source
+ * Functions to write in memory Class representation to file as ObjGTK source
  */
-@interface CGTKClassWriter : OFObject {
+@interface OGTKClassWriter : OFObject {
 }
 
 /**
  * Generate both header and source files based on class and save them in outputDir
  */
-+ (void)generateFilesForClass:(CGTKClass*)cgtkClass inDir:(OFString*)outputDir;
++ (void)generateFilesForClass:(OGTKClass*)cgtkClass inDir:(OFString*)outputDir;
 
 /**
  * Generate header file contents based on class
  */
-+ (OFString*)headerStringFor:(CGTKClass*)cgtkClass;
++ (OFString*)headerStringFor:(OGTKClass*)cgtkClass;
 
 /**
  * Generate source file contents based on class
  */
-+ (OFString*)sourceStringFor:(CGTKClass*)cgtkClass;
++ (OFString*)sourceStringFor:(OGTKClass*)cgtkClass;
 
 /**
  * Generate list of paramters to pass to underlying C function
@@ -68,6 +68,6 @@
 /**
  * Uses the information in the method to return documentation for the method
  */
-+ (OFString*)generateDocumentationForMethod:(CGTKMethod*)meth;
++ (OFString*)generateDocumentationForMethod:(OGTKMethod*)meth;
 
 @end

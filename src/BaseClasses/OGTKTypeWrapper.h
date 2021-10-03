@@ -1,5 +1,5 @@
 /*
- * CGTK.m
+ * OGTKTypeWrapper.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,37 +25,24 @@
  * See the ChangeLog files for a list of changes.
  */
 
-/*
- * Objective-C imports
+#import <ObjFW/ObjFW.h>
+#import <gtk/gtk.h>
+
+/**
+ * Provides functions for wrapping GTK types
  */
-#import "CGTK.h"
-
-@implementation CGTK
-
-+ (OFString*)coreGtkVersion
-{
-    return @"3.24.0";
+@interface OGTKTypeWrapper : OFObject {
+    void* ptrValue;
+    gint gintValue;
 }
 
-+ (void)initWithArgc:(int*)argc andArgv:(char***)argv
-{
-    gtk_init(argc, argv);
-}
+@property (nonatomic) gint gintValue;
 
-+ (int)autoInitWithArgc:(int)argc andArgv:(char*[])argv
-{
-    [CGTK initWithArgc:&argc andArgv:&argv];
-    return argc;
-}
-
-+ (void)main
-{
-    gtk_main();
-}
-
-+ (void)mainQuit
-{
-    gtk_main_quit();
-}
+/**
+ * Returns the stored ptrValue as a GValue*
+ *
+ * @returns GValue*
+ */
+- (const GValue*)asGValuePtr;
 
 @end

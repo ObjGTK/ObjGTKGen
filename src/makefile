@@ -2,7 +2,7 @@
 EXECUTABLE=objgtkgen
 
 #Sources
-SOURCES=CoreGTKGen.m \
+SOURCES=ObjGTKGen.m \
 	XMLReader/XMLReader.m \
 	GIR/GIRApi.m \
 	GIR/GIRArray.m \
@@ -26,11 +26,11 @@ SOURCES=CoreGTKGen.m \
 	GIR/GIRType.m \
 	GIR/GIRVarargs.m \
 	GIR/GIRVirtualMethod.m \
-	Generator/CGTKClassWriter.m \
-	Generator/CGTKClass.m \
-	Generator/CGTKMethod.m \
-	Generator/CGTKParameter.m \
-	Generator/CGTKUtil.m \
+	Generator/OGTKClassWriter.m \
+	Generator/OGTKClass.m \
+	Generator/OGTKMethod.m \
+	Generator/OGTKParameter.m \
+	Generator/OGTKUtil.m \
 	Generator/OFDictionary+JsonContentsOfFile.m \
 	Gir2Objc.m \
 	Exceptions/OGTKIncorrectConfigException.m \
@@ -90,5 +90,5 @@ clean:
 	rm -rf XMLReader/*.o XMLReader/*.d
 	rm -rf Exceptions/*.o Exceptions/*.d
 #Uncomment these if you want to also clean the generated source files
-#	rm -rf Output/CoreGTK/*.h
-#	rm -rf Output/CoreGTK/*.m
+#	rm -rf Output/ObjGTK/*.h
+#	rm -rf Output/ObjGTK/*.m

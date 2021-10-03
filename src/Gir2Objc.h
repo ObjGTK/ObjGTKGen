@@ -1,6 +1,6 @@
 /*
  * Gir2Objc.h
- * This file is part of CoreGTKGen
+ * This file is part of ObjGTKGen
  *
  * Copyright (C) 2017 - Tyler Burton
  *
@@ -27,9 +27,9 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "Generator/CGTKClassWriter.h"
-#import "Generator/CGTKParameter.h"
-#import "Generator/CGTKUtil.h"
+#import "Generator/OGTKClassWriter.h"
+#import "Generator/OGTKParameter.h"
+#import "Generator/OGTKUtil.h"
 
 #import "GIR/GIRApi.h"
 #import "GIR/GIRNamespace.h"
@@ -40,7 +40,7 @@
 #import "XMLReader/XMLReader.h"
 
 /**
- * Provides functionality to convert GObject Introspection GIR files into CoreGTK source code
+ * Provides functionality to convert GObject Introspection GIR files into ObjGTK source code
  */
 @interface Gir2Objc : OFObject
 
@@ -62,12 +62,12 @@
 + (GIRApi*)firstApiFromGirFile:(OFString*)girFile;
 
 /**
- * Generates CoreGTK source from the GIR API level
+ * Generates ObjGTK source from the GIR API level
  */
 + (void)generateClassFilesFromApi:(GIRApi*)api;
 
 /**
- * Generates CoreGTK source from the GIR Namespace level
+ * Generates ObjGTK source from the GIR Namespace level
  */
 + (void)generateClassFilesFromNamespace:(GIRNamespace*)ns;
 
