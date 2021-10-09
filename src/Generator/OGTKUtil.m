@@ -221,10 +221,18 @@ static OFMutableDictionary* dictExtraMethods;
         return @"OGTK";
     else if ([str isEqual:@"OFString*"])
         return @"const gchar*";
+
+    // Make sure OGTKWidget never becomes "GtkWidget"
     else if ([str isEqual:@"CGTKWidget"])
         return @"Widget";
     else if ([str isEqual:@"CGTKWidget*"])
         return @"Widget*";
+
+    // Different naming, same type
+    else if ([str isEqual:@"gboolean"])
+        return @"bool";
+    else if ([str isEqual:@"bool"])
+        return @"gboolean";
 
     OFString* val = [dictSwapTypes objectForKey:str];
 
