@@ -211,17 +211,19 @@ static OFMutableDictionary* dictExtraMethods;
         @throw [OGTKReceivedNilExpectedStringException exception];
 
     // Convert basic types by hardcoding
-    if([str isEqual:@"Atk.Object"] || [str isEqual:@"Gio.Application"] || [str isEqual:@"GObject.InitiallyUnowned"] || [str isEqual:@"GObject.Object"])
+    if ([str isEqual:@"Atk.Object"] || [str isEqual:@"Gio.Application"] ||
+        [str isEqual:@"GObject.InitiallyUnowned"] ||
+        [str isEqual:@"GObject.Object"])
         return @"OGTKObject";
-    else if([str isEqual:@"const gchar*"] || [str isEqual:@"gchar*"])
+    else if ([str isEqual:@"const gchar*"] || [str isEqual:@"gchar*"])
         return @"OFString*";
-    else if([str isEqual:@"Gtk"])
+    else if ([str isEqual:@"Gtk"])
         return @"OGTK";
-    else if([str isEqual:@"OFString*"])
+    else if ([str isEqual:@"OFString*"])
         return @"const gchar*";
-    else if([str isEqual:@"CGTKWidget"])
+    else if ([str isEqual:@"CGTKWidget"])
         return @"Widget";
-    else if([str isEqual:@"CGTKWidget*"])
+    else if ([str isEqual:@"CGTKWidget*"])
         return @"Widget*";
 
     OFString* val = [dictSwapTypes objectForKey:str];
