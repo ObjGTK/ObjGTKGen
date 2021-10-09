@@ -1,5 +1,5 @@
 /*
- * OGTKBase.h
+ * OGTKObject.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -37,7 +37,7 @@
 /**
  * The base class for all CoreGTK wrapper classes
  */
-@interface OGTKBase : OFObject {
+@interface OGTKObject : OFObject {
     /**
      * The internal GtkObject pointer
      */
@@ -45,24 +45,24 @@
 }
 
 /**
- * Returns a new instance of OGTKBase with the internal GObject set to obj
+ * Returns a new instance of OGTKObject with the internal GObject set to obj
  *
  * Note: the returned object is autoreleased
  *
  * @param obj
  * 	The internal GObject to use
  *
- * @returns a new OGTKBase
+ * @returns a new OGTKObject
  */
-+ (OGTKBase*)withGObject:(GObject*)obj;
++ (OGTKObject*)withGObject:(GObject*)obj;
 
 /**
- * Returns a new instance of OGTKBase with the internal GObject set to obj
+ * Returns a new instance of OGTKObject with the internal GObject set to obj
  *
  * @param obj
  * 	The internal GObject to use
  *
- * @returns a new OGTKBase
+ * @returns a new OGTKObject
  */
 - (id)initWithGObject:(GObject*)obj;
 

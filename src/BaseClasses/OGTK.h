@@ -25,7 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "OGTKBase.h"
+#import "OGTKObject.h"
 
 /*
  * C imports

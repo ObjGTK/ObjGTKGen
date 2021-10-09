@@ -27,19 +27,19 @@
 /*
  * Objective-C imports
  */
-#import "OGTKBase.h"
+#import "OGTKObject.h"
 
-@implementation OGTKBase
+@implementation OGTKObject
 
-+ (OGTKBase*)withGtkWidget:(GtkWidget*)obj
++ (OGTKObject*)withGtkWidget:(GtkWidget*)obj
 {
-    OGTKBase* retVal = [[OGTKBase alloc] initWithGObject:(GObject*)obj];
+    OGTKObject* retVal = [[OGTKObject alloc] initWithGObject:(GObject*)obj];
     return [retVal autorelease];
 }
 
-+ (OGTKBase*)withGObject:(GObject*)obj
++ (OGTKObject*)withGObject:(GObject*)obj
 {
-    OGTKBase* retVal = [[OGTKBase alloc] initWithGObject:obj];
+    OGTKObject* retVal = [[OGTKObject alloc] initWithGObject:obj];
     return [retVal autorelease];
 }
 
