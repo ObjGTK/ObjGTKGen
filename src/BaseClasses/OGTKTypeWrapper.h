@@ -32,8 +32,8 @@
  * Provides functions for wrapping GTK types
  */
 @interface OGTKTypeWrapper : OFObject {
-    void* ptrValue;
-    gint gintValue;
+    void* _ptrValue;
+    gint _gintValue;
 }
 
 @property (nonatomic) gint gintValue;
