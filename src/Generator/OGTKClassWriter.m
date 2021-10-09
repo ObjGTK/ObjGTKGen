@@ -29,7 +29,6 @@
  * Objective-C imports
  */
 #import "OGTKClassWriter.h"
-#include <ObjFW/OFStdIOStream.h>
 
 @implementation OGTKClassWriter
 
@@ -103,7 +102,7 @@
 
         // Constructor declarations
         for (OGTKMethod* ctor in [cgtkClass constructors]) {
-            [output appendFormat:@"- (id)%@;\n",
+            [output appendFormat:@"- (instancetype)%@;\n",
                     [OGTKUtil convertFunctionToInit:[ctor sig]]];
         }
     }
@@ -200,7 +199,7 @@
 
     // Constructor implementations
     for (OGTKMethod* ctor in [cgtkClass constructors]) {
-        [output appendFormat:@"- (id)%@",
+        [output appendFormat:@"- (instancetype)%@",
                 [OGTKUtil convertFunctionToInit:[ctor sig]]];
 
         [output appendString:@"\n{\n"];
