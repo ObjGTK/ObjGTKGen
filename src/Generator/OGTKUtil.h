@@ -102,11 +102,6 @@
 + (OFArray*)extraImports:(OFString*)clazz;
 
 /**
- * Gets a list of extra methods for the class
- */
-+ (OFDictionary*)extraMethods:(OFString*)clazz;
-
-/**
  * Returns the configuration value for the provided key
  */
 + (id)globalConfigValueFor:(OFString*)key;

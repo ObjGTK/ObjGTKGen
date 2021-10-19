@@ -68,8 +68,7 @@
                                                        [cgtkClass name]]]];
 
     // Imports
-    [output appendString:@"\n/*\n * Objective-C imports\n */\n"];
-    [output appendFormat:@"#import \"%@.h\"\n",
+    [output appendFormat:@"\n#import \"%@.h\"\n",
             [OGTKUtil swapTypes:[cgtkClass cParentType]]];
 
     OFArray* extraImports = [OGTKUtil extraImports:[cgtkClass type]];
@@ -113,14 +112,6 @@
     [output appendFormat:@"- (%@*)%@;\n", [cgtkClass cType],
             [[cgtkClass cName] uppercaseString]];
 
-    OFDictionary* extraMethods = [OGTKUtil extraMethods:[cgtkClass type]];
-
-    if (extraMethods != nil) {
-        for (OFString* m in extraMethods) {
-            [output appendFormat:@"\n%@;\n", m];
-        }
-    }
-
     for (OGTKMethod* meth in [cgtkClass methods]) {
         [output appendFormat:@"\n%@\n",
                 [OGTKClassWriter generateDocumentationForMethod:meth]];
@@ -143,8 +134,7 @@
                                                        [cgtkClass name]]]];
 
     // Imports
-    [output appendString:@"\n/*\n * Objective-C imports\n */\n"];
-    [output appendFormat:@"#import \"%@.h\"\n\n", [cgtkClass name]];
+    [output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass name]];
 
     // Implementation declaration
     [output appendFormat:@"@implementation %@\n\n", [cgtkClass name]];
@@ -186,15 +176,6 @@
         }
 
         [output appendString:@"}\n\n"];
-    }
-
-    OFDictionary* extraMethods = [OGTKUtil extraMethods:[cgtkClass type]];
-
-    if (extraMethods != nil) {
-        for (OFString* m in extraMethods) {
-            [output
-                appendFormat:@"%@\n%@\n\n", m, [extraMethods objectForKey:m]];
-        }
     }
 
     // Constructor implementations

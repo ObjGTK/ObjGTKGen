@@ -36,7 +36,6 @@ static OFMutableArray* arrTrimMethodName;
 static OFMutableDictionary* dictGlobalConf;
 static OFMutableDictionary* dictSwapTypes;
 static OFMutableDictionary* dictExtraImports;
-static OFMutableDictionary* dictExtraMethods;
 
 + (OFString*)convertUSSToCamelCase:(OFString*)input
 {
@@ -291,16 +290,6 @@ static OFMutableDictionary* dictExtraMethods;
     }
 
     return [dictExtraImports objectForKey:clazz];
-}
-
-+ (OFDictionary*)extraMethods:(OFString*)clazz
-{
-    if (dictExtraMethods == nil) {
-        dictExtraMethods = [[OFMutableDictionary alloc]
-            ogtk_initWithJsonDictionaryOfFile:@"Config/extra_methods.json"];
-    }
-
-    return [dictExtraMethods objectForKey:clazz];
 }
 
 @end
