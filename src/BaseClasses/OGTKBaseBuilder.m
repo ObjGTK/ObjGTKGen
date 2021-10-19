@@ -64,7 +64,7 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder* builder,
                  withSignal:[OFString stringWithUTF8String:signal_name]
                    toTarget:obj
                withSelector:sel
-                    andData:NULL];
+                       data:NULL];
     }
 }
 
@@ -76,8 +76,8 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder* builder,
 }
 
 + (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder
-                       andSignalDictionary:
-                           (OFDictionary*)objectSignalDictionary;
+                          signalDictionary:
+                              (OFDictionary*)objectSignalDictionary;
 {
     gtk_builder_connect_signals_full([builder BUILDER],
         &gtkbuilder_connect_signals_handler, objectSignalDictionary);

@@ -64,8 +64,8 @@
  *  A dictionary mapping CallbackData objects to OFString signal names
  */
 + (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder
-                       andSignalDictionary:
-                           (OFDictionary*)objectSignalDictionary;
+                          signalDictionary:
+                              (OFDictionary*)objectSignalDictionary;
 
 /**
  * Attempts to get the object witht he name returning it as a OGTKWidget. If the

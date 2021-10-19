@@ -41,7 +41,7 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data)
              withSignal:(OFString*)name
                toTarget:(id)target
            withSelector:(SEL)selector
-                andData:(gpointer)data
+                   data:(gpointer)data
 {
     /*
      * Don't release this or else we could seg fault! (Note that to avoid memory

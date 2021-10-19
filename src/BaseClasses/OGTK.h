@@ -64,7 +64,7 @@
  *  Address of the argv parameter of main(), or NULL. Any options understood by
  *  GTK+ are stripped before return. [array length=argc][inout][allow-none]
  */
-+ (void)initWithArgc:(int*)argc andArgv:(char***)argv;
++ (void)initWithArgc:(int*)argc argv:(char***)argv;
 
 /**
  * Same as initWithArgc:andArgv: but does the type conversion automatically.
@@ -81,7 +81,7 @@
  *
  * @see initWithArgc:andArgv:
  */
-+ (int)autoInitWithArgc:(int)argc andArgv:(char*[])argv;
++ (int)autoInitWithArgc:(int)argc argv:(char*[])argv;
 
 /**
  * Runs the main loop until mainQuit is called.

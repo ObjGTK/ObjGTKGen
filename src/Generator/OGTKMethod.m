@@ -55,13 +55,14 @@
 
         bool first = true;
         for (OGTKParameter* p in _parameters) {
-            if (first)
+            if (first) {
                 first = false;
-            else
-                [output appendString:@" and"];
-
-            [output appendFormat:@"%@:(%@)%@",
+                [output appendFormat:@"%@:(%@)%@",
                     [OGTKUtil convertUSSToCapCase:p.name], p.type, p.name];
+            } else {
+                [output appendFormat:@" %@:(%@)%@",
+                    [OGTKUtil convertUSSToCamelCase:p.name], p.type, p.name];
+            }
         }
 
         return output;

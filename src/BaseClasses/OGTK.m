@@ -37,14 +37,14 @@
     return @"3.24.20";
 }
 
-+ (void)initWithArgc:(int*)argc andArgv:(char***)argv
++ (void)initWithArgc:(int*)argc argv:(char***)argv
 {
     gtk_init(argc, argv);
 }
 
-+ (int)autoInitWithArgc:(int)argc andArgv:(char*[])argv
++ (int)autoInitWithArgc:(int)argc argv:(char*[])argv
 {
-    [OGTK initWithArgc:&argc andArgv:&argv];
+    [OGTK initWithArgc:&argc argv:&argv];
     return argc;
 }
 

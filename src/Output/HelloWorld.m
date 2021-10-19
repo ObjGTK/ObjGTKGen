@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 {
     /* This is called in all GTK applications. Arguments are parsed
      * from the command line and are returned to the application. */
-    [OGTK autoInitWithArgc:argc andArgv:argv];
+    [OGTK autoInitWithArgc:argc argv:argv];
 
     // Show standard example
     [HelloWorld standardExample];
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
                               withSignal:@"destroy"
                                 toTarget:[OGTK class]
                             withSelector:@selector(mainQuit)
-                                 andData:NULL];
+                                    data:NULL];
 
     /* Sets the border width of the window */
     [window setBorderWidth:10];
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
                      [OGTK objGtkVersion]]];
 
     /* Sets the default size to 400x300 */
-    [window setDefaultSizeWithWidth:400 andHeight:300];
+    [window setDefaultSizeWithWidth:400 height:300];
 
     /* Creates a new button with the label "Hello World" */
     button = [[OGTKButton alloc] initWithLabel:@"Hello World"];
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
                               withSignal:@"clicked"
                                 toTarget:[HelloWorld class]
                             withSelector:@selector(hello)
-                                 andData:NULL];
+                                    data:NULL];
 
     /* This packs the button into the window (a gtk container) */
     [window add:button];
@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
     /* Create a builder to load GLADE file */
     OGTKBuilder* builder = [[OGTKBuilder alloc] init];
 
-    if ([builder addFromFileWithFilename:@"gladeExample.glade" andErr:NULL]
+    if ([builder addFromFileWithFilename:@"gladeExample.glade" err:NULL]
         == 0) {
         OFLog(@"Error loading GUI file");
         return;
@@ -154,20 +154,19 @@ int main(int argc, char* argv[])
     /* Use signal dictionary to connect GLADE objects to Objective-C code */
     OFDictionary* dic = [[OFDictionary alloc]
         initWithKeysAndObjects:@"endGtkLoop",
-        [OGTKCallbackData callbackWithObject:[OGTK class]
-                                    selector:@selector(mainQuit)],
+        [OGTKCallbackData callbackWithObject:[OGTK class] selector:@selector(mainQuit)],
         @"on_button1_clicked",
         [OGTKCallbackData callbackWithObject:[HelloWorld class]
-                                    selector:@selector(hello)],
+                            selector:@selector(hello)],
         @"on_button2_clicked",
         [OGTKCallbackData callbackWithObject:[HelloWorld class]
-                                    selector:@selector(goodbye)],
+                            selector:@selector(goodbye)],
         nil];
 
     /* OGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C
      * code */
     [OGTKBaseBuilder connectSignalsToObjectsWithBuilder:builder
-                                    andSignalDictionary:dic];
+                                       signalDictionary:dic];
 
     /* window is autoreleased */
     OGTKWidget* window = [OGTKBaseBuilder getWidgetFromBuilder:builder

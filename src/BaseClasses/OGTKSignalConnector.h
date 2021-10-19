@@ -61,6 +61,6 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
              withSignal:(OFString*)name
                toTarget:(id)target
            withSelector:(SEL)selector
-                andData:(gpointer)data;
+                   data:(gpointer)data;
 
 @end
