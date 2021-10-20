@@ -37,10 +37,14 @@
 {
     self = [super init];
 
-    _target = [target retain];
-    _selector = selector;
-    _data = data;
-
+    @try {
+        _target = [target retain];
+        _selector = selector;
+        _data = data;
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
     return self;
 }
 

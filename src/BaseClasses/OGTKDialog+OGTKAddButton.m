@@ -38,13 +38,17 @@
                                       [title UTF8String], [parent WINDOW],
                                       flags, NULL, NULL)];
 
-    OGTKTypeWrapper* wrapper;
-    for (OFString* text in buttonTextDict) {
-        wrapper = [buttonTextDict objectForKey:text];
+    @try {
+        OGTKTypeWrapper* wrapper;
+        for (OFString* text in buttonTextDict) {
+            wrapper = [buttonTextDict objectForKey:text];
 
-        [self addButtonWithButtonText:text responseId:wrapper.gintValue];
+            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
+        }
+    } @catch (id e) {
+        [self release];
+        @throw e;
     }
-
     return self;
 }
 

@@ -47,7 +47,16 @@
 {
     self = [super init];
 
-    [self setGObject:obj];
+    @try {
+        if (obj == NULL)
+            @throw [OGTKGObjectInitializationFailedException
+                exceptionWithClass:[self class]];
+
+        [self setGObject:obj];
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
 
     return self;
 }

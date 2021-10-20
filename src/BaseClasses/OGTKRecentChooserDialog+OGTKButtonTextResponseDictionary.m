@@ -37,14 +37,19 @@
         initWithGObject:(GObject*)gtk_recent_chooser_dialog_new(
                             [title UTF8String], [parent WINDOW], NULL, NULL)];
 
-    OGTKTypeWrapper* wrapper;
+    @try {
+        OGTKTypeWrapper* wrapper;
 
-    for (OFString* text in buttonTextDict) {
-        wrapper = [buttonTextDict objectForKey:text];
+        for (OFString* text in buttonTextDict) {
+            wrapper = [buttonTextDict objectForKey:text];
 
-        [self addButtonWithButtonText:text responseId:wrapper.gintValue];
+            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
+        }
+
+    } @catch (id e) {
+        [self release];
+        @throw e;
     }
-
     return self;
 }
 
@@ -58,14 +63,18 @@
                             [title UTF8String], [parent WINDOW], manager, NULL,
                             NULL)];
 
-    OGTKTypeWrapper* wrapper;
+    @try {
+        OGTKTypeWrapper* wrapper;
 
-    for (OFString* text in buttonTextDict) {
-        wrapper = [buttonTextDict objectForKey:text];
+        for (OFString* text in buttonTextDict) {
+            wrapper = [buttonTextDict objectForKey:text];
 
-        [self addButtonWithButtonText:text responseId:wrapper.gintValue];
+            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
+        }
+    } @catch (id e) {
+        [self release];
+        @throw e;
     }
-
     return self;
 }
 

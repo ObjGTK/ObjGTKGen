@@ -28,6 +28,7 @@
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKTypeWrapper.h"
+#import "OGTKGObjectInitializationFailedException.h"
 
 /*
  * C imports

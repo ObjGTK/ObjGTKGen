@@ -40,9 +40,13 @@
 {
     self = [super init];
 
-    _object = [object retain];
-    _selector = selector;
-
+    @try {
+        _object = [object retain];
+        _selector = selector;
+    } @catch (id e) {
+        [self release];
+        @throw e;
+    }
     return self;
 }
 
