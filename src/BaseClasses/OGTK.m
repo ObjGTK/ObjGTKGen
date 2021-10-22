@@ -29,7 +29,6 @@
  * Objective-C imports
  */
 #import "OGTK.h"
-#include <ObjFW/OFObject.h>
 
 OFString* const OGTKVersion = @"0.1";
 
