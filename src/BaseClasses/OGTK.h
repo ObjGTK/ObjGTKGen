@@ -26,11 +26,9 @@
  */
 
 #import "OGTKObject.h"
-
-/*
- * C imports
- */
 #import <gtk/gtk.h>
+
+extern OFString* const OGTKVersion;
 
 /**
  * Global level CoreGTK functionality
