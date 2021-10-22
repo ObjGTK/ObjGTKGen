@@ -45,6 +45,13 @@
 + (OFString*)objGtkVersion;
 
 /**
+ * Returns the GTK version string
+ *
+ * @return the version string
+ */
++ (OFString*)gtkVersion;
+
+/**
  * Call this function before using any other GTK+ functions in your GUI
  * applications. It will initialize everything needed to operate the toolkit and
  * parses some standard command line options.

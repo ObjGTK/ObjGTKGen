@@ -34,7 +34,12 @@
 
 + (OFString*)objGtkVersion
 {
-    return @"3.24.20";
+    return @"0.1";
+}
+
++ (OFString*)gtkVersion
+{
+    return [OFString stringWithFormat:@"%i.%i.%i", gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version()];
 }
 
 + (void)initWithArgc:(int*)argc argv:(char***)argv

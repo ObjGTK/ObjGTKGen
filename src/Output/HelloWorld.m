@@ -94,11 +94,9 @@ int main(int argc, char* argv[])
     [window setBorderWidth:10];
 
     /* Sets the title text of the window */
-    [window
-        setTitle:[OFString
-                     stringWithFormat:
-                         @"This is ObjGTK supporting GTK+ %@ (elementary OS)!",
-                     [OGTK objGtkVersion]]];
+    [window setTitle:[OFString stringWithFormat:@"This is ObjGTK %@ supporting "
+                                                @"GTK+ %@!",
+                               [OGTK objGtkVersion], [OGTK gtkVersion]]];
 
     /* Sets the default size to 400x300 */
     [window setDefaultSizeWithWidth:400 height:300];
@@ -142,8 +140,7 @@ int main(int argc, char* argv[])
     /* Create a builder to load GLADE file */
     OGTKBuilder* builder = [[OGTKBuilder alloc] init];
 
-    if ([builder addFromFileWithFilename:@"gladeExample.glade" err:NULL]
-        == 0) {
+    if ([builder addFromFileWithFilename:@"gladeExample.glade" err:NULL] == 0) {
         OFLog(@"Error loading GUI file");
         return;
     }
@@ -154,13 +151,14 @@ int main(int argc, char* argv[])
     /* Use signal dictionary to connect GLADE objects to Objective-C code */
     OFDictionary* dic = [[OFDictionary alloc]
         initWithKeysAndObjects:@"endGtkLoop",
-        [OGTKCallbackData callbackWithObject:[OGTK class] selector:@selector(mainQuit)],
+        [OGTKCallbackData callbackWithObject:[OGTK class]
+                                    selector:@selector(mainQuit)],
         @"on_button1_clicked",
         [OGTKCallbackData callbackWithObject:[HelloWorld class]
-                            selector:@selector(hello)],
+                                    selector:@selector(hello)],
         @"on_button2_clicked",
         [OGTKCallbackData callbackWithObject:[HelloWorld class]
-                            selector:@selector(goodbye)],
+                                    selector:@selector(goodbye)],
         nil];
 
     /* OGTKBaseBuilder is a helper class to maps GLADE signals to Objective-C
