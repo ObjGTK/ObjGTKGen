@@ -39,7 +39,8 @@
 
 + (OFString*)gtkVersion
 {
-    return [OFString stringWithFormat:@"%i.%i.%i", gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version()];
+    return [OFString stringWithFormat:@"%i.%i.%i", gtk_get_major_version(),
+                     gtk_get_minor_version(), gtk_get_micro_version()];
 }
 
 + (void)initWithArgc:(int*)argc argv:(char***)argv
