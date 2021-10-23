@@ -29,9 +29,12 @@
  * Objective-C imports
  */
 #import "OGTKClass.h"
+#include <ObjFW/OFStdIOStream.h>
 
 @implementation OGTKClass
-@synthesize cName = _cName, cType = _cType, cParentType = _cParentType;
+@synthesize cName = _cName, cType = _cType, cParentType = _cParentType,
+            cSymbolPrefix = _cSymbolPrefix,
+            cIdentifierPrefix = _cIdentifierPrefix;
 
 - (instancetype)init
 {
@@ -51,7 +54,21 @@
 
 - (OFString*)type
 {
-    return [OGTKUtil swapTypes:_cType];
+    if(self.cType == nil)
+        @throw [OGTKReceivedNilExpectedStringException exception];
+
+    if ([self.cIdentifierPrefix isEqual:@"Gtk"] &&
+        [self.cType hasPrefix:@"Gtk"]) {
+
+        size_t prefixLength = self.cIdentifierPrefix.length;
+
+        OFString* typeWithoutPrefix =
+            [self.cType substringFromIndex:prefixLength];
+
+        return [OFString stringWithFormat:@"OGTK%@", typeWithoutPrefix];
+    }
+
+    return [OFString stringWithFormat:@"OG%@%@", self.cType];
 }
 
 - (OFString*)name

@@ -36,6 +36,8 @@
     OFString* _cName;
     OFString* _cType;
     OFString* _cParentType;
+    OFString* _cSymbolPrefix;
+    OFString* _cIdentifierPrefix;
     OFMutableArray* _constructors;
     OFMutableArray* _functions;
     OFMutableArray* _methods;
@@ -45,6 +47,8 @@
 @property (copy, nonatomic) OFString* cType;
 @property (readonly, nonatomic) OFString* type;
 @property (copy, nonatomic) OFString* cParentType;
+@property (copy, nonatomic) OFString* cSymbolPrefix;
+@property (copy, nonatomic) OFString* cIdentifierPrefix;
 @property (readonly, nonatomic) OFString* name;
 @property (readonly, nonatomic) OFArray* constructors;
 @property (readonly, nonatomic) bool hasConstructors;

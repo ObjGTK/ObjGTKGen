@@ -42,13 +42,13 @@
     @try {
         // Header
         OFString* hFilename =
-            [[outputDir stringByAppendingPathComponent:[cgtkClass name]]
+            [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
                 stringByAppendingString:@".h"];
         [[OGTKClassWriter headerStringFor:cgtkClass] writeToFile:hFilename];
 
         // Source
         OFString* sFilename =
-            [[outputDir stringByAppendingPathComponent:[cgtkClass name]]
+            [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
                 stringByAppendingString:@".m"];
         [[OGTKClassWriter sourceStringFor:cgtkClass] writeToFile:sFilename];
     } @catch (id e) {
@@ -62,10 +62,10 @@
 {
     OFMutableString* output = [[OFMutableString alloc] init];
 
-    // OFLog(@"Writing header file for class %@.", [cgtkClass name]);
+    // OFLog(@"Writing header file for class %@.", [cgtkClass type]);
     [output appendString:[OGTKClassWriter
                              generateLicense:[OFString stringWithFormat:@"%@.h",
-                                                       [cgtkClass name]]]];
+                                                       [cgtkClass type]]]];
 
     // Imports
     [output appendFormat:@"\n#import \"%@.h\"\n",
@@ -84,7 +84,7 @@
     [output appendString:@"\n"];
 
     // Interface declaration
-    [output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n", [cgtkClass name],
+    [output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n", [cgtkClass type],
             [OGTKUtil swapTypes:[cgtkClass cParentType]]];
 
     // Function declarations
@@ -128,16 +128,16 @@
 {
     OFMutableString* output = [[OFMutableString alloc] init];
 
-    // OFLog(@"Writing implementation file for class %@.", [cgtkClass name]);
+    // OFLog(@"Writing implementation file for class %@.", [cgtkClass type]);
     [output appendString:[OGTKClassWriter
                              generateLicense:[OFString stringWithFormat:@"%@.m",
-                                                       [cgtkClass name]]]];
+                                                       [cgtkClass type]]]];
 
     // Imports
-    [output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass name]];
+    [output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass type]];
 
     // Implementation declaration
-    [output appendFormat:@"@implementation %@\n\n", [cgtkClass name]];
+    [output appendFormat:@"@implementation %@\n\n", [cgtkClass type]];
 
     // Function implementations
     for (OGTKMethod* func in [cgtkClass functions]) {

@@ -26,6 +26,7 @@
  */
 
 #import "Gir2Objc.h"
+#include <ObjFW/OFStdIOStream.h>
 
 @implementation Gir2Objc
 
@@ -103,6 +104,10 @@
     if (ns == nil)
         @throw [OGTKNoGIRAPIException exception];
 
+    OFLog(@"Namespace name: %@", ns.name);
+    OFLog(@"C symbol prefix: %@", ns.cSymbolPrefixes);
+    OFLog(@"C identifier prefix: %@", ns.cIdentifierPrefixes);
+
     // Pre-load arrTrimMethodName (in GTKUtil) from info in classesToGen
     // In order to do this we must convert from something like
     // ScaleButton to gtk_scale_button
@@ -122,7 +127,7 @@
         }
 
         [OGTKUtil
-            addToTrimMethodName:[OFString stringWithFormat:@"gtk_%@", result]];
+            addToTrimMethodName:[OFString stringWithFormat:@"%@_%@", ns.cSymbolPrefixes, result]];
     }
 
     for (GIRClass* clazz in ns.classes) {
@@ -132,6 +137,8 @@
         [cgtkClass setCName:clazz.name];
         [cgtkClass setCType:clazz.cType];
         [cgtkClass setCParentType:clazz.parent];
+        [cgtkClass setCIdentifierPrefix:ns.cIdentifierPrefixes];
+        [cgtkClass setCSymbolPrefix:ns.cSymbolPrefixes];
 
         // Set constructors
         for (GIRConstructor* ctor in clazz.constructors) {

@@ -141,6 +141,7 @@ static OFMutableDictionary* dictExtraImports;
         stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
 }
 
+// TODO Fixme
 + (OFString*)selfTypeMethodCall:(OFString*)type;
 {
     int i = 0;
@@ -151,8 +152,7 @@ static OFMutableDictionary* dictExtraImports;
 
         return [OFString
             stringWithFormat:@"[self %@]",
-            [[type substringWithRange:OFRangeMake(3, [type length] - 3)]
-                uppercaseString]];
+            [type uppercaseString]];
     }
     // Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
     else if ([type hasPrefix:@"Gtk"]) {
@@ -238,6 +238,7 @@ static OFMutableDictionary* dictExtraImports;
     return (val == nil) ? str : val;
 }
 
+// TODO Fixme
 + (OFString*)convertType:(OFString*)fromType
                 withName:(OFString*)name
                   toType:(OFString*)toType
