@@ -33,7 +33,9 @@
 @implementation OGTKClass
 @synthesize cName = _cName, cType = _cType, cParentType = _cParentType,
             cSymbolPrefix = _cSymbolPrefix,
-            cIdentifierPrefix = _cIdentifierPrefix;
+            cIdentifierPrefix = _cIdentifierPrefix,
+            dependsOnClasses = _dependsOnClasses,
+            forwardDeclarationForClasses = _forwardDeclarationForClasses;
 
 - (instancetype)init
 {
@@ -43,6 +45,8 @@
         _constructors = [[OFMutableArray alloc] init];
         _functions = [[OFMutableArray alloc] init];
         _methods = [[OFMutableArray alloc] init];
+        _dependsOnClasses = [[OFMutableArray alloc] init];
+        _forwardDeclarationForClasses = [[OFMutableArray alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -61,6 +65,8 @@
     [_constructors release];
     [_functions release];
     [_methods release];
+    [_dependsOnClasses release];
+    [_forwardDeclarationForClasses release];
 
     [_typeWithoutPrefix release];
 
@@ -69,17 +75,16 @@
 
 - (OFString*)type
 {
-    if(self.cType == nil)
+    if (self.cType == nil)
         @throw [OGTKReceivedNilExpectedStringException exception];
 
     if ([self.cIdentifierPrefix isEqual:@"Gtk"] &&
         [self.cType hasPrefix:@"Gtk"]) {
 
-        if(_typeWithoutPrefix == nil) {
+        if (_typeWithoutPrefix == nil) {
             size_t prefixLength = self.cIdentifierPrefix.length;
 
-            _typeWithoutPrefix =
-                [self.cType substringFromIndex:prefixLength];
+            _typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
 
             [_typeWithoutPrefix retain];
         }

@@ -25,6 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
+#include <ObjFW/OFMutableArray.h>
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKMethod.h"
@@ -41,6 +42,8 @@
     OFMutableArray* _constructors;
     OFMutableArray* _functions;
     OFMutableArray* _methods;
+    OFMutableArray* _dependsOnClasses;
+    OFMutableArray* _forwardDeclarationForClasses;
 
 @private
     OFString* _typeWithoutPrefix;
@@ -59,6 +62,8 @@
 @property (readonly, nonatomic) bool hasFunctions;
 @property (readonly, nonatomic) OFArray* methods;
 @property (readonly, nonatomic) bool hasMethods;
+@property (readonly, nonatomic) OFMutableArray* dependsOnClasses;
+@property (readonly, nonatomic) OFMutableArray* forwardDeclarationForClasses;
 
 - (void)addConstructor:(OGTKMethod*)ctor;
 - (void)addFunction:(OGTKMethod*)fun;

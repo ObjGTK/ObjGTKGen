@@ -105,10 +105,23 @@
     OFLog(@"C symbol prefix: %@", ns.cSymbolPrefixes);
     OFLog(@"C identifier prefix: %@", ns.cIdentifierPrefixes);
 
-    // Preload arrays for data mapping and resolving dependencies
+    // Preload data structure for type mapping and resolving dependencies
     for (GIRClass* clazz in ns.classes) {
         // TODO
+        // 1. Add all classes and their ObjC counterpart names to a new data
+        // structure OGTKMapping that holds two dicts to look up GObj <-> ObjC
+        // class names. The ObjC dict is going to hold instances of OGTKClass.
+
+        // 2. Set dependencies of a class before adding it to OGTKMapping (all
+        // ObjC types the class to be written depends on).
     }
+
+    // 3. When finished make OGTKMapping set flags for fast necessary
+    // forward class definitions.
+
+    // 4. Write a concluding header file importing all the classes
+
+    // 5. Then write the classes (yes, we do need more memory then)
 
     for (GIRClass* clazz in ns.classes) {
         OGTKClass* cgtkClass = [[OGTKClass alloc] init];
