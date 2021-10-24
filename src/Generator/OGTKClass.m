@@ -29,7 +29,6 @@
  * Objective-C imports
  */
 #import "OGTKClass.h"
-#include <ObjFW/OFStdIOStream.h>
 
 @implementation OGTKClass
 @synthesize cName = _cName, cType = _cType, cParentType = _cParentType,
@@ -52,6 +51,22 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [_cName release];
+    [_cType release];
+    [_cParentType release];
+    [_cIdentifierPrefix release];
+    [_cSymbolPrefix release];
+    [_constructors release];
+    [_functions release];
+    [_methods release];
+
+    [_typeWithoutPrefix release];
+
+    [super dealloc];
+}
+
 - (OFString*)type
 {
     if(self.cType == nil)
@@ -60,12 +75,16 @@
     if ([self.cIdentifierPrefix isEqual:@"Gtk"] &&
         [self.cType hasPrefix:@"Gtk"]) {
 
-        size_t prefixLength = self.cIdentifierPrefix.length;
+        if(_typeWithoutPrefix == nil) {
+            size_t prefixLength = self.cIdentifierPrefix.length;
 
-        OFString* typeWithoutPrefix =
-            [self.cType substringFromIndex:prefixLength];
+            _typeWithoutPrefix =
+                [self.cType substringFromIndex:prefixLength];
 
-        return [OFString stringWithFormat:@"OGTK%@", typeWithoutPrefix];
+            [_typeWithoutPrefix retain];
+        }
+
+        return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
     }
 
     return [OFString stringWithFormat:@"OG%@%@", self.cType];
@@ -125,18 +144,6 @@
 - (bool)hasMethods
 {
     return (_methods.count > 0);
-}
-
-- (void)dealloc
-{
-    [_cName release];
-    [_cType release];
-    [_cParentType release];
-    [_constructors release];
-    [_functions release];
-    [_methods release];
-
-    [super dealloc];
 }
 
 @end

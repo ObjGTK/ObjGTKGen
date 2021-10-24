@@ -32,7 +32,6 @@
 
 @implementation OGTKUtil
 
-static OFMutableArray* arrTrimMethodName;
 static OFMutableDictionary* dictGlobalConf;
 static OFMutableDictionary* dictSwapTypes;
 static OFMutableDictionary* dictExtraImports;
@@ -97,43 +96,6 @@ static OFMutableDictionary* dictExtraImports;
     }
 }
 
-+ (void)addToTrimMethodName:(OFString*)val
-{
-    if (arrTrimMethodName == nil) {
-        arrTrimMethodName = [[OFMutableArray alloc] init];
-    }
-
-    if ([arrTrimMethodName indexOfObject:val] == OFNotFound) {
-        [arrTrimMethodName addObject:val];
-    }
-}
-
-+ (OFString*)trimMethodName:(OFString*)meth
-{
-    if (arrTrimMethodName == nil) {
-        arrTrimMethodName = [[OFMutableArray alloc] init];
-    }
-
-    OFString* longestMatch = nil;
-
-    for (OFString* el in arrTrimMethodName) {
-        if ([meth hasPrefix:el]) {
-            if (longestMatch == nil) {
-                longestMatch = el;
-            } else if (longestMatch.length < el.length) {
-                // Found longer match
-                longestMatch = el;
-            }
-        }
-    }
-
-    if (longestMatch != nil) {
-        return [meth substringFromIndex:[longestMatch length]];
-    }
-
-    return meth;
-}
-
 + (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType
                                  withConstructor:(OFString*)cCtor
 {
@@ -156,7 +118,7 @@ static OFMutableDictionary* dictExtraImports;
     }
     // Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
     else if ([type hasPrefix:@"Gtk"]) {
-        OFMutableString* result = [[OFMutableString alloc] init];
+        OFMutableString* result = [OFMutableString string];
 
         // Special logic for GTK_GL_AREA
         if ([type isEqual:@"GtkGLArea"]) {

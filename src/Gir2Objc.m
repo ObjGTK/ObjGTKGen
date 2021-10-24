@@ -26,7 +26,6 @@
  */
 
 #import "Gir2Objc.h"
-#include <ObjFW/OFStdIOStream.h>
 
 @implementation Gir2Objc
 
@@ -99,8 +98,6 @@
 
 + (void)generateClassFilesFromNamespace:(GIRNamespace*)ns
 {
-    int i = 0;
-
     if (ns == nil)
         @throw [OGTKNoGIRAPIException exception];
 
@@ -108,26 +105,9 @@
     OFLog(@"C symbol prefix: %@", ns.cSymbolPrefixes);
     OFLog(@"C identifier prefix: %@", ns.cIdentifierPrefixes);
 
-    // Pre-load arrTrimMethodName (in GTKUtil) from info in classesToGen
-    // In order to do this we must convert from something like
-    // ScaleButton to gtk_scale_button
+    // Preload arrays for data mapping and resolving dependencies
     for (GIRClass* clazz in ns.classes) {
-        OFMutableString* result = [[OFMutableString alloc] init];
-
-        for (i = 0; i < [clazz.name length]; i++) {
-            // Current character
-            OFString* currentChar =
-                [clazz.name substringWithRange:OFRangeMake(i, 1)];
-
-            if (i != 0 && [OGTKUtil isUppercase:currentChar]) {
-                [result appendFormat:@"_%@", [currentChar lowercaseString]];
-            } else {
-                [result appendString:[currentChar lowercaseString]];
-            }
-        }
-
-        [OGTKUtil
-            addToTrimMethodName:[OFString stringWithFormat:@"%@_%@", ns.cSymbolPrefixes, result]];
+        // TODO
     }
 
     for (GIRClass* clazz in ns.classes) {
@@ -155,7 +135,8 @@
             // Don't handle VarArgs constructors
             if (!foundVarArgs) {
                 OGTKMethod* objcCtor = [[OGTKMethod alloc] init];
-                [objcCtor setCName:ctor.cIdentifier];
+                [objcCtor setName:ctor.name];
+                [objcCtor setCIdentifier:ctor.cIdentifier];
                 [objcCtor setCReturnType:ctor.returnValue.type.cType];
 
                 OFMutableArray* paramArray = [[OFMutableArray alloc] init];
@@ -194,7 +175,8 @@
 
             if (!foundVarArgs) {
                 OGTKMethod* objcFunc = [[OGTKMethod alloc] init];
-                [objcFunc setCName:func.cIdentifier];
+                [objcFunc setName:func.name];
+                [objcFunc setCIdentifier:func.cIdentifier];
 
                 if (func.returnValue.type == nil
                     && func.returnValue.array != nil) {
@@ -239,7 +221,8 @@
 
             if (!foundVarArgs) {
                 OGTKMethod* objcMeth = [[OGTKMethod alloc] init];
-                [objcMeth setCName:meth.cIdentifier];
+                [objcMeth setName:meth.name];
+                [objcMeth setCIdentifier:meth.cIdentifier];
 
                 if (meth.returnValue.type == nil
                     && meth.returnValue.array != nil) {

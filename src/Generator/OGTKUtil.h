@@ -87,16 +87,6 @@
 + (OFString*)selfTypeMethodCall:(OFString*)type;
 
 /**
- * Adds the prefix to the trimmed method name list
- */
-+ (void)addToTrimMethodName:(OFString*)val;
-
-/**
- * Trims method name (i.e. removes things like GTK_)
- */
-+ (OFString*)trimMethodName:(OFString*)meth;
-
-/**
  * Gets a list of extra imports for the class
  */
 + (OFArray*)extraImports:(OFString*)clazz;

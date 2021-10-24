@@ -41,6 +41,9 @@
     OFMutableArray* _constructors;
     OFMutableArray* _functions;
     OFMutableArray* _methods;
+
+@private
+    OFString* _typeWithoutPrefix;
 }
 
 @property (copy, nonatomic) OFString* cName;

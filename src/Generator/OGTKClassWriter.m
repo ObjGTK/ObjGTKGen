@@ -146,7 +146,7 @@
         [output appendString:@"\n{\n"];
 
         if ([func returnsVoid]) {
-            [output appendFormat:@"\t%@(%@);\n", [func cName],
+            [output appendFormat:@"\t%@(%@);\n", [func cIdentifier],
                     [OGTKClassWriter
                         generateCParameterListString:[func parameters]]];
         } else {
@@ -161,13 +161,13 @@
                             convertType:[func cReturnType]
                                withName:[OFString
                                             stringWithFormat:@"%@(%@)",
-                                            [func cName],
+                                            [func cIdentifier],
                                             [OGTKClassWriter
                                                 generateCParameterListString:
                                                     [func parameters]]]
                                  toType:[func returnType]]];
             } else {
-                [output appendFormat:@"%@(%@)", [func cName],
+                [output appendFormat:@"%@(%@)", [func cIdentifier],
                         [OGTKClassWriter
                             generateCParameterListString:[func parameters]]];
             }
@@ -192,7 +192,7 @@
                                     withConstructor:
                                         [OFString
                                             stringWithFormat:@"%@(%@)",
-                                            [ctor cName],
+                                            [ctor cIdentifier],
                                             [OGTKClassWriter
                                                 generateCParameterListString:
                                                     [ctor parameters]]]]];
@@ -214,7 +214,7 @@
 
         if ([meth returnsVoid]) {
             [output
-                appendFormat:@"\t%@(%@);\n", [meth cName],
+                appendFormat:@"\t%@(%@);\n", [meth cIdentifier],
                 [OGTKClassWriter
                     generateCParameterListWithInstanceString:[cgtkClass type]
                                                    andParams:[meth
@@ -231,7 +231,7 @@
                             convertType:[meth cReturnType]
                                withName:
                                    [OFString
-                                       stringWithFormat:@"%@(%@)", [meth cName],
+                                       stringWithFormat:@"%@(%@)", [meth cIdentifier],
                                        [OGTKClassWriter
                                            generateCParameterListWithInstanceString:
                                                [cgtkClass type]
@@ -241,7 +241,7 @@
                                  toType:[meth returnType]]];
             } else {
                 [output
-                    appendFormat:@"%@(%@)", [meth cName],
+                    appendFormat:@"%@(%@)", [meth cIdentifier],
                     [OGTKClassWriter
                         generateCParameterListWithInstanceString:[cgtkClass
                                                                      type]

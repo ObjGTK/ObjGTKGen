@@ -34,13 +34,14 @@
  * Abstracts Method operations
  */
 @interface OGTKMethod : OFObject {
-    OFString* _cName;
+    OFString* _name;
+    OFString* _cIdentifier;
     OFString* _cReturnType;
     OFArray* _parameters;
 }
 
-@property (copy, nonatomic) OFString* cName;
-@property (readonly, nonatomic) OFString* name;
+@property (copy, nonatomic) OFString* name;
+@property (copy, nonatomic) OFString* cIdentifier;
 @property (readonly, nonatomic) OFString* sig;
 @property (copy, nonatomic) OFString* cReturnType;
 @property (readonly, nonatomic) OFString* returnType;
