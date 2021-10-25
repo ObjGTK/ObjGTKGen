@@ -276,12 +276,9 @@
     OFMutableDictionary* classesDict = sharedMapper.objcToGobjClassMapping;
 
     for (OFString* className in classesDict) {
-        @autoreleasepool {
-            [OGTKClassWriter
-                generateFilesForClass:[classesDict objectForKey:className]
-                                inDir:[OGTKUtil
-                                          globalConfigValueFor:@"outputDir"]];
-        }
+        [OGTKClassWriter
+            generateFilesForClass:[classesDict objectForKey:className]
+                            inDir:[OGTKUtil globalConfigValueFor:@"outputDir"]];
     }
 }
 
