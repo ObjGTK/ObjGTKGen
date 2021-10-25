@@ -30,6 +30,10 @@
  */
 #import "OGTKUtil.h"
 
+#import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
+#import "OFDictionary+OGTKJsonDictionaryOfFile.h"
+#import "OGTKMapper.h"
+
 @implementation OGTKUtil
 
 static OFMutableDictionary* dictGlobalConf;
@@ -163,41 +167,9 @@ static OFMutableDictionary* dictExtraImports;
 // TODO Transform this to generic code
 + (OFString*)swapTypes:(OFString*)str
 {
-    if (dictSwapTypes == nil) {
-        dictSwapTypes = [[OFMutableDictionary alloc]
-            ogtk_initWithJsonDictionaryOfFile:@"Config/swap_types.json"];
-    }
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
 
-    if (str == nil)
-        @throw [OGTKReceivedNilExpectedStringException exception];
-
-    // Convert basic types by hardcoding
-    if ([str isEqual:@"Atk.Object"] || [str isEqual:@"Gio.Application"] ||
-        [str isEqual:@"GObject.InitiallyUnowned"] ||
-        [str isEqual:@"GObject.Object"])
-        return @"OGTKObject";
-    else if ([str isEqual:@"const gchar*"] || [str isEqual:@"gchar*"])
-        return @"OFString*";
-    else if ([str isEqual:@"Gtk"])
-        return @"OGTK";
-    else if ([str isEqual:@"OFString*"])
-        return @"const gchar*";
-
-    // Make sure OGTKWidget never becomes "GtkWidget"
-    else if ([str isEqual:@"CGTKWidget"])
-        return @"Widget";
-    else if ([str isEqual:@"CGTKWidget*"])
-        return @"Widget*";
-
-    // Different naming, same type
-    else if ([str isEqual:@"gboolean"])
-        return @"bool";
-    else if ([str isEqual:@"bool"])
-        return @"gboolean";
-
-    OFString* val = [dictSwapTypes objectForKey:str];
-
-    return (val == nil) ? str : val;
+    return [sharedMapper swapTypes:str];
 }
 
 // TODO Fixme

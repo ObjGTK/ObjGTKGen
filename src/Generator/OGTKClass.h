@@ -25,9 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#include <ObjFW/OFMutableArray.h>
 #import <ObjFW/ObjFW.h>
-
 #import "OGTKMethod.h"
 
 /**

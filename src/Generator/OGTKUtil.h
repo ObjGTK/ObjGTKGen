@@ -25,8 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
-#import "OFDictionary+OGTKJsonDictionaryOfFile.h"
 #import <ObjFW/ObjFW.h>
 
 /**

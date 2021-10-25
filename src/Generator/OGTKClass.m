@@ -29,6 +29,7 @@
  * Objective-C imports
  */
 #import "OGTKClass.h"
+#import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
 @synthesize cName = _cName, cType = _cType, cParentType = _cParentType,
