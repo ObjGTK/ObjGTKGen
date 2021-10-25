@@ -37,7 +37,6 @@
 @implementation OGTKUtil
 
 static OFMutableDictionary* dictGlobalConf;
-static OFMutableDictionary* dictSwapTypes;
 static OFMutableDictionary* dictExtraImports;
 
 + (OFString*)convertUSSToCamelCase:(OFString*)input
@@ -80,6 +79,7 @@ static OFMutableDictionary* dictExtraImports;
     return output;
 }
 
+// TODO Deprecate this and replace usage of this method?
 + (bool)isTypeSwappable:(OFString*)str
 {
     return [str isEqual:@"OFArray*"] || ![[OGTKUtil swapTypes:str] isEqual:str];
@@ -164,7 +164,7 @@ static OFMutableDictionary* dictExtraImports;
     return false;
 }
 
-// TODO Transform this to generic code
+// TODO Deprecate this and replace usage of this method?
 + (OFString*)swapTypes:(OFString*)str
 {
     OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
