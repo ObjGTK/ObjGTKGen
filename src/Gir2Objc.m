@@ -261,7 +261,7 @@
                 OFLog(@"Warning: Cannot generate file for definition for class "
                       @"%@. "
                       @"Definition may be incorrect. Skipping…",
-                    cgtkClass.name);
+                    cgtkClass.cType);
             }
         }
     }

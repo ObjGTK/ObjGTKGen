@@ -96,9 +96,11 @@
     return [OFString stringWithFormat:@"OG%@%@", self.cType];
 }
 
+// TODO Deprecate usage of this method
 - (OFString*)name
 {
-    return [OFString stringWithFormat:@"OGTK%@", _cName];
+    return [self type];
+    //return [OFString stringWithFormat:@"OGTK%@", _cName];
 }
 
 - (void)addConstructor:(OGTKMethod*)constructor
