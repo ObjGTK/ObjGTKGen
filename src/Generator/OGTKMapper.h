@@ -25,8 +25,10 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import <ObjFW/ObjFW.h>
 #import "OGTKClass.h"
+#import <ObjFW/ObjFW.h>
+
+@class OGTKClass;
 
 /**
  * Reflects class/type mappings
@@ -42,9 +44,38 @@
 + (instancetype)sharedMapper;
 
 - (void)addClass:(OGTKClass*)clazz;
+
 - (void)calculateDependencies;
+
 - (bool)isGobjType:(OFString*)type;
+
 - (bool)isObjcType:(OFString*)type;
+
 - (OFString*)swapTypes:(OFString*)type;
+
+- (bool)isTypeSwappable:(OFString*)type;
+
+- (OFString*)convertType:(OFString*)fromType
+                withName:(OFString*)name
+                  toType:(OFString*)toType;
+- (OFString*)selfTypeMethodCall:(OFString*)type;
+
+/**
+ * Attempts to swap the type or returns the input if it can't (shorthand
+ * singleton access)
+ */
++ (OFString*)swapTypes:(OFString*)type;
+
++ (bool)isTypeSwappable:(OFString*)type;
+
++ (OFString*)convertType:(OFString*)fromType
+                withName:(OFString*)name
+                  toType:(OFString*)toType;
+
+/**
+ * Returns the appropriate self referencing call for the type (i.e. -(type)[self
+ * TYPE] or GTK_TYPE([self GOBJECT])
+ */
++ (OFString*)selfTypeMethodCall:(OFString*)type;
 
 @end

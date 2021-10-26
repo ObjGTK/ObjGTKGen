@@ -35,7 +35,7 @@
 
 - (OFString*)type
 {
-    return [OGTKUtil swapTypes:_cType];
+    return [OGTKMapper swapTypes:_cType];
 }
 
 - (OFString*)name

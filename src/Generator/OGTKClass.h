@@ -28,6 +28,8 @@
 #import <ObjFW/ObjFW.h>
 #import "OGTKMethod.h"
 
+@class OGTKMethod;
+
 /**
  * Abstracts Class operations
  */

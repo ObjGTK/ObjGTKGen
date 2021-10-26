@@ -69,7 +69,7 @@
 
     // Imports
     [output appendFormat:@"\n#import \"%@.h\"\n",
-            [OGTKUtil swapTypes:[cgtkClass cParentType]]];
+            [OGTKMapper swapTypes:[cgtkClass cParentType]]];
 
     OFArray* extraImports = [OGTKUtil extraImports:[cgtkClass type]];
 
@@ -85,7 +85,7 @@
 
     // Interface declaration
     [output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n", [cgtkClass type],
-            [OGTKUtil swapTypes:[cgtkClass cParentType]]];
+            [OGTKMapper swapTypes:[cgtkClass cParentType]]];
 
     // Function declarations
     if ([cgtkClass hasFunctions]) {
@@ -153,11 +153,11 @@
             // Need to add "return ..."
             [output appendString:@"\treturn "];
 
-            if ([OGTKUtil isTypeSwappable:[func cReturnType]]) {
+            if ([OGTKMapper isTypeSwappable:[func cReturnType]]) {
                 // Need to swap type on return
                 [output
                     appendString:
-                        [OGTKUtil
+                        [OGTKMapper
                             convertType:[func cReturnType]
                                withName:[OFString
                                             stringWithFormat:@"%@(%@)",
@@ -205,7 +205,7 @@
     // Self type method implementation
     [output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n",
             [cgtkClass cType], [[cgtkClass cName] uppercaseString],
-            [OGTKUtil selfTypeMethodCall:[cgtkClass cType]]];
+            [OGTKMapper selfTypeMethodCall:[cgtkClass cType]]];
 
     for (OGTKMethod* meth in [cgtkClass methods]) {
         [output appendFormat:@"- (%@)%@", [meth returnType], [meth sig]];
@@ -223,15 +223,16 @@
             // Need to add "return ..."
             [output appendString:@"\treturn "];
 
-            if ([OGTKUtil isTypeSwappable:[meth cReturnType]]) {
+            if ([OGTKMapper isTypeSwappable:[meth cReturnType]]) {
                 // Need to swap type on return
                 [output
                     appendString:
-                        [OGTKUtil
+                        [OGTKMapper
                             convertType:[meth cReturnType]
                                withName:
                                    [OFString
-                                       stringWithFormat:@"%@(%@)", [meth cIdentifier],
+                                       stringWithFormat:@"%@(%@)",
+                                       [meth cIdentifier],
                                        [OGTKClassWriter
                                            generateCParameterListWithInstanceString:
                                                [cgtkClass type]
@@ -267,9 +268,9 @@
 
     size_t i = 0, count = params.count;
     for (OGTKParameter* param in params) {
-        [paramsOutput appendString:[OGTKUtil convertType:param.type
-                                                withName:param.name
-                                                  toType:param.cType]];
+        [paramsOutput appendString:[OGTKMapper convertType:param.type
+                                                  withName:param.name
+                                                    toType:param.cType]];
 
         if (i++ < count - 1)
             [paramsOutput appendString:@", "];
@@ -284,7 +285,7 @@
     int i;
     OFMutableString* paramsOutput = [OFMutableString string];
 
-    [paramsOutput appendString:[OGTKUtil selfTypeMethodCall:instanceType]];
+    [paramsOutput appendString:[OGTKMapper selfTypeMethodCall:instanceType]];
 
     if (params != nil && [params count] > 0) {
         [paramsOutput appendString:@", "];
@@ -294,9 +295,9 @@
         // Start at index 1
         for (i = 0; i < [params count]; i++) {
             p = [params objectAtIndex:i];
-            [paramsOutput appendString:[OGTKUtil convertType:[p type]
-                                                    withName:[p name]
-                                                      toType:[p cType]]];
+            [paramsOutput appendString:[OGTKMapper convertType:[p type]
+                                                      withName:[p name]
+                                                        toType:[p cType]]];
 
             if (i < [params count] - 1) {
                 [paramsOutput appendString:@", "];

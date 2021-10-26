@@ -48,16 +48,6 @@
 + (bool)isUppercase:(OFString*)character;
 
 /**
- * Returns true if this type is configured as being swappable
- */
-+ (bool)isTypeSwappable:(OFString*)str;
-
-/**
- * Attempts to swap the type or returns the input if it can't
- */
-+ (OFString*)swapTypes:(OFString*)str;
-
-/**
  * Converts GTK style type_new_with_param style functions into ObjGTK
  * initWithParam inits. If func doesn't contain "New" or "new" then it will
  * return nil.
@@ -70,19 +60,6 @@
  */
 + (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType
                                  withConstructor:(OFString*)cCtor;
-
-/**
- * Converts the given fromType to the toType while maintaining the name
- */
-+ (OFString*)convertType:(OFString*)fromType
-                withName:(OFString*)name
-                  toType:(OFString*)toType;
-
-/**
- * Returns the appropriate self referencing call for the type (i.e. -(type)[self
- * TYPE] or GTK_TYPE([self GOBJECT])
- */
-+ (OFString*)selfTypeMethodCall:(OFString*)type;
 
 /**
  * Gets a list of extra imports for the class

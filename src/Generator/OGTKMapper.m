@@ -111,23 +111,115 @@ static OGTKMapper* sharedMyMapper = nil;
 
     OFString* strippedType = [self stripAsterisks:type];
 
-    OFString* swappedType = [_gobjToObjcStringMapping objectForKey:strippedType];
-    if(swappedType != nil) {
-        if([strippedType isEqual:type])
+    OFString* swappedType =
+        [_gobjToObjcStringMapping objectForKey:strippedType];
+    if (swappedType != nil) {
+        if ([strippedType isEqual:type])
             return swappedType;
         else
             return [OFString stringWithFormat:@"%@*", swappedType];
     }
 
-    OGTKClass* swappedClass = [_objcToGobjClassMapping objectForKey:strippedType];
-    if(swappedClass != nil) {
-        if([strippedType isEqual:type])
+    OGTKClass* swappedClass =
+        [_objcToGobjClassMapping objectForKey:strippedType];
+    if (swappedClass != nil) {
+        if ([strippedType isEqual:type])
             return swappedClass.cType;
         else
             return [OFString stringWithFormat:@"%@*", swappedClass.cType];
     }
 
     return type;
+}
+
+- (bool)isTypeSwappable:(OFString*)type
+{
+    return [type isEqual:@"OFArray*"] || ([self isGobjType:type])
+        || ([self isObjcType:type]);
+}
+
+// TODO What about references (**)?
+- (OFString*)convertType:(OFString*)fromType
+                withName:(OFString*)name
+                  toType:(OFString*)toType
+{
+    // Try to return conversion for string types first
+    if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"]) &&
+        [toType isEqual:@"OFString*"]) {
+        return [OFString
+            stringWithFormat:@"[OFString stringWithUTF8String:%@]", name];
+    } else if ([fromType isEqual:@"OFString*"]
+        && ([toType isEqual:@"gchar*"] || [toType isEqual:@"const gchar*"])) {
+        return [OFString stringWithFormat:@"[%@ UTF8String]", name];
+    }
+
+    // Then try to return generic Gobj type conversion
+    if ([self isGobjType:fromType] && [self isObjcType:toType]) {
+        // Converting from Gobjc -> Objc
+
+        return [OFString
+            stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]",
+            [self stripAsterisks:toType], name];
+
+    } else if ([self isObjcType:fromType] && [self isGobjType:toType]) {
+        // Converting from Objc -> Gobj
+
+        OGTKClass* toClass = [_objcToGobjClassMapping
+            objectForKey:[self stripAsterisks:fromType]];
+
+        return [OFString
+            stringWithFormat:@"[%@ %@]", name, [toClass.cName uppercaseString]];
+    }
+
+    // Otherwise don't do any conversion (including bool types, as ObjFW uses
+    // the stdc bool type)
+    return name;
+}
+
+// TODO Fixme
+- (OFString*)selfTypeMethodCall:(OFString*)type;
+{
+    int i = 0;
+
+    // Convert OGTKFooBar into [self FOOBAR]
+    if ([type hasPrefix:@"OGTK"]) {
+        type = [self swapTypes:type];
+
+        return [OFString stringWithFormat:@"[self %@]", [type uppercaseString]];
+    }
+    // Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
+    else if ([type hasPrefix:@"Gtk"]) {
+        OFMutableString* result = [OFMutableString string];
+
+        // Special logic for GTK_GL_AREA
+        if ([type isEqual:@"GtkGLArea"]) {
+            [result appendString:@"GTK_GL_AREA"];
+        } else {
+            // Special logic for things like GtkHSV
+            int countBetweenUnderscores = 0;
+
+            for (i = 0; i < [type length]; i++) {
+                // Current character
+                OFString* currentChar =
+                    [type substringWithRange:OFRangeMake(i, 1)];
+
+                if (i != 0 && [OGTKUtil isUppercase:currentChar]
+                    && countBetweenUnderscores > 1) {
+                    [result appendFormat:@"_%@", [currentChar uppercaseString]];
+                    countBetweenUnderscores = 0;
+                } else {
+                    [result appendString:[currentChar uppercaseString]];
+                    countBetweenUnderscores++;
+                }
+            }
+        }
+
+        [result appendString:@"([self GOBJECT])"];
+
+        return result;
+    } else {
+        return type;
+    }
 }
 
 // Private methods
@@ -141,6 +233,37 @@ static OGTKMapper* sharedMyMapper = nil;
         return identifier;
 
     return [identifier substringToIndex:index];
+}
+
+// Short hands for singleton access
++ (OFString*)swapTypes:(OFString*)type
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper swapTypes:type];
+}
+
++ (bool)isTypeSwappable:(OFString*)type
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper isTypeSwappable:type];
+}
+
++ (OFString*)convertType:(OFString*)fromType
+                withName:(OFString*)name
+                  toType:(OFString*)toType
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper convertType:fromType withName:name toType:toType];
+}
+
++ (OFString*)selfTypeMethodCall:(OFString*)type
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper selfTypeMethodCall:type];
 }
 
 @end

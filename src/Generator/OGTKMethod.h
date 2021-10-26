@@ -29,6 +29,7 @@
 
 #import "OGTKParameter.h"
 #import "OGTKUtil.h"
+#import "OGTKMapper.h"
 
 /**
  * Abstracts Method operations

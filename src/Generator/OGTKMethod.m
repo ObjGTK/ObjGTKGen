@@ -83,7 +83,7 @@
 
 - (OFString*)returnType
 {
-    return [OGTKUtil swapTypes:_cReturnType];
+    return [OGTKMapper swapTypes:_cReturnType];
 }
 
 - (bool)returnsVoid

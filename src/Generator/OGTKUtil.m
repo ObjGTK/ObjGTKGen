@@ -79,12 +79,6 @@ static OFMutableDictionary* dictExtraImports;
     return output;
 }
 
-// TODO Deprecate this and replace usage of this method?
-+ (bool)isTypeSwappable:(OFString*)str
-{
-    return [str isEqual:@"OFArray*"] || ![[OGTKUtil swapTypes:str] isEqual:str];
-}
-
 + (OFString*)convertFunctionToInit:(OFString*)func
 {
     OFRange range = [func rangeOfString:@"New"];
@@ -107,54 +101,6 @@ static OFMutableDictionary* dictExtraImports;
         stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
 }
 
-// TODO Fixme
-+ (OFString*)selfTypeMethodCall:(OFString*)type;
-{
-    int i = 0;
-
-    // Convert OGTKFooBar into [self FOOBAR]
-    if ([type hasPrefix:@"OGTK"]) {
-        type = [OGTKUtil swapTypes:type];
-
-        return [OFString
-            stringWithFormat:@"[self %@]",
-            [type uppercaseString]];
-    }
-    // Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
-    else if ([type hasPrefix:@"Gtk"]) {
-        OFMutableString* result = [OFMutableString string];
-
-        // Special logic for GTK_GL_AREA
-        if ([type isEqual:@"GtkGLArea"]) {
-            [result appendString:@"GTK_GL_AREA"];
-        } else {
-            // Special logic for things like GtkHSV
-            int countBetweenUnderscores = 0;
-
-            for (i = 0; i < [type length]; i++) {
-                // Current character
-                OFString* currentChar =
-                    [type substringWithRange:OFRangeMake(i, 1)];
-
-                if (i != 0 && [OGTKUtil isUppercase:currentChar]
-                    && countBetweenUnderscores > 1) {
-                    [result appendFormat:@"_%@", [currentChar uppercaseString]];
-                    countBetweenUnderscores = 0;
-                } else {
-                    [result appendString:[currentChar uppercaseString]];
-                    countBetweenUnderscores++;
-                }
-            }
-        }
-
-        [result appendString:@"([self GOBJECT])"];
-
-        return result;
-    } else {
-        return type;
-    }
-}
-
 + (bool)isUppercase:(OFString*)character
 {
     OFUnichar myCharacter = [character characterAtIndex:0];
@@ -162,49 +108,6 @@ static OFMutableDictionary* dictExtraImports;
         return true;
 
     return false;
-}
-
-// TODO Deprecate this and replace usage of this method?
-+ (OFString*)swapTypes:(OFString*)str
-{
-    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
-
-    return [sharedMapper swapTypes:str];
-}
-
-// TODO Fixme
-+ (OFString*)convertType:(OFString*)fromType
-                withName:(OFString*)name
-                  toType:(OFString*)toType
-{
-    // Try to return conversion for string types first
-    if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"]) &&
-        [toType isEqual:@"OFString*"]) {
-        return [OFString
-            stringWithFormat:@"[OFString stringWithUTF8String:%@]", name];
-    } else if ([fromType isEqual:@"OFString*"]
-        && ([toType isEqual:@"gchar*"] || [toType isEqual:@"const gchar*"])) {
-        return [OFString stringWithFormat:@"[%@ UTF8String]", name];
-    }
-
-    // Then try to return generic Gtk type conversion
-    if ([fromType hasPrefix:@"Gtk"] && [toType hasPrefix:@"OGTK"]) {
-        // Converting from Gtk -> OGTK
-        return [OFString
-            stringWithFormat:@"[[%@ alloc] initWithGObject:(GObject*)%@]",
-            [toType substringWithRange:OFRangeMake(0, [toType length] - 1)],
-            name];
-    } else if ([fromType hasPrefix:@"OGTK"] && [toType hasPrefix:@"Gtk"]) {
-        // Converting from OGTK -> Gtk
-        return [OFString
-            stringWithFormat:@"[%@ %@]", name,
-            [[toType substringWithRange:OFRangeMake(3, [toType length] - 4)]
-                uppercaseString]];
-    }
-
-    // Otherwise don't do any conversion (including bool types, as ObjFW uses
-    // the stdc bool type)
-    return name;
 }
 
 + (id)globalConfigValueFor:(OFString*)key
