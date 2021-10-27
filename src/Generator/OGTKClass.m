@@ -34,7 +34,8 @@
 @implementation OGTKClass
 @synthesize cName = _cName, cType = _cType, cParentType = _cParentType,
             cSymbolPrefix = _cSymbolPrefix,
-            cIdentifierPrefix = _cIdentifierPrefix,
+            cNSSymbolPrefix = _cNSSymbolPrefix,
+            cNSIdentifierPrefix = _cNSIdentifierPrefix,
             dependsOnClasses = _dependsOnClasses,
             forwardDeclarationForClasses = _forwardDeclarationForClasses;
 
@@ -61,8 +62,9 @@
     [_cName release];
     [_cType release];
     [_cParentType release];
-    [_cIdentifierPrefix release];
     [_cSymbolPrefix release];
+    [_cNSIdentifierPrefix release];
+    [_cNSSymbolPrefix release];
     [_constructors release];
     [_functions release];
     [_methods release];
@@ -79,11 +81,11 @@
     if (self.cType == nil)
         @throw [OGTKReceivedNilExpectedStringException exception];
 
-    if ([self.cIdentifierPrefix isEqual:@"Gtk"] &&
+    if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] &&
         [self.cType hasPrefix:@"Gtk"]) {
 
         if (_typeWithoutPrefix == nil) {
-            size_t prefixLength = self.cIdentifierPrefix.length;
+            size_t prefixLength = self.cNSIdentifierPrefix.length;
 
             _typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
 
@@ -94,13 +96,6 @@
     }
 
     return [OFString stringWithFormat:@"OG%@%@", self.cType];
-}
-
-// TODO Deprecate usage of this method
-- (OFString*)name
-{
-    return [self type];
-    //return [OFString stringWithFormat:@"OGTK%@", _cName];
 }
 
 - (void)addConstructor:(OGTKMethod*)constructor

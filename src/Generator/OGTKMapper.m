@@ -134,8 +134,8 @@ static OGTKMapper* sharedMyMapper = nil;
 
 - (bool)isTypeSwappable:(OFString*)type
 {
-    return [type isEqual:@"OFArray*"] || ([self isGobjType:type])
-        || ([self isObjcType:type]);
+    return [type isEqual:@"OFArray*"] || [self isGobjType:type] ||
+        [self isObjcType:type];
 }
 
 // TODO What about references (**)?
@@ -176,50 +176,32 @@ static OGTKMapper* sharedMyMapper = nil;
     return name;
 }
 
-// TODO Fixme
 - (OFString*)selfTypeMethodCall:(OFString*)type;
 {
-    int i = 0;
-
     // Convert OGTKFooBar into [self FOOBAR]
-    if ([type hasPrefix:@"OGTK"]) {
-        type = [self swapTypes:type];
+    if ([self isObjcType:type]) {
+        OGTKClass* toClass =
+            [_objcToGobjClassMapping objectForKey:[self stripAsterisks:type]];
 
-        return [OFString stringWithFormat:@"[self %@]", [type uppercaseString]];
+        return [OFString
+            stringWithFormat:@"[self %@]", [toClass.cName uppercaseString]];
     }
+
     // Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
-    else if ([type hasPrefix:@"Gtk"]) {
-        OFMutableString* result = [OFMutableString string];
+    if ([self isGobjType:type]) {
+        OGTKClass* classInfo = [_objcToGobjClassMapping
+            objectForKey:[_gobjToObjcStringMapping
+                             objectForKey:[self stripAsterisks:type]]];
 
-        // Special logic for GTK_GL_AREA
-        if ([type isEqual:@"GtkGLArea"]) {
-            [result appendString:@"GTK_GL_AREA"];
-        } else {
-            // Special logic for things like GtkHSV
-            int countBetweenUnderscores = 0;
+        OFString* functionMacroName =
+            [[OFString stringWithFormat:@"%@_%@", classInfo.cNSSymbolPrefix,
+                       classInfo.cSymbolPrefix] uppercaseString];
 
-            for (i = 0; i < [type length]; i++) {
-                // Current character
-                OFString* currentChar =
-                    [type substringWithRange:OFRangeMake(i, 1)];
-
-                if (i != 0 && [OGTKUtil isUppercase:currentChar]
-                    && countBetweenUnderscores > 1) {
-                    [result appendFormat:@"_%@", [currentChar uppercaseString]];
-                    countBetweenUnderscores = 0;
-                } else {
-                    [result appendString:[currentChar uppercaseString]];
-                    countBetweenUnderscores++;
-                }
-            }
-        }
-
-        [result appendString:@"([self GOBJECT])"];
-
-        return result;
-    } else {
-        return type;
+        return [OFString
+            stringWithFormat:@"%@%@", functionMacroName, @"([self GOBJECT])"];
     }
+
+    return type;
 }
 
 // Private methods

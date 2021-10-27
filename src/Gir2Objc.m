@@ -120,8 +120,9 @@
             [cgtkClass setCName:clazz.name];
             [cgtkClass setCType:clazz.cType];
             [cgtkClass setCParentType:clazz.parent];
-            [cgtkClass setCIdentifierPrefix:ns.cIdentifierPrefixes];
-            [cgtkClass setCSymbolPrefix:ns.cSymbolPrefixes];
+            [cgtkClass setCSymbolPrefix:clazz.cSymbolPrefix];
+            [cgtkClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
+            [cgtkClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
 
             // Set constructors
             for (GIRConstructor* ctor in clazz.constructors) {
@@ -258,10 +259,9 @@
             @try {
                 [sharedMapper addClass:cgtkClass];
             } @catch (id e) {
-                OFLog(@"Warning: Cannot generate file for definition for class "
-                      @"%@. "
-                      @"Definition may be incorrect. Skipping…",
-                    cgtkClass.cType);
+                OFLog(@"Warning: Cannot generate file for type %@. "
+                      @"Class definition may be incorrect. Skipping…",
+                    cgtkClass.cName);
             }
         }
     }

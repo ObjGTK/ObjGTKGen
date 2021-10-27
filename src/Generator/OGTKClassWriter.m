@@ -52,9 +52,9 @@
                 stringByAppendingString:@".m"];
         [[OGTKClassWriter sourceStringFor:cgtkClass] writeToFile:sFilename];
     } @catch (id e) {
-        OFLog(@"Warning: Cannot generate file for definition for class %@. "
-              @"Definition may be incorrect. Skipping…",
-            cgtkClass.cType);
+        OFLog(@"Warning: Cannot generate file for type %@. "
+              @"Class definition may be incorrect. Skipping…",
+            cgtkClass.cName);
     }
 }
 
