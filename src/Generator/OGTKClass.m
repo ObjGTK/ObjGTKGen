@@ -29,6 +29,7 @@
  * Objective-C imports
  */
 #import "OGTKClass.h"
+#include <ObjFW/OFStdIOStream.h>
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
@@ -94,8 +95,7 @@
 
         return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
     }
-
-    return [OFString stringWithFormat:@"OG%@%@", self.cType];
+    return [OFString stringWithFormat:@"OG%@", self.cType];
 }
 
 - (void)addConstructor:(OGTKMethod*)constructor
