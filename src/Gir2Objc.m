@@ -26,7 +26,11 @@
  */
 
 #import "Gir2Objc.h"
+#include "GIR/GIRField.h"
+#include "GIR/GIRType.h"
+#include <ObjFW/OFDictionary.h>
 #include <ObjFW/OFMutableDictionary.h>
+#include <ObjFW/OFStdIOStream.h>
 
 @implementation Gir2Objc
 
@@ -119,7 +123,22 @@
             // Set basic class properties
             [cgtkClass setCName:clazz.name];
             [cgtkClass setCType:clazz.cType];
-            [cgtkClass setCParentType:clazz.parent];
+
+            // Set parent type
+            // TODO Some GIR definitions, f.e. HdyAvatar, are missing a <field>
+            // node. So we need to ask the mapper to get the correct cType for
+            // parent class
+            OFArray* classFields = clazz.fields;
+            for (GIRField* field in classFields) {
+                if ([field.name isEqual:@"parent_class"] ||
+                    [field.name isEqual:@"parent_instance"]) {
+                    [cgtkClass setCParentType:field.type.cType];
+                } else {
+                    // Add lib dependency based on prefix (use OGTKMapper)
+                    // Resolve cType from clazz.parent (use OGTKMapper)
+                }
+            }
+
             [cgtkClass setCSymbolPrefix:clazz.cSymbolPrefix];
             [cgtkClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
             [cgtkClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
