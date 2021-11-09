@@ -26,11 +26,6 @@
  */
 
 #import "Gir2Objc.h"
-#include "GIR/GIRField.h"
-#include "GIR/GIRType.h"
-#include <ObjFW/OFDictionary.h>
-#include <ObjFW/OFMutableDictionary.h>
-#include <ObjFW/OFStdIOStream.h>
 
 @implementation Gir2Objc
 
@@ -301,14 +296,13 @@
         }
     }
 
-
-    // TODO
-    // 1. Calculate dependencies for each class
+    // Calculate dependencies for each class
     [sharedMapper determineDependencies];
 
-    // 2. set flags for fast necessary forward class definitions.
+    // TODO
+    // 1. set flags for fast necessary forward class definitions.
 
-    // 3. Write a concluding header file importing all the classes
+    // 2. Write a concluding header file and a make file importing all the classes
 
     // Write the classes
     for (OFString* className in classesDict) {
