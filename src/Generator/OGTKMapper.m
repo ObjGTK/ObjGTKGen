@@ -97,10 +97,8 @@ static OGTKMapper* sharedMyMapper = nil;
 - (OFString*)swapTypes:(OFString*)type
 {
     // Convert basic types by hardcoding
-    if ([type isEqual:@"Atk.Object"] || [type isEqual:@"Gio.Application"] ||
-        [type isEqual:@"GObject.InitiallyUnowned"] ||
-        [type isEqual:@"GObject.Object"] || [type isEqual:@"GObject"] ||
-        [type isEqual:@"GInitiallyUnowned"])
+    if ([type isEqual:@"AtkObject"] || [type isEqual:@"GApplication"] ||
+        [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"])
         return @"OGTKObject";
     else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"])
         return @"OFString*";
@@ -212,12 +210,16 @@ static OGTKMapper* sharedMyMapper = nil;
 
 - (OFString*)getCTypeFromName:(OFString*)name
 {
-    if ([name isEqual:@"Atk.Object"] || [name isEqual:@"Gio.Application"] ||
-        [name isEqual:@"GObject.InitiallyUnowned"] ||
-        [name isEqual:@"GObject.Object"] || [name isEqual:@"GObject"] ||
-        [name isEqual:@"GInitiallyUnowned"]) {
-        return name;
-    }
+    // Some shortcut definitions from libraries we do not want to add as
+    // dependencies
+    if ([name isEqual:@"Atk.Object"])
+        return @"AtkObject";
+    else if ([name isEqual:@"Gio.Application"])
+        return @"GApplication";
+    else if ([name isEqual:@"GObject.InitiallyUnowned"])
+        return @"GInitiallyUnowned";
+    else if ([name isEqual:@"GObject.Object"])
+        return @"GObject";
 
     // Name has a namespace prefix
     if ([name containsString:@"."]) {
