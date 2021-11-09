@@ -124,18 +124,17 @@
             [cgtkClass setCName:clazz.name];
             [cgtkClass setCType:clazz.cType];
 
-            // Set parent type
-            // TODO Some GIR definitions, f.e. HdyAvatar, are missing a <field>
-            // node. So we need to ask the mapper to get the correct cType for
-            // parent class
+            // Set parent name
+            [cgtkClass setParentName:clazz.parent];
+
+            // Try to set parent c type
+            // First try to get information from a <field> node.
+            // Otherwise we need to get the c type from the mapper later
             OFArray* classFields = clazz.fields;
             for (GIRField* field in classFields) {
                 if ([field.name isEqual:@"parent_class"] ||
                     [field.name isEqual:@"parent_instance"]) {
                     [cgtkClass setCParentType:field.type.cType];
-                } else {
-                    // Add lib dependency based on prefix (use OGTKMapper)
-                    // Resolve cType from clazz.parent (use OGTKMapper)
                 }
             }
 
@@ -278,22 +277,43 @@
             @try {
                 [sharedMapper addClass:cgtkClass];
             } @catch (id e) {
-                OFLog(@"Warning: Cannot generate file for type %@. "
+                OFLog(@"Warning: Cannot add type %@ to mapper. "
+                      @"Exception %@, description: %@"
                       @"Class definition may be incorrect. Skipping…",
-                    cgtkClass.cName);
+                    cgtkClass.cName, [e class], [e description]);
             }
         }
     }
 
-    // TODO
-    // 3. When finished make OGTKMapping set flags for fast necessary
-    // forward class definitions.
-    // 4. Write a concluding header file importing all the classes
-
-    // Write the classes
-
+    // Set correct class names for parent classes
     OFMutableDictionary* classesDict = sharedMapper.objcToGobjClassMapping;
 
+    for (OFString* className in classesDict) {
+        OGTKClass* currentClass = [classesDict objectForKey:className];
+
+        if (currentClass.cParentType == nil) {
+            @try {
+                [currentClass
+                    setCParentType:[OGTKMapper
+                                       getCTypeFromName:currentClass
+                                                            .parentName]];
+            } @catch (id e) {
+                OFLog(@"Could not get c type for parent of %@, exception %@. "
+                      @"Skipping…",
+                    currentClass.cName, [e class]);
+            }
+        }
+    }
+
+
+    // TODO
+    // 1. Calculate dependencies for each class
+
+    // 2. set flags for fast necessary forward class definitions.
+
+    // 3. Write a concluding header file importing all the classes
+
+    // Write the classes
     for (OFString* className in classesDict) {
         [OGTKClassWriter
             generateFilesForClass:[classesDict objectForKey:className]

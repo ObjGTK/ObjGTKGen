@@ -29,12 +29,12 @@
  * Objective-C imports
  */
 #import "OGTKClass.h"
-#include <ObjFW/OFStdIOStream.h>
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
+#include <ObjFW/OFStdIOStream.h>
 
 @implementation OGTKClass
-@synthesize cName = _cName, cType = _cType, cParentType = _cParentType,
-            cSymbolPrefix = _cSymbolPrefix,
+@synthesize cName = _cName, cType = _cType, parentName = _parentName,
+            cParentType = _cParentType, cSymbolPrefix = _cSymbolPrefix,
             cNSSymbolPrefix = _cNSSymbolPrefix,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
             dependsOnClasses = _dependsOnClasses,
@@ -62,6 +62,7 @@
 {
     [_cName release];
     [_cType release];
+    [_parentName release];
     [_cParentType release];
     [_cSymbolPrefix release];
     [_cNSIdentifierPrefix release];

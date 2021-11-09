@@ -35,10 +35,12 @@
  */
 @interface OGTKMapper : OFObject {
     OFMutableDictionary* _gobjToObjcStringMapping;
+    OFMutableDictionary* _nameToObjcStringMapping;
     OFMutableDictionary* _objcToGobjClassMapping;
 }
 
 @property (readonly, nonatomic) OFMutableDictionary* gobjToObjcStringMapping;
+@property (readonly, nonatomic) OFMutableDictionary* nameToObjcStringMapping;
 @property (readonly, nonatomic) OFMutableDictionary* objcToGobjClassMapping;
 
 + (instancetype)sharedMapper;
@@ -58,7 +60,10 @@
 - (OFString*)convertType:(OFString*)fromType
                 withName:(OFString*)name
                   toType:(OFString*)toType;
+
 - (OFString*)selfTypeMethodCall:(OFString*)type;
+
+- (OFString*)getCTypeFromName:(OFString*)name;
 
 /**
  * Attempts to swap the type or returns the input if it can't (shorthand
@@ -77,5 +82,7 @@
  * TYPE] or GTK_TYPE([self GOBJECT])
  */
 + (OFString*)selfTypeMethodCall:(OFString*)type;
+
++ (OFString*)getCTypeFromName:(OFString*)name;
 
 @end

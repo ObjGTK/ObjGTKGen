@@ -32,7 +32,8 @@ static OGTKMapper* sharedMyMapper = nil;
 @implementation OGTKMapper
 
 @synthesize gobjToObjcStringMapping = _gobjToObjcStringMapping,
-            objcToGobjClassMapping = _objcToGobjClassMapping;
+            objcToGobjClassMapping = _objcToGobjClassMapping,
+            nameToObjcStringMapping = _nameToObjcStringMapping;
 
 - (instancetype)init
 {
@@ -40,6 +41,7 @@ static OGTKMapper* sharedMyMapper = nil;
 
     @try {
         _gobjToObjcStringMapping = [[OFMutableDictionary alloc] init];
+        _nameToObjcStringMapping = [[OFMutableDictionary alloc] init];
         _objcToGobjClassMapping = [[OFMutableDictionary alloc] init];
     } @catch (id e) {
         [self release];
@@ -52,6 +54,7 @@ static OGTKMapper* sharedMyMapper = nil;
 - (void)dealloc
 {
     [_gobjToObjcStringMapping release];
+    [_nameToObjcStringMapping release];
     [_objcToGobjClassMapping release];
 
     [super dealloc];
@@ -69,6 +72,8 @@ static OGTKMapper* sharedMyMapper = nil;
 - (void)addClass:(OGTKClass*)clazz
 {
     [_gobjToObjcStringMapping setObject:clazz.type forKey:clazz.cType];
+
+    [_nameToObjcStringMapping setObject:clazz.type forKey:clazz.cName];
 
     [_objcToGobjClassMapping setObject:clazz forKey:clazz.type];
 }
@@ -94,7 +99,8 @@ static OGTKMapper* sharedMyMapper = nil;
     // Convert basic types by hardcoding
     if ([type isEqual:@"Atk.Object"] || [type isEqual:@"Gio.Application"] ||
         [type isEqual:@"GObject.InitiallyUnowned"] ||
-        [type isEqual:@"GObject.Object"])
+        [type isEqual:@"GObject.Object"] || [type isEqual:@"GObject"] ||
+        [type isEqual:@"GInitiallyUnowned"])
         return @"OGTKObject";
     else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"])
         return @"OFString*";
@@ -204,6 +210,43 @@ static OGTKMapper* sharedMyMapper = nil;
     return type;
 }
 
+- (OFString*)getCTypeFromName:(OFString*)name
+{
+    if ([name isEqual:@"Atk.Object"] || [name isEqual:@"Gio.Application"] ||
+        [name isEqual:@"GObject.InitiallyUnowned"] ||
+        [name isEqual:@"GObject.Object"] || [name isEqual:@"GObject"] ||
+        [name isEqual:@"GInitiallyUnowned"]) {
+        return name;
+    }
+
+    // Name has a namespace prefix
+    if ([name containsString:@"."]) {
+        OFArray* nameParts = [name componentsSeparatedByString:@"."];
+
+        OFString* objcType =
+            [_nameToObjcStringMapping objectForKey:[nameParts objectAtIndex:1]];
+
+        if (objcType != nil) {
+            OGTKClass* classInfo =
+                [_objcToGobjClassMapping objectForKey:objcType];
+
+            if ([classInfo.cNSIdentifierPrefix
+                    isEqual:[nameParts objectAtIndex:0]])
+                return classInfo.cType;
+        }
+    }
+
+    // Simple name without prefix
+    OFString* objcType = [_nameToObjcStringMapping objectForKey:name];
+    if (objcType != nil) {
+        OGTKClass* classInfo = [_objcToGobjClassMapping objectForKey:objcType];
+        return classInfo.cType;
+    }
+
+    // We did not find any c type
+    @throw [OFInvalidArgumentException exception];
+}
+
 // Private methods
 - (OFString*)stripAsterisks:(OFString*)identifier
 {
@@ -246,6 +289,13 @@ static OGTKMapper* sharedMyMapper = nil;
     OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
 
     return [sharedMapper selfTypeMethodCall:type];
+}
+
++ (OFString*)getCTypeFromName:(OFString*)name
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper getCTypeFromName:name];
 }
 
 @end

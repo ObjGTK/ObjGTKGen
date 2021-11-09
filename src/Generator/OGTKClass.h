@@ -36,6 +36,7 @@
 @interface OGTKClass : OFObject {
     OFString* _cName;
     OFString* _cType;
+    OFString* _parentName;
     OFString* _cParentType;
     OFString* _cSymbolPrefix;
     OFString* _cNSSymbolPrefix;
@@ -53,11 +54,11 @@
 @property (copy, nonatomic) OFString* cName;
 @property (copy, nonatomic) OFString* cType;
 @property (readonly, nonatomic) OFString* type;
+@property (copy, nonatomic) OFString* parentName;
 @property (copy, nonatomic) OFString* cParentType;
 @property (copy, nonatomic) OFString* cSymbolPrefix;
 @property (copy, nonatomic) OFString* cNSSymbolPrefix;
 @property (copy, nonatomic) OFString* cNSIdentifierPrefix;
-@property (readonly, nonatomic) OFString* name;
 @property (readonly, nonatomic) OFArray* constructors;
 @property (readonly, nonatomic) bool hasConstructors;
 @property (readonly, nonatomic) OFArray* functions;
