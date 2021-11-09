@@ -47,7 +47,7 @@
 
 - (void)addClass:(OGTKClass*)clazz;
 
-- (void)calculateDependencies;
+- (void)determineDependencies;
 
 - (bool)isGobjType:(OFString*)type;
 
@@ -64,6 +64,10 @@
 - (OFString*)selfTypeMethodCall:(OFString*)type;
 
 - (OFString*)getCTypeFromName:(OFString*)name;
+
++ (bool)isGobjType:(OFString*)type;
+
++ (bool)isObjcType:(OFString*)type;
 
 /**
  * Attempts to swap the type or returns the input if it can't (shorthand

@@ -112,10 +112,6 @@
 
     OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
 
-    // TODO:
-    // 2. Set dependencies of a class before adding it to OGTKMapping (all
-    // ObjC types the class to be written depends on).
-
     for (GIRClass* clazz in ns.classes) {
         @autoreleasepool {
             OGTKClass* cgtkClass = [[[OGTKClass alloc] init] autorelease];
@@ -308,6 +304,7 @@
 
     // TODO
     // 1. Calculate dependencies for each class
+    [sharedMapper determineDependencies];
 
     // 2. set flags for fast necessary forward class definitions.
 

@@ -37,7 +37,6 @@
 @implementation OGTKUtil
 
 static OFMutableDictionary* dictGlobalConf;
-static OFMutableDictionary* dictExtraImports;
 
 + (OFString*)convertUSSToCamelCase:(OFString*)input
 {
@@ -118,16 +117,6 @@ static OFMutableDictionary* dictExtraImports;
     }
 
     return [dictGlobalConf objectForKey:key];
-}
-
-+ (OFArray*)extraImports:(OFString*)clazz
-{
-    if (dictExtraImports == nil) {
-        dictExtraImports = [[OFMutableDictionary alloc]
-            ogtk_initWithJsonDictionaryOfFile:@"Config/extra_imports.json"];
-    }
-
-    return [dictExtraImports objectForKey:clazz];
 }
 
 @end

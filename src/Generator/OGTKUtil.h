@@ -62,11 +62,6 @@
                                  withConstructor:(OFString*)cCtor;
 
 /**
- * Gets a list of extra imports for the class
- */
-+ (OFArray*)extraImports:(OFString*)clazz;
-
-/**
  * Returns the configuration value for the provided key
  */
 + (id)globalConfigValueFor:(OFString*)key;

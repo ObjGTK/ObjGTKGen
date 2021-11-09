@@ -26,6 +26,7 @@
  */
 
 #import "OGTKMapper.h"
+#import "OGTKParameter.h"
 
 static OGTKMapper* sharedMyMapper = nil;
 
@@ -90,8 +91,23 @@ static OGTKMapper* sharedMyMapper = nil;
         != nil);
 }
 
-- (void)calculateDependencies
+- (void)determineDependencies
 {
+    for(OFString* className in _objcToGobjClassMapping) {
+        OGTKClass* classInfo = [_objcToGobjClassMapping objectForKey:className];
+
+        if(classInfo.cParentType != nil)
+            [classInfo addDependency:classInfo.cParentType];
+
+        for(OGTKMethod* constructor in classInfo.constructors)
+            [self addDependenciesFromMethod:constructor to:classInfo];
+
+        for(OGTKMethod* function in classInfo.functions)
+            [self addDependenciesFromMethod:function to:classInfo];
+
+        for(OGTKMethod* method in classInfo.methods)
+            [self addDependenciesFromMethod:method to:classInfo];
+    }
 }
 
 - (OFString*)swapTypes:(OFString*)type
@@ -262,6 +278,17 @@ static OGTKMapper* sharedMyMapper = nil;
     return [identifier substringToIndex:index];
 }
 
+- (void)addDependenciesFromMethod:(OGTKMethod*)method to:(OGTKClass*)classInfo
+{
+    if([self isTypeSwappable:method.returnType])
+        [classInfo addDependency:[self stripAsterisks:method.returnType]];
+
+    for(OGTKParameter* parameter in method.parameters) {
+        if([self isTypeSwappable:parameter.cType])
+            [classInfo addDependency:[self stripAsterisks:parameter.cType]];
+    }
+}
+
 // Short hands for singleton access
 + (OFString*)swapTypes:(OFString*)type
 {
@@ -275,6 +302,20 @@ static OGTKMapper* sharedMyMapper = nil;
     OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
 
     return [sharedMapper isTypeSwappable:type];
+}
+
++ (bool)isGobjType:(OFString*)type
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper isGobjType:type];
+}
+
++ (bool)isObjcType:(OFString*)type
+{
+    OGTKMapper* sharedMapper = [OGTKMapper sharedMapper];
+
+    return [sharedMapper isObjcType:type];
 }
 
 + (OFString*)convertType:(OFString*)fromType

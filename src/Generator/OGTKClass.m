@@ -30,7 +30,6 @@
  */
 #import "OGTKClass.h"
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
-#include <ObjFW/OFStdIOStream.h>
 
 @implementation OGTKClass
 @synthesize cName = _cName, cType = _cType, parentName = _parentName,
@@ -48,8 +47,8 @@
         _constructors = [[OFMutableArray alloc] init];
         _functions = [[OFMutableArray alloc] init];
         _methods = [[OFMutableArray alloc] init];
-        _dependsOnClasses = [[OFMutableArray alloc] init];
-        _forwardDeclarationForClasses = [[OFMutableArray alloc] init];
+        _dependsOnClasses = [[OFMutableSet alloc] init];
+        _forwardDeclarationForClasses = [[OFMutableSet alloc] init];
     } @catch (id e) {
         [self release];
         @throw e;
@@ -121,6 +120,11 @@
     if (function != nil) {
         [_functions addObject:function];
     }
+}
+
+- (void)addDependency:(OFString*)className
+{
+    [_dependsOnClasses addObject:className];
 }
 
 - (OFArray*)functions

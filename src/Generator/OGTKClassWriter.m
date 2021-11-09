@@ -53,8 +53,8 @@
         [[OGTKClassWriter sourceStringFor:cgtkClass] writeToFile:sFilename];
     } @catch (id e) {
         OFLog(@"Warning: Cannot generate file for type %@. "
-                @"Exception %@, description: %@ "
-                @"Class definition may be incorrect. Skipping…",
+              @"Exception %@, description: %@ "
+              @"Class definition may be incorrect. Skipping…",
             cgtkClass.cName, [e class], [e description]);
     }
 }
@@ -68,18 +68,16 @@
                              generateLicense:[OFString stringWithFormat:@"%@.h",
                                                        [cgtkClass type]]]];
 
-    // Imports
-    [output appendFormat:@"\n#import \"%@.h\"\n",
-            [OGTKMapper swapTypes:[cgtkClass cParentType]]];
+    [output appendString:@"\n"];
 
-    OFArray* extraImports = [OGTKUtil extraImports:[cgtkClass type]];
-
-    if (extraImports != nil) {
-        for (OFString* imp in extraImports) {
-            if (imp != nil) {
-                [output appendFormat:@"#import %@\n", imp];
-            }
-        }
+    // Imports/Dependencies
+    for (OFString* dependency in cgtkClass.dependsOnClasses) {
+        if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGTKObject"])
+            [output appendString:@"#import \"OGTKObject.h\"\n"];
+        else if ([OGTKMapper isGobjType:dependency] &&
+            [OGTKMapper isTypeSwappable:dependency])
+            [output appendFormat:@"#import \"%@.h\"\n",
+                    [OGTKMapper swapTypes:dependency]];
     }
 
     [output appendString:@"\n"];
