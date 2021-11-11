@@ -25,11 +25,8 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#include <ObjFW/OFSet.h>
 #import <ObjFW/ObjFW.h>
 #import "OGTKMethod.h"
-
-@class OGTKMethod;
 
 /**
  * Abstracts Class operations
@@ -72,6 +69,8 @@
 - (void)addConstructor:(OGTKMethod*)ctor;
 - (void)addFunction:(OGTKMethod*)fun;
 - (void)addMethod:(OGTKMethod*)meth;
-- (void)addDependency:(OFString*)className;
+- (void)addDependency:(OFString*)cType;
+- (void)removeForwardDeclarationsFromDependencies;
+- (void)addForwardDeclarationForClass:(OFString*)cType;
 
 @end

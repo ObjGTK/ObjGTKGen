@@ -49,6 +49,8 @@
 
 - (void)determineDependencies;
 
+- (void)detectAndMarkCircularDependencies;
+
 - (bool)isGobjType:(OFString*)type;
 
 - (bool)isObjcType:(OFString*)type;

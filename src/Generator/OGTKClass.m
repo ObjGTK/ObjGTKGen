@@ -122,9 +122,19 @@
     }
 }
 
-- (void)addDependency:(OFString*)className
+- (void)addDependency:(OFString*)cType
 {
-    [_dependsOnClasses addObject:className];
+    [_dependsOnClasses addObject:cType];
+}
+
+- (void)removeForwardDeclarationsFromDependencies
+{
+    [_dependsOnClasses minusSet:_forwardDeclarationForClasses];
+}
+
+- (void)addForwardDeclarationForClass:(OFString*)cType
+{
+    [_forwardDeclarationForClasses addObject:cType];
 }
 
 - (OFArray*)functions

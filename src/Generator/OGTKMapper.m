@@ -26,7 +26,9 @@
  */
 
 #import "OGTKMapper.h"
+#include "OGTKClass.h"
 #import "OGTKParameter.h"
+#include <ObjFW/OFObject.h>
 
 static OGTKMapper* sharedMyMapper = nil;
 
@@ -93,20 +95,55 @@ static OGTKMapper* sharedMyMapper = nil;
 
 - (void)determineDependencies
 {
-    for(OFString* className in _objcToGobjClassMapping) {
+    for (OFString* className in _objcToGobjClassMapping) {
         OGTKClass* classInfo = [_objcToGobjClassMapping objectForKey:className];
 
-        if(classInfo.cParentType != nil)
+        if (classInfo.cParentType != nil)
             [classInfo addDependency:classInfo.cParentType];
 
-        for(OGTKMethod* constructor in classInfo.constructors)
+        for (OGTKMethod* constructor in classInfo.constructors)
             [self addDependenciesFromMethod:constructor to:classInfo];
 
-        for(OGTKMethod* function in classInfo.functions)
+        for (OGTKMethod* function in classInfo.functions)
             [self addDependenciesFromMethod:function to:classInfo];
 
-        for(OGTKMethod* method in classInfo.methods)
+        for (OGTKMethod* method in classInfo.methods)
             [self addDependenciesFromMethod:method to:classInfo];
+    }
+}
+
+// TODO Make this work recursively - otherwise it won't find all circular deps
+- (void)detectAndMarkCircularDependencies
+{
+    for (OFString* className in _objcToGobjClassMapping) {
+        OGTKClass* classInfo = [_objcToGobjClassMapping objectForKey:className];
+
+        OFString* ownType = classInfo.cType;
+
+        for (OFString* dependencyGobjName in classInfo.dependsOnClasses) {
+            OFString* dependencyObjcName =
+                [_gobjToObjcStringMapping objectForKey:dependencyGobjName];
+
+            if (dependencyObjcName == nil)
+                continue;
+
+            OGTKClass* dependencyClassInfo =
+                [_objcToGobjClassMapping objectForKey:dependencyObjcName];
+
+            for (OFString* dependencyOfDependency in dependencyClassInfo
+                     .dependsOnClasses) {
+
+                if ([dependencyOfDependency isEqual:ownType]
+                    && ![dependencyOfDependency
+                        isEqual:dependencyClassInfo.cParentType]) {
+
+                    [dependencyClassInfo
+                        addForwardDeclarationForClass:dependencyOfDependency];
+                }
+            }
+
+            [dependencyClassInfo removeForwardDeclarationsFromDependencies];
+        }
     }
 }
 
@@ -154,8 +191,9 @@ static OGTKMapper* sharedMyMapper = nil;
 
 - (bool)isTypeSwappable:(OFString*)type
 {
-    return [type isEqual:@"OFArray*"] || [self isGobjType:type] ||
-        [self isObjcType:type];
+    return [type isEqual:@"gchar*"] || [type isEqual:@"const gchar*"] ||
+        [type isEqual:@"OFString*"] || [type isEqual:@"OFArray*"] ||
+        [self isGobjType:type] || [self isObjcType:type];
 }
 
 // TODO What about references (**)?
@@ -280,12 +318,19 @@ static OGTKMapper* sharedMyMapper = nil;
 
 - (void)addDependenciesFromMethod:(OGTKMethod*)method to:(OGTKClass*)classInfo
 {
-    if([self isTypeSwappable:method.returnType])
-        [classInfo addDependency:[self stripAsterisks:method.returnType]];
+    OFString* strippedReturnType = [self stripAsterisks:method.cReturnType];
 
-    for(OGTKParameter* parameter in method.parameters) {
-        if([self isTypeSwappable:parameter.cType])
-            [classInfo addDependency:[self stripAsterisks:parameter.cType]];
+    if ([self isTypeSwappable:strippedReturnType]
+        && ![strippedReturnType isEqual:classInfo.cType])
+        [classInfo addDependency:strippedReturnType];
+
+    for (OGTKParameter* parameter in method.parameters) {
+        OFString* strippedParameterCType =
+            [self stripAsterisks:parameter.cType];
+
+        if ([self isTypeSwappable:strippedParameterCType]
+            && ![strippedParameterCType isEqual:classInfo.cType])
+            [classInfo addDependency:strippedParameterCType];
     }
 }
 

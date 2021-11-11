@@ -299,9 +299,10 @@
     // Calculate dependencies for each class
     [sharedMapper determineDependencies];
 
-    // TODO
-    // 1. set flags for fast necessary forward class definitions.
+    // Set flags for fast necessary forward class definitions.
+    [sharedMapper detectAndMarkCircularDependencies];
 
+    // TODO
     // 2. Write a concluding header file and a make file importing all the classes
 
     // Write the classes

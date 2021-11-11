@@ -82,6 +82,19 @@
 
     [output appendString:@"\n"];
 
+    // Forward class declarations (for circular dependencies)
+    if (cgtkClass.forwardDeclarationForClasses.count > 0) {
+        for (OFString* gobjClassName in cgtkClass
+                 .forwardDeclarationForClasses) {
+            if ([OGTKMapper isGobjType:gobjClassName] &&
+                [OGTKMapper isTypeSwappable:gobjClassName])
+                [output appendFormat:@"@class %@;\n",
+                        [OGTKMapper swapTypes:gobjClassName]];
+        }
+
+        [output appendString:@"\n"];
+    }
+
     // Interface declaration
     [output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n", [cgtkClass type],
             [OGTKMapper swapTypes:[cgtkClass cParentType]]];
