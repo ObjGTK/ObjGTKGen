@@ -37,7 +37,8 @@
             cNSSymbolPrefix = _cNSSymbolPrefix,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
             dependsOnClasses = _dependsOnClasses,
-            forwardDeclarationForClasses = _forwardDeclarationForClasses;
+            forwardDeclarationForClasses = _forwardDeclarationForClasses,
+            visited = _visited;
 
 - (instancetype)init
 {
@@ -49,6 +50,7 @@
         _methods = [[OFMutableArray alloc] init];
         _dependsOnClasses = [[OFMutableSet alloc] init];
         _forwardDeclarationForClasses = [[OFMutableSet alloc] init];
+        _visited = false;
     } @catch (id e) {
         [self release];
         @throw e;

@@ -44,6 +44,7 @@
     OFMutableArray* _methods;
     OFMutableSet* _dependsOnClasses;
     OFMutableSet* _forwardDeclarationForClasses;
+    bool _visited;
 
 @private
     OFString* _typeWithoutPrefix;
@@ -65,6 +66,7 @@
 @property (readonly, nonatomic) bool hasMethods;
 @property (readonly, nonatomic) OFMutableSet* dependsOnClasses;
 @property (readonly, nonatomic) OFMutableSet* forwardDeclarationForClasses;
+@property (nonatomic) bool visited;
 
 - (void)addConstructor:(OGTKMethod*)ctor;
 - (void)addFunction:(OGTKMethod*)fun;

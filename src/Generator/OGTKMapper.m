@@ -26,9 +26,9 @@
  */
 
 #import "OGTKMapper.h"
-#include "OGTKClass.h"
 #import "OGTKParameter.h"
-#include <ObjFW/OFObject.h>
+#include <ObjFW/OFDictionary.h>
+#include <ObjFW/OFStdIOStream.h>
 
 static OGTKMapper* sharedMyMapper = nil;
 
@@ -112,39 +112,58 @@ static OGTKMapper* sharedMyMapper = nil;
     }
 }
 
-// TODO Make this work recursively - otherwise it won't find all circular deps
 - (void)detectAndMarkCircularDependencies
 {
     for (OFString* className in _objcToGobjClassMapping) {
         OGTKClass* classInfo = [_objcToGobjClassMapping objectForKey:className];
 
-        OFString* ownType = classInfo.cType;
+        OFMutableDictionary* stack = [[OFMutableDictionary alloc] init];
 
-        for (OFString* dependencyGobjName in classInfo.dependsOnClasses) {
-            OFString* dependencyObjcName =
-                [_gobjToObjcStringMapping objectForKey:dependencyGobjName];
+        [stack setObject:@"1" forKey:classInfo.cType];
 
-            if (dependencyObjcName == nil)
-                continue;
+        [self walkDependencyTreeFrom:classInfo usingStack:stack];
 
-            OGTKClass* dependencyClassInfo =
-                [_objcToGobjClassMapping objectForKey:dependencyObjcName];
-
-            for (OFString* dependencyOfDependency in dependencyClassInfo
-                     .dependsOnClasses) {
-
-                if ([dependencyOfDependency isEqual:ownType]
-                    && ![dependencyOfDependency
-                        isEqual:dependencyClassInfo.cParentType]) {
-
-                    [dependencyClassInfo
-                        addForwardDeclarationForClass:dependencyOfDependency];
-                }
-            }
-
-            [dependencyClassInfo removeForwardDeclarationsFromDependencies];
-        }
+        [stack release];
     }
+}
+
+// TODO: Need to add stack - otherwise we won't detect circular dependencies
+// while walking through the tree :D To not do this multiple times be sure to
+// check whether the forwardDeclaration already has been done
+- (void)walkDependencyTreeFrom:(OGTKClass*)classInfo
+                    usingStack:(OFMutableDictionary*)stack
+{
+    OFLog(@"Looking for dependency %@.", classInfo.cType);
+
+    for (OFString* dependencyGobjName in classInfo.dependsOnClasses) {
+
+        // Do not follow parent classes - that would mean we are going to travel
+        // the "tree" the wrong way
+        if ([classInfo.cParentType isEqual:dependencyGobjName])
+            continue;
+
+        if ([stack objectForKey:dependencyGobjName] != nil
+            && ![classInfo.cParentType isEqual:dependencyGobjName]) {
+            [classInfo addForwardDeclarationForClass:dependencyGobjName];
+
+            continue;
+        }
+
+        OFString* dependencyObjcName =
+            [_gobjToObjcStringMapping objectForKey:dependencyGobjName];
+
+        if (dependencyObjcName == nil)
+            continue;
+
+        OGTKClass* dependencyClassInfo =
+            [_objcToGobjClassMapping objectForKey:dependencyObjcName];
+
+        [stack setObject:@"1" forKey:dependencyGobjName];
+
+        [self walkDependencyTreeFrom:dependencyClassInfo usingStack:stack];
+    }
+
+    [classInfo removeForwardDeclarationsFromDependencies];
 }
 
 - (OFString*)swapTypes:(OFString*)type
