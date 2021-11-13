@@ -133,17 +133,47 @@ static OGTKMapper* sharedMyMapper = nil;
 - (void)walkDependencyTreeFrom:(OGTKClass*)classInfo
                     usingStack:(OFMutableDictionary*)stack
 {
-    OFLog(@"Looking for dependency %@.", classInfo.cType);
+    if(classInfo.visited) {
+        OFLog(@"Class %@ aleady visited. Skipping…", classInfo.cType);
+        return;
+    }
+    
+    OFLog(@"Visiting class: %@.", classInfo.cType);
+    classInfo.visited = true;
 
+    // First follow parent classes - traverse to the topmost tree element
+    OFString* parentClassObjcName = nil;
+
+    if (classInfo.cParentType != nil)
+        parentClassObjcName =
+            [_gobjToObjcStringMapping objectForKey:classInfo.cParentType];
+
+    if (parentClassObjcName != nil &&
+        [stack objectForKey:classInfo.cParentType] == nil) {
+
+        OGTKClass* parentClassInfo =
+            [_objcToGobjClassMapping objectForKey:parentClassObjcName];
+
+        // if (parentClassInfo.visited) {
+        //     OFLog(@"Class %@ already visited. Skipping…", parentClassInfo.cType);
+        // } else {
+        //     OFLog(@"Staging into parent class %@.", parentClassObjcName);
+
+            [stack setObject:@"1" forKey:classInfo.cParentType];
+            [self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
+        //}
+    }
+
+    OFLog(@"Checking dependencies of %@.", classInfo.cType);
+    // Then start to follow dependencies - leave out parent classes this time
     for (OFString* dependencyGobjName in classInfo.dependsOnClasses) {
 
-        // Do not follow parent classes - that would mean we are going to travel
-        // the "tree" the wrong way
-        if ([classInfo.cParentType isEqual:dependencyGobjName])
-            continue;
-
+        // Add a forward declaration if the dependency is within the stack -
+        // we're inside a circular dependency structure then
         if ([stack objectForKey:dependencyGobjName] != nil
             && ![classInfo.cParentType isEqual:dependencyGobjName]) {
+
+            OFLog(@"Detected circular dependency %@, adding forward declaration.", dependencyGobjName);
             [classInfo addForwardDeclarationForClass:dependencyGobjName];
 
             continue;
@@ -155,9 +185,15 @@ static OGTKMapper* sharedMyMapper = nil;
         if (dependencyObjcName == nil)
             continue;
 
+        // We got a dependency to follow
         OGTKClass* dependencyClassInfo =
             [_objcToGobjClassMapping objectForKey:dependencyObjcName];
 
+        // // Only follow it if we have not visited it yet
+        // if (dependencyClassInfo.visited)
+        //     continue;
+
+        // We are ready to visit that dependency and follow its dependencies
         [stack setObject:@"1" forKey:dependencyGobjName];
 
         [self walkDependencyTreeFrom:dependencyClassInfo usingStack:stack];
