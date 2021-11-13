@@ -27,8 +27,6 @@
 
 #import "OGTKMapper.h"
 #import "OGTKParameter.h"
-#include <ObjFW/OFDictionary.h>
-#include <ObjFW/OFStdIOStream.h>
 
 static OGTKMapper* sharedMyMapper = nil;
 
