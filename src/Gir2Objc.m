@@ -151,6 +151,7 @@
                     [objcCtor setName:ctor.name];
                     [objcCtor setCIdentifier:ctor.cIdentifier];
                     [objcCtor setCReturnType:ctor.returnValue.type.cType];
+                    [objcCtor setThrows:ctor.throws];
 
                     OFMutableArray* paramArray = [[OFMutableArray alloc] init];
                     for (GIRParameter* param in ctor.parameters) {
@@ -190,6 +191,7 @@
                     OGTKMethod* objcFunc = [[OGTKMethod alloc] init];
                     [objcFunc setName:func.name];
                     [objcFunc setCIdentifier:func.cIdentifier];
+                    [objcFunc setThrows:func.throws];
 
                     if (func.returnValue.type == nil
                         && func.returnValue.array != nil) {
@@ -236,6 +238,7 @@
                     OGTKMethod* objcMeth = [[OGTKMethod alloc] init];
                     [objcMeth setName:meth.name];
                     [objcMeth setCIdentifier:meth.cIdentifier];
+                    [objcMeth setThrows:meth.throws];
 
                     if (meth.returnValue.type == nil
                         && meth.returnValue.array != nil) {

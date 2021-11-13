@@ -36,6 +36,7 @@
     OFString* _cIdentifier;
     OFString* _cReturnType;
     OFArray* _parameters;
+    bool _throws;
 }
 
 @property (copy, nonatomic) OFString* name;
@@ -45,5 +46,6 @@
 @property (readonly, nonatomic) OFString* returnType;
 @property (readonly, nonatomic) bool returnsVoid;
 @property (copy, nonatomic) OFArray* parameters;
+@property (nonatomic) bool throws;
 
 @end
