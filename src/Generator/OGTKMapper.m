@@ -133,11 +133,11 @@ static OGTKMapper* sharedMyMapper = nil;
 - (void)walkDependencyTreeFrom:(OGTKClass*)classInfo
                     usingStack:(OFMutableDictionary*)stack
 {
-    if(classInfo.visited) {
+    if (classInfo.visited) {
         OFLog(@"Class %@ aleady visited. Skipping…", classInfo.cType);
         return;
     }
-    
+
     OFLog(@"Visiting class: %@.", classInfo.cType);
     classInfo.visited = true;
 
@@ -154,14 +154,8 @@ static OGTKMapper* sharedMyMapper = nil;
         OGTKClass* parentClassInfo =
             [_objcToGobjClassMapping objectForKey:parentClassObjcName];
 
-        // if (parentClassInfo.visited) {
-        //     OFLog(@"Class %@ already visited. Skipping…", parentClassInfo.cType);
-        // } else {
-        //     OFLog(@"Staging into parent class %@.", parentClassObjcName);
-
-            [stack setObject:@"1" forKey:classInfo.cParentType];
-            [self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
-        //}
+        [stack setObject:@"1" forKey:classInfo.cParentType];
+        [self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
     }
 
     OFLog(@"Checking dependencies of %@.", classInfo.cType);
@@ -173,7 +167,9 @@ static OGTKMapper* sharedMyMapper = nil;
         if ([stack objectForKey:dependencyGobjName] != nil
             && ![classInfo.cParentType isEqual:dependencyGobjName]) {
 
-            OFLog(@"Detected circular dependency %@, adding forward declaration.", dependencyGobjName);
+            OFLog(
+                @"Detected circular dependency %@, adding forward declaration.",
+                dependencyGobjName);
             [classInfo addForwardDeclarationForClass:dependencyGobjName];
 
             continue;
@@ -188,10 +184,6 @@ static OGTKMapper* sharedMyMapper = nil;
         // We got a dependency to follow
         OGTKClass* dependencyClassInfo =
             [_objcToGobjClassMapping objectForKey:dependencyObjcName];
-
-        // // Only follow it if we have not visited it yet
-        // if (dependencyClassInfo.visited)
-        //     continue;
 
         // We are ready to visit that dependency and follow its dependencies
         [stack setObject:@"1" forKey:dependencyGobjName];
