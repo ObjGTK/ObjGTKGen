@@ -125,9 +125,7 @@ static OGTKMapper* sharedMyMapper = nil;
     }
 }
 
-// TODO: Need to add stack - otherwise we won't detect circular dependencies
-// while walking through the tree :D To not do this multiple times be sure to
-// check whether the forwardDeclaration already has been done
+// WIP
 - (void)walkDependencyTreeFrom:(OGTKClass*)classInfo
                     usingStack:(OFMutableDictionary*)stack
 {
