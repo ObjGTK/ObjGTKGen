@@ -148,6 +148,19 @@
     // Imports
     [output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass type]];
 
+    // Imports for forward class declarations (for circular dependencies)
+    if (cgtkClass.forwardDeclarationForClasses.count > 0) {
+        for (OFString* gobjClassName in cgtkClass
+                 .forwardDeclarationForClasses) {
+            if ([OGTKMapper isGobjType:gobjClassName] &&
+                [OGTKMapper isTypeSwappable:gobjClassName])
+                [output appendFormat:@"#import \"%@.h\"\n",
+                        [OGTKMapper swapTypes:gobjClassName]];
+        }
+
+        [output appendString:@"\n"];
+    }
+
     // Implementation declaration
     [output appendFormat:@"@implementation %@\n\n", [cgtkClass type]];
 

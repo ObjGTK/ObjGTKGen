@@ -27,6 +27,7 @@
 
 #import "OGTKMapper.h"
 #import "OGTKParameter.h"
+#import "OGTKClass.h"
 
 static OGTKMapper* sharedMyMapper = nil;
 
@@ -194,7 +195,8 @@ static OGTKMapper* sharedMyMapper = nil;
 {
     // Convert basic types by hardcoding
     if ([type isEqual:@"AtkObject"] || [type isEqual:@"GApplication"] ||
-        [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"])
+        [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"] ||
+        [type isEqual:@"GMountOperation"])
         return @"OGTKObject";
     else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"])
         return @"OFString*";

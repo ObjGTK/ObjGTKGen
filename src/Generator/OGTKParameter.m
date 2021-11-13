@@ -26,6 +26,7 @@
  */
 
 #import "OGTKParameter.h"
+#import "OGTKUtil.h"
 
 /**
  * Abstracts Parameter operations

@@ -25,7 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "OGTKClass.h"
 #import <ObjFW/ObjFW.h>
 
 @class OGTKClass;

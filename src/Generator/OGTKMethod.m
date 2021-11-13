@@ -26,6 +26,8 @@
  */
 
 #import "OGTKMethod.h"
+#import "OGTKMapper.h"
+#import "OGTKUtil.h"
 
 @implementation OGTKMethod
 @synthesize name = _name, cIdentifier = _cIdentifier,
@@ -106,7 +108,21 @@
         [_cIdentifier isEqual:@"gtk_builder_add_objects_from_string"] ||
         [_cIdentifier isEqual:@"gtk_builder_extend_with_template"] ||
         [_cIdentifier isEqual:@"gtk_builder_value_from_string"] ||
-        [_cIdentifier isEqual:@"gtk_builder_value_from_string_type"]) {
+        [_cIdentifier isEqual:@"gtk_builder_value_from_string_type"] ||
+        [_cIdentifier isEqual:@"gtk_css_provider_load_from_data"] ||
+        [_cIdentifier isEqual:@"gtk_css_provider_load_from_file"] ||
+        [_cIdentifier isEqual:@"gtk_css_provider_load_from_path"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_icon"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_icon_finish"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_symbolic"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_symbolic_finish"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_symbolic_for_context"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_symbolic_for_context_finish"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_symbolic_for_style"] ||
+        [_cIdentifier isEqual:@"gtk_icon_info_load_surface"] ||
+        [_cIdentifier isEqual:@"gtk_icon_theme_load_icon"] ||
+        [_cIdentifier isEqual:@"gtk_icon_theme_load_icon_for_scale"] ||
+        [_cIdentifier isEqual:@"gtk_icon_theme_load_surface"]) {
         OGTKParameter* param = [[[OGTKParameter alloc] init] autorelease];
         param.cType = @"GError**";
         param.cName = @"err";
