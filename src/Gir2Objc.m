@@ -280,7 +280,7 @@
     }
 
     // Set correct class names for parent classes
-    OFMutableDictionary* classesDict = sharedMapper.objcToGobjClassMapping;
+    OFMutableDictionary* classesDict = sharedMapper.objcTypeToClassMapping;
 
     for (OFString* className in classesDict) {
         OGTKClass* currentClass = [classesDict objectForKey:className];

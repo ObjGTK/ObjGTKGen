@@ -29,18 +29,16 @@
 
 @class OGTKClass;
 
-/**
- * Reflects class/type mappings
- */
 @interface OGTKMapper : OFObject {
-    OFMutableDictionary* _gobjToObjcStringMapping;
-    OFMutableDictionary* _nameToObjcStringMapping;
-    OFMutableDictionary* _objcToGobjClassMapping;
+    OFMutableDictionary* _gobjTypeToClassMapping;
+    OFMutableDictionary* _girNameToClassMapping;
+    OFMutableDictionary* _objcTypeToClassMapping;
 }
 
-@property (readonly, nonatomic) OFMutableDictionary* gobjToObjcStringMapping;
-@property (readonly, nonatomic) OFMutableDictionary* nameToObjcStringMapping;
-@property (readonly, nonatomic) OFMutableDictionary* objcToGobjClassMapping;
+
+@property (readonly, nonatomic) OFMutableDictionary* gobjTypeToClassMapping;
+@property (readonly, nonatomic) OFMutableDictionary* girNameToClassMapping;
+@property (readonly, nonatomic) OFMutableDictionary* objcTypeToClassMapping;
 
 + (instancetype)sharedMapper;
 
