@@ -75,13 +75,13 @@ static OGTKMapper* sharedMyMapper = nil;
 
 #pragma mark - Public methods - domain logic
 
-- (void)addClass:(OGTKClass*)clazz
+- (void)addClass:(OGTKClass*)classInfo
 {
-    [_gobjTypeToClassMapping setObject:clazz forKey:clazz.cType];
+    [_gobjTypeToClassMapping setObject:classInfo forKey:classInfo.cType];
 
-    [_girNameToClassMapping setObject:clazz forKey:clazz.cName];
+    [_girNameToClassMapping setObject:classInfo forKey:classInfo.cName];
 
-    [_objcTypeToClassMapping setObject:clazz forKey:clazz.type];
+    [_objcTypeToClassMapping setObject:classInfo forKey:classInfo.type];
 }
 
 - (bool)isGobjType:(OFString*)type
@@ -266,7 +266,7 @@ static OGTKMapper* sharedMyMapper = nil;
     else if ([name isEqual:@"GObject.Object"])
         return @"GObject";
 
-    // Name has a namespace prefix
+    // Case: Name has a namespace prefix
     if ([name containsString:@"."]) {
         OFArray* nameParts = [name componentsSeparatedByString:@"."];
 
@@ -278,12 +278,12 @@ static OGTKMapper* sharedMyMapper = nil;
             return classInfo.cType;
     }
 
-    // Simple name without prefix
+    // Case: Simple name without prefix
     OGTKClass* classInfo = [_girNameToClassMapping objectForKey:name];
     if (classInfo != nil)
         return classInfo.cType;
 
-    // We did not find any c type
+    // Case: We did not find any c type
     @throw [OFInvalidArgumentException exception];
 }
 
@@ -335,11 +335,11 @@ static OGTKMapper* sharedMyMapper = nil;
                     usingStack:(OFMutableDictionary*)stack
 {
     if (classInfo.visited) {
-        OFLog(@"Class %@ aleady visited. Skipping…", classInfo.cType);
+        // OFLog(@"Class %@ aleady visited. Skipping…", classInfo.cType);
         return;
     }
 
-    OFLog(@"Visiting class: %@.", classInfo.cType);
+    // OFLog(@"Visiting class: %@.", classInfo.cType);
     classInfo.visited = true;
 
     // First follow parent classes - traverse to the topmost tree element
@@ -356,7 +356,7 @@ static OGTKMapper* sharedMyMapper = nil;
         [self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
     }
 
-    OFLog(@"Checking dependencies of %@.", classInfo.cType);
+    // OFLog(@"Checking dependencies of %@.", classInfo.cType);
     // Then start to follow dependencies - leave out parent classes this time
     for (OFString* dependencyGobjName in classInfo.dependsOnClasses) {
 
@@ -365,9 +365,9 @@ static OGTKMapper* sharedMyMapper = nil;
         if ([stack objectForKey:dependencyGobjName] != nil
             && ![classInfo.cParentType isEqual:dependencyGobjName]) {
 
-            OFLog(
-                @"Detected circular dependency %@, adding forward declaration.",
-                dependencyGobjName);
+            // OFLog(
+            //     @"Detected circular dependency %@, adding forward declaration.",
+            //     dependencyGobjName);
             [classInfo addForwardDeclarationForClass:dependencyGobjName];
 
             continue;
