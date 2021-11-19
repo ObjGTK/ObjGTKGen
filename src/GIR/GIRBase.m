@@ -36,94 +36,94 @@ static LogLevel logLevel = Info;
 
 + (void)setLogLevel:(LogLevel)level
 {
-    logLevel = level;
+	logLevel = level;
 }
 
-+ (void)log:(OFString*)message andLevel:(LogLevel)level
++ (void)log:(OFString *)message andLevel:(LogLevel)level
 {
-    if (level >= logLevel) {
-        OFString* levelDescription = nil;
+	if (level >= logLevel) {
+		OFString *levelDescription = nil;
 
-        switch (level) {
-        case Debug:
-            levelDescription = @"Debug";
-            break;
-        case Info:
-            levelDescription = @"Info";
-            break;
-        case Warning:
-            levelDescription = @"Warning";
-            break;
-        case Error:
-            levelDescription = @"Error";
-            break;
-        default:
-            levelDescription = @"Unkown";
-            break;
-        }
+		switch (level) {
+		case Debug:
+			levelDescription = @"Debug";
+			break;
+		case Info:
+			levelDescription = @"Info";
+			break;
+		case Warning:
+			levelDescription = @"Warning";
+			break;
+		case Error:
+			levelDescription = @"Error";
+			break;
+		default:
+			levelDescription = @"Unkown";
+			break;
+		}
 
-        OFLog(@"[%@] %@", levelDescription, message);
-    }
+		OFLog(@"[%@] %@", levelDescription, message);
+	}
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    OF_UNRECOGNIZED_SELECTOR
+	OF_UNRECOGNIZED_SELECTOR
 }
 
-- (instancetype)initWithDictionary:(OFDictionary*)dict
+- (instancetype)initWithDictionary:(OFDictionary *)dict
 {
-    OF_INVALID_INIT_METHOD
+	OF_INVALID_INIT_METHOD
 }
 
 - (void)processArrayOrDictionary:(id)values
                        withClass:(Class)clazz
-                        andArray:(OFMutableArray*)array;
+                        andArray:(OFMutableArray *)array;
 {
-    // If the values are a dictionary call it directly
-    if ([values isKindOfClass:[OFDictionary class]]) {
-        id obj = [[[clazz alloc] init] autorelease];
+	// If the values are a dictionary call it directly
+	if ([values isKindOfClass:[OFDictionary class]]) {
+		id obj = [[[clazz alloc] init] autorelease];
 
-        if ([obj conformsToProtocol:@protocol(GIRParseDictionary)]) {
-            [obj parseDictionary:values];
-            [array addObject:obj];
-        }
-    } else if ([values isKindOfClass:[OFArray class]]) {
-        for (id object in values) {
-            [self processArrayOrDictionary:object
-                                 withClass:clazz
-                                  andArray:array];
-        }
-    } else
-        @throw [OFInvalidArgumentException exception];
+		if ([obj conformsToProtocol:@protocol(GIRParseDictionary)]) {
+			[obj parseDictionary:values];
+			[array addObject:obj];
+		}
+	} else if ([values isKindOfClass:[OFArray class]]) {
+		for (id object in values) {
+			[self processArrayOrDictionary:object
+			                     withClass:clazz
+			                      andArray:array];
+		}
+	} else
+		@throw [OFInvalidArgumentException exception];
 }
 
-- (void)logUnknownElement:(OFString*)element
+- (void)logUnknownElement:(OFString *)element
 {
-    if (self.unknownElements == nil) {
-        self.unknownElements = [OFMutableDictionary dictionary];
-    }
+	if (self.unknownElements == nil) {
+		self.unknownElements = [OFMutableDictionary dictionary];
+	}
 
-    OFString* hopefullyUniqueKey =
-        [OFString stringWithFormat:@"%@--%@", self.elementTypeName, element];
+	OFString *hopefullyUniqueKey = [OFString
+	    stringWithFormat:@"%@--%@", self.elementTypeName, element];
 
-    if ([self.unknownElements objectForKey:hopefullyUniqueKey] != nil) {
-        [self.unknownElements setObject:hopefullyUniqueKey
-                                 forKey:hopefullyUniqueKey];
-    } else {
-        [GIRBase log:[OFString
-                         stringWithFormat:@"[%@]: Found unknown element: [%@]",
-                         self.elementTypeName, element]
-            andLevel:Warning];
-    }
+	if ([self.unknownElements objectForKey:hopefullyUniqueKey] != nil) {
+		[self.unknownElements setObject:hopefullyUniqueKey
+		                         forKey:hopefullyUniqueKey];
+	} else {
+		[GIRBase log:[OFString stringWithFormat:
+		                           @"[%@]: Found unknown element: [%@]",
+		                       self.elementTypeName, element]
+		    andLevel:Warning];
+	}
 }
 
 - (void)dealloc
 {
-    [_elementTypeName release];
-    [_unknownElements release];
+	[_elementTypeName release];
+	[_unknownElements release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

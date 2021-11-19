@@ -36,52 +36,52 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _elementTypeName = @"GIRPrerequisite";
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_elementTypeName = @"GIRPrerequisite";
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]) {
-            // Do nothing
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"]) {
+			// Do nothing
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_name release];
+	[_name release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

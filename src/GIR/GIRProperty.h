@@ -32,36 +32,37 @@
 #import "GIRDoc.h"
 #import "GIRType.h"
 
-@interface GIRProperty : GIRBase {
-    OFString* _name;
-    OFString* _transferOwnership;
-    OFString* _version;
-    OFString* _deprecatedVersion;
-    GIRDoc* _doc;
-    GIRDoc* _docDeprecated;
-    GIRType* _type;
-    bool _allowNone;
-    bool _constructOnly;
-    bool _readable;
-    bool _deprecated;
-    OFString* _construct;
-    OFString* _writable;
-    GIRArray* _array;
+@interface GIRProperty: GIRBase
+{
+	OFString *_name;
+	OFString *_transferOwnership;
+	OFString *_version;
+	OFString *_deprecatedVersion;
+	GIRDoc *_doc;
+	GIRDoc *_docDeprecated;
+	GIRType *_type;
+	bool _allowNone;
+	bool _constructOnly;
+	bool _readable;
+	bool _deprecated;
+	OFString *_construct;
+	OFString *_writable;
+	GIRArray *_array;
 }
 
-@property (nonatomic, retain) OFString* name;
-@property (nonatomic, retain) OFString* transferOwnership;
-@property (nonatomic, retain) OFString* version;
-@property (nonatomic, retain) OFString* deprecatedVersion;
-@property (nonatomic, retain) GIRDoc* doc;
-@property (nonatomic, retain) GIRDoc* docDeprecated;
-@property (nonatomic, retain) GIRType* type;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *transferOwnership;
+@property (nonatomic, retain) OFString *version;
+@property (nonatomic, retain) OFString *deprecatedVersion;
+@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, retain) GIRDoc *docDeprecated;
+@property (nonatomic, retain) GIRType *type;
 @property (nonatomic) bool allowNone;
 @property (nonatomic) bool constructOnly;
 @property (nonatomic) bool readable;
 @property (nonatomic) bool deprecated;
-@property (nonatomic, retain) OFString* construct;
-@property (nonatomic, retain) OFString* writable;
-@property (nonatomic, retain) GIRArray* array;
+@property (nonatomic, retain) OFString *construct;
+@property (nonatomic, retain) OFString *writable;
+@property (nonatomic, retain) GIRArray *array;
 
 @end

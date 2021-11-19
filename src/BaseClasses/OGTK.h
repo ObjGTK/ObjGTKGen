@@ -28,26 +28,26 @@
 #import "OGTKObject.h"
 #import <gtk/gtk.h>
 
-extern OFString* const OGTKVersion;
+extern OFString *const OGTKVersion;
 
 /**
  * Global level CoreGTK functionality
  */
-@interface OGTK : OFObject
+@interface OGTK: OFObject
 
 /**
  * Returns the CoreGTK version string
  *
  * @return the version string
  */
-+ (OFString*)objGtkVersion;
++ (OFString *)objGtkVersion;
 
 /**
  * Returns the GTK version string
  *
  * @return the version string
  */
-+ (OFString*)gtkVersion;
++ (OFString *)gtkVersion;
 
 /**
  * Call this function before using any other GTK+ functions in your GUI
@@ -69,7 +69,7 @@ extern OFString* const OGTKVersion;
  *  Address of the argv parameter of main(), or NULL. Any options understood by
  *  GTK+ are stripped before return. [array length=argc][inout][allow-none]
  */
-+ (void)initWithArgc:(int*)argc argv:(char***)argv;
++ (void)initWithArgc:(int *)argc argv:(char ***)argv;
 
 /**
  * Same as initWithArgc:andArgv: but does the type conversion automatically.
@@ -86,7 +86,7 @@ extern OFString* const OGTKVersion;
  *
  * @see initWithArgc:andArgv:
  */
-+ (int)autoInitWithArgc:(int)argc argv:(char*[])argv;
++ (int)autoInitWithArgc:(int)argc argv:(char *[])argv;
 
 /**
  * Runs the main loop until mainQuit is called.

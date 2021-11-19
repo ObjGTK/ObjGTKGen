@@ -31,38 +31,38 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    _elementTypeName = @"GIRVarargs";
+	_elementTypeName = @"GIRVarargs";
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        // id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		// id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"] || [key isEqual:@"type"]) {
-            // Do nothing
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"] || [key isEqual:@"type"]) {
+			// Do nothing
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 @end

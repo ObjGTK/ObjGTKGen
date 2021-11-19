@@ -27,8 +27,10 @@
 
 #import "OGTKContainer.h"
 
-@interface OGTKContainer (OGTKAddWidget)
+@interface
+OGTKContainer (OGTKAddWidget)
 
-- (void)addWidget:(OGTKWidget*)widget withProperties:(OFDictionary*)properties;
+- (void)addWidget:(OGTKWidget *)widget
+    withProperties:(OFDictionary *)properties;
 
 @end

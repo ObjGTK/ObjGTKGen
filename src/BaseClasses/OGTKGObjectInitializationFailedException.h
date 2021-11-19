@@ -11,9 +11,10 @@
 
 OF_ASSUME_NONNULL_BEGIN
 
-@interface OGTKGObjectInitializationFailedException : OFInitializationFailedException
+@interface OGTKGObjectInitializationFailedException
+    : OFInitializationFailedException
 
-- (OFString*)description;
+- (OFString *)description;
 
 @end
 

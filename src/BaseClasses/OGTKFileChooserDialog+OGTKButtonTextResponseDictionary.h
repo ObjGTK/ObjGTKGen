@@ -27,11 +27,12 @@
 
 #import "OGTKFileChooserDialog.h"
 
-@interface OGTKFileChooserDialog (OGTKButtonTextResponseDictionary)
+@interface
+OGTKFileChooserDialog (OGTKButtonTextResponseDictionary)
 
-- (id)initWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
+- (id)initWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
                           action:(GtkFileChooserAction)action
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict;
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict;
 
 @end

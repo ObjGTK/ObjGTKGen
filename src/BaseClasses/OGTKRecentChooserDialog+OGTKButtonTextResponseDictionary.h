@@ -27,15 +27,16 @@
 
 #import "OGTKRecentChooserDialog.h"
 
-@interface OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
+@interface
+OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
 
-- (id)initWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict;
+- (id)initWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict;
 
-- (id)initForManagerWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
-                         manager:(GtkRecentManager*)manager
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict;
+- (id)initForManagerWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
+                         manager:(GtkRecentManager *)manager
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict;
 
 @end

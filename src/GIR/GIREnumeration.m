@@ -41,114 +41,117 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _elementTypeName = @"GIREnumeration";
-        _members = [[OFMutableArray alloc] init];
-        _functions = [[OFMutableArray alloc] init];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_elementTypeName = @"GIREnumeration";
+		_members = [[OFMutableArray alloc] init];
+		_functions = [[OFMutableArray alloc] init];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
-            [key isEqual:@"glib:get-type"] ||
-            [key isEqual:@"glib:error-domain"]) {
-            // Do nothing
-        } else if ([key isEqual:@"c:type"]) {
-            self.cType = value;
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else if ([key isEqual:@"version"]) {
-            self.version = value;
-        } else if ([key isEqual:@"deprecated-version"]) {
-            self.deprecatedVersion = value;
-        } else if ([key isEqual:@"deprecated"]) {
-            self.deprecated = [value isEqual:@"1"];
-        } else if ([key isEqual:@"doc"]) {
-            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"doc-deprecated"]) {
-            self.docDeprecated =
-                [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"member"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIRMember class]
-                                  andArray:_members];
-        } else if ([key isEqual:@"function"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIRFunction class]
-                                  andArray:_functions];
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
+		    [key isEqual:@"glib:get-type"] ||
+		    [key isEqual:@"glib:error-domain"]) {
+			// Do nothing
+		} else if ([key isEqual:@"c:type"]) {
+			self.cType = value;
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else if ([key isEqual:@"version"]) {
+			self.version = value;
+		} else if ([key isEqual:@"deprecated-version"]) {
+			self.deprecatedVersion = value;
+		} else if ([key isEqual:@"deprecated"]) {
+			self.deprecated = [value isEqual:@"1"];
+		} else if ([key isEqual:@"doc"]) {
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"doc-deprecated"]) {
+			self.docDeprecated = [[[GIRDoc alloc]
+			    initWithDictionary:value] autorelease];
+		} else if ([key isEqual:@"member"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRMember class]
+			                      andArray:_members];
+		} else if ([key isEqual:@"function"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRFunction class]
+			                      andArray:_functions];
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)addMemberDictionary:(id)object
 {
-    [GIRBase log:@"Adding member" andLevel:Debug];
+	[GIRBase log:@"Adding member" andLevel:Debug];
 
-    // Create the array if this is the first time through
-    if (_members == nil) {
-        _members = [[OFMutableArray alloc] init];
-    }
+	// Create the array if this is the first time through
+	if (_members == nil) {
+		_members = [[OFMutableArray alloc] init];
+	}
 
-    if ([object isKindOfClass:[OFDictionary class]]) {
-        [_members addObject:[[[GIRMember alloc] initWithDictionary:object]
-                                autorelease]];
-    }
+	if ([object isKindOfClass:[OFDictionary class]]) {
+		[_members
+		    addObject:[[[GIRMember alloc] initWithDictionary:object]
+		                  autorelease]];
+	}
 }
 
 - (void)addFunctionDictionary:(id)object
 {
-    [GIRBase log:@"Adding function" andLevel:Debug];
+	[GIRBase log:@"Adding function" andLevel:Debug];
 
-    // Create the array if this is the first time through
-    if (_functions == nil) {
-        _functions = [[OFMutableArray alloc] init];
-    }
+	// Create the array if this is the first time through
+	if (_functions == nil) {
+		_functions = [[OFMutableArray alloc] init];
+	}
 
-    if ([object isKindOfClass:[OFDictionary class]]) {
-        [_functions addObject:[[[GIRFunction alloc] initWithDictionary:object]
-                                  autorelease]];
-    }
+	if ([object isKindOfClass:[OFDictionary class]]) {
+		[_functions
+		    addObject:[[[GIRFunction alloc] initWithDictionary:object]
+		                  autorelease]];
+	}
 }
 
 - (void)dealloc
 {
-    [_cType release];
-    [_name release];
-    [_version release];
-    [_deprecatedVersion release];
-    [_doc release];
-    [_docDeprecated release];
-    [_members release];
-    [_functions release];
+	[_cType release];
+	[_name release];
+	[_version release];
+	[_deprecatedVersion release];
+	[_doc release];
+	[_docDeprecated release];
+	[_members release];
+	[_functions release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

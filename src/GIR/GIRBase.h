@@ -33,17 +33,18 @@
 typedef enum LogLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 } LogLevel;
 
 @protocol GIRParseDictionary
-- (void)parseDictionary:(OFDictionary*)dict;
-- (instancetype)initWithDictionary:(OFDictionary*)dict;
+- (void)parseDictionary:(OFDictionary *)dict;
+- (instancetype)initWithDictionary:(OFDictionary *)dict;
 @end
 
-@interface GIRBase : OFObject <GIRParseDictionary> {
-    OFString* _elementTypeName;
-    OFMutableDictionary* _unknownElements;
+@interface GIRBase: OFObject <GIRParseDictionary>
+{
+	OFString *_elementTypeName;
+	OFMutableDictionary *_unknownElements;
 }
 
-@property (nonatomic, copy) OFString* elementTypeName;
-@property (nonatomic, retain) OFMutableDictionary* unknownElements;
+@property (nonatomic, copy) OFString *elementTypeName;
+@property (nonatomic, retain) OFMutableDictionary *unknownElements;
 
 /**
  * Sets the (current) global log level
@@ -53,13 +54,13 @@ typedef enum LogLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 } LogLevel;
 /**
  * Logs the message with the given level
  */
-+ (void)log:(OFString*)message andLevel:(LogLevel)level;
++ (void)log:(OFString *)message andLevel:(LogLevel)level;
 
 /**
  * When an unknown item is discovered this will log it iff it hasn't previously
  * been logged
  */
-- (void)logUnknownElement:(OFString*)element;
+- (void)logUnknownElement:(OFString *)element;
 
 /**
  * Extracts information from the array or dictionary (values) into the provided
@@ -67,6 +68,6 @@ typedef enum LogLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 } LogLevel;
  */
 - (void)processArrayOrDictionary:(id)values
                        withClass:(Class)clazz
-                        andArray:(OFMutableArray*)array;
+                        andArray:(OFMutableArray *)array;
 
 @end

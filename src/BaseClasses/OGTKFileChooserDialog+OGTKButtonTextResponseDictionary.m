@@ -27,31 +27,33 @@
 
 #import "OGTKFileChooserDialog+OGTKButtonTextResponseDictionary.h"
 
-@implementation OGTKFileChooserDialog (OGTKButtonTextResponseDictionary)
+@implementation
+OGTKFileChooserDialog (OGTKButtonTextResponseDictionary)
 
-- (id)initWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
+- (id)initWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
                           action:(GtkFileChooserAction)action
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict
 {
-    self = [super initWithGObject:(GObject*)gtk_file_chooser_dialog_new(
-                                      [title UTF8String], [parent WINDOW],
-                                      action, NULL, NULL)];
+	self = [super initWithGObject:(GObject *)gtk_file_chooser_dialog_new(
+	                                  [title UTF8String], [parent WINDOW],
+	                                  action, NULL, NULL)];
 
-    @try {
-        OGTKTypeWrapper* wrapper;
+	@try {
+		OGTKTypeWrapper *wrapper;
 
-        for (OFString* text in buttonTextDict) {
-            wrapper = [buttonTextDict objectForKey:text];
+		for (OFString *text in buttonTextDict) {
+			wrapper = [buttonTextDict objectForKey:text];
 
-            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-        }
+			[self addButtonWithButtonText:text
+			                   responseId:wrapper.gintValue];
+		}
 
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
-    return self;
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+	return self;
 }
 
 @end

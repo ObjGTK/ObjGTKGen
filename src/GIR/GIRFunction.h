@@ -32,34 +32,35 @@
 #import "GIRParameter.h"
 #import "GIRReturnValue.h"
 
-@interface GIRFunction : GIRBase {
-    OFString* _name;
-    OFString* _cIdentifier;
-    OFString* _movedTo;
-    OFString* _version;
-    bool _introspectable;
-    bool _deprecated;
-    OFString* _deprecatedVersion;
-    bool _throws;
-    GIRDoc* _docDeprecated;
-    GIRDoc* _doc;
-    GIRReturnValue* _returnValue;
-    OFMutableArray* _parameters;
-    OFMutableArray* _instanceParameters;
+@interface GIRFunction: GIRBase
+{
+	OFString *_name;
+	OFString *_cIdentifier;
+	OFString *_movedTo;
+	OFString *_version;
+	bool _introspectable;
+	bool _deprecated;
+	OFString *_deprecatedVersion;
+	bool _throws;
+	GIRDoc *_docDeprecated;
+	GIRDoc *_doc;
+	GIRReturnValue *_returnValue;
+	OFMutableArray *_parameters;
+	OFMutableArray *_instanceParameters;
 }
 
-@property (nonatomic, retain) OFString* name;
-@property (nonatomic, retain) OFString* cIdentifier;
-@property (nonatomic, retain) OFString* movedTo;
-@property (nonatomic, retain) OFString* version;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *cIdentifier;
+@property (nonatomic, retain) OFString *movedTo;
+@property (nonatomic, retain) OFString *version;
 @property (nonatomic) bool introspectable;
 @property (nonatomic) bool deprecated;
-@property (nonatomic, retain) OFString* deprecatedVersion;
+@property (nonatomic, retain) OFString *deprecatedVersion;
 @property (nonatomic) bool throws;
-@property (nonatomic, retain) GIRDoc* docDeprecated;
-@property (nonatomic, retain) GIRDoc* doc;
-@property (nonatomic, retain) GIRReturnValue* returnValue;
-@property (nonatomic, retain) OFMutableArray* parameters;
-@property (nonatomic, retain) OFMutableArray* instanceParameters;
+@property (nonatomic, retain) GIRDoc *docDeprecated;
+@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, retain) GIRReturnValue *returnValue;
+@property (nonatomic, retain) OFMutableArray *parameters;
+@property (nonatomic, retain) OFMutableArray *instanceParameters;
 
 @end

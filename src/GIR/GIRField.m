@@ -38,61 +38,61 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    _elementTypeName = @"GIRField";
+	_elementTypeName = @"GIRField";
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"] || [key isEqual:@"doc"]) {
-            // Do nothing
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else if ([key isEqual:@"private"]) {
-            self.isPrivate = [value isEqual:@"1"];
-        } else if ([key isEqual:@"readable"]) {
-            self.readable = [value isEqual:@"1"];
-        } else if ([key isEqual:@"bits"]) {
-            self.bits = [value longLongValue];
-        } else if ([key isEqual:@"type"]) {
-            self.type =
-                [[[GIRType alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"array"]) {
-            self.array =
-                [[[GIRArray alloc] initWithDictionary:value] autorelease];
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"] || [key isEqual:@"doc"]) {
+			// Do nothing
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else if ([key isEqual:@"private"]) {
+			self.isPrivate = [value isEqual:@"1"];
+		} else if ([key isEqual:@"readable"]) {
+			self.readable = [value isEqual:@"1"];
+		} else if ([key isEqual:@"bits"]) {
+			self.bits = [value longLongValue];
+		} else if ([key isEqual:@"type"]) {
+			self.type = [[[GIRType alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"array"]) {
+			self.array = [[[GIRArray alloc]
+			    initWithDictionary:value] autorelease];
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_name release];
-    [_type release];
-    [_array release];
+	[_name release];
+	[_type release];
+	[_array release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

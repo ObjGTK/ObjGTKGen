@@ -29,10 +29,11 @@
 
 #import "GIRBase.h"
 
-@interface GIRPrerequisite : GIRBase {
-    OFString* _name;
+@interface GIRPrerequisite: GIRBase
+{
+	OFString *_name;
 }
 
-@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString *name;
 
 @end

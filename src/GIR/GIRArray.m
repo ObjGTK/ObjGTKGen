@@ -38,65 +38,65 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _elementTypeName = @"GIRArray";
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_elementTypeName = @"GIRArray";
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]) {
-            // Do nothing
-        } else if ([key isEqual:@"c:type"]) {
-            self.cType = value;
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else if ([key isEqual:@"length"]) {
-            self.length = [value longLongValue];
-        } else if ([key isEqual:@"fixed-size"]) {
-            self.fixedSize = [value longLongValue];
-        } else if ([key isEqual:@"zero-terminated"]) {
-            self.zeroTerminated = [value isEqual:@"1"];
-        } else if ([key isEqual:@"type"]) {
-            self.type =
-                [[[GIRType alloc] initWithDictionary:value] autorelease];
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"]) {
+			// Do nothing
+		} else if ([key isEqual:@"c:type"]) {
+			self.cType = value;
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else if ([key isEqual:@"length"]) {
+			self.length = [value longLongValue];
+		} else if ([key isEqual:@"fixed-size"]) {
+			self.fixedSize = [value longLongValue];
+		} else if ([key isEqual:@"zero-terminated"]) {
+			self.zeroTerminated = [value isEqual:@"1"];
+		} else if ([key isEqual:@"type"]) {
+			self.type = [[[GIRType alloc] initWithDictionary:value]
+			    autorelease];
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_cType release];
-    [_name release];
-    [_type release];
+	[_cType release];
+	[_name release];
+	[_type release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

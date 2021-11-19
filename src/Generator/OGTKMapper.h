@@ -29,20 +29,21 @@
 
 @class OGTKClass;
 
-@interface OGTKMapper : OFObject {
-    OFMutableDictionary OF_GENERIC(OFString*, OGTKClass*)
-        * _gobjTypeToClassMapping;
-    OFMutableDictionary OF_GENERIC(OFString*, OGTKClass*)
-        * _girNameToClassMapping;
-    OFMutableDictionary OF_GENERIC(OFString*, OGTKClass*)
-        * _objcTypeToClassMapping;
+@interface OGTKMapper: OFObject
+{
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
+	    _gobjTypeToClassMapping;
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
+	    _girNameToClassMapping;
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
+	    _objcTypeToClassMapping;
 }
 
 /**
  * @brief Dictionary that maps Gobj type names to class information (OGTKClass)
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString*, OGTKClass*)
+    OFString *, OGTKClass *)
     * gobjTypeToClassMapping;
 
 /**
@@ -50,14 +51,14 @@
  * file to class information (OGTKClass)
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString*, OGTKClass*)
+    OFString *, OGTKClass *)
     * girNameToClassMapping;
 
 /**
  * @brief Dictionary that maps ObjC type names to class information (OGTKClass)
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString*, OGTKClass*)
+    OFString *, OGTKClass *)
     * objcTypeToClassMapping;
 
 /**
@@ -70,7 +71,7 @@
  * @brief Adds a class to the mapping dictionaries
  * @param classInfo The object describing the class
  */
-- (void)addClass:(OGTKClass*)classInfo;
+- (void)addClass:(OGTKClass *)classInfo;
 
 /**
  * @brief Iterates through all the class information objects retained in the
@@ -95,13 +96,13 @@
  * @brief Returns if a given type string is listed as Gobj class type
  * @return True if the given string is a listed Gobj class type
  */
-- (bool)isGobjType:(OFString*)type;
+- (bool)isGobjType:(OFString *)type;
 
 /**
  * @brief Returns if a given type string is listed as ObjC class type
  * @return True if the given string is a listed ObjC class type
  */
-- (bool)isObjcType:(OFString*)type;
+- (bool)isObjcType:(OFString *)type;
 
 /**
  * @brief Tries to swap Gobj data types with ObjC data types and vice versa.
@@ -119,14 +120,14 @@
  * @see -convertType:withName:toType
  *
  */
-- (OFString*)swapTypes:(OFString*)type;
+- (OFString *)swapTypes:(OFString *)type;
 
 /**
  * @brief Tests if the given type is swappable by ```swapTypes:```
  * @param type The Gobj or ObjC type name
  * @return True if the given type is swappable by ```swapTypes:```
  */
-- (bool)isTypeSwappable:(OFString*)type;
+- (bool)isTypeSwappable:(OFString *)type;
 
 /**
  * @brief Provides the string holding the source code snipped to convert
@@ -142,9 +143,9 @@
  * ```toType``` holding ```name``` as variable name
  *
  */
-- (OFString*)convertType:(OFString*)fromType
-                withName:(OFString*)name
-                  toType:(OFString*)toType;
+- (OFString *)convertType:(OFString *)fromType
+                 withName:(OFString *)name
+                   toType:(OFString *)toType;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type
@@ -156,7 +157,7 @@
  * object instance.
  *
  */
-- (OFString*)selfTypeMethodCall:(OFString*)type;
+- (OFString *)selfTypeMethodCall:(OFString *)type;
 
 /**
  * @brief Returns the cType (Gobj type) for a name provided by a gir file
@@ -169,33 +170,33 @@
  * @see -addClass:
  *
  */
-- (OFString*)getCTypeFromName:(OFString*)name;
+- (OFString *)getCTypeFromName:(OFString *)name;
 
 /**
  * @brief Return is ```type``` is known by the Gobj type dict
  *
  */
-+ (bool)isGobjType:(OFString*)type;
++ (bool)isGobjType:(OFString *)type;
 
 /**
  * @brief Return is ```type``` is known by the ObjC type dict
  *
  */
-+ (bool)isObjcType:(OFString*)type;
++ (bool)isObjcType:(OFString *)type;
 
 /**
  * @brief Tries to swap Gobj data types with ObjC data types and vice versa.
  * Returns the input if it can't. Singleton access shortcut.
  * @see -swapTypes:
  */
-+ (OFString*)swapTypes:(OFString*)type;
++ (OFString *)swapTypes:(OFString *)type;
 
 /**
  * @brief Tests if the given type is swappable by ```swapTypes:``` Singleton
  * access shortcut.
  * @see -isTypeSwappable:
  */
-+ (bool)isTypeSwappable:(OFString*)type;
++ (bool)isTypeSwappable:(OFString *)type;
 
 /**
  * @brief Provides the string holding the source code snipped to convert
@@ -203,9 +204,9 @@
  * access shortcut.
  * @see -convertType:withName:toType:
  */
-+ (OFString*)convertType:(OFString*)fromType
-                withName:(OFString*)name
-                  toType:(OFString*)toType;
++ (OFString *)convertType:(OFString *)fromType
+                 withName:(OFString *)name
+                   toType:(OFString *)toType;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type
@@ -213,7 +214,7 @@
  * object instance. Singleton access shortcut.
  * @see -selfTypeMethodCall:
  */
-+ (OFString*)selfTypeMethodCall:(OFString*)type;
++ (OFString *)selfTypeMethodCall:(OFString *)type;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type
@@ -221,6 +222,6 @@
  * object instance. Singleton access shortcut.
  * @see -getCTypeFromName:
  */
-+ (OFString*)getCTypeFromName:(OFString*)name;
++ (OFString *)getCTypeFromName:(OFString *)name;
 
 @end

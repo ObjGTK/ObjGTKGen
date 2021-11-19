@@ -32,16 +32,17 @@
 #import "GIRDoc.h"
 #import "GIRType.h"
 
-@interface GIRReturnValue : GIRBase {
-    OFString* _transferOwnership;
-    GIRDoc* _doc;
-    GIRType* _type;
-    GIRArray* _array;
+@interface GIRReturnValue: GIRBase
+{
+	OFString *_transferOwnership;
+	GIRDoc *_doc;
+	GIRType *_type;
+	GIRArray *_array;
 }
 
-@property (nonatomic, retain) OFString* transferOwnership;
-@property (nonatomic, retain) GIRDoc* doc;
-@property (nonatomic, retain) GIRType* type;
-@property (nonatomic, retain) GIRArray* array;
+@property (nonatomic, retain) OFString *transferOwnership;
+@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, retain) GIRType *type;
+@property (nonatomic, retain) GIRArray *array;
 
 @end

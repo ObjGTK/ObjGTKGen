@@ -31,38 +31,38 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    _elementTypeName = @"GIRVirtualMethod";
+	_elementTypeName = @"GIRVirtualMethod";
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([super tryParseWithKey:key andValue:value]) {
-            // Parsed OK by GIRMethod
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([super tryParseWithKey:key andValue:value]) {
+			// Parsed OK by GIRMethod
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 @end

@@ -34,22 +34,22 @@
 @implementation OGTKParameter
 @synthesize cType = _cType, cName = _cName;
 
-- (OFString*)type
+- (OFString *)type
 {
-    return [OGTKMapper swapTypes:_cType];
+	return [OGTKMapper swapTypes:_cType];
 }
 
-- (OFString*)name
+- (OFString *)name
 {
-    return [OGTKUtil convertUSSToCamelCase:_cName];
+	return [OGTKUtil convertUSSToCamelCase:_cName];
 }
 
 - (void)dealloc
 {
-    [_cType release];
-    [_cName release];
+	[_cType release];
+	[_cName release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

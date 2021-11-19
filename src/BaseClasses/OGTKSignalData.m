@@ -27,21 +27,21 @@
 
 #import "OGTKSignalData.h"
 
-@implementation OGTKSignalData : OFObject
+@implementation OGTKSignalData: OFObject
 @synthesize target = _target, selector = _selector, data = _data;
 @synthesize dataRetained = _retained;
 
 - (instancetype)initWithTarget:(id)target
                       selector:(SEL)selector
-                          data:(void*)data
+                          data:(void *)data
 {
-    self = [super init];
+	self = [super init];
 
-    _target = [target retain];
-    _selector = selector;
-    _data = data;
+	_target = [target retain];
+	_selector = selector;
+	_data = data;
 
-    return self;
+	return self;
 }
 
 @end

@@ -31,46 +31,47 @@
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKClass.h"
-#import "OGTKUtil.h"
 #import "OGTKMapper.h"
+#import "OGTKUtil.h"
 
 /**
  * Functions to write in memory Class representation to file as ObjGTK source
  */
-@interface OGTKClassWriter : OFObject
+@interface OGTKClassWriter: OFObject
 
 /**
  * Generate both header and source files based on class and save them in
  * outputDir
  */
-+ (void)generateFilesForClass:(OGTKClass*)cgtkClass inDir:(OFString*)outputDir;
++ (void)generateFilesForClass:(OGTKClass *)cgtkClass
+                        inDir:(OFString *)outputDir;
 
 /**
  * Generate header file contents based on class
  */
-+ (OFString*)headerStringFor:(OGTKClass*)cgtkClass;
++ (OFString *)headerStringFor:(OGTKClass *)cgtkClass;
 
 /**
  * Generate source file contents based on class
  */
-+ (OFString*)sourceStringFor:(OGTKClass*)cgtkClass;
++ (OFString *)sourceStringFor:(OGTKClass *)cgtkClass;
 
 /**
  * Generate list of paramters to pass to underlying C function
  */
-+ (OFString*)generateCParameterListString:(OFArray*)params;
-+ (OFString*)generateCParameterListWithInstanceString:(OFString*)instanceType
-                                            andParams:(OFArray*)params;
++ (OFString *)generateCParameterListString:(OFArray *)params;
++ (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
+                                             andParams:(OFArray *)params;
 
 /**
  * Reads the text from conf/license.txt and replaces "@@@FILENAME@@@" with
  * fileName
  */
-+ (OFString*)generateLicense:(OFString*)fileName;
++ (OFString *)generateLicense:(OFString *)fileName;
 
 /**
  * Uses the information in the method to return documentation for the method
  */
-+ (OFString*)generateDocumentationForMethod:(OGTKMethod*)meth;
++ (OFString *)generateDocumentationForMethod:(OGTKMethod *)meth;
 
 @end

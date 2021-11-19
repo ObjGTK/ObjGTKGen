@@ -28,9 +28,9 @@
 #import <ObjFW/ObjFW.h>
 
 #import "Generator/OGTKClassWriter.h"
+#import "Generator/OGTKMapper.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
-#import "Generator/OGTKMapper.h"
 
 #import "GIR/GIRApi.h"
 #import "GIR/GIRNamespace.h"
@@ -44,36 +44,36 @@
  * Provides functionality to convert GObject Introspection GIR files into ObjGTK
  * source code
  */
-@interface Gir2Objc : OFObject
+@interface Gir2Objc: OFObject
 
 /**
  * Parses the girFile XML into the OFDictionary
  */
-+ (void)parseGirFromFile:(OFString*)girFile
-          intoDictionary:(OFDictionary**)girDict;
++ (void)parseGirFromFile:(OFString *)girFile
+          intoDictionary:(OFDictionary **)girDict;
 
 /**
  * Recurses through the OFDictionary looking for the first "api" or "repository"
  * key and then attempts to parse that into a GIRApi. If no key is found nil is
  * returned.
  */
-+ (GIRApi*)firstApiFromDictionary:(OFDictionary*)girDict;
++ (GIRApi *)firstApiFromDictionary:(OFDictionary *)girDict;
 
 /**
  * Parses the girFile XML and then attempts to extract a GIRApi from the parsed
  * contents. If the GIR is successfully parsed, but no valid data is found, nil
  * is returned.
  */
-+ (GIRApi*)firstApiFromGirFile:(OFString*)girFile;
++ (GIRApi *)firstApiFromGirFile:(OFString *)girFile;
 
 /**
  * Generates ObjGTK source from the GIR API level
  */
-+ (void)generateClassFilesFromApi:(GIRApi*)api;
++ (void)generateClassFilesFromApi:(GIRApi *)api;
 
 /**
  * Generates ObjGTK source from the GIR Namespace level
  */
-+ (void)generateClassFilesFromNamespace:(GIRNamespace*)ns;
++ (void)generateClassFilesFromNamespace:(GIRNamespace *)ns;
 
 @end

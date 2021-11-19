@@ -32,36 +32,37 @@
 #import "GIRParameter.h"
 #import "GIRReturnValue.h"
 
-@interface GIRConstructor : GIRBase {
-    OFString* _name;
-    OFString* _cIdentifier;
-    OFString* _version;
-    OFString* _deprecatedVersion;
-    OFString* _shadowedBy;
-    OFString* _shadows;
-    bool _introspectable;
-    bool _deprecated;
-    bool _throws;
-    GIRDoc* _doc;
-    GIRDoc* _docDeprecated;
-    GIRReturnValue* _returnValue;
-    OFMutableArray* _parameters;
-    OFMutableArray* _instanceParameters;
+@interface GIRConstructor: GIRBase
+{
+	OFString *_name;
+	OFString *_cIdentifier;
+	OFString *_version;
+	OFString *_deprecatedVersion;
+	OFString *_shadowedBy;
+	OFString *_shadows;
+	bool _introspectable;
+	bool _deprecated;
+	bool _throws;
+	GIRDoc *_doc;
+	GIRDoc *_docDeprecated;
+	GIRReturnValue *_returnValue;
+	OFMutableArray *_parameters;
+	OFMutableArray *_instanceParameters;
 }
 
-@property (nonatomic, retain) OFString* name;
-@property (nonatomic, retain) OFString* cIdentifier;
-@property (nonatomic, retain) OFString* version;
-@property (nonatomic, retain) OFString* deprecatedVersion;
-@property (nonatomic, retain) OFString* shadowedBy;
-@property (nonatomic, retain) OFString* shadows;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *cIdentifier;
+@property (nonatomic, retain) OFString *version;
+@property (nonatomic, retain) OFString *deprecatedVersion;
+@property (nonatomic, retain) OFString *shadowedBy;
+@property (nonatomic, retain) OFString *shadows;
 @property (nonatomic) bool introspectable;
 @property (nonatomic) bool deprecated;
 @property (nonatomic) bool throws;
-@property (nonatomic, retain) GIRDoc* doc;
-@property (nonatomic, retain) GIRDoc* docDeprecated;
-@property (nonatomic, retain) GIRReturnValue* returnValue;
-@property (nonatomic, retain) OFMutableArray* parameters;
-@property (nonatomic, retain) OFMutableArray* instanceParameters;
+@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, retain) GIRDoc *docDeprecated;
+@property (nonatomic, retain) GIRReturnValue *returnValue;
+@property (nonatomic, retain) OFMutableArray *parameters;
+@property (nonatomic, retain) OFMutableArray *instanceParameters;
 
 @end

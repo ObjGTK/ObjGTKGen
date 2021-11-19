@@ -32,341 +32,367 @@
 
 @implementation OGTKClassWriter
 
-+ (void)generateFilesForClass:(OGTKClass*)cgtkClass inDir:(OFString*)outputDir
++ (void)generateFilesForClass:(OGTKClass *)cgtkClass inDir:(OFString *)outputDir
 {
-    OFFileManager* fileManager = [OFFileManager defaultManager];
-    if (![fileManager directoryExistsAtPath:outputDir]) {
-        [fileManager createDirectoryAtPath:outputDir createParents:true];
-    }
+	OFFileManager *fileManager = [OFFileManager defaultManager];
+	if (![fileManager directoryExistsAtPath:outputDir]) {
+		[fileManager createDirectoryAtPath:outputDir
+		                     createParents:true];
+	}
 
-    @try {
-        // Header
-        OFString* hFilename =
-            [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
-                stringByAppendingString:@".h"];
-        [[OGTKClassWriter headerStringFor:cgtkClass] writeToFile:hFilename];
+	@try {
+		// Header
+		OFString *hFilename =
+		    [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
+		        stringByAppendingString:@".h"];
+		[[OGTKClassWriter headerStringFor:cgtkClass]
+		    writeToFile:hFilename];
 
-        // Source
-        OFString* sFilename =
-            [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
-                stringByAppendingString:@".m"];
-        [[OGTKClassWriter sourceStringFor:cgtkClass] writeToFile:sFilename];
-    } @catch (id e) {
-        OFLog(@"Warning: Cannot generate file for type %@. "
-              @"Exception %@, description: %@ "
-              @"Class definition may be incorrect. Skipping…",
-            cgtkClass.cName, [e class], [e description]);
-    }
+		// Source
+		OFString *sFilename =
+		    [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
+		        stringByAppendingString:@".m"];
+		[[OGTKClassWriter sourceStringFor:cgtkClass]
+		    writeToFile:sFilename];
+	} @catch (id e) {
+		OFLog(@"Warning: Cannot generate file for type %@. "
+		      @"Exception %@, description: %@ "
+		      @"Class definition may be incorrect. Skipping…",
+		    cgtkClass.cName, [e class], [e description]);
+	}
 }
 
-+ (OFString*)headerStringFor:(OGTKClass*)cgtkClass
++ (OFString *)headerStringFor:(OGTKClass *)cgtkClass
 {
-    OFMutableString* output = [[OFMutableString alloc] init];
+	OFMutableString *output = [[OFMutableString alloc] init];
 
-    // OFLog(@"Writing header file for class %@.", [cgtkClass type]);
-    [output appendString:[OGTKClassWriter
-                             generateLicense:[OFString stringWithFormat:@"%@.h",
-                                                       [cgtkClass type]]]];
+	// OFLog(@"Writing header file for class %@.", [cgtkClass type]);
+	[output
+	    appendString:[OGTKClassWriter
+	                     generateLicense:[OFString stringWithFormat:@"%@.h",
+	                                               [cgtkClass type]]]];
 
-    [output appendString:@"\n"];
+	[output appendString:@"\n"];
 
-    // Imports/Dependencies
-    for (OFString* dependency in cgtkClass.dependsOnClasses) {
-        if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGTKObject"])
-            [output appendString:@"#import \"OGTKObject.h\"\n"];
-        else if ([OGTKMapper isGobjType:dependency] &&
-            [OGTKMapper isTypeSwappable:dependency])
-            [output appendFormat:@"#import \"%@.h\"\n",
-                    [OGTKMapper swapTypes:dependency]];
-    }
+	// Imports/Dependencies
+	for (OFString *dependency in cgtkClass.dependsOnClasses) {
+		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGTKObject"])
+			[output appendString:@"#import \"OGTKObject.h\"\n"];
+		else if ([OGTKMapper isGobjType:dependency] &&
+		    [OGTKMapper isTypeSwappable:dependency])
+			[output appendFormat:@"#import \"%@.h\"\n",
+			        [OGTKMapper swapTypes:dependency]];
+	}
 
-    [output appendString:@"\n"];
+	[output appendString:@"\n"];
 
-    // Forward class declarations (for circular dependencies)
-    if (cgtkClass.forwardDeclarationForClasses.count > 0) {
-        for (OFString* gobjClassName in cgtkClass
-                 .forwardDeclarationForClasses) {
-            if ([OGTKMapper isGobjType:gobjClassName] &&
-                [OGTKMapper isTypeSwappable:gobjClassName])
-                [output appendFormat:@"@class %@;\n",
-                        [OGTKMapper swapTypes:gobjClassName]];
-        }
+	// Forward class declarations (for circular dependencies)
+	if (cgtkClass.forwardDeclarationForClasses.count > 0) {
+		for (OFString *gobjClassName in cgtkClass
+		         .forwardDeclarationForClasses) {
+			if ([OGTKMapper isGobjType:gobjClassName] &&
+			    [OGTKMapper isTypeSwappable:gobjClassName])
+				[output appendFormat:@"@class %@;\n",
+				        [OGTKMapper swapTypes:gobjClassName]];
+		}
 
-        [output appendString:@"\n"];
-    }
+		[output appendString:@"\n"];
+	}
 
-    // Interface declaration
-    [output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n", [cgtkClass type],
-            [OGTKMapper swapTypes:[cgtkClass cParentType]]];
+	// Interface declaration
+	[output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n",
+	        [cgtkClass type],
+	        [OGTKMapper swapTypes:[cgtkClass cParentType]]];
 
-    // Function declarations
-    if ([cgtkClass hasFunctions]) {
-        [output appendString:@"/**\n * Functions\n */\n"];
+	// Function declarations
+	if ([cgtkClass hasFunctions]) {
+		[output appendString:@"/**\n * Functions\n */\n"];
 
-        for (OGTKMethod* func in [cgtkClass functions]) {
-            [output appendFormat:@"+ (%@)%@;\n", [func returnType], [func sig]];
-        }
-    }
+		for (OGTKMethod *func in [cgtkClass functions]) {
+			[output appendFormat:@"+ (%@)%@;\n", [func returnType],
+			        [func sig]];
+		}
+	}
 
-    if ([cgtkClass hasConstructors]) {
-        [output appendString:@"\n/**\n * Constructors\n */\n"];
+	if ([cgtkClass hasConstructors]) {
+		[output appendString:@"\n/**\n * Constructors\n */\n"];
 
-        // Constructor declarations
-        for (OGTKMethod* ctor in [cgtkClass constructors]) {
-            [output appendFormat:@"- (instancetype)%@;\n",
-                    [OGTKUtil convertFunctionToInit:[ctor sig]]];
-        }
-    }
+		// Constructor declarations
+		for (OGTKMethod *ctor in [cgtkClass constructors]) {
+			[output appendFormat:@"- (instancetype)%@;\n",
+			        [OGTKUtil convertFunctionToInit:[ctor sig]]];
+		}
+	}
 
-    [output appendString:@"\n/**\n * Methods\n */\n\n"];
+	[output appendString:@"\n/**\n * Methods\n */\n\n"];
 
-    // Self type method declaration
-    [output appendFormat:@"- (%@*)%@;\n", [cgtkClass cType],
-            [[cgtkClass cName] uppercaseString]];
+	// Self type method declaration
+	[output appendFormat:@"- (%@*)%@;\n", [cgtkClass cType],
+	        [[cgtkClass cName] uppercaseString]];
 
-    for (OGTKMethod* meth in [cgtkClass methods]) {
-        [output appendFormat:@"\n%@\n",
-                [OGTKClassWriter generateDocumentationForMethod:meth]];
-        [output appendFormat:@"- (%@)%@;\n", [meth returnType], [meth sig]];
-    }
+	for (OGTKMethod *meth in [cgtkClass methods]) {
+		[output appendFormat:@"\n%@\n",
+		        [OGTKClassWriter generateDocumentationForMethod:meth]];
+		[output
+		    appendFormat:@"- (%@)%@;\n", [meth returnType], [meth sig]];
+	}
 
-    // End interface
-    [output appendString:@"\n@end"];
+	// End interface
+	[output appendString:@"\n@end"];
 
-    return [output autorelease];
+	return [output autorelease];
 }
 
-+ (OFString*)sourceStringFor:(OGTKClass*)cgtkClass
++ (OFString *)sourceStringFor:(OGTKClass *)cgtkClass
 {
-    OFMutableString* output = [[OFMutableString alloc] init];
+	OFMutableString *output = [[OFMutableString alloc] init];
 
-    // OFLog(@"Writing implementation file for class %@.", [cgtkClass type]);
-    [output appendString:[OGTKClassWriter
-                             generateLicense:[OFString stringWithFormat:@"%@.m",
-                                                       [cgtkClass type]]]];
+	// OFLog(@"Writing implementation file for class %@.", [cgtkClass
+	// type]);
+	[output
+	    appendString:[OGTKClassWriter
+	                     generateLicense:[OFString stringWithFormat:@"%@.m",
+	                                               [cgtkClass type]]]];
 
-    // Imports
-    [output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass type]];
+	// Imports
+	[output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass type]];
 
-    // Imports for forward class declarations (for circular dependencies)
-    if (cgtkClass.forwardDeclarationForClasses.count > 0) {
-        for (OFString* gobjClassName in cgtkClass
-                 .forwardDeclarationForClasses) {
-            if ([OGTKMapper isGobjType:gobjClassName] &&
-                [OGTKMapper isTypeSwappable:gobjClassName])
-                [output appendFormat:@"#import \"%@.h\"\n",
-                        [OGTKMapper swapTypes:gobjClassName]];
-        }
+	// Imports for forward class declarations (for circular dependencies)
+	if (cgtkClass.forwardDeclarationForClasses.count > 0) {
+		for (OFString *gobjClassName in cgtkClass
+		         .forwardDeclarationForClasses) {
+			if ([OGTKMapper isGobjType:gobjClassName] &&
+			    [OGTKMapper isTypeSwappable:gobjClassName])
+				[output appendFormat:@"#import \"%@.h\"\n",
+				        [OGTKMapper swapTypes:gobjClassName]];
+		}
 
-        [output appendString:@"\n"];
-    }
+		[output appendString:@"\n"];
+	}
 
-    // Implementation declaration
-    [output appendFormat:@"@implementation %@\n\n", [cgtkClass type]];
+	// Implementation declaration
+	[output appendFormat:@"@implementation %@\n\n", [cgtkClass type]];
 
-    // Function implementations
-    for (OGTKMethod* func in [cgtkClass functions]) {
-        [output appendFormat:@"+ (%@)%@", [func returnType], [func sig]];
+	// Function implementations
+	for (OGTKMethod *func in [cgtkClass functions]) {
+		[output
+		    appendFormat:@"+ (%@)%@", [func returnType], [func sig]];
 
-        [output appendString:@"\n{\n"];
+		[output appendString:@"\n{\n"];
 
-        if ([func returnsVoid]) {
-            [output appendFormat:@"\t%@(%@);\n", [func cIdentifier],
-                    [OGTKClassWriter
-                        generateCParameterListString:[func parameters]]];
-        } else {
-            // Need to add "return ..."
-            [output appendString:@"\treturn "];
+		if ([func returnsVoid]) {
+			[output
+			    appendFormat:@"\t%@(%@);\n", [func cIdentifier],
+			    [OGTKClassWriter
+			        generateCParameterListString:[func
+			                                         parameters]]];
+		} else {
+			// Need to add "return ..."
+			[output appendString:@"\treturn "];
 
-            if ([OGTKMapper isTypeSwappable:[func cReturnType]]) {
-                // Need to swap type on return
-                [output
-                    appendString:
-                        [OGTKMapper
-                            convertType:[func cReturnType]
-                               withName:[OFString
-                                            stringWithFormat:@"%@(%@)",
-                                            [func cIdentifier],
-                                            [OGTKClassWriter
-                                                generateCParameterListString:
-                                                    [func parameters]]]
-                                 toType:[func returnType]]];
-            } else {
-                [output appendFormat:@"%@(%@)", [func cIdentifier],
-                        [OGTKClassWriter
-                            generateCParameterListString:[func parameters]]];
-            }
+			if ([OGTKMapper isTypeSwappable:[func cReturnType]]) {
+				// Need to swap type on return
+				[output
+				    appendString:
+				        [OGTKMapper
+				            convertType:[func cReturnType]
+				               withName:
+				                   [OFString
+				                       stringWithFormat:
+				                           @"%@(%@)",
+				                       [func cIdentifier],
+				                       [OGTKClassWriter
+				                           generateCParameterListString:
+				                               [func
+				                                   parameters]]]
+				                 toType:[func returnType]]];
+			} else {
+				[output appendFormat:@"%@(%@)",
+				        [func cIdentifier],
+				        [OGTKClassWriter
+				            generateCParameterListString:
+				                [func parameters]]];
+			}
 
-            [output appendString:@";\n"];
-        }
+			[output appendString:@";\n"];
+		}
 
-        [output appendString:@"}\n\n"];
-    }
+		[output appendString:@"}\n\n"];
+	}
 
-    // Constructor implementations
-    for (OGTKMethod* ctor in [cgtkClass constructors]) {
-        [output appendFormat:@"- (instancetype)%@",
-                [OGTKUtil convertFunctionToInit:[ctor sig]]];
+	// Constructor implementations
+	for (OGTKMethod *ctor in [cgtkClass constructors]) {
+		[output appendFormat:@"- (instancetype)%@",
+		        [OGTKUtil convertFunctionToInit:[ctor sig]]];
 
-        [output appendString:@"\n{\n"];
+		[output appendString:@"\n{\n"];
 
-        [output
-            appendFormat:@"\tself = %@;\n\n",
-            [OGTKUtil
-                getFunctionCallForConstructorOfType:[cgtkClass cType]
-                                    withConstructor:
-                                        [OFString
-                                            stringWithFormat:@"%@(%@)",
-                                            [ctor cIdentifier],
-                                            [OGTKClassWriter
-                                                generateCParameterListString:
-                                                    [ctor parameters]]]]];
+		[output
+		    appendFormat:@"\tself = %@;\n\n",
+		    [OGTKUtil
+		        getFunctionCallForConstructorOfType:[cgtkClass cType]
+		                            withConstructor:
+		                                [OFString
+		                                    stringWithFormat:@"%@(%@)",
+		                                    [ctor cIdentifier],
+		                                    [OGTKClassWriter
+		                                        generateCParameterListString:
+		                                            [ctor
+		                                                parameters]]]]];
 
-        [output appendString:@"\treturn self;\n"];
+		[output appendString:@"\treturn self;\n"];
 
-        [output appendString:@"}\n\n"];
-    }
+		[output appendString:@"}\n\n"];
+	}
 
-    // Self type method implementation
-    [output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n",
-            [cgtkClass cType], [[cgtkClass cName] uppercaseString],
-            [OGTKMapper selfTypeMethodCall:[cgtkClass cType]]];
+	// Self type method implementation
+	[output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n",
+	        [cgtkClass cType], [[cgtkClass cName] uppercaseString],
+	        [OGTKMapper selfTypeMethodCall:[cgtkClass cType]]];
 
-    for (OGTKMethod* meth in [cgtkClass methods]) {
-        [output appendFormat:@"- (%@)%@", [meth returnType], [meth sig]];
+	for (OGTKMethod *meth in [cgtkClass methods]) {
+		[output
+		    appendFormat:@"- (%@)%@", [meth returnType], [meth sig]];
 
-        [output appendString:@"\n{\n"];
+		[output appendString:@"\n{\n"];
 
-        if ([meth returnsVoid]) {
-            [output
-                appendFormat:@"\t%@(%@);\n", [meth cIdentifier],
-                [OGTKClassWriter
-                    generateCParameterListWithInstanceString:[cgtkClass type]
-                                                   andParams:[meth
-                                                                 parameters]]];
-        } else {
-            // Need to add "return ..."
-            [output appendString:@"\treturn "];
+		if ([meth returnsVoid]) {
+			[output
+			    appendFormat:@"\t%@(%@);\n", [meth cIdentifier],
+			    [OGTKClassWriter
+			        generateCParameterListWithInstanceString:
+			            [cgtkClass type]
+			                                       andParams:
+			                                           [meth
+			                                               parameters]]];
+		} else {
+			// Need to add "return ..."
+			[output appendString:@"\treturn "];
 
-            if ([OGTKMapper isTypeSwappable:[meth cReturnType]]) {
-                // Need to swap type on return
-                [output
-                    appendString:
-                        [OGTKMapper
-                            convertType:[meth cReturnType]
-                               withName:
-                                   [OFString
-                                       stringWithFormat:@"%@(%@)",
-                                       [meth cIdentifier],
-                                       [OGTKClassWriter
-                                           generateCParameterListWithInstanceString:
-                                               [cgtkClass type]
-                                                                          andParams:
-                                                                              [meth
-                                                                                  parameters]]]
-                                 toType:[meth returnType]]];
-            } else {
-                [output
-                    appendFormat:@"%@(%@)", [meth cIdentifier],
-                    [OGTKClassWriter
-                        generateCParameterListWithInstanceString:[cgtkClass
-                                                                     type]
-                                                       andParams:
-                                                           [meth parameters]]];
-            }
+			if ([OGTKMapper isTypeSwappable:[meth cReturnType]]) {
+				// Need to swap type on return
+				[output
+				    appendString:
+				        [OGTKMapper
+				            convertType:[meth cReturnType]
+				               withName:
+				                   [OFString
+				                       stringWithFormat:
+				                           @"%@(%@)",
+				                       [meth cIdentifier],
+				                       [OGTKClassWriter
+				                           generateCParameterListWithInstanceString:
+				                               [cgtkClass type]
+				                                                          andParams:
+				                                                              [meth
+				                                                                  parameters]]]
+				                 toType:[meth returnType]]];
+			} else {
+				[output
+				    appendFormat:@"%@(%@)", [meth cIdentifier],
+				    [OGTKClassWriter
+				        generateCParameterListWithInstanceString:
+				            [cgtkClass type]
+				                                       andParams:
+				                                           [meth
+				                                               parameters]]];
+			}
 
-            [output appendString:@";\n"];
-        }
+			[output appendString:@";\n"];
+		}
 
-        [output appendString:@"}\n\n"];
-    }
+		[output appendString:@"}\n\n"];
+	}
 
-    // End implementation
-    [output appendString:@"\n@end"];
+	// End implementation
+	[output appendString:@"\n@end"];
 
-    return [output autorelease];
+	return [output autorelease];
 }
 
-+ (OFString*)generateCParameterListString:(OFArray*)params
++ (OFString *)generateCParameterListString:(OFArray *)params
 {
-    OFMutableString* paramsOutput = [OFMutableString string];
+	OFMutableString *paramsOutput = [OFMutableString string];
 
-    size_t i = 0, count = params.count;
-    for (OGTKParameter* param in params) {
-        [paramsOutput appendString:[OGTKMapper convertType:param.type
-                                                  withName:param.name
-                                                    toType:param.cType]];
+	size_t i = 0, count = params.count;
+	for (OGTKParameter *param in params) {
+		[paramsOutput
+		    appendString:[OGTKMapper convertType:param.type
+		                                withName:param.name
+		                                  toType:param.cType]];
 
-        if (i++ < count - 1)
-            [paramsOutput appendString:@", "];
-    }
+		if (i++ < count - 1)
+			[paramsOutput appendString:@", "];
+	}
 
-    return paramsOutput;
+	return paramsOutput;
 }
 
-+ (OFString*)generateCParameterListWithInstanceString:(OFString*)instanceType
-                                            andParams:(OFArray*)params
++ (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
+                                             andParams:(OFArray *)params
 {
-    int i;
-    OFMutableString* paramsOutput = [OFMutableString string];
+	int i;
+	OFMutableString *paramsOutput = [OFMutableString string];
 
-    [paramsOutput appendString:[OGTKMapper selfTypeMethodCall:instanceType]];
+	[paramsOutput
+	    appendString:[OGTKMapper selfTypeMethodCall:instanceType]];
 
-    if (params != nil && [params count] > 0) {
-        [paramsOutput appendString:@", "];
+	if (params != nil && [params count] > 0) {
+		[paramsOutput appendString:@", "];
 
-        OGTKParameter* p;
+		OGTKParameter *p;
 
-        // Start at index 1
-        for (i = 0; i < [params count]; i++) {
-            p = [params objectAtIndex:i];
-            [paramsOutput appendString:[OGTKMapper convertType:[p type]
-                                                      withName:[p name]
-                                                        toType:[p cType]]];
+		// Start at index 1
+		for (i = 0; i < [params count]; i++) {
+			p = [params objectAtIndex:i];
+			[paramsOutput
+			    appendString:[OGTKMapper convertType:[p type]
+			                                withName:[p name]
+			                                  toType:[p cType]]];
 
-            if (i < [params count] - 1) {
-                [paramsOutput appendString:@", "];
-            }
-        }
-    }
+			if (i < [params count] - 1) {
+				[paramsOutput appendString:@", "];
+			}
+		}
+	}
 
-    return [paramsOutput autorelease];
+	return [paramsOutput autorelease];
 }
 
-+ (OFString*)generateLicense:(OFString*)fileName
++ (OFString *)generateLicense:(OFString *)fileName
 {
-    OFString* licText =
-        [OFString stringWithContentsOfFile:@"Config/license.txt"];
+	OFString *licText =
+	    [OFString stringWithContentsOfFile:@"Config/license.txt"];
 
-    return [licText stringByReplacingOccurrencesOfString:@"@@@FILENAME@@@"
-                                              withString:fileName];
+	return [licText stringByReplacingOccurrencesOfString:@"@@@FILENAME@@@"
+	                                          withString:fileName];
 }
 
-+ (OFString*)generateDocumentationForMethod:(OGTKMethod*)meth
++ (OFString *)generateDocumentationForMethod:(OGTKMethod *)meth
 {
-    int i;
-    OGTKParameter* p = nil;
+	int i;
+	OGTKParameter *p = nil;
 
-    OFMutableString* doc = [[OFMutableString alloc] init];
+	OFMutableString *doc = [[OFMutableString alloc] init];
 
-    [doc appendFormat:@"/**\n * - (%@*)%@;\n *\n", [meth returnType],
-         [meth sig]];
+	[doc appendFormat:@"/**\n * - (%@*)%@;\n *\n", [meth returnType],
+	     [meth sig]];
 
-    if ([meth.parameters count] > 0) {
-        for (i = 0; i < [meth.parameters count]; i++) {
-            p = [meth.parameters objectAtIndex:i];
+	if ([meth.parameters count] > 0) {
+		for (i = 0; i < [meth.parameters count]; i++) {
+			p = [meth.parameters objectAtIndex:i];
 
-            [doc appendFormat:@" * @param %@\n", [p name]];
-        }
-    }
+			[doc appendFormat:@" * @param %@\n", [p name]];
+		}
+	}
 
-    if (![meth returnsVoid]) {
-        [doc appendFormat:@" * @returns %@\n", [meth returnType]];
-    }
+	if (![meth returnsVoid]) {
+		[doc appendFormat:@" * @returns %@\n", [meth returnType]];
+	}
 
-    [doc appendString:@" */"];
+	[doc appendString:@" */"];
 
-    return [doc autorelease];
+	return [doc autorelease];
 }
 
 @end

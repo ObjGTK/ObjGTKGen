@@ -40,91 +40,91 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _elementTypeName = @"GIRNamespace";
-        _classes = [[OFMutableArray alloc] init];
-        _functions = [[OFMutableArray alloc] init];
-        _enumerations = [[OFMutableArray alloc] init];
-        _constants = [[OFMutableArray alloc] init];
-        _interfaces = [[OFMutableArray alloc] init];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_elementTypeName = @"GIRNamespace";
+		_classes = [[OFMutableArray alloc] init];
+		_functions = [[OFMutableArray alloc] init];
+		_enumerations = [[OFMutableArray alloc] init];
+		_constants = [[OFMutableArray alloc] init];
+		_interfaces = [[OFMutableArray alloc] init];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (instancetype)initWithDictionary:(OFDictionary*)dict
+- (instancetype)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"] || [key isEqual:@"shared-library"] ||
-            [key isEqual:@"version"] || [key isEqual:@"record"] ||
-            [key isEqual:@"callback"] || [key isEqual:@"bitfield"] ||
-            [key isEqual:@"alias"] || [key isEqual:@"function-macro"]) {
-            // Do nothing
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else if ([key isEqual:@"c:symbol-prefixes"]) {
-            self.cSymbolPrefixes = value;
-        } else if ([key isEqual:@"c:identifier-prefixes"]) {
-            self.cIdentifierPrefixes = value;
-        } else if ([key isEqual:@"class"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIRClass class]
-                                  andArray:_classes];
-        } else if ([key isEqual:@"function"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIRFunction class]
-                                  andArray:_functions];
-        } else if ([key isEqual:@"enumeration"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIREnumeration class]
-                                  andArray:_enumerations];
-        } else if ([key isEqual:@"constant"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIRConstant class]
-                                  andArray:_constants];
-        } else if ([key isEqual:@"interface"]) {
-            [self processArrayOrDictionary:value
-                                 withClass:[GIRInterface class]
-                                  andArray:_interfaces];
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"] || [key isEqual:@"shared-library"] ||
+		    [key isEqual:@"version"] || [key isEqual:@"record"] ||
+		    [key isEqual:@"callback"] || [key isEqual:@"bitfield"] ||
+		    [key isEqual:@"alias"] || [key isEqual:@"function-macro"]) {
+			// Do nothing
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else if ([key isEqual:@"c:symbol-prefixes"]) {
+			self.cSymbolPrefixes = value;
+		} else if ([key isEqual:@"c:identifier-prefixes"]) {
+			self.cIdentifierPrefixes = value;
+		} else if ([key isEqual:@"class"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRClass class]
+			                      andArray:_classes];
+		} else if ([key isEqual:@"function"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRFunction class]
+			                      andArray:_functions];
+		} else if ([key isEqual:@"enumeration"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIREnumeration class]
+			                      andArray:_enumerations];
+		} else if ([key isEqual:@"constant"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRConstant class]
+			                      andArray:_constants];
+		} else if ([key isEqual:@"interface"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRInterface class]
+			                      andArray:_interfaces];
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_name release];
-    [_cSymbolPrefixes release];
-    [_cIdentifierPrefixes release];
-    [_classes release];
-    [_functions release];
-    [_enumerations release];
-    [_constants release];
-    [_interfaces release];
+	[_name release];
+	[_cSymbolPrefixes release];
+	[_cIdentifierPrefixes release];
+	[_classes release];
+	[_functions release];
+	[_enumerations release];
+	[_constants release];
+	[_interfaces release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

@@ -36,93 +36,95 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    _throws = false;
+	_throws = false;
 
-    return self;
+	return self;
 }
 
 - (void)dealloc
 {
-    [_name release];
-    [_cIdentifier release];
-    [_cReturnType release];
-    [_parameters release];
+	[_name release];
+	[_cIdentifier release];
+	[_cReturnType release];
+	[_parameters release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
-- (OFString*)name
+- (OFString *)name
 {
-    return [OGTKUtil convertUSSToCamelCase:_name];
+	return [OGTKUtil convertUSSToCamelCase:_name];
 }
 
-- (OFString*)sig
+- (OFString *)sig
 {
-    // C method with no parameters
-    if (_parameters.count == 0) {
-        return self.name;
-    }
-    // C method with only one parameter
-    else if (_parameters.count == 1) {
-        OGTKParameter* p = [_parameters objectAtIndex:0];
+	// C method with no parameters
+	if (_parameters.count == 0) {
+		return self.name;
+	}
+	// C method with only one parameter
+	else if (_parameters.count == 1) {
+		OGTKParameter *p = [_parameters objectAtIndex:0];
 
-        return
-            [OFString stringWithFormat:@"%@:(%@)%@", self.name, p.type, p.name];
-    }
-    // C method with multiple parameters
-    else {
-        OFMutableString* output =
-            [OFMutableString stringWithFormat:@"%@With", self.name];
+		return [OFString
+		    stringWithFormat:@"%@:(%@)%@", self.name, p.type, p.name];
+	}
+	// C method with multiple parameters
+	else {
+		OFMutableString *output =
+		    [OFMutableString stringWithFormat:@"%@With", self.name];
 
-        bool first = true;
-        for (OGTKParameter* p in _parameters) {
-            if (first) {
-                first = false;
-                [output appendFormat:@"%@:(%@)%@",
-                        [OGTKUtil convertUSSToCapCase:p.name], p.type, p.name];
-            } else {
-                [output appendFormat:@" %@:(%@)%@",
-                        [OGTKUtil convertUSSToCamelCase:p.name], p.type,
-                        p.name];
-            }
-        }
+		bool first = true;
+		for (OGTKParameter *p in _parameters) {
+			if (first) {
+				first = false;
+				[output appendFormat:@"%@:(%@)%@",
+				        [OGTKUtil convertUSSToCapCase:p.name],
+				        p.type, p.name];
+			} else {
+				[output appendFormat:@" %@:(%@)%@",
+				        [OGTKUtil convertUSSToCamelCase:p.name],
+				        p.type, p.name];
+			}
+		}
 
-        return output;
-    }
+		return output;
+	}
 }
 
-- (OFString*)returnType
+- (OFString *)returnType
 {
-    return [OGTKMapper swapTypes:_cReturnType];
+	return [OGTKMapper swapTypes:_cReturnType];
 }
 
 - (bool)returnsVoid
 {
-    return [_cReturnType isEqual:@"void"];
+	return [_cReturnType isEqual:@"void"];
 }
 
-- (void)setParameters:(OFArray*)params
+- (void)setParameters:(OFArray *)params
 {
-    OFMutableArray* mutParams = [[params mutableCopy] autorelease];
+	OFMutableArray *mutParams = [[params mutableCopy] autorelease];
 
-    // TODO: Replace this by an OFException implemention within the writer
-    if (_throws) {
-        OGTKParameter* param = [[[OGTKParameter alloc] init] autorelease];
-        param.cType = @"GError**";
-        param.cName = @"err";
-        [mutParams addObject:param];
-    }
+	// TODO: Replace this by an OFException implemention within the writer
+	if (_throws) {
+		OGTKParameter *param =
+		    [[[OGTKParameter alloc] init] autorelease];
+		param.cType = @"GError**";
+		param.cName = @"err";
+		[mutParams addObject:param];
+	}
 
-    [_parameters release];
-    [mutParams makeImmutable];
-    _parameters = [mutParams copy];
+	[_parameters release];
+	[mutParams makeImmutable];
+	_parameters = [mutParams copy];
 }
 
-- (OFArray*)parameters
+- (OFArray *)parameters
 {
-    return [[_parameters copy] autorelease];
+	return [[_parameters copy] autorelease];
 }
 
 @end

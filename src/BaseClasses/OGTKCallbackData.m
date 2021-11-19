@@ -32,25 +32,25 @@
 
 + (instancetype)callbackWithObject:(id)object selector:(SEL)selector
 {
-    return [[[OGTKCallbackData alloc] initWithObject:object
-                                            selector:selector] autorelease];
+	return [[[OGTKCallbackData alloc] initWithObject:object
+	                                        selector:selector] autorelease];
 }
 
 - (instancetype)initWithObject:(id)object selector:(SEL)selector
 {
-    self = [super init];
+	self = [super init];
 
-    _object = [object retain];
-    _selector = selector;
+	_object = [object retain];
+	_selector = selector;
 
-    return self;
+	return self;
 }
 
 - (void)dealloc
 {
-    [_object release];
+	[_object release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

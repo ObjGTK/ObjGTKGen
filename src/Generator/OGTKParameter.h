@@ -32,14 +32,15 @@
 /**
  * Abstracts Parameter operations
  */
-@interface OGTKParameter : OFObject {
-    OFString* _cType;
-    OFString* _cName;
+@interface OGTKParameter: OFObject
+{
+	OFString *_cType;
+	OFString *_cName;
 }
 
-@property (copy, nonatomic) OFString* cType;
-@property (readonly, nonatomic) OFString* type;
-@property (copy, nonatomic) OFString* cName;
-@property (readonly, nonatomic) OFString* name;
+@property (copy, nonatomic) OFString *cType;
+@property (readonly, nonatomic) OFString *type;
+@property (copy, nonatomic) OFString *cName;
+@property (readonly, nonatomic) OFString *name;
 
 @end

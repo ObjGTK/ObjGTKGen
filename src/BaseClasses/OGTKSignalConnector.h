@@ -29,12 +29,12 @@
 #import <ObjFW/ObjFW.h>
 #import <gtk/gtk.h>
 
-void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
+void gsignal_forwarder(gpointer gtk, OGTKSignalData *data);
 
 /**
  * Provides functions for GCallback signal connecting
  */
-@interface OGTKSignalConnector : OFObject
+@interface OGTKSignalConnector: OFObject
 
 /**
  * Connects a GCallback function to a signal for a particular object. The
@@ -58,7 +58,7 @@ void gsignal_forwarder(gpointer gtk, OGTKSignalData* data);
  * @returns a new OGTKCallbackData
  */
 + (void)connectGpointer:(gpointer)object
-             withSignal:(OFString*)name
+             withSignal:(OFString *)name
                toTarget:(id)target
            withSelector:(SEL)selector
                    data:(gpointer)data;

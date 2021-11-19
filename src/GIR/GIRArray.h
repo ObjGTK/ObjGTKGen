@@ -30,20 +30,21 @@
 #import "GIRBase.h"
 #import "GIRType.h"
 
-@interface GIRArray : GIRBase {
-    OFString* _cType;
-    OFString* _name;
-    int _length;
-    int _fixedSize;
-    bool _zeroTerminated;
-    GIRType* _type;
+@interface GIRArray: GIRBase
+{
+	OFString *_cType;
+	OFString *_name;
+	int _length;
+	int _fixedSize;
+	bool _zeroTerminated;
+	GIRType *_type;
 }
 
-@property (nonatomic, retain) OFString* cType;
-@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString *cType;
+@property (nonatomic, retain) OFString *name;
 @property (nonatomic) int length;
 @property (nonatomic) int fixedSize;
 @property (nonatomic) bool zeroTerminated;
-@property (nonatomic, retain) GIRType* type;
+@property (nonatomic, retain) GIRType *type;
 
 @end
