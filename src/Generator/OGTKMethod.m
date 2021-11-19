@@ -26,13 +26,36 @@
  */
 
 #import "OGTKMethod.h"
+#import "OGTKMapper.h"
+#import "OGTKUtil.h"
 
 @implementation OGTKMethod
-@synthesize cName = _cName, cReturnType = _cReturnType;
+@synthesize name = _name, cIdentifier = _cIdentifier,
+            cReturnType = _cReturnType, parameters = _parameters,
+            throws = _throws;
+
+- (instancetype)init
+{
+    self = [super init];
+
+    _throws = false;
+
+    return self;
+}
+
+- (void)dealloc
+{
+    [_name release];
+    [_cIdentifier release];
+    [_cReturnType release];
+    [_parameters release];
+
+    [super dealloc];
+}
 
 - (OFString*)name
 {
-    return [OGTKUtil convertUSSToCamelCase:[OGTKUtil trimMethodName:_cName]];
+    return [OGTKUtil convertUSSToCamelCase:_name];
 }
 
 - (OFString*)sig
@@ -58,10 +81,11 @@
             if (first) {
                 first = false;
                 [output appendFormat:@"%@:(%@)%@",
-                    [OGTKUtil convertUSSToCapCase:p.name], p.type, p.name];
+                        [OGTKUtil convertUSSToCapCase:p.name], p.type, p.name];
             } else {
                 [output appendFormat:@" %@:(%@)%@",
-                    [OGTKUtil convertUSSToCamelCase:p.name], p.type, p.name];
+                        [OGTKUtil convertUSSToCamelCase:p.name], p.type,
+                        p.name];
             }
         }
 
@@ -71,7 +95,7 @@
 
 - (OFString*)returnType
 {
-    return [OGTKUtil swapTypes:_cReturnType];
+    return [OGTKMapper swapTypes:_cReturnType];
 }
 
 - (bool)returnsVoid
@@ -83,18 +107,8 @@
 {
     OFMutableArray* mutParams = [[params mutableCopy] autorelease];
 
-    // Hacky fix to get around issue with missing GError parameter from GIR file
-    if ([_cName isEqual:@"gtk_window_set_icon_from_file"] ||
-        [_cName isEqual:@"gtk_window_set_default_icon_from_file"] ||
-        [_cName isEqual:@"gtk_builder_add_from_file"] ||
-        [_cName isEqual:@"gtk_builder_add_from_resource"] ||
-        [_cName isEqual:@"gtk_builder_add_from_string"] ||
-        [_cName isEqual:@"gtk_builder_add_objects_from_file"] ||
-        [_cName isEqual:@"gtk_builder_add_objects_from_resource"] ||
-        [_cName isEqual:@"gtk_builder_add_objects_from_string"] ||
-        [_cName isEqual:@"gtk_builder_extend_with_template"] ||
-        [_cName isEqual:@"gtk_builder_value_from_string"] ||
-        [_cName isEqual:@"gtk_builder_value_from_string_type"]) {
+    // TODO: Replace this by an OFException implemention within the writer
+    if (_throws) {
         OGTKParameter* param = [[[OGTKParameter alloc] init] autorelease];
         param.cType = @"GError**";
         param.cName = @"err";
@@ -109,15 +123,6 @@
 - (OFArray*)parameters
 {
     return [[_parameters copy] autorelease];
-}
-
-- (void)dealloc
-{
-    [_cName release];
-    [_cReturnType release];
-    [_parameters release];
-
-    [super dealloc];
 }
 
 @end

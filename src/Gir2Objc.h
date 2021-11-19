@@ -30,6 +30,7 @@
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
+#import "Generator/OGTKMapper.h"
 
 #import "GIR/GIRApi.h"
 #import "GIR/GIRNamespace.h"

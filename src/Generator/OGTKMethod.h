@@ -26,25 +26,26 @@
  */
 
 #import <ObjFW/ObjFW.h>
-
 #import "OGTKParameter.h"
-#import "OGTKUtil.h"
 
 /**
  * Abstracts Method operations
  */
 @interface OGTKMethod : OFObject {
-    OFString* _cName;
+    OFString* _name;
+    OFString* _cIdentifier;
     OFString* _cReturnType;
     OFArray* _parameters;
+    bool _throws;
 }
 
-@property (copy, nonatomic) OFString* cName;
-@property (readonly, nonatomic) OFString* name;
+@property (copy, nonatomic) OFString* name;
+@property (copy, nonatomic) OFString* cIdentifier;
 @property (readonly, nonatomic) OFString* sig;
 @property (copy, nonatomic) OFString* cReturnType;
 @property (readonly, nonatomic) OFString* returnType;
 @property (readonly, nonatomic) bool returnsVoid;
 @property (copy, nonatomic) OFArray* parameters;
+@property (nonatomic) bool throws;
 
 @end

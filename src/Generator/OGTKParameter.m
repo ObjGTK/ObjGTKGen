@@ -26,6 +26,7 @@
  */
 
 #import "OGTKParameter.h"
+#import "OGTKUtil.h"
 
 /**
  * Abstracts Parameter operations
@@ -35,7 +36,7 @@
 
 - (OFString*)type
 {
-    return [OGTKUtil swapTypes:_cType];
+    return [OGTKMapper swapTypes:_cType];
 }
 
 - (OFString*)name

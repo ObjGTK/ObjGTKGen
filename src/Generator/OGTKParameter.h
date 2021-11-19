@@ -27,7 +27,7 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "OGTKUtil.h"
+#import "OGTKMapper.h"
 
 /**
  * Abstracts Parameter operations

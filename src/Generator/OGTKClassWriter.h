@@ -32,6 +32,7 @@
 
 #import "OGTKClass.h"
 #import "OGTKUtil.h"
+#import "OGTKMapper.h"
 
 /**
  * Functions to write in memory Class representation to file as ObjGTK source

@@ -29,9 +29,16 @@
  * Objective-C imports
  */
 #import "OGTKClass.h"
+#import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
-@synthesize cName = _cName, cType = _cType, cParentType = _cParentType;
+@synthesize cName = _cName, cType = _cType, parentName = _parentName,
+            cParentType = _cParentType, cSymbolPrefix = _cSymbolPrefix,
+            cNSSymbolPrefix = _cNSSymbolPrefix,
+            cNSIdentifierPrefix = _cNSIdentifierPrefix,
+            dependsOnClasses = _dependsOnClasses,
+            forwardDeclarationForClasses = _forwardDeclarationForClasses,
+            visited = _visited;
 
 - (instancetype)init
 {
@@ -41,6 +48,9 @@
         _constructors = [[OFMutableArray alloc] init];
         _functions = [[OFMutableArray alloc] init];
         _methods = [[OFMutableArray alloc] init];
+        _dependsOnClasses = [[OFMutableSet alloc] init];
+        _forwardDeclarationForClasses = [[OFMutableSet alloc] init];
+        _visited = false;
     } @catch (id e) {
         [self release];
         @throw e;
@@ -49,14 +59,45 @@
     return self;
 }
 
-- (OFString*)type
+- (void)dealloc
 {
-    return [OGTKUtil swapTypes:_cType];
+    [_cName release];
+    [_cType release];
+    [_parentName release];
+    [_cParentType release];
+    [_cSymbolPrefix release];
+    [_cNSIdentifierPrefix release];
+    [_cNSSymbolPrefix release];
+    [_constructors release];
+    [_functions release];
+    [_methods release];
+    [_dependsOnClasses release];
+    [_forwardDeclarationForClasses release];
+
+    [_typeWithoutPrefix release];
+
+    [super dealloc];
 }
 
-- (OFString*)name
+- (OFString*)type
 {
-    return [OFString stringWithFormat:@"OGTK%@", _cName];
+    if (self.cType == nil)
+        @throw [OGTKReceivedNilExpectedStringException exception];
+
+    if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] &&
+        [self.cType hasPrefix:@"Gtk"]) {
+
+        if (_typeWithoutPrefix == nil) {
+            size_t prefixLength = self.cNSIdentifierPrefix.length;
+
+            _typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
+
+            [_typeWithoutPrefix retain];
+        }
+
+        return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
+    }
+    return [OFString stringWithFormat:@"OG%@", self.cType];
 }
 
 - (void)addConstructor:(OGTKMethod*)constructor
@@ -81,6 +122,21 @@
     if (function != nil) {
         [_functions addObject:function];
     }
+}
+
+- (void)addDependency:(OFString*)cType
+{
+    [_dependsOnClasses addObject:cType];
+}
+
+- (void)removeForwardDeclarationsFromDependencies
+{
+    [_dependsOnClasses minusSet:_forwardDeclarationForClasses];
+}
+
+- (void)addForwardDeclarationForClass:(OFString*)cType
+{
+    [_forwardDeclarationForClasses addObject:cType];
 }
 
 - (OFArray*)functions
@@ -108,18 +164,6 @@
 - (bool)hasMethods
 {
     return (_methods.count > 0);
-}
-
-- (void)dealloc
-{
-    [_cName release];
-    [_cType release];
-    [_cParentType release];
-    [_constructors release];
-    [_functions release];
-    [_methods release];
-
-    [super dealloc];
 }
 
 @end
