@@ -36,87 +36,89 @@
 
 @implementation OGTKUtil
 
-static OFMutableDictionary* dictGlobalConf;
+static OFMutableDictionary *dictGlobalConf;
 
-+ (OFString*)convertUSSToCamelCase:(OFString*)input
++ (OFString *)convertUSSToCamelCase:(OFString *)input
 {
-    OFString* output = [self convertUSSToCapCase:input];
+	OFString *output = [self convertUSSToCapCase:input];
 
-    if ([output length] > 1) {
-        return [OFString stringWithFormat:@"%@%@",
-                         [[output substringToIndex:1] lowercaseString],
-                         [output substringFromIndex:1]];
-    } else {
-        return [output lowercaseString];
-    }
+	if ([output length] > 1) {
+		return [OFString stringWithFormat:@"%@%@",
+		                 [[output substringToIndex:1] lowercaseString],
+		                 [output substringFromIndex:1]];
+	} else {
+		return [output lowercaseString];
+	}
 }
 
-+ (OFString*)convertUSSToCapCase:(OFString*)input
++ (OFString *)convertUSSToCapCase:(OFString *)input
 {
-    OFMutableString* output = [[[OFMutableString alloc] init] autorelease];
-    OFArray* inputItems = [input componentsSeparatedByString:@"_"];
+	OFMutableString *output = [[[OFMutableString alloc] init] autorelease];
+	OFArray *inputItems = [input componentsSeparatedByString:@"_"];
 
-    bool previousItemWasSingleChar = false;
+	bool previousItemWasSingleChar = false;
 
-    for (OFString* item in inputItems) {
-        if ([item length] > 1) {
-            // Special case where we don't strand single characters
-            if (previousItemWasSingleChar) {
-                [output appendString:item];
-            } else {
-                [output appendFormat:@"%@%@",
-                        [[item substringToIndex:1] uppercaseString],
-                        [item substringFromIndex:1]];
-            }
-            previousItemWasSingleChar = false;
-        } else {
-            [output appendString:[item uppercaseString]];
-            previousItemWasSingleChar = true;
-        }
-    }
+	for (OFString *item in inputItems) {
+		if ([item length] > 1) {
+			// Special case where we don't strand single characters
+			if (previousItemWasSingleChar) {
+				[output appendString:item];
+			} else {
+				[output
+				    appendFormat:@"%@%@",
+				    [[item substringToIndex:1] uppercaseString],
+				    [item substringFromIndex:1]];
+			}
+			previousItemWasSingleChar = false;
+		} else {
+			[output appendString:[item uppercaseString]];
+			previousItemWasSingleChar = true;
+		}
+	}
 
-    return output;
+	return output;
 }
 
-+ (OFString*)convertFunctionToInit:(OFString*)func
++ (OFString *)convertFunctionToInit:(OFString *)func
 {
-    OFRange range = [func rangeOfString:@"New"];
-    if (range.location == OFNotFound) {
-        range = [func rangeOfString:@"new"];
-    }
+	OFRange range = [func rangeOfString:@"New"];
+	if (range.location == OFNotFound) {
+		range = [func rangeOfString:@"new"];
+	}
 
-    if (range.location == OFNotFound) {
-        return nil;
-    } else {
-        return [OFString stringWithFormat:@"init%@",
-                         [func substringFromIndex:range.location + 3]];
-    }
+	if (range.location == OFNotFound) {
+		return nil;
+	} else {
+		return [OFString stringWithFormat:@"init%@",
+		                 [func substringFromIndex:range.location + 3]];
+	}
 }
 
-+ (OFString*)getFunctionCallForConstructorOfType:(OFString*)cType
-                                 withConstructor:(OFString*)cCtor
++ (OFString *)getFunctionCallForConstructorOfType:(OFString *)cType
+                                  withConstructor:(OFString *)cCtor
 {
-    return [OFString
-        stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
+	return [OFString
+	    stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
 }
 
-+ (bool)isUppercase:(OFString*)character
++ (bool)isUppercase:(OFString *)character
 {
-    OFUnichar myCharacter = [character characterAtIndex:0];
-    if (myCharacter >= 'A' && myCharacter <= 'Z')
-        return true;
+	OFUnichar myCharacter = [character characterAtIndex:0];
+	if (myCharacter >= 'A' && myCharacter <= 'Z')
+		return true;
 
-    return false;
+	return false;
 }
 
-+ (id)globalConfigValueFor:(OFString*)key
++ (id)globalConfigValueFor:(OFString *)key
 {
-    if (dictGlobalConf == nil) {
-        dictGlobalConf = [[OFMutableDictionary alloc]
-            ogtk_initWithJsonDictionaryOfFile:@"Config/global_conf.json"];
-    }
+	if (dictGlobalConf == nil) {
+		dictGlobalConf = [[OFMutableDictionary alloc]
+		    ogtk_initWithJsonDictionaryOfFile:
+		        @"Config/global_conf.json"];
+	}
 
-    return [dictGlobalConf objectForKey:key];
+	return [dictGlobalConf objectForKey:key];
 }
 
 @end

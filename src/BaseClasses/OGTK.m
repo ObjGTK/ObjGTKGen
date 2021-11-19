@@ -30,40 +30,40 @@
  */
 #import "OGTK.h"
 
-OFString* const OGTKVersion = @"0.1";
+OFString *const OGTKVersion = @"0.1";
 
 @implementation OGTK
 
-+ (OFString*)objGtkVersion
++ (OFString *)objGtkVersion
 {
-    return OGTKVersion;
+	return OGTKVersion;
 }
 
-+ (OFString*)gtkVersion
++ (OFString *)gtkVersion
 {
-    return [OFString stringWithFormat:@"%i.%i.%i", gtk_get_major_version(),
-                     gtk_get_minor_version(), gtk_get_micro_version()];
+	return [OFString stringWithFormat:@"%i.%i.%i", gtk_get_major_version(),
+	                 gtk_get_minor_version(), gtk_get_micro_version()];
 }
 
-+ (void)initWithArgc:(int*)argc argv:(char***)argv
++ (void)initWithArgc:(int *)argc argv:(char ***)argv
 {
-    gtk_init(argc, argv);
+	gtk_init(argc, argv);
 }
 
-+ (int)autoInitWithArgc:(int)argc argv:(char*[])argv
++ (int)autoInitWithArgc:(int)argc argv:(char *[])argv
 {
-    [OGTK initWithArgc:&argc argv:&argv];
-    return argc;
+	[OGTK initWithArgc:&argc argv:&argv];
+	return argc;
 }
 
 + (void)main
 {
-    gtk_main();
+	gtk_main();
 }
 
 + (void)mainQuit
 {
-    gtk_main_quit();
+	gtk_main_quit();
 }
 
 @end

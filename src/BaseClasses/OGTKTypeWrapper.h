@@ -31,19 +31,20 @@
 /**
  * Provides functions for wrapping GTK types
  */
-@interface OGTKTypeWrapper : OFObject {
-    void* _ptrValue;
-    gint _gintValue;
+@interface OGTKTypeWrapper: OFObject
+{
+	void *_ptrValue;
+	gint _gintValue;
 }
 
 @property (nonatomic) gint gintValue;
-@property (nonatomic) void* ptrValue;
+@property (nonatomic) void *ptrValue;
 
 /**
  * Returns the stored ptrValue as a GValue*
  *
  * @returns GValue*
  */
-- (const GValue*)asGValuePtr;
+- (const GValue *)asGValuePtr;
 
 @end

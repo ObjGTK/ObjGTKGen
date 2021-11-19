@@ -27,23 +27,24 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "OGTKTypeWrapper.h"
 #import "OGTKGObjectInitializationFailedException.h"
+#import "OGTKTypeWrapper.h"
 
 /*
  * C imports
  */
-#import <gtk/gtk.h>
 #import <gtk/gtk-a11y.h>
+#import <gtk/gtk.h>
 
 /**
  * The base class for all CoreGTK wrapper classes
  */
-@interface OGTKObject : OFObject {
-    /**
-     * The internal GtkObject pointer
-     */
-    GObject* _gObject;
+@interface OGTKObject: OFObject
+{
+	/**
+	 * The internal GtkObject pointer
+	 */
+	GObject *_gObject;
 }
 
 /**
@@ -56,7 +57,7 @@
  *
  * @returns a new OGTKObject
  */
-+ (OGTKObject*)withGObject:(GObject*)obj;
++ (OGTKObject *)withGObject:(GObject *)obj;
 
 /**
  * Returns a new instance of OGTKObject with the internal GObject set to obj
@@ -66,14 +67,14 @@
  *
  * @returns a new OGTKObject
  */
-- (id)initWithGObject:(GObject*)obj;
+- (id)initWithGObject:(GObject *)obj;
 
 /**
  * Gets the internal GtkWidget
  *
  * @returns the internal GtkWidget
  */
-- (GtkWidget*)WIDGET;
+- (GtkWidget *)WIDGET;
 
 /**
  * Sets the internal GObject
@@ -81,13 +82,13 @@
  * @param obj
  * 	The GObject to set internally
  */
-- (void)setGObject:(GObject*)obj;
+- (void)setGObject:(GObject *)obj;
 
 /**
  * Gets the internal GObject
  *
  * @returns the internal GObject
  */
-- (GObject*)GOBJECT;
+- (GObject *)GOBJECT;
 
 @end

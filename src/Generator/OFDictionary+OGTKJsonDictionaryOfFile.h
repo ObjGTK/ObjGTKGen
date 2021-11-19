@@ -27,8 +27,9 @@
 
 #import <ObjFW/ObjFW.h>
 
-@interface OFDictionary (OGTKJsonDictionaryOfFile)
+@interface
+OFDictionary (OGTKJsonDictionaryOfFile)
 
-- (instancetype)ogtk_initWithJsonDictionaryOfFile:(OFString*)filePath;
+- (instancetype)ogtk_initWithJsonDictionaryOfFile:(OFString *)filePath;
 
 @end

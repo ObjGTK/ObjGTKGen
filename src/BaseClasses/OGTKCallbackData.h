@@ -30,9 +30,10 @@
 /**
  * Holds object and selector info for gobject signal callbacks
  */
-@interface OGTKCallbackData : OFObject {
-    id _object;
-    SEL _selector;
+@interface OGTKCallbackData: OFObject
+{
+	id _object;
+	SEL _selector;
 }
 
 /**

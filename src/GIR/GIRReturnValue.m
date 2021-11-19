@@ -36,64 +36,65 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _elementTypeName = @"GIRReturnValue";
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_elementTypeName = @"GIRReturnValue";
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        // TODO: Do we need nullable?
-        if ([key isEqual:@"text"] || [key isEqual:@"nullable"]) {
-            // Do nothing
-        } else if ([key isEqual:@"transfer-ownership"]) {
-            self.transferOwnership = value;
-        } else if ([key isEqual:@"doc"]) {
-            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"type"]) {
-            self.type =
-                [[[GIRType alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"array"]) {
-            self.array =
-                [[[GIRArray alloc] initWithDictionary:value] autorelease];
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		// TODO: Do we need nullable?
+		if ([key isEqual:@"text"] || [key isEqual:@"nullable"]) {
+			// Do nothing
+		} else if ([key isEqual:@"transfer-ownership"]) {
+			self.transferOwnership = value;
+		} else if ([key isEqual:@"doc"]) {
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"type"]) {
+			self.type = [[[GIRType alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"array"]) {
+			self.array = [[[GIRArray alloc]
+			    initWithDictionary:value] autorelease];
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_transferOwnership release];
-    [_doc release];
-    [_type release];
-    [_array release];
+	[_transferOwnership release];
+	[_doc release];
+	[_type release];
+	[_array release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

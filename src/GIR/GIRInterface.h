@@ -36,26 +36,27 @@
 #import "GIRProperty.h"
 #import "GIRVirtualMethod.h"
 
-@interface GIRInterface : GIRBase {
-    OFString* name;
-    OFString* cType;
-    OFString* cSymbolPrefix;
-    GIRDoc* doc;
-    OFMutableArray* fields;
-    OFMutableArray* methods;
-    OFMutableArray* virtualMethods;
-    OFMutableArray* properties;
-    GIRPrerequisite* prerequisite;
+@interface GIRInterface: GIRBase
+{
+	OFString *name;
+	OFString *cType;
+	OFString *cSymbolPrefix;
+	GIRDoc *doc;
+	OFMutableArray *fields;
+	OFMutableArray *methods;
+	OFMutableArray *virtualMethods;
+	OFMutableArray *properties;
+	GIRPrerequisite *prerequisite;
 }
 
-@property (nonatomic, retain) OFString* name;
-@property (nonatomic, retain) OFString* cType;
-@property (nonatomic, retain) OFString* cSymbolPrefix;
-@property (nonatomic, retain) GIRDoc* doc;
-@property (nonatomic, retain) OFMutableArray* fields;
-@property (nonatomic, retain) OFMutableArray* methods;
-@property (nonatomic, retain) OFMutableArray* virtualMethods;
-@property (nonatomic, retain) OFMutableArray* properties;
-@property (nonatomic, retain) GIRPrerequisite* prerequisite;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *cType;
+@property (nonatomic, retain) OFString *cSymbolPrefix;
+@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, retain) OFMutableArray *fields;
+@property (nonatomic, retain) OFMutableArray *methods;
+@property (nonatomic, retain) OFMutableArray *virtualMethods;
+@property (nonatomic, retain) OFMutableArray *properties;
+@property (nonatomic, retain) GIRPrerequisite *prerequisite;
 
 @end

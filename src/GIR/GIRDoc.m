@@ -35,53 +35,53 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    _elementTypeName = @"GIRDoc";
+	_elementTypeName = @"GIRDoc";
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"filename"] || [key isEqual:@"line"]) {
-            // do nothing - suppress warning
-        } else if ([key isEqual:@"text"]) {
-            self.docText = value;
-        } else if ([key isEqual:@"xml:space"]) {
-            self.xmlSpace = value;
-        } else if ([key isEqual:@"xml:whitespace"]) {
-            self.xmlWhitespace = value;
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"filename"] || [key isEqual:@"line"]) {
+			// do nothing - suppress warning
+		} else if ([key isEqual:@"text"]) {
+			self.docText = value;
+		} else if ([key isEqual:@"xml:space"]) {
+			self.xmlSpace = value;
+		} else if ([key isEqual:@"xml:whitespace"]) {
+			self.xmlWhitespace = value;
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_xmlSpace release];
-    [_xmlWhitespace release];
-    [_docText release];
+	[_xmlSpace release];
+	[_xmlWhitespace release];
+	[_docText release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

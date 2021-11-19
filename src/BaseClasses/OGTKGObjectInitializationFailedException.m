@@ -11,19 +11,20 @@
 
 @implementation OGTKGObjectInitializationFailedException
 
-- (OFString*)description
+- (OFString *)description
 {
-    if (_inClass != Nil)
-        return
-            [OFString stringWithFormat:
-                          @"Initialization of GObject instance (or a child "
-                          @"instance) to be wrapped failed for or in class %@! "
-                          @" Received NULL for OGTKObject initalization.",
-                      _inClass];
-    else
-        return @"Initialization of GObject instance (or a child instance) to "
-               @"be wrapped failed. Received NULL for OGTKObject "
-               @"initalization.";
+	if (_inClass != Nil)
+		return [OFString
+		    stringWithFormat:
+		        @"Initialization of GObject instance (or a child "
+		        @"instance) to be wrapped failed for or in class %@! "
+		        @" Received NULL for OGTKObject initalization.",
+		    _inClass];
+	else
+		return @"Initialization of GObject instance (or a child "
+		       @"instance) to "
+		       @"be wrapped failed. Received NULL for OGTKObject "
+		       @"initalization.";
 }
 
 @end

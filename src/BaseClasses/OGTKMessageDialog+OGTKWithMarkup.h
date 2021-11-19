@@ -27,22 +27,23 @@
 
 #import "OGTKMessageDialog.h"
 
-@interface OGTKMessageDialog (OGTKWithMarkup)
+@interface
+OGTKMessageDialog (OGTKWithMarkup)
 
-- (id)initWithParent:(OGTKWindow*)parent
+- (id)initWithParent:(OGTKWindow *)parent
                flags:(GtkDialogFlags)flags
                 type:(GtkMessageType)type
              buttons:(GtkButtonsType)buttons
-              markup:(OFString*)markup;
+              markup:(OFString *)markup;
 
-- (void)formatSecondaryMarkup:(OFString*)markup;
+- (void)formatSecondaryMarkup:(OFString *)markup;
 
-- (void)formatSecondaryText:(OFString*)message;
+- (void)formatSecondaryText:(OFString *)message;
 
-- (id)initWithParent:(OGTKWindow*)parent
+- (id)initWithParent:(OGTKWindow *)parent
                flags:(GtkDialogFlags)flags
                 type:(GtkMessageType)type
              buttons:(GtkButtonsType)buttons
-             message:(OFString*)message;
+             message:(OFString *)message;
 
 @end

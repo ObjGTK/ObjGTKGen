@@ -11,9 +11,9 @@
 
 OF_ASSUME_NONNULL_BEGIN
 
-@interface OGTKReceivedNilExpectedStringException : OFInvalidFormatException
+@interface OGTKReceivedNilExpectedStringException: OFInvalidFormatException
 
-- (OFString*)description;
+- (OFString *)description;
 
 @end
 

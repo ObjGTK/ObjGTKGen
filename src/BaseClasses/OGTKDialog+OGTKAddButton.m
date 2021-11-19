@@ -27,38 +27,41 @@
 
 #import "OGTKDialog+OGTKAddButton.h"
 
-@implementation OGTKDialog (OGTKAddButton)
+@implementation
+OGTKDialog (OGTKAddButton)
 
-- (id)initWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
+- (id)initWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
                            flags:(GtkDialogFlags)flags
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict
 {
-    self = [super initWithGObject:(GObject*)gtk_dialog_new_with_buttons(
-                                      [title UTF8String], [parent WINDOW],
-                                      flags, NULL, NULL)];
+	self = [super initWithGObject:(GObject *)gtk_dialog_new_with_buttons(
+	                                  [title UTF8String], [parent WINDOW],
+	                                  flags, NULL, NULL)];
 
-    @try {
-        OGTKTypeWrapper* wrapper;
-        for (OFString* text in buttonTextDict) {
-            wrapper = [buttonTextDict objectForKey:text];
+	@try {
+		OGTKTypeWrapper *wrapper;
+		for (OFString *text in buttonTextDict) {
+			wrapper = [buttonTextDict objectForKey:text];
 
-            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-        }
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
-    return self;
+			[self addButtonWithButtonText:text
+			                   responseId:wrapper.gintValue];
+		}
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+	return self;
 }
 
-- (void)addButtons:(OFDictionary*)buttonTextDict
+- (void)addButtons:(OFDictionary *)buttonTextDict
 {
-    OGTKTypeWrapper* wrapper;
-    for (OFString* text in buttonTextDict) {
-        wrapper = [buttonTextDict objectForKey:text];
+	OGTKTypeWrapper *wrapper;
+	for (OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 
-        [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-    }
+		[self addButtonWithButtonText:text
+		                   responseId:wrapper.gintValue];
+	}
 }
 @end

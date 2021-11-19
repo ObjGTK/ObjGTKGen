@@ -27,55 +27,59 @@
 
 #import "OGTKRecentChooserDialog+OGTKButtonTextResponseDictionary.h"
 
-@implementation OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
+@implementation
+OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
 
-- (id)initWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict
+- (id)initWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict
 {
-    self = [super
-        initWithGObject:(GObject*)gtk_recent_chooser_dialog_new(
-                            [title UTF8String], [parent WINDOW], NULL, NULL)];
+	self = [super initWithGObject:(GObject *)gtk_recent_chooser_dialog_new(
+	                                  [title UTF8String], [parent WINDOW],
+	                                  NULL, NULL)];
 
-    @try {
-        OGTKTypeWrapper* wrapper;
+	@try {
+		OGTKTypeWrapper *wrapper;
 
-        for (OFString* text in buttonTextDict) {
-            wrapper = [buttonTextDict objectForKey:text];
+		for (OFString *text in buttonTextDict) {
+			wrapper = [buttonTextDict objectForKey:text];
 
-            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-        }
+			[self addButtonWithButtonText:text
+			                   responseId:wrapper.gintValue];
+		}
 
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
-    return self;
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+	return self;
 }
 
-- (id)initForManagerWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
-                         manager:(GtkRecentManager*)manager
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict
+- (id)initForManagerWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
+                         manager:(GtkRecentManager *)manager
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict
 {
-    self = [super
-        initWithGObject:(GObject*)gtk_recent_chooser_dialog_new_for_manager(
-                            [title UTF8String], [parent WINDOW], manager, NULL,
-                            NULL)];
+	self = [super
+	    initWithGObject:(GObject *)
+	                        gtk_recent_chooser_dialog_new_for_manager(
+	                            [title UTF8String], [parent WINDOW],
+	                            manager, NULL, NULL)];
 
-    @try {
-        OGTKTypeWrapper* wrapper;
+	@try {
+		OGTKTypeWrapper *wrapper;
 
-        for (OFString* text in buttonTextDict) {
-            wrapper = [buttonTextDict objectForKey:text];
+		for (OFString *text in buttonTextDict) {
+			wrapper = [buttonTextDict objectForKey:text];
 
-            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-        }
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
-    return self;
+			[self addButtonWithButtonText:text
+			                   responseId:wrapper.gintValue];
+		}
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+	return self;
 }
 
 @end

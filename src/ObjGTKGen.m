@@ -32,7 +32,7 @@
 #import "Generator/OGTKClassWriter.h"
 #import "Gir2Objc.h"
 
-@interface ObjGTKGen : OFObject <OFApplicationDelegate>
+@interface ObjGTKGen: OFObject <OFApplicationDelegate>
 @end
 
 OF_APPLICATION_DELEGATE(ObjGTKGen)
@@ -41,63 +41,68 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 - (void)applicationDidFinishLaunching
 {
-    // Step 1: parse GIR file
+	// Step 1: parse GIR file
 
-    OFString* girFile = [OGTKUtil globalConfigValueFor:@"girFile"];
+	OFString *girFile = [OGTKUtil globalConfigValueFor:@"girFile"];
 
-    OFLog(@"%@", @"Attempting to parse GIR file...");
-    GIRApi* api = [Gir2Objc firstApiFromGirFile:girFile];
+	OFLog(@"%@", @"Attempting to parse GIR file...");
+	GIRApi *api = [Gir2Objc firstApiFromGirFile:girFile];
 
-    if (api == nil)
-        @throw [OGTKNoGIRAPIException exception];
+	if (api == nil)
+		@throw [OGTKNoGIRAPIException exception];
 
-    // Step 2: generate ObjGTK source files
-    OFLog(@"%@", @"Attempting to generate ObjGTK...");
-    [Gir2Objc generateClassFilesFromApi:api];
-    OFLog(@"%@", @"Process complete");
+	// Step 2: generate ObjGTK source files
+	OFLog(@"%@", @"Attempting to generate ObjGTK...");
+	[Gir2Objc generateClassFilesFromApi:api];
+	OFLog(@"%@", @"Process complete");
 
-    // Step 3: copy ObjGTK base files
-    OFString* baseClassPath = [OGTKUtil globalConfigValueFor:@"baseClassDir"];
-    OFString* outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
+	// Step 3: copy ObjGTK base files
+	OFString *baseClassPath =
+	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
+	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 
-    if (baseClassPath == nil || outputDir == nil)
-        @throw [OGTKIncorrectConfigException exception];
+	if (baseClassPath == nil || outputDir == nil)
+		@throw [OGTKIncorrectConfigException exception];
 
-    OFLog(@"%@", @"Attempting to copy ObjGTK base class files...");
-    OFFileManager* fileMgr = [OFFileManager defaultManager];
+	OFLog(@"%@", @"Attempting to copy ObjGTK base class files...");
+	OFFileManager *fileMgr = [OFFileManager defaultManager];
 
-    OFArray* srcDirContents = [fileMgr contentsOfDirectoryAtPath:baseClassPath];
+	OFArray *srcDirContents =
+	    [fileMgr contentsOfDirectoryAtPath:baseClassPath];
 
-    for (OFString* srcFile in srcDirContents) {
-        OFString* src = [baseClassPath
-            stringByAppendingPathComponent:[srcFile lastPathComponent]];
-        OFString* dest = [outputDir
-            stringByAppendingPathComponent:[srcFile lastPathComponent]];
+	for (OFString *srcFile in srcDirContents) {
+		OFString *src = [baseClassPath
+		    stringByAppendingPathComponent:[srcFile lastPathComponent]];
+		OFString *dest = [outputDir
+		    stringByAppendingPathComponent:[srcFile lastPathComponent]];
 
-        if ([fileMgr fileExistsAtPath:dest]) {
-            OFLog(@"File [%@] already exists in destination [%@]. Removing "
-                  @"existing file...",
-                src, dest);
+		if ([fileMgr fileExistsAtPath:dest]) {
+			OFLog(@"File [%@] already exists in destination [%@]. "
+			      @"Removing "
+			      @"existing file...",
+			    src, dest);
 
-            @try {
-                [fileMgr removeItemAtPath:dest];
-            } @catch (id exception) {
-                OFLog(@"Error removing file [%@]. Skipping file.", dest);
-                continue;
-            }
-        }
+			@try {
+				[fileMgr removeItemAtPath:dest];
+			} @catch (id exception) {
+				OFLog(
+				    @"Error removing file [%@]. Skipping file.",
+				    dest);
+				continue;
+			}
+		}
 
-        OFLog(@"Copying file [%@] to [%@]...", src, dest);
-        [fileMgr copyItemAtPath:src toPath:dest];
-    }
+		OFLog(@"Copying file [%@] to [%@]...", src, dest);
+		[fileMgr copyItemAtPath:src toPath:dest];
+	}
 
-    OFLog(@"%@", @"Process complete");
+	OFLog(@"%@", @"Process complete");
 
-    // Release memory
-    [baseClassPath release];
-    [outputDir release];
+	// Release memory
+	[baseClassPath release];
+	[outputDir release];
 
-    [OFApplication terminate];
+	[OFApplication terminate];
 }
 
 @end

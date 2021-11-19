@@ -42,128 +42,130 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _constructors = [[OFMutableArray alloc] init];
-        _functions = [[OFMutableArray alloc] init];
-        _methods = [[OFMutableArray alloc] init];
-        _dependsOnClasses = [[OFMutableSet alloc] init];
-        _forwardDeclarationForClasses = [[OFMutableSet alloc] init];
-        _visited = false;
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_constructors = [[OFMutableArray alloc] init];
+		_functions = [[OFMutableArray alloc] init];
+		_methods = [[OFMutableArray alloc] init];
+		_dependsOnClasses = [[OFMutableSet alloc] init];
+		_forwardDeclarationForClasses = [[OFMutableSet alloc] init];
+		_visited = false;
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
 - (void)dealloc
 {
-    [_cName release];
-    [_cType release];
-    [_parentName release];
-    [_cParentType release];
-    [_cSymbolPrefix release];
-    [_cNSIdentifierPrefix release];
-    [_cNSSymbolPrefix release];
-    [_constructors release];
-    [_functions release];
-    [_methods release];
-    [_dependsOnClasses release];
-    [_forwardDeclarationForClasses release];
+	[_cName release];
+	[_cType release];
+	[_parentName release];
+	[_cParentType release];
+	[_cSymbolPrefix release];
+	[_cNSIdentifierPrefix release];
+	[_cNSSymbolPrefix release];
+	[_constructors release];
+	[_functions release];
+	[_methods release];
+	[_dependsOnClasses release];
+	[_forwardDeclarationForClasses release];
 
-    [_typeWithoutPrefix release];
+	[_typeWithoutPrefix release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
-- (OFString*)type
+- (OFString *)type
 {
-    if (self.cType == nil)
-        @throw [OGTKReceivedNilExpectedStringException exception];
+	if (self.cType == nil)
+		@throw [OGTKReceivedNilExpectedStringException exception];
 
-    if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] &&
-        [self.cType hasPrefix:@"Gtk"]) {
+	if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] &&
+	    [self.cType hasPrefix:@"Gtk"]) {
 
-        if (_typeWithoutPrefix == nil) {
-            size_t prefixLength = self.cNSIdentifierPrefix.length;
+		if (_typeWithoutPrefix == nil) {
+			size_t prefixLength = self.cNSIdentifierPrefix.length;
 
-            _typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
+			_typeWithoutPrefix =
+			    [self.cType substringFromIndex:prefixLength];
 
-            [_typeWithoutPrefix retain];
-        }
+			[_typeWithoutPrefix retain];
+		}
 
-        return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
-    }
-    return [OFString stringWithFormat:@"OG%@", self.cType];
+		return
+		    [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
+	}
+	return [OFString stringWithFormat:@"OG%@", self.cType];
 }
 
-- (void)addConstructor:(OGTKMethod*)constructor
+- (void)addConstructor:(OGTKMethod *)constructor
 {
-    if (constructor != nil) {
-        [_constructors addObject:constructor];
-    }
+	if (constructor != nil) {
+		[_constructors addObject:constructor];
+	}
 }
 
-- (OFArray*)constructors
+- (OFArray *)constructors
 {
-    return [[_constructors copy] autorelease];
+	return [[_constructors copy] autorelease];
 }
 
 - (bool)hasConstructors
 {
-    return (_constructors.count > 0);
+	return (_constructors.count > 0);
 }
 
-- (void)addFunction:(OGTKMethod*)function
+- (void)addFunction:(OGTKMethod *)function
 {
-    if (function != nil) {
-        [_functions addObject:function];
-    }
+	if (function != nil) {
+		[_functions addObject:function];
+	}
 }
 
-- (void)addDependency:(OFString*)cType
+- (void)addDependency:(OFString *)cType
 {
-    [_dependsOnClasses addObject:cType];
+	[_dependsOnClasses addObject:cType];
 }
 
 - (void)removeForwardDeclarationsFromDependencies
 {
-    [_dependsOnClasses minusSet:_forwardDeclarationForClasses];
+	[_dependsOnClasses minusSet:_forwardDeclarationForClasses];
 }
 
-- (void)addForwardDeclarationForClass:(OFString*)cType
+- (void)addForwardDeclarationForClass:(OFString *)cType
 {
-    [_forwardDeclarationForClasses addObject:cType];
+	[_forwardDeclarationForClasses addObject:cType];
 }
 
-- (OFArray*)functions
+- (OFArray *)functions
 {
-    return [[_functions copy] autorelease];
+	return [[_functions copy] autorelease];
 }
 
 - (bool)hasFunctions
 {
-    return (_functions.count > 0);
+	return (_functions.count > 0);
 }
 
-- (void)addMethod:(OGTKMethod*)method
+- (void)addMethod:(OGTKMethod *)method
 {
-    if (method != nil) {
-        [_methods addObject:method];
-    }
+	if (method != nil) {
+		[_methods addObject:method];
+	}
 }
 
-- (OFArray*)methods
+- (OFArray *)methods
 {
-    return [[_methods copy] autorelease];
+	return [[_methods copy] autorelease];
 }
 
 - (bool)hasMethods
 {
-    return (_methods.count > 0);
+	return (_methods.count > 0);
 }
 
 @end

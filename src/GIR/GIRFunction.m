@@ -45,96 +45,108 @@
 
 - (id)init
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        _elementTypeName = @"GIRFunction";
-        _parameters = [[OFMutableArray alloc] init];
-        _instanceParameters = [[OFMutableArray alloc] init];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		_elementTypeName = @"GIRFunction";
+		_parameters = [[OFMutableArray alloc] init];
+		_instanceParameters = [[OFMutableArray alloc] init];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"] || [key isEqual:@"source-position"]) {
-            // Do nothing
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else if ([key isEqual:@"c:identifier"]) {
-            self.cIdentifier = value;
-        } else if ([key isEqual:@"moved-to"]) {
-            self.movedTo = value;
-        } else if ([key isEqual:@"version"]) {
-            self.version = value;
-        } else if ([key isEqual:@"introspectable"]) {
-            self.introspectable = [value isEqual:@"1"];
-        } else if ([key isEqual:@"deprecated"]) {
-            self.deprecated = [value isEqual:@"1"];
-        } else if ([key isEqual:@"deprecated-version"]) {
-            self.deprecatedVersion = value;
-        } else if ([key isEqual:@"throws"]) {
-            self.throws = [value isEqual:@"1"];
-        } else if ([key isEqual:@"doc-deprecated"]) {
-            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"doc"]) {
-            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"return-value"]) {
-            self.returnValue =
-                [[[GIRReturnValue alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"parameters"]) {
-            for (OFString* paramKey in value) {
-                if ([paramKey isEqual:@"parameter"]) {
-                    [self processArrayOrDictionary:[value objectForKey:paramKey]
-                                         withClass:[GIRParameter class]
-                                          andArray:_parameters];
-                } else if ([paramKey isEqual:@"instance-parameter"]) {
-                    [self processArrayOrDictionary:[value objectForKey:paramKey]
-                                         withClass:[GIRParameter class]
-                                          andArray:_instanceParameters];
-                }
-            }
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"] || [key isEqual:@"source-position"]) {
+			// Do nothing
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else if ([key isEqual:@"c:identifier"]) {
+			self.cIdentifier = value;
+		} else if ([key isEqual:@"moved-to"]) {
+			self.movedTo = value;
+		} else if ([key isEqual:@"version"]) {
+			self.version = value;
+		} else if ([key isEqual:@"introspectable"]) {
+			self.introspectable = [value isEqual:@"1"];
+		} else if ([key isEqual:@"deprecated"]) {
+			self.deprecated = [value isEqual:@"1"];
+		} else if ([key isEqual:@"deprecated-version"]) {
+			self.deprecatedVersion = value;
+		} else if ([key isEqual:@"throws"]) {
+			self.throws = [value isEqual:@"1"];
+		} else if ([key isEqual:@"doc-deprecated"]) {
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"doc"]) {
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"return-value"]) {
+			self.returnValue = [[[GIRReturnValue alloc]
+			    initWithDictionary:value] autorelease];
+		} else if ([key isEqual:@"parameters"]) {
+			for (OFString *paramKey in value) {
+				if ([paramKey isEqual:@"parameter"]) {
+					[self processArrayOrDictionary:
+					          [value objectForKey:paramKey]
+					                     withClass:
+					                         [GIRParameter
+					                             class]
+					                      andArray:
+					                          _parameters];
+				} else if ([paramKey
+				               isEqual:@"instance-parameter"]) {
+					[self
+					    processArrayOrDictionary:
+					        [value objectForKey:paramKey]
+					                   withClass:
+					                       [GIRParameter
+					                           class]
+					                    andArray:
+					                        _instanceParameters];
+				}
+			}
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_name release];
-    [_cIdentifier release];
-    [_movedTo release];
-    [_version release];
-    [_deprecatedVersion release];
-    [_docDeprecated release];
-    [_doc release];
-    [_returnValue release];
-    [_parameters release];
-    [_instanceParameters release];
+	[_name release];
+	[_cIdentifier release];
+	[_movedTo release];
+	[_version release];
+	[_deprecatedVersion release];
+	[_docDeprecated release];
+	[_doc release];
+	[_returnValue release];
+	[_parameters release];
+	[_instanceParameters release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

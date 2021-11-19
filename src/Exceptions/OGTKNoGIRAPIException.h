@@ -11,7 +11,7 @@
 
 OF_ASSUME_NONNULL_BEGIN
 
-@interface OGTKNoGIRAPIException : OFException
+@interface OGTKNoGIRAPIException: OFException
 
 @end
 

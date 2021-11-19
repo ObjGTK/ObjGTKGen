@@ -29,12 +29,13 @@
 
 #import "GIRBase.h"
 
-@interface GIRType : GIRBase {
-    OFString* _cType;
-    OFString* _name;
+@interface GIRType: GIRBase
+{
+	OFString *_cType;
+	OFString *_name;
 }
 
-@property (nonatomic, retain) OFString* cType;
-@property (nonatomic, retain) OFString* name;
+@property (nonatomic, retain) OFString *cType;
+@property (nonatomic, retain) OFString *name;
 
 @end

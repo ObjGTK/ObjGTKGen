@@ -31,69 +31,70 @@
 
 @implementation OGTKObject
 
-+ (OGTKObject*)withGtkWidget:(GtkWidget*)obj
++ (OGTKObject *)withGtkWidget:(GtkWidget *)obj
 {
-    OGTKObject* retVal = [[OGTKObject alloc] initWithGObject:(GObject*)obj];
-    return [retVal autorelease];
+	OGTKObject *retVal =
+	    [[OGTKObject alloc] initWithGObject:(GObject *)obj];
+	return [retVal autorelease];
 }
 
-+ (OGTKObject*)withGObject:(GObject*)obj
++ (OGTKObject *)withGObject:(GObject *)obj
 {
-    OGTKObject* retVal = [[OGTKObject alloc] initWithGObject:obj];
-    return [retVal autorelease];
+	OGTKObject *retVal = [[OGTKObject alloc] initWithGObject:obj];
+	return [retVal autorelease];
 }
 
-- (id)initWithGObject:(GObject*)obj
+- (id)initWithGObject:(GObject *)obj
 {
-    self = [super init];
+	self = [super init];
 
-    @try {
-        if (obj == NULL)
-            @throw [OGTKGObjectInitializationFailedException
-                exceptionWithClass:[self class]];
+	@try {
+		if (obj == NULL)
+			@throw [OGTKGObjectInitializationFailedException
+			    exceptionWithClass:[self class]];
 
-        [self setGObject:obj];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+		[self setGObject:obj];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (GtkWidget*)WIDGET
+- (GtkWidget *)WIDGET
 {
-    return GTK_WIDGET(_gObject);
+	return GTK_WIDGET(_gObject);
 }
 
-- (void)setGObject:(GObject*)obj
+- (void)setGObject:(GObject *)obj
 {
-    if (_gObject != NULL) {
-        // Decrease the reference count on the previously stored GObject
-        g_object_unref(_gObject);
-    }
+	if (_gObject != NULL) {
+		// Decrease the reference count on the previously stored GObject
+		g_object_unref(_gObject);
+	}
 
-    _gObject = obj;
+	_gObject = obj;
 
-    if (_gObject != NULL) {
-        // Increase the reference count on the new GObject
-        g_object_ref(_gObject);
-    }
+	if (_gObject != NULL) {
+		// Increase the reference count on the new GObject
+		g_object_ref(_gObject);
+	}
 }
 
-- (GObject*)GOBJECT
+- (GObject *)GOBJECT
 {
-    return _gObject;
+	return _gObject;
 }
 
 - (void)dealloc
 {
-    if (_gObject != NULL) {
-        // Decrease the reference count on the previously stored GObject
-        g_object_unref(_gObject);
-        _gObject = NULL;
-    }
-    [super dealloc];
+	if (_gObject != NULL) {
+		// Decrease the reference count on the previously stored GObject
+		g_object_unref(_gObject);
+		_gObject = NULL;
+	}
+	[super dealloc];
 }
 
 @end

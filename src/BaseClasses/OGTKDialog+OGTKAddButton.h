@@ -27,13 +27,14 @@
 
 #import "OGTKDialog.h"
 
-@interface OGTKDialog (OGTKAddButton)
+@interface
+OGTKDialog (OGTKAddButton)
 
-- (id)initWithTitle:(OFString*)title
-                          parent:(OGTKWindow*)parent
+- (id)initWithTitle:(OFString *)title
+                          parent:(OGTKWindow *)parent
                            flags:(GtkDialogFlags)flags
-    buttonTextResponseDictionary:(OFDictionary*)buttonTextDict;
+    buttonTextResponseDictionary:(OFDictionary *)buttonTextDict;
 
-- (void)addButtons:(OFDictionary*)buttonTextDict;
+- (void)addButtons:(OFDictionary *)buttonTextDict;
 
 @end

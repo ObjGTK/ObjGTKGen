@@ -27,44 +27,46 @@
 
 #import "OGTKMessageDialog+OGTKWithMarkup.h"
 
-@implementation OGTKMessageDialog (OGTKWithMarkup)
+@implementation
+OGTKMessageDialog (OGTKWithMarkup)
 
-- (id)initWithParent:(OGTKWindow*)parent
+- (id)initWithParent:(OGTKWindow *)parent
                flags:(GtkDialogFlags)flags
                 type:(GtkMessageType)type
              buttons:(GtkButtonsType)buttons
-              markup:(OFString*)markup
+              markup:(OFString *)markup
 {
-    self = [super initWithGObject:(GObject*)gtk_message_dialog_new_with_markup(
-                                      [parent WINDOW], flags, type, buttons,
-                                      [markup UTF8String], NULL)];
+	self = [super
+	    initWithGObject:(GObject *)gtk_message_dialog_new_with_markup(
+	                        [parent WINDOW], flags, type, buttons,
+	                        [markup UTF8String], NULL)];
 
-    return self;
+	return self;
 }
 
-- (void)formatSecondaryMarkup:(OFString*)markup
+- (void)formatSecondaryMarkup:(OFString *)markup
 {
-    gtk_message_dialog_format_secondary_markup(
-        [self MESSAGEDIALOG], [markup UTF8String], NULL);
+	gtk_message_dialog_format_secondary_markup(
+	    [self MESSAGEDIALOG], [markup UTF8String], NULL);
 }
 
-- (void)formatSecondaryText:(OFString*)message
+- (void)formatSecondaryText:(OFString *)message
 {
-    gtk_message_dialog_format_secondary_text(
-        [self MESSAGEDIALOG], [message UTF8String], NULL);
+	gtk_message_dialog_format_secondary_text(
+	    [self MESSAGEDIALOG], [message UTF8String], NULL);
 }
 
-- (id)initWithParent:(OGTKWindow*)parent
+- (id)initWithParent:(OGTKWindow *)parent
                flags:(GtkDialogFlags)flags
                 type:(GtkMessageType)type
              buttons:(GtkButtonsType)buttons
-             message:(OFString*)message
+             message:(OFString *)message
 {
-    self = [super
-        initWithGObject:(GObject*)gtk_message_dialog_new([parent WINDOW], flags,
-                            type, buttons, [message UTF8String], NULL)];
+	self = [super initWithGObject:(GObject *)gtk_message_dialog_new(
+	                                  [parent WINDOW], flags, type, buttons,
+	                                  [message UTF8String], NULL)];
 
-    return self;
+	return self;
 }
 
 @end

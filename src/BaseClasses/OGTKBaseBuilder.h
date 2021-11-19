@@ -34,7 +34,7 @@
 /**
  * OGTKBuilder adds additional functionality to GtkBuilder
  */
-@interface OGTKBaseBuilder : OFObject
+@interface OGTKBaseBuilder: OFObject
 
 /**
  * When enabled this builder will print out signal connection debug info
@@ -63,9 +63,9 @@
  * @param objectSignalDictionary
  *  A dictionary mapping CallbackData objects to OFString signal names
  */
-+ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder*)builder
++ (void)connectSignalsToObjectsWithBuilder:(OGTKBuilder *)builder
                           signalDictionary:
-                              (OFDictionary*)objectSignalDictionary;
+                              (OFDictionary *)objectSignalDictionary;
 
 /**
  * Attempts to get the object witht he name returning it as a OGTKWidget. If the
@@ -80,7 +80,7 @@
  *
  * @returns the OGTKWidget or nil
  */
-+ (OGTKWidget*)getWidgetFromBuilder:(OGTKBuilder*)builder
-                           withName:(OFString*)name;
++ (OGTKWidget *)getWidgetFromBuilder:(OGTKBuilder *)builder
+                            withName:(OFString *)name;
 
 @end

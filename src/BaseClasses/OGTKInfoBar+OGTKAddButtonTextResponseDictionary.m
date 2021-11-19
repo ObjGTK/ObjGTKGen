@@ -27,36 +27,39 @@
 
 #import "OGTKInfoBar+OGTKAddButtonTextResponseDictionary.h"
 
-@implementation OGTKInfoBar (OGTKAddButtonTextResponseDictionary)
+@implementation
+OGTKInfoBar (OGTKAddButtonTextResponseDictionary)
 
-- (id)initWithButtonTextResponseDictionary:(OFDictionary*)buttonTextDict
+- (id)initWithButtonTextResponseDictionary:(OFDictionary *)buttonTextDict
 {
-    self = [super initWithGObject:(GObject*)gtk_info_bar_new()];
+	self = [super initWithGObject:(GObject *)gtk_info_bar_new()];
 
-    @try {
-        OGTKTypeWrapper* wrapper;
+	@try {
+		OGTKTypeWrapper *wrapper;
 
-        for (OFString* text in buttonTextDict) {
-            wrapper = [buttonTextDict objectForKey:text];
+		for (OFString *text in buttonTextDict) {
+			wrapper = [buttonTextDict objectForKey:text];
 
-            [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-        }
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
-    return self;
+			[self addButtonWithButtonText:text
+			                   responseId:wrapper.gintValue];
+		}
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+	return self;
 }
 
-- (void)addButtonTextResponseDictionary:(OFDictionary*)buttonTextDict
+- (void)addButtonTextResponseDictionary:(OFDictionary *)buttonTextDict
 {
-    OGTKTypeWrapper* wrapper;
+	OGTKTypeWrapper *wrapper;
 
-    for (OFString* text in buttonTextDict) {
-        wrapper = [buttonTextDict objectForKey:text];
+	for (OFString *text in buttonTextDict) {
+		wrapper = [buttonTextDict objectForKey:text];
 
-        [self addButtonWithButtonText:text responseId:wrapper.gintValue];
-    }
+		[self addButtonWithButtonText:text
+		                   responseId:wrapper.gintValue];
+	}
 }
 
 @end

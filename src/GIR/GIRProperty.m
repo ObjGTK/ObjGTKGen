@@ -49,85 +49,86 @@
 
 - (instancetype)init
 {
-    self = [super init];
+	self = [super init];
 
-    _elementTypeName = @"GIRProperty";
+	_elementTypeName = @"GIRProperty";
 
-    return self;
+	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary*)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-    self = [self init];
+	self = [self init];
 
-    @try {
-        [self parseDictionary:dict];
-    } @catch (id e) {
-        [self release];
-        @throw e;
-    }
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)parseDictionary:(OFDictionary*)dict
+- (void)parseDictionary:(OFDictionary *)dict
 {
-    for (OFString* key in dict) {
-        id value = [dict objectForKey:key];
+	for (OFString *key in dict) {
+		id value = [dict objectForKey:key];
 
-        if ([key isEqual:@"text"]) {
-            // Do nothing
-        } else if ([key isEqual:@"name"]) {
-            self.name = value;
-        } else if ([key isEqual:@"transfer-ownership"]) {
-            self.transferOwnership = value;
-        } else if ([key isEqual:@"version"]) {
-            self.version = value;
-        } else if ([key isEqual:@"deprecated-version"]) {
-            self.deprecatedVersion = value;
-        } else if ([key isEqual:@"doc"]) {
-            self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"doc-deprecated"]) {
-            self.docDeprecated =
-                [[[GIRDoc alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"type"]) {
-            self.type =
-                [[[GIRType alloc] initWithDictionary:value] autorelease];
-        } else if ([key isEqual:@"allow-none"]) {
-            self.allowNone = [value isEqual:@"1"];
-        } else if ([key isEqual:@"construct-only"]) {
-            self.constructOnly = [value isEqual:@"1"];
-        } else if ([key isEqual:@"readable"]) {
-            self.readable = [value isEqual:@"1"];
-        } else if ([key isEqual:@"deprecated"]) {
-            self.deprecated = [value isEqual:@"1"];
-        } else if ([key isEqual:@"construct"]) {
-            self.construct = value;
-        } else if ([key isEqual:@"writable"]) {
-            self.writable = value;
-        } else if ([key isEqual:@"array"]) {
-            self.array =
-                [[[GIRArray alloc] initWithDictionary:value] autorelease];
-        } else {
-            [self logUnknownElement:key];
-        }
-    }
+		if ([key isEqual:@"text"]) {
+			// Do nothing
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
+		} else if ([key isEqual:@"transfer-ownership"]) {
+			self.transferOwnership = value;
+		} else if ([key isEqual:@"version"]) {
+			self.version = value;
+		} else if ([key isEqual:@"deprecated-version"]) {
+			self.deprecatedVersion = value;
+		} else if ([key isEqual:@"doc"]) {
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"doc-deprecated"]) {
+			self.docDeprecated = [[[GIRDoc alloc]
+			    initWithDictionary:value] autorelease];
+		} else if ([key isEqual:@"type"]) {
+			self.type = [[[GIRType alloc] initWithDictionary:value]
+			    autorelease];
+		} else if ([key isEqual:@"allow-none"]) {
+			self.allowNone = [value isEqual:@"1"];
+		} else if ([key isEqual:@"construct-only"]) {
+			self.constructOnly = [value isEqual:@"1"];
+		} else if ([key isEqual:@"readable"]) {
+			self.readable = [value isEqual:@"1"];
+		} else if ([key isEqual:@"deprecated"]) {
+			self.deprecated = [value isEqual:@"1"];
+		} else if ([key isEqual:@"construct"]) {
+			self.construct = value;
+		} else if ([key isEqual:@"writable"]) {
+			self.writable = value;
+		} else if ([key isEqual:@"array"]) {
+			self.array = [[[GIRArray alloc]
+			    initWithDictionary:value] autorelease];
+		} else {
+			[self logUnknownElement:key];
+		}
+	}
 }
 
 - (void)dealloc
 {
-    [_name release];
-    [_transferOwnership release];
-    [_version release];
-    [_deprecatedVersion release];
-    [_doc release];
-    [_docDeprecated release];
-    [_type release];
-    [_construct release];
-    [_writable release];
-    [_array release];
+	[_name release];
+	[_transferOwnership release];
+	[_version release];
+	[_deprecatedVersion release];
+	[_doc release];
+	[_docDeprecated release];
+	[_type release];
+	[_construct release];
+	[_writable release];
+	[_array release];
 
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

@@ -27,17 +27,19 @@
 
 #import "OGTKContainer+OGTKAddWidget.h"
 
-@implementation OGTKContainer (OGTKAddWidget)
+@implementation
+OGTKContainer (OGTKAddWidget)
 
-- (void)addWidget:(OGTKWidget*)widget withProperties:(OFDictionary*)properties
+- (void)addWidget:(OGTKWidget *)widget withProperties:(OFDictionary *)properties
 {
-    OGTKTypeWrapper* wrapper;
-    for (OFString* propName in properties) {
-        wrapper = [properties objectForKey:propName];
+	OGTKTypeWrapper *wrapper;
+	for (OFString *propName in properties) {
+		wrapper = [properties objectForKey:propName];
 
-        gtk_container_child_set_property([self CONTAINER], [widget WIDGET],
-            [propName UTF8String], [wrapper asGValuePtr]);
-    }
+		gtk_container_child_set_property([self CONTAINER],
+		    [widget WIDGET], [propName UTF8String],
+		    [wrapper asGValuePtr]);
+	}
 }
 
 @end

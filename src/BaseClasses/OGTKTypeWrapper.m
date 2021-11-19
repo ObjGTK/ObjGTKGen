@@ -34,9 +34,9 @@
 
 @synthesize gintValue = _gintValue, ptrValue = _ptrValue;
 
-- (const GValue*)asGValuePtr
+- (const GValue *)asGValuePtr
 {
-    return (const GValue*)_ptrValue;
+	return (const GValue *)_ptrValue;
 }
 
 @end

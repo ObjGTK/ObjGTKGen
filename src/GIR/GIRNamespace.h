@@ -34,24 +34,25 @@
 #import "GIRFunction.h"
 #import "GIRInterface.h"
 
-@interface GIRNamespace : GIRBase {
-    OFString* _name;
-    OFString* _cSymbolPrefixes;
-    OFString* _cIdentifierPrefixes;
-    OFMutableArray* _classes;
-    OFMutableArray* _functions;
-    OFMutableArray* _enumerations;
-    OFMutableArray* _constants;
-    OFMutableArray* _interfaces;
+@interface GIRNamespace: GIRBase
+{
+	OFString *_name;
+	OFString *_cSymbolPrefixes;
+	OFString *_cIdentifierPrefixes;
+	OFMutableArray *_classes;
+	OFMutableArray *_functions;
+	OFMutableArray *_enumerations;
+	OFMutableArray *_constants;
+	OFMutableArray *_interfaces;
 }
 
-@property (nonatomic, retain) OFString* name;
-@property (nonatomic, retain) OFString* cSymbolPrefixes;
-@property (nonatomic, retain) OFString* cIdentifierPrefixes;
-@property (nonatomic, retain) OFMutableArray* classes;
-@property (nonatomic, retain) OFMutableArray* functions;
-@property (nonatomic, retain) OFMutableArray* enumerations;
-@property (nonatomic, retain) OFMutableArray* constants;
-@property (nonatomic, retain) OFMutableArray* interfaces;
+@property (nonatomic, retain) OFString *name;
+@property (nonatomic, retain) OFString *cSymbolPrefixes;
+@property (nonatomic, retain) OFString *cIdentifierPrefixes;
+@property (nonatomic, retain) OFMutableArray *classes;
+@property (nonatomic, retain) OFMutableArray *functions;
+@property (nonatomic, retain) OFMutableArray *enumerations;
+@property (nonatomic, retain) OFMutableArray *constants;
+@property (nonatomic, retain) OFMutableArray *interfaces;
 
 @end
