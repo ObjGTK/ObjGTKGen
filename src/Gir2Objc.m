@@ -108,23 +108,23 @@
 
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 
-	for (GIRClass *clazz in ns.classes) {
+	for (GIRClass *girClass in ns.classes) {
 		@autoreleasepool {
-			OGTKClass *objcClass =
+			OGTKClass *objCClass =
 			    [[[OGTKClass alloc] init] autorelease];
 
-			[Gir2Objc mapGirClass:clazz
-			          toObjcClass:objcClass
+			[Gir2Objc mapGIRClass:girClass
+			          toObjCClass:objCClass
 			       usingNamespace:ns];
 
 			@try {
-				[sharedMapper addClass:objcClass];
+				[sharedMapper addClass:objCClass];
 			} @catch (id e) {
 				OFLog(@"Warning: Cannot add type %@ to mapper. "
 				      @"Exception %@, description: %@"
 				      @"Class definition may be incorrect. "
 				      @"Skipping…",
-				    objcClass.cName, [e class],
+				    objCClass.cName, [e class],
 				    [e description]);
 			}
 		}
@@ -138,11 +138,10 @@
 
 		if (currentClass.cParentType == nil) {
 			@try {
-				[currentClass
-				    setCParentType:
-				        [OGTKMapper
-				            getCTypeFromName:currentClass
-				                                 .parentName]];
+				OFString *cParentType = [OGTKMapper
+				    getCTypeFromName:currentClass.parentName];
+
+				[currentClass setCParentType:cParentType];
 			} @catch (id e) {
 				OFLog(@"Could not get c type for parent of %@, "
 				      @"exception %@. "
@@ -171,16 +170,16 @@
 	}
 }
 
-+ (void)mapGirClass:(GIRClass *)girClass
-        toObjcClass:(OGTKClass *)objcClass
++ (void)mapGIRClass:(GIRClass *)girClass
+        toObjCClass:(OGTKClass *)objCClass
      usingNamespace:(GIRNamespace *)ns
 {
 	// Set basic class properties
-	[objcClass setCName:girClass.name];
-	[objcClass setCType:girClass.cType];
+	[objCClass setCName:girClass.name];
+	[objCClass setCType:girClass.cType];
 
 	// Set parent name
-	[objcClass setParentName:girClass.parent];
+	[objCClass setParentName:girClass.parent];
 
 	// Try to set parent c type
 	// First try to get information from a <field> node.
@@ -190,34 +189,34 @@
 	for (GIRField *field in classFields) {
 		if ([field.name isEqual:@"parent_class"] ||
 		    [field.name isEqual:@"parent_instance"]) {
-			[objcClass setCParentType:field.type.cType];
+			[objCClass setCParentType:field.type.cType];
 		}
 	}
 
-	[objcClass setCSymbolPrefix:girClass.cSymbolPrefix];
-	[objcClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
-	[objcClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
+	[objCClass setCSymbolPrefix:girClass.cSymbolPrefix];
+	[objCClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
+	[objCClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
 
 	// Set constructors
-	[Gir2Objc mapGirMethods:girClass.constructors
-	            toObjcClass:objcClass
-	          usingSelector:@selector(addConstructor:)];
+	[Gir2Objc addMappedGIRMethods:girClass.constructors
+	                  toObjCClass:objCClass
+	                usingSelector:@selector(addConstructor:)];
 
 	// Set functions
-	[Gir2Objc mapGirMethods:girClass.functions
-	            toObjcClass:objcClass
-	          usingSelector:@selector(addFunction:)];
+	[Gir2Objc addMappedGIRMethods:girClass.functions
+	                  toObjCClass:objCClass
+	                usingSelector:@selector(addFunction:)];
 
 	// Set methods
-	[Gir2Objc mapGirMethods:girClass.methods
-	            toObjcClass:objcClass
-	          usingSelector:@selector(addMethod:)];
+	[Gir2Objc addMappedGIRMethods:girClass.methods
+	                  toObjCClass:objCClass
+	                usingSelector:@selector(addMethod:)];
 }
 
-+ (void)mapGirMethods:(OFMutableArray OF_GENERIC(
-                          id<GIRMethodMapping>) *)girMethodArray
-          toObjcClass:(OGTKClass *)objcClass
-        usingSelector:(SEL)addMethodSelector
++ (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(
+                                id<GIRMethodMapping>) *)girMethodArray
+                toObjCClass:(OGTKClass *)objCClass
+              usingSelector:(SEL)addMethodSelector
 {
 	// Set constructors
 	for (id<GIRMethodMapping> girMethod in girMethodArray) {
@@ -275,7 +274,7 @@
 		[paramArray release];
 
 		// Add method to class
-		[objcClass performSelector:addMethodSelector
+		[objCClass performSelector:addMethodSelector
 		                withObject:objcMethod];
 		[objcMethod release];
 	}
