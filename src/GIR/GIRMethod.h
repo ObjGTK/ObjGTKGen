@@ -29,10 +29,11 @@
 
 #import "GIRBase.h"
 #import "GIRDoc.h"
+#import "GIRMethodMapping.h"
 #import "GIRParameter.h"
 #import "GIRReturnValue.h"
 
-@interface GIRMethod: GIRBase
+@interface GIRMethod: GIRBase <GIRMethodMapping>
 {
 	OFString *_name;
 	OFString *_cIdentifier;

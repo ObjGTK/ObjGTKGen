@@ -1,8 +1,8 @@
 /*
- * GIRFunction.h
+ * GIRMethodMapping.h
  * This file is part of ObjGTK
  *
- * Copyright (C) 2017 - Tyler Burton
+ * Copyright (C) 2021 - Johannes Brakensiek
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,42 +26,14 @@
  */
 
 #import <ObjFW/ObjFW.h>
-
-#import "GIRBase.h"
-#import "GIRDoc.h"
-#import "GIRMethodMapping.h"
-#import "GIRParameter.h"
 #import "GIRReturnValue.h"
 
-@interface GIRFunction: GIRBase <GIRMethodMapping>
-{
-	OFString *_name;
-	OFString *_cIdentifier;
-	OFString *_movedTo;
-	OFString *_version;
-	bool _introspectable;
-	bool _deprecated;
-	OFString *_deprecatedVersion;
-	bool _throws;
-	GIRDoc *_docDeprecated;
-	GIRDoc *_doc;
-	GIRReturnValue *_returnValue;
-	OFMutableArray *_parameters;
-	OFMutableArray *_instanceParameters;
-}
+@protocol GIRMethodMapping
 
 @property (nonatomic, copy) OFString *name;
 @property (nonatomic, copy) OFString *cIdentifier;
-@property (nonatomic, copy) OFString *movedTo;
-@property (nonatomic, copy) OFString *version;
-@property (nonatomic) bool introspectable;
-@property (nonatomic) bool deprecated;
-@property (nonatomic, copy) OFString *deprecatedVersion;
-@property (nonatomic) bool throws;
-@property (nonatomic, retain) GIRDoc *docDeprecated;
-@property (nonatomic, retain) GIRDoc *doc;
-@property (nonatomic, retain) GIRReturnValue *returnValue;
 @property (nonatomic, retain) OFMutableArray *parameters;
-@property (nonatomic, retain) OFMutableArray *instanceParameters;
+@property (nonatomic, retain) GIRReturnValue *returnValue;
+@property (nonatomic) bool throws;
 
 @end

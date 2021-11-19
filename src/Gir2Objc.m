@@ -110,231 +110,21 @@
 
 	for (GIRClass *clazz in ns.classes) {
 		@autoreleasepool {
-			OGTKClass *cgtkClass =
+			OGTKClass *objcClass =
 			    [[[OGTKClass alloc] init] autorelease];
 
-			// Set basic class properties
-			[cgtkClass setCName:clazz.name];
-			[cgtkClass setCType:clazz.cType];
-
-			// Set parent name
-			[cgtkClass setParentName:clazz.parent];
-
-			// Try to set parent c type
-			// First try to get information from a <field> node.
-			// Otherwise we need to get the c type from the mapper
-			// later
-			OFArray *classFields = clazz.fields;
-			for (GIRField *field in classFields) {
-				if ([field.name isEqual:@"parent_class"] ||
-				    [field.name isEqual:@"parent_instance"]) {
-					[cgtkClass
-					    setCParentType:field.type.cType];
-				}
-			}
-
-			[cgtkClass setCSymbolPrefix:clazz.cSymbolPrefix];
-			[cgtkClass
-			    setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
-			[cgtkClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
-
-			// Set constructors
-			for (GIRConstructor *ctor in clazz.constructors) {
-				bool foundVarArgs = false;
-
-				// First need to check for varargs in list of
-				// parameters
-				for (GIRParameter *param in ctor.parameters) {
-					if (param.varargs != nil) {
-						foundVarArgs = true;
-						break;
-					}
-				}
-
-				// Don't handle VarArgs constructors
-				if (!foundVarArgs) {
-					OGTKMethod *objcCtor =
-					    [[OGTKMethod alloc] init];
-					[objcCtor setName:ctor.name];
-					[objcCtor
-					    setCIdentifier:ctor.cIdentifier];
-					[objcCtor
-					    setCReturnType:ctor.returnValue.type
-					                       .cType];
-					[objcCtor setThrows:ctor.throws];
-
-					OFMutableArray *paramArray =
-					    [[OFMutableArray alloc] init];
-					for (GIRParameter *param in ctor
-					         .parameters) {
-						OGTKParameter *objcParam =
-						    [[OGTKParameter alloc]
-						        init];
-
-						if (param.type == nil &&
-						    param.array != nil) {
-							[objcParam
-							    setCType:
-							        param.array
-							            .cType];
-						} else {
-							[objcParam
-							    setCType:
-							        param.type
-							            .cType];
-						}
-
-						[objcParam setCName:param.name];
-						[paramArray
-						    addObject:objcParam];
-						[objcParam release];
-					}
-					[objcCtor setParameters:paramArray];
-					[paramArray release];
-
-					[cgtkClass addConstructor:objcCtor];
-					[objcCtor release];
-				}
-			}
-
-			// Set functions
-			for (GIRFunction *func in clazz.functions) {
-				bool foundVarArgs = false;
-
-				// First need to check for varargs in list of
-				// parameters
-				for (GIRParameter *param in func.parameters) {
-					if (param.varargs != nil) {
-						foundVarArgs = true;
-						break;
-					}
-				}
-
-				if (!foundVarArgs) {
-					OGTKMethod *objcFunc =
-					    [[OGTKMethod alloc] init];
-					[objcFunc setName:func.name];
-					[objcFunc
-					    setCIdentifier:func.cIdentifier];
-					[objcFunc setThrows:func.throws];
-
-					if (func.returnValue.type == nil &&
-					    func.returnValue.array != nil) {
-						[objcFunc setCReturnType:
-						              func.returnValue
-						                  .array.cType];
-					} else {
-						[objcFunc setCReturnType:
-						              func.returnValue
-						                  .type.cType];
-					}
-
-					OFMutableArray *paramArray =
-					    [[OFMutableArray alloc] init];
-					for (GIRParameter *param in func
-					         .parameters) {
-						OGTKParameter *objcParam =
-						    [[OGTKParameter alloc]
-						        init];
-
-						if (param.type == nil &&
-						    param.array != nil) {
-							[objcParam
-							    setCType:
-							        param.array
-							            .cType];
-						} else {
-							[objcParam
-							    setCType:
-							        param.type
-							            .cType];
-						}
-
-						[objcParam setCName:param.name];
-						[paramArray
-						    addObject:objcParam];
-						[objcParam release];
-					}
-					[objcFunc setParameters:paramArray];
-					[paramArray release];
-
-					[cgtkClass addFunction:objcFunc];
-					[objcFunc release];
-				}
-			}
-
-			// Set methods
-			for (GIRMethod *meth in clazz.methods) {
-				bool foundVarArgs = false;
-
-				// First need to check for varargs in list of
-				// parameters
-				for (GIRParameter *param in meth.parameters) {
-					if (param.varargs != nil) {
-						foundVarArgs = true;
-						break;
-					}
-				}
-
-				if (!foundVarArgs) {
-					OGTKMethod *objcMeth =
-					    [[OGTKMethod alloc] init];
-					[objcMeth setName:meth.name];
-					[objcMeth
-					    setCIdentifier:meth.cIdentifier];
-					[objcMeth setThrows:meth.throws];
-
-					if (meth.returnValue.type == nil &&
-					    meth.returnValue.array != nil) {
-						[objcMeth setCReturnType:
-						              meth.returnValue
-						                  .array.cType];
-					} else {
-						[objcMeth setCReturnType:
-						              meth.returnValue
-						                  .type.cType];
-					}
-
-					OFMutableArray *paramArray =
-					    [OFMutableArray array];
-					for (GIRParameter *param in meth
-					         .parameters) {
-						OGTKParameter *objcParam =
-						    [[[OGTKParameter alloc]
-						        init] autorelease];
-
-						if (param.type == nil &&
-						    param.array != nil) {
-							[objcParam
-							    setCType:
-							        param.array
-							            .cType];
-						} else {
-							[objcParam
-							    setCType:
-							        param.type
-							            .cType];
-						}
-
-						[objcParam setCName:param.name];
-						[paramArray
-						    addObject:objcParam];
-					}
-					[objcMeth setParameters:paramArray];
-
-					[cgtkClass addMethod:objcMeth];
-					[objcMeth release];
-				}
-			}
+			[Gir2Objc mapGirClass:clazz
+			          toObjcClass:objcClass
+			       usingNamespace:ns];
 
 			@try {
-				[sharedMapper addClass:cgtkClass];
+				[sharedMapper addClass:objcClass];
 			} @catch (id e) {
 				OFLog(@"Warning: Cannot add type %@ to mapper. "
 				      @"Exception %@, description: %@"
 				      @"Class definition may be incorrect. "
 				      @"Skipping…",
-				    cgtkClass.cName, [e class],
+				    objcClass.cName, [e class],
 				    [e description]);
 			}
 		}
@@ -378,6 +168,116 @@
 		    generateFilesForClass:[classesDict objectForKey:className]
 		                    inDir:[OGTKUtil globalConfigValueFor:
 		                                        @"outputDir"]];
+	}
+}
+
++ (void)mapGirClass:(GIRClass *)girClass
+        toObjcClass:(OGTKClass *)objcClass
+     usingNamespace:(GIRNamespace *)ns
+{
+	// Set basic class properties
+	[objcClass setCName:girClass.name];
+	[objcClass setCType:girClass.cType];
+
+	// Set parent name
+	[objcClass setParentName:girClass.parent];
+
+	// Try to set parent c type
+	// First try to get information from a <field> node.
+	// Otherwise we need to get the c type from the mapper
+	// later
+	OFArray *classFields = girClass.fields;
+	for (GIRField *field in classFields) {
+		if ([field.name isEqual:@"parent_class"] ||
+		    [field.name isEqual:@"parent_instance"]) {
+			[objcClass setCParentType:field.type.cType];
+		}
+	}
+
+	[objcClass setCSymbolPrefix:girClass.cSymbolPrefix];
+	[objcClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
+	[objcClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
+
+	// Set constructors
+	[Gir2Objc mapGirMethods:girClass.constructors
+	            toObjcClass:objcClass
+	          usingSelector:@selector(addConstructor:)];
+
+	// Set functions
+	[Gir2Objc mapGirMethods:girClass.functions
+	            toObjcClass:objcClass
+	          usingSelector:@selector(addFunction:)];
+
+	// Set methods
+	[Gir2Objc mapGirMethods:girClass.methods
+	            toObjcClass:objcClass
+	          usingSelector:@selector(addMethod:)];
+}
+
++ (void)mapGirMethods:(OFMutableArray OF_GENERIC(
+                          id<GIRMethodMapping>) *)girMethodArray
+          toObjcClass:(OGTKClass *)objcClass
+        usingSelector:(SEL)addMethodSelector
+{
+	// Set constructors
+	for (id<GIRMethodMapping> girMethod in girMethodArray) {
+		bool foundVarArgs = false;
+
+		// First need to check for varargs in list of
+		// parameters
+		for (GIRParameter *param in girMethod.parameters) {
+			if (param.varargs != nil) {
+				foundVarArgs = true;
+				break;
+			}
+		}
+
+		// Don't handle VarArgs methods
+		if (foundVarArgs)
+			continue;
+
+		OGTKMethod *objcMethod = [[OGTKMethod alloc] init];
+
+		[objcMethod setName:girMethod.name];
+		[objcMethod setCIdentifier:girMethod.cIdentifier];
+
+		// Set return type
+		if (girMethod.returnValue.type == nil &&
+		    girMethod.returnValue.array != nil) {
+			[objcMethod
+			    setCReturnType:girMethod.returnValue.array.cType];
+		} else {
+			[objcMethod
+			    setCReturnType:girMethod.returnValue.type.cType];
+		}
+
+		// Set if throws GError
+		[objcMethod setThrows:girMethod.throws];
+
+		// Set parameters
+		OFMutableArray *paramArray = [[OFMutableArray alloc] init];
+
+		for (GIRParameter *param in girMethod.parameters) {
+			OGTKParameter *objcParam = [[OGTKParameter alloc] init];
+
+			if (param.type == nil && param.array != nil) {
+				[objcParam setCType:param.array.cType];
+			} else {
+				[objcParam setCType:param.type.cType];
+			}
+
+			[objcParam setCName:param.name];
+			[paramArray addObject:objcParam];
+			[objcParam release];
+		}
+
+		[objcMethod setParameters:paramArray];
+		[paramArray release];
+
+		// Add method to class
+		[objcClass performSelector:addMethodSelector
+		                withObject:objcMethod];
+		[objcMethod release];
 	}
 }
 

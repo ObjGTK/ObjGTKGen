@@ -29,10 +29,11 @@
 
 #import "GIRBase.h"
 #import "GIRDoc.h"
+#import "GIRMethodMapping.h"
 #import "GIRParameter.h"
 #import "GIRReturnValue.h"
 
-@interface GIRConstructor: GIRBase
+@interface GIRConstructor: GIRBase <GIRMethodMapping>
 {
 	OFString *_name;
 	OFString *_cIdentifier;
@@ -50,12 +51,12 @@
 	OFMutableArray *_instanceParameters;
 }
 
-@property (nonatomic, retain) OFString *name;
-@property (nonatomic, retain) OFString *cIdentifier;
-@property (nonatomic, retain) OFString *version;
-@property (nonatomic, retain) OFString *deprecatedVersion;
-@property (nonatomic, retain) OFString *shadowedBy;
-@property (nonatomic, retain) OFString *shadows;
+@property (nonatomic, copy) OFString *name;
+@property (nonatomic, copy) OFString *cIdentifier;
+@property (nonatomic, copy) OFString *version;
+@property (nonatomic, copy) OFString *deprecatedVersion;
+@property (nonatomic, copy) OFString *shadowedBy;
+@property (nonatomic, copy) OFString *shadows;
 @property (nonatomic) bool introspectable;
 @property (nonatomic) bool deprecated;
 @property (nonatomic) bool throws;
