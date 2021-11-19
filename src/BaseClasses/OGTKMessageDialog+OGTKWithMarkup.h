@@ -27,8 +27,7 @@
 
 #import "OGTKMessageDialog.h"
 
-@interface
-OGTKMessageDialog (OGTKWithMarkup)
+@interface OGTKMessageDialog (OGTKWithMarkup)
 
 - (id)initWithParent:(OGTKWindow *)parent
                flags:(GtkDialogFlags)flags

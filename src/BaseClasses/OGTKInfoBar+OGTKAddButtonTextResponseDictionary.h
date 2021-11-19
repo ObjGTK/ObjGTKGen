@@ -27,8 +27,7 @@
 
 #import "OGTKInfoBar.h"
 
-@interface
-OGTKInfoBar (OGTKAddButtonTextResponseDictionary)
+@interface OGTKInfoBar (OGTKAddButtonTextResponseDictionary)
 
 - (id)initWithButtonTextResponseDictionary:(OFDictionary *)buttonTextDict;
 

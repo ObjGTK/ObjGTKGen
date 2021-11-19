@@ -16,8 +16,7 @@ OFString *const kXMLNSForPrefixGlib =
     @"http://www.gtk.org/introspection/glib/1.0";
 OFString *const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 
-@interface
-XMLReader (Internal)
+@interface XMLReader (Internal)
 
 - (OFDictionary *)dictionaryForXMLString:(OFString *)string;
 

@@ -27,8 +27,7 @@
 
 #import "OFDictionary+OGTKJsonDictionaryOfFile.h"
 
-@implementation
-OFDictionary (OGTKJsonDictionaryOfFile)
+@implementation OFDictionary (OGTKJsonDictionaryOfFile)
 
 - (instancetype)ogtk_initWithJsonDictionaryOfFile:(OFString *)filePath
 {

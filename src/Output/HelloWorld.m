@@ -55,8 +55,7 @@
 
 @implementation HelloWorld
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	/* This is called in all GTK applications. Arguments are parsed
 	 * from the command line and are returned to the application. */

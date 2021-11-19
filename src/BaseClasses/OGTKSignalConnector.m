@@ -30,8 +30,7 @@
 /**
  * Redirects g_signall callbacks to Objective-C class/methods
  */
-void
-gsignal_forwarder(gpointer gtk, OGTKSignalData *data)
+void gsignal_forwarder(gpointer gtk, OGTKSignalData *data)
 {
 	[[data target] performSelector:[data selector]];
 }

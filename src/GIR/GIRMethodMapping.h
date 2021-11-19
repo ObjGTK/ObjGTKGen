@@ -25,8 +25,8 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import <ObjFW/ObjFW.h>
 #import "GIRReturnValue.h"
+#import <ObjFW/ObjFW.h>
 
 @protocol GIRMethodMapping
 

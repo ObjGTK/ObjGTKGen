@@ -27,8 +27,7 @@
 
 #import "OGTKDialog.h"
 
-@interface
-OGTKDialog (OGTKAddButton)
+@interface OGTKDialog (OGTKAddButton)
 
 - (id)initWithTitle:(OFString *)title
                           parent:(OGTKWindow *)parent

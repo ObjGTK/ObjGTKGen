@@ -27,8 +27,7 @@
 
 #import "OGTKRecentChooserDialog+OGTKButtonTextResponseDictionary.h"
 
-@implementation
-OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
+@implementation OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
 
 - (id)initWithTitle:(OFString *)title
                           parent:(OGTKWindow *)parent
