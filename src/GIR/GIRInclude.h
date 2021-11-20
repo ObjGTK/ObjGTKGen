@@ -1,5 +1,5 @@
 /*
- * GIRImplements.h
+ * GIRInclude.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -29,11 +29,13 @@
 
 #import "GIRBase.h"
 
-@interface GIRImplements: GIRBase
+@interface GIRInclude: GIRBase
 {
 	OFString *_name;
+    OFString *_version;
 }
 
 @property (nonatomic, copy) OFString *name;
+@property (nonatomic, copy) OFString *version;
 
 @end

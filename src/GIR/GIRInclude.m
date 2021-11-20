@@ -1,5 +1,5 @@
 /*
- * GIRApi.m
+ * GIRInclude.m
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -25,24 +25,17 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "GIRApi.h"
+#import "GIRInclude.h"
 
-@implementation GIRApi
+@implementation GIRInclude
 
-@synthesize version = _version;
-@synthesize cInclude = _cInclude;
+@synthesize name = _name, version = _version;
 
-- (instancetype)init
+- (id)init
 {
 	self = [super init];
 
-	@try {
-		_elementTypeName = @"GIRApi";
-		_namespaces = [[OFMutableArray alloc] init];
-	} @catch (id e) {
-		[self release];
-		@throw e;
-	}
+	_elementTypeName = @"GIRInclude";
 
 	return self;
 }
@@ -66,36 +59,16 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"include"] ||
-		    [key isEqual:@"xmlns:glib"] || [key isEqual:@"xmlns:c"] ||
-		    [key isEqual:@"xmlns"] || [key isEqual:@"package"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"type"]) {
 			// Do nothing
+		} else if ([key isEqual:@"name"]) {
+			self.name = value;
 		} else if ([key isEqual:@"version"]) {
 			self.version = value;
-		} else if ([key isEqual:@"c:include"]) {
-			self.cInclude = value;
-		} else if ([key isEqual:@"namespace"]) {
-			[self processArrayOrDictionary:value
-			                     withClass:[GIRNamespace class]
-			                      andArray:_namespaces];
 		} else {
 			[self logUnknownElement:key];
 		}
 	}
-}
-
-- (OFArray *)namespaces
-{
-	return [[_namespaces copy] autorelease];
-}
-
-- (void)dealloc
-{
-	[_version release];
-	[_cInclude release];
-	[_namespaces release];
-
-	[super dealloc];
 }
 
 @end

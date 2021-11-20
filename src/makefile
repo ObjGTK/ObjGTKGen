@@ -4,7 +4,7 @@ EXECUTABLE=objgtkgen
 #Sources
 SOURCES=ObjGTKGen.m \
 	XMLReader/XMLReader.m \
-	GIR/GIRApi.m \
+	GIR/GIRAPI.m \
 	GIR/GIRArray.m \
 	GIR/GIRBase.m \
 	GIR/GIRClass.m \
@@ -15,6 +15,7 @@ SOURCES=ObjGTKGen.m \
 	GIR/GIRField.m \
 	GIR/GIRFunction.m \
 	GIR/GIRImplements.m \
+	GIR/GIRInclude.m \
 	GIR/GIRInterface.m \
 	GIR/GIRParameter.m \
 	GIR/GIRProperty.m \

@@ -1,5 +1,5 @@
 /*
- * GIRApi.h
+ * GIRAPI.h
  * This file is part of ObjGTK
  *
  * Copyright (C) 2017 - Tyler Burton
@@ -28,17 +28,18 @@
 #import <ObjFW/ObjFW.h>
 
 #import "GIRBase.h"
-#import "GIRNamespace.h"
 
-@interface GIRApi: GIRBase
+@interface GIRAPI: GIRBase
 {
 	OFString *_version;
-	OFString *_cInclude;
+	OFMutableArray *_include;
+	OFMutableArray *_cInclude;
 	OFMutableArray *_namespaces;
 }
 
-@property (nonatomic, retain) OFString *version;
-@property (nonatomic, retain) OFString *cInclude;
-@property (nonatomic, retain) OFArray *namespaces;
+@property (nonatomic, copy) OFString *version;
+@property (nonatomic, retain) OFMutableArray *include;
+@property (nonatomic, retain) OFMutableArray *cInclude;
+@property (nonatomic, retain) OFMutableArray *namespaces;
 
 @end

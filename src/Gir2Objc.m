@@ -57,7 +57,7 @@
 	}
 }
 
-+ (GIRApi *)firstApiFromDictionary:(OFDictionary *)girDict
++ (GIRAPI *)firstAPIFromDictionary:(OFDictionary *)girDict
 {
 	if (girDict == nil)
 		@throw [OGTKNoGIRDictException exception];
@@ -66,26 +66,26 @@
 		id value = [girDict objectForKey:key];
 
 		if ([key isEqual:@"api"] || [key isEqual:@"repository"]) {
-			return [[[GIRApi alloc] initWithDictionary:value]
+			return [[[GIRAPI alloc] initWithDictionary:value]
 			    autorelease];
 		} else if ([value isKindOfClass:[OFDictionary class]]) {
-			return [Gir2Objc firstApiFromDictionary:value];
+			return [Gir2Objc firstAPIFromDictionary:value];
 		}
 	}
 
 	return nil;
 }
 
-+ (GIRApi *)firstApiFromGirFile:(OFString *)girFile
++ (GIRAPI *)firstAPIFromGirFile:(OFString *)girFile
 {
 	OFDictionary *girDict = nil;
 
 	[Gir2Objc parseGirFromFile:girFile intoDictionary:&girDict];
 
-	return [Gir2Objc firstApiFromDictionary:girDict];
+	return [Gir2Objc firstAPIFromDictionary:girDict];
 }
 
-+ (void)generateClassFilesFromApi:(GIRApi *)api
++ (void)generateClassFilesFromAPI:(GIRAPI *)api
 {
 	OFArray *namespaces = api.namespaces;
 

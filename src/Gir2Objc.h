@@ -32,7 +32,7 @@
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
 
-#import "GIR/GIRApi.h"
+#import "GIR/GIRAPI.h"
 #import "GIR/GIRNamespace.h"
 
 #import "Exceptions/OGTKNoGIRAPIException.h"
@@ -54,22 +54,22 @@
 
 /**
  * Recurses through the OFDictionary looking for the first "api" or "repository"
- * key and then attempts to parse that into a GIRApi. If no key is found nil is
+ * key and then attempts to parse that into a GIRAPI. If no key is found nil is
  * returned.
  */
-+ (GIRApi *)firstApiFromDictionary:(OFDictionary *)girDict;
++ (GIRAPI *)firstAPIFromDictionary:(OFDictionary *)girDict;
 
 /**
- * Parses the girFile XML and then attempts to extract a GIRApi from the parsed
+ * Parses the girFile XML and then attempts to extract a GIRAPI from the parsed
  * contents. If the GIR is successfully parsed, but no valid data is found, nil
  * is returned.
  */
-+ (GIRApi *)firstApiFromGirFile:(OFString *)girFile;
++ (GIRAPI *)firstAPIFromGirFile:(OFString *)girFile;
 
 /**
  * Generates ObjGTK source from the GIR API level
  */
-+ (void)generateClassFilesFromApi:(GIRApi *)api;
++ (void)generateClassFilesFromAPI:(GIRAPI *)api;
 
 /**
  * Generates ObjGTK source from the GIR Namespace level

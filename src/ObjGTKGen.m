@@ -46,14 +46,14 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFString *girFile = [OGTKUtil globalConfigValueFor:@"girFile"];
 
 	OFLog(@"%@", @"Attempting to parse GIR file...");
-	GIRApi *api = [Gir2Objc firstApiFromGirFile:girFile];
+	GIRAPI *api = [Gir2Objc firstAPIFromGirFile:girFile];
 
 	if (api == nil)
 		@throw [OGTKNoGIRAPIException exception];
 
 	// Step 2: generate ObjGTK source files
 	OFLog(@"%@", @"Attempting to generate ObjGTK...");
-	[Gir2Objc generateClassFilesFromApi:api];
+	[Gir2Objc generateClassFilesFromAPI:api];
 	OFLog(@"%@", @"Process complete");
 
 	// Step 3: copy ObjGTK base files
