@@ -42,20 +42,6 @@
 	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary *)dict
-{
-	self = [self init];
-
-	@try {
-		[self parseDictionary:dict];
-	} @catch (id e) {
-		[self release];
-		@throw e;
-	}
-
-	return self;
-}
-
 - (void)parseDictionary:(OFDictionary *)dict
 {
 	for (OFString *key in dict) {

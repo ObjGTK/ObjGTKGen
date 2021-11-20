@@ -71,9 +71,18 @@ static LogLevel logLevel = Info;
 	OF_UNRECOGNIZED_SELECTOR
 }
 
-- (instancetype)initWithDictionary:(OFDictionary *)dict
+- (id)initWithDictionary:(OFDictionary *)dict
 {
-	OF_INVALID_INIT_METHOD
+	self = [self init];
+
+	@try {
+		[self parseDictionary:dict];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+
+	return self;
 }
 
 - (void)processArrayOrDictionary:(id)values

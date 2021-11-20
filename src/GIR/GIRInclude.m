@@ -40,18 +40,12 @@
 	return self;
 }
 
-- (id)initWithDictionary:(OFDictionary *)dict
+- (void)dealloc
 {
-	self = [self init];
+	[_name release];
+	[_version release];
 
-	@try {
-		[self parseDictionary:dict];
-	} @catch (id e) {
-		[self release];
-		@throw e;
-	}
-
-	return self;
+	[super dealloc];
 }
 
 - (void)parseDictionary:(OFDictionary *)dict
