@@ -149,10 +149,10 @@
 
 	// OFLog(@"Writing implementation file for class %@.", [cgtkClass
 	// type]);
-	[output
-	    appendString:[OGTKClassWriter
-	                     generateLicense:[OFString stringWithFormat:@"%@.m",
-	                                               [cgtkClass type]]]];
+	OFString *fileName =
+	    [OFString stringWithFormat:@"%@.m", [cgtkClass type]];
+	OFString *license = [OGTKClassWriter generateLicense:fileName];
+	[output appendString:license];
 
 	// Imports
 	[output appendFormat:@"\n#import \"%@.h\"\n\n", [cgtkClass type]];
