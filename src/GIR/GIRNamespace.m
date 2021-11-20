@@ -29,14 +29,11 @@
 
 @implementation GIRNamespace
 
-@synthesize name;
-@synthesize cSymbolPrefixes = _cSymbolPrefixes;
-@synthesize cIdentifierPrefixes = _cIdentifierPrefixes;
-@synthesize classes = _classes;
-@synthesize functions = _functions;
-@synthesize enumerations = _enumerations;
-@synthesize constants = _constants;
-@synthesize interfaces = _interfaces;
+@synthesize name = _name, version = _version, sharedLibrary = _sharedLibrary,
+            cSymbolPrefixes = _cSymbolPrefixes,
+            cIdentifierPrefixes = _cIdentifierPrefixes, classes = _classes,
+            functions = _functions, enumerations = _enumerations,
+            constants = _constants, interfaces = _interfaces;
 
 - (instancetype)init
 {
@@ -57,18 +54,37 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[_name release];
+	[_version release];
+	[_sharedLibrary release];
+	[_cSymbolPrefixes release];
+	[_cIdentifierPrefixes release];
+	[_classes release];
+	[_functions release];
+	[_enumerations release];
+	[_constants release];
+	[_interfaces release];
+
+	[super dealloc];
+}
+
 - (void)parseDictionary:(OFDictionary *)dict
 {
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"shared-library"] ||
-		    [key isEqual:@"version"] || [key isEqual:@"record"] ||
+		if ([key isEqual:@"text"] || [key isEqual:@"record"] ||
 		    [key isEqual:@"callback"] || [key isEqual:@"bitfield"] ||
 		    [key isEqual:@"alias"] || [key isEqual:@"function-macro"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
+		} else if ([key isEqual:@"version"]) {
+			self.version = value;
+		} else if ([key isEqual:@"shared-library"]) {
+			self.sharedLibrary = value;
 		} else if ([key isEqual:@"c:symbol-prefixes"]) {
 			self.cSymbolPrefixes = value;
 		} else if ([key isEqual:@"c:identifier-prefixes"]) {
@@ -97,20 +113,6 @@
 			[self logUnknownElement:key];
 		}
 	}
-}
-
-- (void)dealloc
-{
-	[_name release];
-	[_cSymbolPrefixes release];
-	[_cIdentifierPrefixes release];
-	[_classes release];
-	[_functions release];
-	[_enumerations release];
-	[_constants release];
-	[_interfaces release];
-
-	[super dealloc];
 }
 
 @end

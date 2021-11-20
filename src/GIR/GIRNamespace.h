@@ -37,6 +37,8 @@
 @interface GIRNamespace: GIRBase
 {
 	OFString *_name;
+	OFString *_version;
+	OFString *_sharedLibrary;
 	OFString *_cSymbolPrefixes;
 	OFString *_cIdentifierPrefixes;
 	OFMutableArray *_classes;
@@ -46,9 +48,11 @@
 	OFMutableArray *_interfaces;
 }
 
-@property (nonatomic, retain) OFString *name;
-@property (nonatomic, retain) OFString *cSymbolPrefixes;
-@property (nonatomic, retain) OFString *cIdentifierPrefixes;
+@property (nonatomic, copy) OFString *name;
+@property (nonatomic, copy) OFString *version;
+@property (nonatomic, copy) OFString *sharedLibrary;
+@property (nonatomic, copy) OFString *cSymbolPrefixes;
+@property (nonatomic, copy) OFString *cIdentifierPrefixes;
 @property (nonatomic, retain) OFMutableArray *classes;
 @property (nonatomic, retain) OFMutableArray *functions;
 @property (nonatomic, retain) OFMutableArray *enumerations;

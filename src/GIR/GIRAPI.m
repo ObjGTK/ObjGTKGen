@@ -31,8 +31,8 @@
 
 @implementation GIRAPI
 
-@synthesize version = _version, include = _include, cInclude = _cInclude,
-            namespaces = _namespaces;
+@synthesize version = _version, package = _package, include = _include,
+            cInclude = _cInclude, namespaces = _namespaces;
 
 - (instancetype)init
 {
@@ -54,6 +54,7 @@
 - (void)dealloc
 {
 	[_version release];
+	[_package release];
 	[_include release];
 	[_cInclude release];
 	[_namespaces release];
@@ -67,11 +68,12 @@
 		id value = [dict objectForKey:key];
 
 		if ([key isEqual:@"text"] || [key isEqual:@"xmlns:glib"] ||
-		    [key isEqual:@"xmlns:c"] || [key isEqual:@"xmlns"] ||
-		    [key isEqual:@"package"]) {
+		    [key isEqual:@"xmlns:c"] || [key isEqual:@"xmlns"]) {
 			// Do nothing
 		} else if ([key isEqual:@"version"]) {
 			self.version = value;
+		} else if ([key isEqual:@"package"]) {
+			self.package = value;
 		} else if ([key isEqual:@"c:include"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRInclude class]
