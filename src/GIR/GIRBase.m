@@ -71,7 +71,7 @@ static LogLevel logLevel = Info;
 	OF_UNRECOGNIZED_SELECTOR
 }
 
-- (id)initWithDictionary:(OFDictionary *)dict
+- (instancetype)initWithDictionary:(OFDictionary *)dict
 {
 	self = [self init];
 
