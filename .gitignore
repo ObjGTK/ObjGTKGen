@@ -1,4 +1,5 @@
 *.o
+*.dep
 build
 objgtkgen
 .DS_Store

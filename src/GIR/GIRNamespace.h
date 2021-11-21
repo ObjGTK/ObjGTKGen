@@ -50,6 +50,11 @@
 
 @property (nonatomic, copy) OFString *name;
 @property (nonatomic, copy) OFString *version;
+
+/**
+ * @brief A comma separated list of shared libraries
+ * 
+ */
 @property (nonatomic, copy) OFString *sharedLibrary;
 @property (nonatomic, copy) OFString *cSymbolPrefixes;
 @property (nonatomic, copy) OFString *cIdentifierPrefixes;
