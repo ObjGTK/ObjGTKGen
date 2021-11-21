@@ -26,7 +26,6 @@
  *
  */
 
-#import <ObjFW/ObjFW.h>
 #import <ObjGTK/ObjGTK.h>
 
 @interface HelloWorld: OFObject
