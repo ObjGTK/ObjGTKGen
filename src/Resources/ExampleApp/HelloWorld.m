@@ -168,6 +168,8 @@ int main(int argc, char *argv[])
 	[OGTKBaseBuilder connectSignalsToObjectsWithBuilder:builder
 	                                   signalDictionary:dic];
 
+	[dic release];
+
 	/* window is autoreleased */
 	OGTKWidget *window = [OGTKBaseBuilder getWidgetFromBuilder:builder
 	                                                  withName:@"window1"];

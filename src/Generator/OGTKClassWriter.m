@@ -29,6 +29,9 @@
  * Objective-C imports
  */
 #import "OGTKClassWriter.h"
+#include "OGTKClass.h"
+#include <ObjFW/OFMutableString.h>
+#include <ObjFW/OFString.h>
 
 @implementation OGTKClassWriter
 
@@ -308,6 +311,55 @@
 	[output appendString:@"\n@end"];
 
 	return [output autorelease];
+}
+
++ (void)generateUmbrellaHeaderFileForClasses:
+            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
+                                       inDir:(OFString *)outputDir
+                             forLibraryNamed:(OFString *)libName
+                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir
+{
+	OFMutableString *output = [OFMutableString string];
+
+	OFString *fileName = [OFString stringWithFormat:@"%@.h", libName];
+	OFString *license = [OGTKClassWriter generateLicense:fileName];
+	[output appendString:license];
+
+	[output appendString:@"\n#import <ObjFW/ObjFW.h>\n\n"];
+
+	// TODO append C includes of library
+
+	if (additionalHeaderDir != nil) {
+		[output appendString:@"// Manually written classes\n"];
+
+		OFFileManager *fileMgr = [OFFileManager defaultManager];
+
+		OFArray *srcDirContents =
+		    [fileMgr contentsOfDirectoryAtPath:additionalHeaderDir];
+
+		for (OFString *srcFile in srcDirContents) {
+			OFString *additionalFile = [srcFile lastPathComponent];
+			if([additionalFile containsString:@".h"]) {
+				// Include OGTK headers only for ObjGTK
+				if([additionalFile containsString:@"GTK"] && ![libName isEqual:@"ObjGTK"])
+					continue;
+
+				[output appendFormat:@"#import \"%@\"\n", additionalFile];
+			}
+		}
+
+		[output appendString:@"\n"];
+	}
+	
+	[output appendString:@"// Generated classes\n"];
+	for (OFString *objCClassName in objCClassesDict) {
+		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
+	}
+
+	OFString *hFilePath =
+	    [outputDir stringByAppendingPathComponent:fileName];
+
+	[output writeToFile:hFilePath];
 }
 
 + (OFString *)generateCParameterListString:(OFArray *)params

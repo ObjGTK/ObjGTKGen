@@ -26,6 +26,8 @@
  */
 
 #import "Gir2Objc.h"
+#include "Generator/OGTKClassWriter.h"
+#include <ObjFW/OFString.h>
 
 @implementation Gir2Objc
 
@@ -157,16 +159,24 @@
 	// Set flags for fast necessary forward class definitions.
 	[sharedMapper detectAndMarkCircularDependencies];
 
-	// TODO
-	// 2. Write a concluding header file and a make file importing all the
-	// classes
+	// Informations is collected
+
+	// Start writing out the definitions
+	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
+	OFString *baseClassPath =
+	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
+
+	// Write the umbrella header file for the lib
+	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
+	                                                inDir:outputDir
+	                                      forLibraryNamed:@"ObjGTK"
+	                         readAdditionalHeadersFromDir:baseClassPath];
 
 	// Write the classes
 	for (OFString *className in classesDict) {
 		[OGTKClassWriter
 		    generateFilesForClass:[classesDict objectForKey:className]
-		                    inDir:[OGTKUtil globalConfigValueFor:
-		                                        @"outputDir"]];
+		                    inDir:outputDir];
 	}
 }
 

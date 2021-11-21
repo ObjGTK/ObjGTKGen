@@ -68,6 +68,8 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder *builder,
 		       withSelector:sel
 		               data:NULL];
 	}
+
+	[objectSignalDictionary release];
 }
 
 @implementation OGTKBaseBuilder
@@ -81,6 +83,8 @@ static void gtkbuilder_connect_signals_handler(GtkBuilder *builder,
                           signalDictionary:
                               (OFDictionary *)objectSignalDictionary;
 {
+	[objectSignalDictionary retain];
+	
 	gtk_builder_connect_signals_full([builder BUILDER],
 	    &gtkbuilder_connect_signals_handler, objectSignalDictionary);
 }

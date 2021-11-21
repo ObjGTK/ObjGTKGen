@@ -28,6 +28,8 @@
 /*
  * Objective-C imports
  */
+#include <ObjFW/OFDictionary.h>
+#include <ObjFW/OFString.h>
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKClass.h"
@@ -55,6 +57,16 @@
  * Generate source file contents based on class
  */
 + (OFString *)sourceStringFor:(OGTKClass *)cgtkClass;
+
+/**
+ * @brief Generates the umbrella header file for the lib named and saves it in
+ * outputDir. Assumes that keys of the dict passed are ObjC class names
+ */
++ (void)generateUmbrellaHeaderFileForClasses:
+            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
+                                       inDir:(OFString *)outputDir
+                             forLibraryNamed:(OFString *)libName
+                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
 
 /**
  * Generate list of paramters to pass to underlying C function
