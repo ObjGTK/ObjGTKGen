@@ -26,6 +26,7 @@
  */
 
 #import "OGTKContainer+OGTKAddWidget.h"
+#import "OGTKTypeWrapper.h"
 
 @implementation OGTKContainer (OGTKAddWidget)
 

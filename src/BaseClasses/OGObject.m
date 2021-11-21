@@ -27,20 +27,21 @@
 /*
  * Objective-C imports
  */
-#import "OGTKObject.h"
+#import "OGObject.h"
+#import "OGTKGObjectInitializationFailedException.h"
 
-@implementation OGTKObject
+@implementation OGObject
 
-+ (OGTKObject *)withGtkWidget:(GtkWidget *)obj
++ (OGObject *)withGtkWidget:(GtkWidget *)obj
 {
-	OGTKObject *retVal =
-	    [[OGTKObject alloc] initWithGObject:(GObject *)obj];
+	OGObject *retVal =
+	    [[OGObject alloc] initWithGObject:(GObject *)obj];
 	return [retVal autorelease];
 }
 
-+ (OGTKObject *)withGObject:(GObject *)obj
++ (OGObject *)withGObject:(GObject *)obj
 {
-	OGTKObject *retVal = [[OGTKObject alloc] initWithGObject:obj];
+	OGObject *retVal = [[OGObject alloc] initWithGObject:obj];
 	return [retVal autorelease];
 }
 
@@ -60,11 +61,6 @@
 	}
 
 	return self;
-}
-
-- (GtkWidget *)WIDGET
-{
-	return GTK_WIDGET(_gObject);
 }
 
 - (void)setGObject:(GObject *)obj

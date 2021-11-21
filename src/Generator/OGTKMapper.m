@@ -154,7 +154,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	if ([type isEqual:@"AtkObject"] || [type isEqual:@"GApplication"] ||
 	    [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"] ||
 	    [type isEqual:@"GMountOperation"])
-		return @"OGTKObject";
+		return @"OGObject";
 	else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"])
 		return @"OFString*";
 	else if ([type isEqual:@"Gtk"])

@@ -26,6 +26,7 @@
  */
 
 #import "OGTKInfoBar+OGTKAddButtonTextResponseDictionary.h"
+#import "OGTKTypeWrapper.h"
 
 @implementation OGTKInfoBar (OGTKAddButtonTextResponseDictionary)
 

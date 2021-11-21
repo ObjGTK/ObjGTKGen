@@ -118,7 +118,7 @@
  * and gboolean.
  *
  * Class types of basic (runtime) libraries which Gtk depends on, f.e. Glib, are
- * always mapped to OGTKObject because we do not want to wrap and use those but
+ * always mapped to OGObject because we do not want to wrap and use those but
  * use ObjFW classes instead.
  *
  * Pointers to pointer (**) currently are not swapped because conversion of

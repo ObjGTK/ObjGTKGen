@@ -76,8 +76,8 @@
 
 	// Imports/Dependencies
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
-		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGTKObject"])
-			[output appendString:@"#import \"OGTKObject.h\"\n"];
+		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGObject"])
+			[output appendString:@"#import \"OGObject.h\"\n"];
 		else if ([OGTKMapper isGobjType:dependency] &&
 		    [OGTKMapper isTypeSwappable:dependency])
 			[output appendFormat:@"#import \"%@.h\"\n",

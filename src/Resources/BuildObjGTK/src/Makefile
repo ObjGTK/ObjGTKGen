@@ -169,7 +169,7 @@ SRCS = OGTKAboutDialog.m \
 	OGTKNotebookAccessible.m \
 	OGTKNotebook.m \
 	OGTKNotebookPageAccessible.m \
-	OGTKObject.m \
+	OGObject.m \
 	OGTKOffscreenWindow.m \
 	OGTKOverlay.m \
 	OGTKPadController.m \

@@ -26,6 +26,7 @@
  */
 
 #import "OGTKFileChooserDialog+OGTKButtonTextResponseDictionary.h"
+#import "OGTKTypeWrapper.h"
 
 @implementation OGTKFileChooserDialog (OGTKButtonTextResponseDictionary)
 

@@ -18,12 +18,12 @@
 		    stringWithFormat:
 		        @"Initialization of GObject instance (or a child "
 		        @"instance) to be wrapped failed for or in class %@! "
-		        @" Received NULL for OGTKObject initalization.",
+		        @" Received NULL for OGObject initalization.",
 		    _inClass];
 	else
 		return @"Initialization of GObject instance (or a child "
 		       @"instance) to "
-		       @"be wrapped failed. Received NULL for OGTKObject "
+		       @"be wrapped failed. Received NULL for OGObject "
 		       @"initalization.";
 }
 
