@@ -11,7 +11,7 @@ OBJECTS=$(SOURCES:.m=.o)
 CC=clang
 
 #CFLAGS
-CFLAGS=`objfw-config --cppflags` `pkg-config --cflags gtk+-3.0` -I/usr/local/include/ObjGTK -g -O0 -c
+CFLAGS=`objfw-config --package ObjGTK --cppflags` `pkg-config --cflags gtk+-3.0` -g -O0 -c
 
 #Objective-c specific flags
 OBJCFLAGS=`objfw-config --objcflags`
@@ -19,13 +19,13 @@ OBJCFLAGS=`objfw-config --objcflags`
 #Objective-c specific flags
 MACOBJCFLAGS=$(OBJCFLAGS)
 
-#OGTK dependency
-OGTKDEPS=`pkg-config --libs gtk+-3.0` -lobjgtk
+#GTK dependency
+GTKDEPS=`pkg-config --libs gtk+-3.0`
 
 #Common flags
 COMMONFLAGS=$(CFLAGS) $(OBJCFLAGS)
 
-LIBS=`objfw-config --rpath --libs` $(OGTKDEPS)
+LIBS=`objfw-config --package ObjGTK --libs --rpath` $(GTKDEPS)
 
 #Targets
 
@@ -33,7 +33,7 @@ LIBS=`objfw-config --rpath --libs` $(OGTKDEPS)
 linux: all
 
 #Mac Target
-mac: COMMONFLAGS=$(MACOBJCFLAGS) $(OGTKDEPS)
+mac: COMMONFLAGS=$(MACOBJCFLAGS) $(GTKDEPS)
 mac: all
 
 #Windows Target

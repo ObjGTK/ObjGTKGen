@@ -1,4 +1,4 @@
-AC_INIT(%%LIBNAME%%, %%LIBVERSION%%, %%LIBAUTHOREMAIL%%)
+AC_INIT(ObjGTK, 0.2, objfw@codingpastor.de)
 AC_CONFIG_SRCDIR(src)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(build-aux/m4)
@@ -39,20 +39,18 @@ AC_ARG_ENABLE(shared,
 	AS_HELP_STRING([--disable-shared], [do not build shared library]))
 AS_IF([test x"$enable_shared" != x"no"], [
 	BUILDSYS_SHARED_LIB
-	AC_SUBST(%%UCLIBNAME%%_SHARED_LIB, "${LIB_PREFIX}%%LCLIBNAME%%${LIB_SUFFIX}")
+	AC_SUBST(OBJGTK_SHARED_LIB, "${LIB_PREFIX}objgtk${LIB_SUFFIX}")
 
 	BUILDSYS_FRAMEWORK([
-		AC_SUBST(%%UCLIBNAME%%_FRAMEWORK, "%%LIBNAME%%.framework")
+		AC_SUBST(OBJGTK_FRAMEWORK, "ObjGTK.framework")
 	])
 ])
 AC_ARG_ENABLE(static, AS_HELP_STRING([--enable-static], [build static library]))
 AS_IF([test x"$enable_static" = x"yes" -o x"$enable_shared" = x"no"], [
 	AC_PATH_TOOL(AR, ar)
 	AC_PROG_RANLIB
-	AC_SUBST(%%UCLIBNAME%%_STATIC_LIB, "lib%%LCLIBNAME%%.a")
+	AC_SUBST(OBJGTK_STATIC_LIB, "libobjgtk.a")
 ])
-
-%%ACARGWITH%%
 
 AC_ARG_WITH(gtk, AS_HELP_STRING([--with-gtk=PREFIX],
 	[build with GTK in the specified prefix]))
@@ -63,8 +61,6 @@ AS_IF([test x"$with_gtk" != x"no" -a x"$with_gtk" != x""], [
        LIBS="-L$with_gtk/lib $LIBS"
        FRAMEWORK_LIBS="-L$with_gtk/lib $FRAMEWORK_LIBS"
 ])
-
-%%PKGCHECKMODULES%%
 
 PKG_CHECK_MODULES(gtk3, [gtk+-3.0 >= 3.24], [
 	CPPFLAGS="$CPPFLAGS $gtk3_CFLAGS"
@@ -84,8 +80,8 @@ dnl and add OBJCPPFLAGS to CPPFLAGS, thus we need to AC_SUBST these ourself.
 AC_SUBST(CPP)
 AC_SUBST(CPPFLAGS)
 
-AC_SUBST(%%UCLIBNAME%%_CPPFLAGS)
-AC_SUBST(%%UCLIBNAME%%_LIBS)
+AC_SUBST(OBJGTK_CPPFLAGS)
+AC_SUBST(OBJGTK_LIBS)
 
-AC_CONFIG_FILES([buildsys.mk extra.mk %%LIBNAME%%.oc])
+AC_CONFIG_FILES([buildsys.mk extra.mk ObjGTK.oc])
 AC_OUTPUT
