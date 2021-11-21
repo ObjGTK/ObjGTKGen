@@ -29,9 +29,6 @@
  * Objective-C imports
  */
 #import "OGTKClassWriter.h"
-#include "OGTKClass.h"
-#include <ObjFW/OFMutableString.h>
-#include <ObjFW/OFString.h>
 
 @implementation OGTKClassWriter
 
