@@ -74,6 +74,12 @@
 - (void)addClass:(OGTKClass *)classInfo;
 
 /**
+ * @brief Removes a class from the mapping dictionaries
+ * @param classInfo The object describing the class
+ */
+- (void)removeClass:(OGTKClass *)classInfo;
+
+/**
  * @brief Iterates through all the class information objects retained in the
  * dict and looks for class dependencies
  * @details Dependencies are stored as Gobj types as well and should be

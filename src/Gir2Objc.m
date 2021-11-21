@@ -26,8 +26,6 @@
  */
 
 #import "Gir2Objc.h"
-#include "Generator/OGTKClassWriter.h"
-#include <ObjFW/OFString.h>
 
 @implementation Gir2Objc
 
@@ -128,12 +126,14 @@
 				      @"Skipping…",
 				    objCClass.cName, [e class],
 				    [e description]);
+				[sharedMapper removeClass:objCClass];
 			}
 		}
 	}
 
 	// Set correct class names for parent classes
 	OFMutableDictionary *classesDict = sharedMapper.objcTypeToClassMapping;
+	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
 
 	for (OFString *className in classesDict) {
 		OGTKClass *currentClass = [classesDict objectForKey:className];
@@ -149,9 +149,14 @@
 				      @"exception %@. "
 				      @"Skipping…",
 				    currentClass.cName, [e class]);
+				[classesToRemove addObject:currentClass];
 			}
 		}
 	}
+
+	for(OGTKClass* currentClass in classesToRemove)
+		[sharedMapper removeClass:currentClass];
+	[classesToRemove release];
 
 	// Calculate dependencies for each class
 	[sharedMapper determineDependencies];

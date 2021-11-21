@@ -177,6 +177,7 @@ SRCS = OGTKAboutDialog.m \
 	OGTKPanedAccessible.m \
 	OGTKPaned.m \
 	OGTKPlacesSidebar.m \
+	OGTKPlug.m \
 	OGTKPopoverAccessible.m \
 	OGTKPopover.m \
 	OGTKPopoverMenu.m \
@@ -224,6 +225,7 @@ SRCS = OGTKAboutDialog.m \
 	OGTKSignalConnector.m \
 	OGTKSignalData.m \
 	OGTKSizeGroup.m \
+	OGTKSocket.m \
 	OGTKSpinButtonAccessible.m \
 	OGTKSpinButton.m \
 	OGTKSpinnerAccessible.m \
@@ -285,8 +287,8 @@ SRCS = OGTKAboutDialog.m \
 	OGTKWindowGroup.m \
 	OGTKWindow.m
 
-INCLUDES = ${SRCS:.m=.h}
-#	   ObjGTK.h
+INCLUDES = ${SRCS:.m=.h} \
+	ObjGTK.h
 
 include ../buildsys.mk
 

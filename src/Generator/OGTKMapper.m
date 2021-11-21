@@ -84,6 +84,21 @@ static OGTKMapper *sharedMyMapper = nil;
 	[_objcTypeToClassMapping setObject:classInfo forKey:classInfo.type];
 }
 
+- (void)removeClass:(OGTKClass *)classInfo
+{
+	if (classInfo.cType != nil &&
+	    [_gobjTypeToClassMapping objectForKey:classInfo.cType] != nil)
+		[_gobjTypeToClassMapping removeObjectForKey:classInfo.cType];
+
+	if (classInfo.cName != nil &&
+	    [_girNameToClassMapping objectForKey:classInfo.cName] != nil)
+		[_girNameToClassMapping removeObjectForKey:classInfo.cName];
+
+	if (classInfo.cType != nil && classInfo.type != nil &&
+	    [_objcTypeToClassMapping objectForKey:classInfo.type] != nil)
+		[_objcTypeToClassMapping removeObjectForKey:classInfo.type];
+}
+
 - (bool)isGobjType:(OFString *)type
 {
 	return ([_gobjTypeToClassMapping

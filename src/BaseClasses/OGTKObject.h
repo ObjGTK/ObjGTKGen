@@ -35,6 +35,7 @@
  */
 #import <gtk/gtk-a11y.h>
 #import <gtk/gtk.h>
+#import <gtk/gtkx.h>
 
 /**
  * The base class for all CoreGTK wrapper classes

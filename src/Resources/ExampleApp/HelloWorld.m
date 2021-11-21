@@ -27,14 +27,7 @@
  */
 
 #import <ObjFW/ObjFW.h>
-
-#import "ObjGTK/OGTK.h"
-#import "ObjGTK/OGTKBaseBuilder.h"
-#import "ObjGTK/OGTKBuilder.h"
-#import "ObjGTK/OGTKButton.h"
-#import "ObjGTK/OGTKCallbackData.h"
-#import "ObjGTK/OGTKSignalConnector.h"
-#import "ObjGTK/OGTKWindow.h"
+#import <ObjGTK/ObjGTK.h>
 
 @interface HelloWorld: OFObject
 
