@@ -28,8 +28,8 @@
 #import "Gir2Objc.h"
 
 #import "Generator/OGTKClassWriter.h"
-#import "Generator/OGTKMapper.h"
 #import "Generator/OGTKLibrary.h"
+#import "Generator/OGTKMapper.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
 
@@ -233,6 +233,7 @@
 	// Set basic class properties
 	[objCClass setCName:girClass.name];
 	[objCClass setCType:girClass.cType];
+	[objCClass setDocumentation:girClass.doc.docText];
 
 	// Set parent name
 	[objCClass setParentName:girClass.parent];
@@ -295,6 +296,7 @@
 
 		[objcMethod setName:girMethod.name];
 		[objcMethod setCIdentifier:girMethod.cIdentifier];
+		objcMethod.documentation = girMethod.doc.docText;
 
 		// Set return type
 		if (girMethod.returnValue.type == nil &&
@@ -306,6 +308,13 @@
 			    setCReturnType:girMethod.returnValue.type.cType];
 		}
 
+		// Set return type documentation
+		if (girMethod.returnValue.doc.docText != nil)
+			objcMethod.returnValueDocumentation =
+			    girMethod.returnValue.doc.docText;
+		else
+			objcMethod.returnValueDocumentation = @"";
+
 		// Set if throws GError
 		[objcMethod setThrows:girMethod.throws];
 
@@ -314,6 +323,7 @@
 
 		for (GIRParameter *param in girMethod.parameters) {
 			OGTKParameter *objcParam = [[OGTKParameter alloc] init];
+			objcParam.documentation = param.doc.docText;
 
 			if (param.type == nil && param.array != nil) {
 				[objcParam setCType:param.array.cType];

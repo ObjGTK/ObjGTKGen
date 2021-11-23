@@ -99,6 +99,16 @@
 		[output appendString:@"\n"];
 	}
 
+	// Class documentation
+	if (cgtkClass.documentation != nil) {
+		OFString *docText = [OGTKClassWriter
+		    preparedDocumentationStringCopy:cgtkClass.documentation];
+
+		[output appendFormat:@"/**\n * %@\n *\n */\n", docText];
+
+		[docText release];
+	}
+
 	// Interface declaration
 	[output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n",
 	        [cgtkClass type],
@@ -336,18 +346,20 @@
 
 		for (OFString *srcFile in srcDirContents) {
 			OFString *additionalFile = [srcFile lastPathComponent];
-			if([additionalFile containsString:@".h"]) {
+			if ([additionalFile containsString:@".h"]) {
 				// Include OGTK headers only for ObjGTK
-				if([additionalFile containsString:@"GTK"] && ![libName isEqual:@"ObjGTK"])
+				if ([additionalFile containsString:@"GTK"] &&
+				    ![libName isEqual:@"ObjGTK"])
 					continue;
 
-				[output appendFormat:@"#import \"%@\"\n", additionalFile];
+				[output appendFormat:@"#import \"%@\"\n",
+				        additionalFile];
 			}
 		}
 
 		[output appendString:@"\n"];
 	}
-	
+
 	[output appendString:@"// Generated classes\n"];
 	for (OFString *objCClassName in objCClassesDict) {
 		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
@@ -417,26 +429,64 @@
 	                                          withString:fileName];
 }
 
++ (OFString *)preparedDocumentationStringCopy:(OFString *)unpreparedText
+{
+	OFMutableString *docText =
+	    [[unpreparedText stringByDeletingEnclosingWhitespaces] mutableCopy];
+	[docText replaceOccurrencesOfString:@"\n" withString:@"\n * "];
+
+	[docText makeImmutable];
+
+	return docText;
+}
+
 + (OFString *)generateDocumentationForMethod:(OGTKMethod *)meth
 {
-	int i;
-	OGTKParameter *p = nil;
-
 	OFMutableString *doc = [[OFMutableString alloc] init];
 
-	[doc appendFormat:@"/**\n * - (%@*)%@;\n *\n", [meth returnType],
-	     [meth sig]];
+	OFString *docText;
+
+	if (meth.documentation != nil) {
+		docText = [OGTKClassWriter
+		    preparedDocumentationStringCopy:meth.documentation];
+
+		[doc appendFormat:@"/**\n * %@\n *\n", docText];
+		[docText release];
+	} else {
+		[doc appendString:@"/**\n *\n"];
+	}
 
 	if ([meth.parameters count] > 0) {
-		for (i = 0; i < [meth.parameters count]; i++) {
-			p = [meth.parameters objectAtIndex:i];
+		for (OGTKParameter *parameter in meth.parameters) {
 
-			[doc appendFormat:@" * @param %@\n", [p name]];
+			if (parameter.documentation != nil) {
+				docText = [OGTKClassWriter
+				    preparedDocumentationStringCopy:
+				        parameter.documentation];
+
+				[doc appendFormat:@" * @param %@ %@\n",
+				     parameter.name, docText];
+
+				[docText release];
+			} else {
+				[doc appendFormat:@" * @param %@\n",
+				     parameter.name];
+			}
 		}
 	}
 
 	if (![meth returnsVoid]) {
-		[doc appendFormat:@" * @returns %@\n", [meth returnType]];
+		if (meth.returnValueDocumentation != nil) {
+			docText =
+			    [OGTKClassWriter preparedDocumentationStringCopy:
+			                         meth.returnValueDocumentation];
+
+			[doc appendFormat:@" * @return %@\n", docText];
+
+			[docText release];
+		} else {
+			[doc appendString:@" * @return\n"];
+		}
 	}
 
 	[doc appendString:@" */"];

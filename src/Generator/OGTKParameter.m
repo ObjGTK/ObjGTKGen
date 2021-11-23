@@ -32,7 +32,16 @@
  * Abstracts Parameter operations
  */
 @implementation OGTKParameter
-@synthesize cType = _cType, cName = _cName;
+@synthesize cType = _cType, cName = _cName, documentation = _documentation;
+
+- (void)dealloc
+{
+	[_cType release];
+	[_cName release];
+	[_documentation release];
+
+	[super dealloc];
+}
 
 - (OFString *)type
 {
@@ -42,14 +51,6 @@
 - (OFString *)name
 {
 	return [OGTKUtil convertUSSToCamelCase:_cName];
-}
-
-- (void)dealloc
-{
-	[_cType release];
-	[_cName release];
-
-	[super dealloc];
 }
 
 @end

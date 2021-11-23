@@ -34,6 +34,7 @@
 @property (nonatomic, copy) OFString *cIdentifier;
 @property (nonatomic, retain) OFMutableArray *parameters;
 @property (nonatomic, retain) GIRReturnValue *returnValue;
+@property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic) bool throws;
 
 @end

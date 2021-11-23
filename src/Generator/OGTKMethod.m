@@ -31,8 +31,9 @@
 
 @implementation OGTKMethod
 @synthesize name = _name, cIdentifier = _cIdentifier,
-            cReturnType = _cReturnType, parameters = _parameters,
-            throws = _throws;
+            cReturnType = _cReturnType, documentation = _documentation,
+            returnValueDocumentation = _returnValueDocumentation,
+            parameters = _parameters, throws = _throws;
 
 - (instancetype)init
 {
@@ -48,6 +49,8 @@
 	[_name release];
 	[_cIdentifier release];
 	[_cReturnType release];
+	[_documentation release];
+	[_returnValueDocumentation release];
 	[_parameters release];
 
 	[super dealloc];

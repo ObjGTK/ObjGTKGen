@@ -36,6 +36,7 @@
             cParentType = _cParentType, cSymbolPrefix = _cSymbolPrefix,
             cNSSymbolPrefix = _cNSSymbolPrefix,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
+            documentation = _documentation,
             dependsOnClasses = _dependsOnClasses,
             forwardDeclarationForClasses = _forwardDeclarationForClasses,
             visited = _visited;
@@ -68,6 +69,7 @@
 	[_cSymbolPrefix release];
 	[_cNSIdentifierPrefix release];
 	[_cNSSymbolPrefix release];
+	[_documentation release];
 	[_constructors release];
 	[_functions release];
 	[_methods release];

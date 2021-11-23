@@ -36,12 +36,16 @@
 	OFString *_name;
 	OFString *_cIdentifier;
 	OFString *_cReturnType;
+	OFString *_documentation;
+	OFString *_returnValueDocumentation;
 	OFArray *_parameters;
 	bool _throws;
 }
 
 @property (copy, nonatomic) OFString *name;
 @property (copy, nonatomic) OFString *cIdentifier;
+@property (copy, nonatomic) OFString *documentation;
+@property (copy, nonatomic) OFString *returnValueDocumentation;
 @property (readonly, nonatomic) OFString *sig;
 @property (copy, nonatomic) OFString *cReturnType;
 @property (readonly, nonatomic) OFString *returnType;
