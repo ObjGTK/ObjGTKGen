@@ -28,9 +28,13 @@
 #import <ObjFW/ObjFW.h>
 
 @class OGTKClass;
+@class OGTKLibrary;
 
 @interface OGTKMapper: OFObject
 {
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKLibrary *) *
+	    _girNameToLibraryMapping;
+
 	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
 	    _gobjTypeToClassMapping;
 	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
@@ -38,6 +42,14 @@
 	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
 	    _objcTypeToClassMapping;
 }
+
+/**
+ * @brief Dictionary that maps general API names that are specified in the .gir
+ * file to library information (OGTKLibrary)
+ */
+@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
+    OFString *, OGTKLibrary *)
+    * girNameToLibraryMapping;
 
 /**
  * @brief Dictionary that maps Gobj type names to class information (OGTKClass)
@@ -66,6 +78,12 @@
  * @return instancetype One unique instance of OGTKMapper
  */
 + (instancetype)sharedMapper;
+
+/**
+ * @brief Adds a library to the mapping dictionary
+ * @param libraryInfo The object describing the library
+ */
+- (void)addLibrary:(OGTKLibrary *)libraryInfo;
 
 /**
  * @brief Adds a class to the mapping dictionaries

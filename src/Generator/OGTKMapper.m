@@ -27,13 +27,15 @@
 
 #import "OGTKMapper.h"
 #import "OGTKClass.h"
+#import "OGTKLibrary.h"
 #import "OGTKParameter.h"
 
 static OGTKMapper *sharedMyMapper = nil;
 
 @implementation OGTKMapper
 
-@synthesize gobjTypeToClassMapping = _gobjTypeToClassMapping,
+@synthesize girNameToLibraryMapping = _girNameToLibraryMapping,
+            gobjTypeToClassMapping = _gobjTypeToClassMapping,
             girNameToClassMapping = _girNameToClassMapping,
             objcTypeToClassMapping = _objcTypeToClassMapping;
 
@@ -74,6 +76,12 @@ static OGTKMapper *sharedMyMapper = nil;
 }
 
 #pragma mark - Public methods - domain logic
+
+- (void)addLibrary:(OGTKLibrary *)libraryInfo
+{
+	[_girNameToLibraryMapping setObject:libraryInfo
+	                             forKey:libraryInfo.name];
+}
 
 - (void)addClass:(OGTKClass *)classInfo
 {

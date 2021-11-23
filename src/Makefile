@@ -28,6 +28,7 @@ SOURCES=ObjGTKGen.m \
 	GIR/GIRVarargs.m \
 	GIR/GIRVirtualMethod.m \
 	Generator/OGTKClassWriter.m \
+	Generator/OGTKLibrary.m \
 	Generator/OGTKClass.m \
 	Generator/OGTKMethod.m \
 	Generator/OGTKParameter.m \

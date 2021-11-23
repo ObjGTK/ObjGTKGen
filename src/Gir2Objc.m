@@ -27,6 +27,17 @@
 
 #import "Gir2Objc.h"
 
+#import "Generator/OGTKClassWriter.h"
+#import "Generator/OGTKMapper.h"
+#import "Generator/OGTKLibrary.h"
+#import "Generator/OGTKParameter.h"
+#import "Generator/OGTKUtil.h"
+
+#import "Exceptions/OGTKNoGIRAPIException.h"
+#import "Exceptions/OGTKNoGIRDictException.h"
+
+#import "XMLReader/XMLReader.h"
+
 @implementation Gir2Objc
 
 + (void)parseGirFromFile:(OFString *)girFile
@@ -92,12 +103,40 @@
 	if (api == nil || namespaces == nil)
 		@throw [OGTKNoGIRAPIException exception];
 
-	for (GIRNamespace *ns in namespaces) {
-		[Gir2Objc generateClassFilesFromNamespace:ns];
+	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
+
+	// Map library information from API
+	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
+	libraryInfo.version = api.version;
+	libraryInfo.packageName = api.package;
+	for (OFString *include in api.cInclude) {
+		[libraryInfo addCInclude:include];
 	}
+
+	for (OFString *dependency in api.include) {
+		[libraryInfo addDependency:dependency];
+	}
+
+	// TODO: Is there any API containing more than one namespace?
+	GIRNamespace *ns = namespaces.firstObject;
+
+	// Map library information from namespace
+	libraryInfo.girName = ns.name;
+	[libraryInfo addSharedLibrariesAsString:ns.sharedLibrary];
+	libraryInfo.cNSIdentifierPrefix = ns.cIdentifierPrefixes;
+	libraryInfo.cNSSymbolPrefix = ns.cSymbolPrefixes;
+
+	[sharedMapper addLibrary:libraryInfo];
+
+	[Gir2Objc generateClassInfoFromNamespace:ns];
+
+	OFMutableDictionary *classesDict =
+	    [sharedMapper objcTypeToClassMapping];
+
+	[Gir2Objc writeClassFilesFromClassesDict:classesDict];
 }
 
-+ (void)generateClassFilesFromNamespace:(GIRNamespace *)ns
++ (void)generateClassInfoFromNamespace:(GIRNamespace *)ns
 {
 	if (ns == nil)
 		@throw [OGTKNoGIRAPIException exception];
@@ -154,7 +193,7 @@
 		}
 	}
 
-	for(OGTKClass* currentClass in classesToRemove)
+	for (OGTKClass *currentClass in classesToRemove)
 		[sharedMapper removeClass:currentClass];
 	[classesToRemove release];
 
@@ -165,8 +204,10 @@
 	[sharedMapper detectAndMarkCircularDependencies];
 
 	// Informations is collected
+}
 
-	// Start writing out the definitions
++ (void)writeClassFilesFromClassesDict:(OFMutableDictionary *)classesDict
+{
 	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 	OFString *baseClassPath =
 	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
