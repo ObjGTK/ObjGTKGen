@@ -309,11 +309,8 @@
 		}
 
 		// Set return type documentation
-		if (girMethod.returnValue.doc.docText != nil)
-			objcMethod.returnValueDocumentation =
-			    girMethod.returnValue.doc.docText;
-		else
-			objcMethod.returnValueDocumentation = @"";
+		objcMethod.returnValueDocumentation =
+		    girMethod.returnValue.doc.docText;
 
 		// Set if throws GError
 		[objcMethod setThrows:girMethod.throws];
