@@ -334,8 +334,6 @@
 
 	[output appendString:@"\n#import <ObjFW/ObjFW.h>\n\n"];
 
-	// TODO append C includes of library
-
 	if (additionalHeaderDir != nil) {
 		[output appendString:@"// Manually written classes\n"];
 
