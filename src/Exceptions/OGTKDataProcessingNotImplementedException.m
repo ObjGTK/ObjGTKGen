@@ -18,6 +18,11 @@
 	OF_UNRECOGNIZED_SELECTOR
 }
 
+- (instancetype)init
+{
+	OF_INVALID_INIT_METHOD
+}
+
 + (instancetype)exceptionWithDescription:(OFString *)description;
 {
 	return [[[self alloc] initWithDescription:description] autorelease];

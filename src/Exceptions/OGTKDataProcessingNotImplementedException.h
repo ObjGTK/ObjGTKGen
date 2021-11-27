@@ -18,7 +18,9 @@ OF_ASSUME_NONNULL_BEGIN
 
 @property (copy, nonatomic) OFString *description;
 
++ (instancetype)exception OF_UNAVAILABLE;
 + (instancetype)exceptionWithDescription:(OFString *)description;
+- (instancetype)init OF_UNAVAILABLE;
 - (instancetype)initWithDescription:(OFString *)description;
 
 @end
