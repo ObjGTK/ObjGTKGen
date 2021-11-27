@@ -39,7 +39,8 @@ SOURCES=ObjGTKGen.m \
 	Exceptions/OGTKIncorrectConfigException.m \
 	Exceptions/OGTKNoGIRAPIException.m \
 	Exceptions/OGTKNoGIRDictException.m \
-	Exceptions/OGTKReceivedNilExpectedStringException.m
+	Exceptions/OGTKReceivedNilExpectedStringException.m \
+	Exceptions/OGTKDataProcessingNotImplementedException.m
 
 #Objects
 OBJECTS=$(SOURCES:.m=.o)

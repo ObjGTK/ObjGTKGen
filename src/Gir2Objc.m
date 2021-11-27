@@ -26,6 +26,9 @@
  */
 
 #import "Gir2Objc.h"
+#include "Exceptions/OGTKDataProcessingNotImplementedException.h"
+#include "GIR/GIRNamespace.h"
+#include <ObjFW/OFInvalidArgumentException.h>
 
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKLibrary.h"
@@ -117,7 +120,13 @@
 		[libraryInfo addDependency:dependency];
 	}
 
-	// TODO: Is there any API containing more than one namespace?
+	if (namespaces.count > 1)
+		@throw [OGTKDataProcessingNotImplementedException
+		    exceptionWithDescription:
+		        @"Found more than one namespace within an GIR API. "
+		        @"That's unexpected and not implemented yet. Please "
+		        @"contact the maintainer."];
+
 	GIRNamespace *ns = namespaces.firstObject;
 
 	// Map library information from namespace
