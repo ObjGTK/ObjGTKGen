@@ -135,12 +135,28 @@
 	libraryInfo.cNSIdentifierPrefix = ns.cIdentifierPrefixes;
 	libraryInfo.cNSSymbolPrefix = ns.cSymbolPrefixes;
 
+	// TODO: Move parts concerning library into its own method (0.), then
+	// proceed with 1.
+
+	// 1. Load config from file:
+	//	- excluded classes
+	//	- custom library name
+	// 2. Add that information to libraryInfo
+
 	[sharedMapper addLibrary:libraryInfo];
+
+	// 3. Pass librarInfo to generateClassInfoFromNamespace:
+	//		let that method exclude excluded classes
 
 	[Gir2Objc generateClassInfoFromNamespace:ns];
 
 	OFMutableDictionary *classesDict =
 	    [sharedMapper objcTypeToClassMapping];
+
+	// 4. Create library dir
+	// 5. Copy makefiles (based on libraryInfo)
+	// 6. Copy BaseClasses (based on libraryInfo)
+	// 		- remove that part from ObjGTKGen
 
 	[Gir2Objc writeClassFilesFromClassesDict:classesDict];
 }

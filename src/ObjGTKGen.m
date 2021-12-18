@@ -53,9 +53,11 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 	// Step 2: generate ObjGTK source files
 	OFLog(@"%@", @"Attempting to generate ObjGTK...");
+	// TODO split this into two methods (library + class files)
 	[Gir2Objc generateClassFilesFromAPI:api];
 	OFLog(@"%@", @"Process complete");
 
+	// TODO: Move this part to Gir2Objc
 	// Step 3: copy ObjGTK base files
 	OFString *baseClassPath =
 	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
