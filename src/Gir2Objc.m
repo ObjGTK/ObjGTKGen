@@ -173,26 +173,26 @@
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 
 	for (GIRClass *girClass in ns.classes) {
-		@autoreleasepool {
-			OGTKClass *objCClass =
-			    [[[OGTKClass alloc] init] autorelease];
+		void *pool = objc_autoreleasePoolPush();
+		OGTKClass *objCClass =
+			[[[OGTKClass alloc] init] autorelease];
 
-			[Gir2Objc mapGIRClass:girClass
-			          toObjCClass:objCClass
-			       usingNamespace:ns];
+		[Gir2Objc mapGIRClass:girClass
+				  toObjCClass:objCClass
+			   usingNamespace:ns];
 
-			@try {
-				[sharedMapper addClass:objCClass];
-			} @catch (id e) {
-				OFLog(@"Warning: Cannot add type %@ to mapper. "
-				      @"Exception %@, description: %@"
-				      @"Class definition may be incorrect. "
-				      @"Skipping…",
-				    objCClass.cName, [e class],
-				    [e description]);
-				[sharedMapper removeClass:objCClass];
-			}
+		@try {
+			[sharedMapper addClass:objCClass];
+		} @catch (id e) {
+			OFLog(@"Warning: Cannot add type %@ to mapper. "
+				  @"Exception %@, description: %@"
+				  @"Class definition may be incorrect. "
+				  @"Skipping…",
+				objCClass.cName, [e class],
+				[e description]);
+			[sharedMapper removeClass:objCClass];
 		}
+		objc_autoreleasePoolPop(pool);
 	}
 
 	// Set correct class names for parent classes

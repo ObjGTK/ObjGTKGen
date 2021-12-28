@@ -92,7 +92,7 @@
 	}
 }
 
-- (OFArray *)namespaces
+- (OFMutableArray *)namespaces
 {
 	return [[_namespaces copy] autorelease];
 }

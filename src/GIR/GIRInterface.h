@@ -38,15 +38,15 @@
 
 @interface GIRInterface: GIRBase
 {
-	OFString *name;
-	OFString *cType;
-	OFString *cSymbolPrefix;
-	GIRDoc *doc;
-	OFMutableArray *fields;
-	OFMutableArray *methods;
-	OFMutableArray *virtualMethods;
-	OFMutableArray *properties;
-	GIRPrerequisite *prerequisite;
+	OFString *_name;
+	OFString *_cType;
+	OFString *_cSymbolPrefix;
+	GIRDoc *_doc;
+	OFMutableArray *_fields;
+	OFMutableArray *_methods;
+	OFMutableArray *_virtualMethods;
+	OFMutableArray *_properties;
+	GIRPrerequisite *_prerequisite;
 }
 
 @property (nonatomic, retain) OFString *name;

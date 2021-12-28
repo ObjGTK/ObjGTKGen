@@ -363,6 +363,7 @@
 		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
 	}
 
+	// TODO: Make sure to create path before writing to it
 	OFString *hFilePath =
 	    [outputDir stringByAppendingPathComponent:fileName];
 
@@ -390,7 +391,6 @@
 + (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
                                              andParams:(OFArray *)params
 {
-	int i;
 	OFMutableString *paramsOutput = [OFMutableString string];
 
 	[paramsOutput
@@ -402,6 +402,7 @@
 		OGTKParameter *p;
 
 		// Start at index 1
+		size_t i;
 		for (i = 0; i < [params count]; i++) {
 			p = [params objectAtIndex:i];
 			[paramsOutput
