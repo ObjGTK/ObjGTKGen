@@ -199,8 +199,6 @@
 		[fileMgr copyItemAtPath:src toPath:dest];
 	}
 
-	OFLog(@"%@", @"Process complete");
-
 	// Release memory
 	[baseClassPath release];
 	[outputDir release];
