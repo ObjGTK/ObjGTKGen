@@ -25,7 +25,6 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#include <ObjFW/OFSet.h>
 #import <ObjFW/ObjFW.h>
 
 /**
