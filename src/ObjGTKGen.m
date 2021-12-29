@@ -27,9 +27,9 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "Exceptions/OGTKIncorrectConfigException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Generator/OGTKClassWriter.h"
+#import "Generator/OGTKLibrary.h"
 #import "Gir2Objc.h"
 
 @interface ObjGTKGen: OFObject <OFApplicationDelegate>
@@ -41,8 +41,6 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 - (void)applicationDidFinishLaunching
 {
-	// Step 1: parse GIR file
-
 	OFString *girFile = [OGTKUtil globalConfigValueFor:@"girFile"];
 
 	OFLog(@"%@", @"Attempting to parse GIR file...");
@@ -51,58 +49,28 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	if (api == nil)
 		@throw [OGTKNoGIRAPIException exception];
 
-	// Step 2: generate ObjGTK source files
 	OFLog(@"%@", @"Attempting to generate ObjGTK...");
-	// TODO split this into two methods (library + class files)
-	[Gir2Objc generateClassFilesFromAPI:api];
-	OFLog(@"%@", @"Process complete");
-
-	// TODO: Move this part to Gir2Objc
-	// Step 3: copy ObjGTK base files
+	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
+	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 	OFString *baseClassPath =
 	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
-	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 
-	if (baseClassPath == nil || outputDir == nil)
-		@throw [OGTKIncorrectConfigException exception];
+	// Parse library information
+	OGTKLibrary *libraryInfo =
+	    [Gir2Objc generateLibraryInfoFromAPI:api intoMapper:sharedMapper];
 
-	OFLog(@"%@", @"Attempting to copy ObjGTK base class files...");
-	OFFileManager *fileMgr = [OFFileManager defaultManager];
+	// Write out classes definition
+	[Gir2Objc writeClassFilesForLibrary:libraryInfo
+	                              inDir:outputDir
+	      getClassDefinitionsFromMapper:sharedMapper];
 
-	OFArray *srcDirContents =
-	    [fileMgr contentsOfDirectoryAtPath:baseClassPath];
-
-	for (OFString *srcFile in srcDirContents) {
-		OFString *src = [baseClassPath
-		    stringByAppendingPathComponent:[srcFile lastPathComponent]];
-		OFString *dest = [outputDir
-		    stringByAppendingPathComponent:[srcFile lastPathComponent]];
-
-		if ([fileMgr fileExistsAtPath:dest]) {
-			OFLog(@"File [%@] already exists in destination [%@]. "
-			      @"Removing "
-			      @"existing file...",
-			    src, dest);
-
-			@try {
-				[fileMgr removeItemAtPath:dest];
-			} @catch (id exception) {
-				OFLog(
-				    @"Error removing file [%@]. Skipping file.",
-				    dest);
-				continue;
-			}
-		}
-
-		OFLog(@"Copying file [%@] to [%@]...", src, dest);
-		[fileMgr copyItemAtPath:src toPath:dest];
-	}
+	// Write and copy additional files to make the library build and run
+	[Gir2Objc writeLibraryAdditionsFor:libraryInfo
+	                             inDir:outputDir
+	     getClassDefinitionsFromMapper:sharedMapper
+	      readAdditionalHeadersFromDir:baseClassPath];
 
 	OFLog(@"%@", @"Process complete");
-
-	// Release memory
-	[baseClassPath release];
-	[outputDir release];
 
 	[OFApplication terminate];
 }
