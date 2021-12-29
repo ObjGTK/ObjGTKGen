@@ -77,7 +77,8 @@
 
 		if ([key isEqual:@"text"] || [key isEqual:@"record"] ||
 		    [key isEqual:@"callback"] || [key isEqual:@"bitfield"] ||
-		    [key isEqual:@"alias"] || [key isEqual:@"function-macro"]) {
+		    [key isEqual:@"alias"] || [key isEqual:@"function-macro"] ||
+		    [key isEqual:@"docsection"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
