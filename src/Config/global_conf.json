@@ -1,5 +1,5 @@
 {
-  "outputDir": "Output/ObjGTK/src",
+  "outputDir": "Output",
   "girFile": "/usr/share/gir-1.0/Gtk-3.0.gir",
   "baseClassDir": "BaseClasses"
 }

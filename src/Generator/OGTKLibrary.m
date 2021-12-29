@@ -33,6 +33,7 @@
             packageName = _packageName, authorMail = _authorMail,
             dependencies = _dependencies, cIncludes = _cIncludes,
             sharedLibraries = _sharedLibraries,
+            excludeClasses = _excludeClasses,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
             cNSSymbolPrefix = _cNSSymbolPrefix, visited = _visited,
             topmostGraphNode = _topmostGraphNode;
@@ -65,6 +66,7 @@
 	[_dependencies release];
 	[_cIncludes release];
 	[_sharedLibraries release];
+	[_excludeClasses release];
 	[_cNSIdentifierPrefix release];
 	[_cNSSymbolPrefix release];
 

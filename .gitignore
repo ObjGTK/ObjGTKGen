@@ -3,6 +3,4 @@
 build
 objgtkgen
 .DS_Store
-CoreGTK
-ObjGTK
-HelloWorld
+Output

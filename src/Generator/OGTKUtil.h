@@ -66,4 +66,9 @@
  */
 + (id)globalConfigValueFor:(OFString *)key;
 
+/**
+ * Returns the configuration for the library identified by namespaceName-versionNumber
+ */
++ (id)libraryConfigFor:(OFString *)libraryIdentifier;
+
 @end

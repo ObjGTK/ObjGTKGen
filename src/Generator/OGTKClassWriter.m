@@ -363,7 +363,6 @@
 		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
 	}
 
-	// TODO: Make sure to create path before writing to it
 	OFString *hFilePath =
 	    [outputDir stringByAppendingPathComponent:fileName];
 

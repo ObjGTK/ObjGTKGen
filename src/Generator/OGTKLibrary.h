@@ -25,6 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
+#include <ObjFW/OFSet.h>
 #import <ObjFW/ObjFW.h>
 
 /**
@@ -40,6 +41,7 @@
 	OFMutableSet *_dependencies;
 	OFMutableSet *_cIncludes;
 	OFSet *_sharedLibraries;
+	OFSet *_excludeClasses;
 	OFString *_cNSIdentifierPrefix;
 	OFString *_cNSSymbolPrefix;
 	bool _visited;
@@ -54,6 +56,7 @@
 @property (readonly, nonatomic) OFMutableSet *dependencies;
 @property (readonly, nonatomic) OFMutableSet *cIncludes;
 @property (readonly, nonatomic) OFSet *sharedLibraries;
+@property (copy, nonatomic) OFSet *excludeClasses;
 @property (copy, nonatomic) OFString *cNSIdentifierPrefix;
 @property (copy, nonatomic) OFString *cNSSymbolPrefix;
 @property (nonatomic) bool visited;
