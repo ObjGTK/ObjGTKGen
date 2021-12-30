@@ -29,8 +29,6 @@
  * Objective-C imports
  */
 #import "OGTKClassWriter.h"
-#include <ObjFW/OFReadFailedException.h>
-#include <ObjFW/OFString.h>
 
 @implementation OGTKClassWriter
 

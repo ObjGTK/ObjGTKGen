@@ -1,8 +1,8 @@
-# README - About the directory
+# README - About this directory
 
 The generator will try to copy source files from two directories:
 
-1. For each destination library that is generated if will copy the
+1. For each destination library that is generated it will copy the
     contents of the "General" dir and add them to the makefile.
 2. For each destination library that is generated it will try to
     copy the contents of a dir that either matches the configured 

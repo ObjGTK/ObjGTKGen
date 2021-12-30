@@ -26,7 +26,6 @@
  */
 
 #import "Gir2Objc.h"
-#include "Generator/OGTKFileOperation.h"
 
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKParameter.h"
