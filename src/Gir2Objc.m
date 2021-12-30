@@ -30,6 +30,7 @@
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
+#import "Generator/OGTKFileOperation.h"
 
 #import "Exceptions/OGTKDataProcessingNotImplementedException.h"
 #import "Exceptions/OGTKIncorrectConfigException.h"
