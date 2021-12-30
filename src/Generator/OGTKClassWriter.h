@@ -28,8 +28,6 @@
 /*
  * Objective-C imports
  */
-#include <ObjFW/OFDictionary.h>
-#include <ObjFW/OFString.h>
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKClass.h"
