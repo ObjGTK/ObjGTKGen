@@ -26,6 +26,7 @@
  */
 
 #import "Gir2Objc.h"
+#include "Generator/OGTKFileOperation.h"
 
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKParameter.h"
@@ -142,6 +143,8 @@
 
 	if ([libraryConfig valueForKey:@"customName"] != nil)
 		libraryInfo.name = [libraryConfig valueForKey:@"customName"];
+	else
+		libraryInfo.name = libraryIdentifier;
 
 	if ([libraryConfig valueForKey:@"excludeClasses"] != nil) {
 		OFArray *excludeClasses =
@@ -166,6 +169,9 @@
 {
 	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
 
+	if (baseClassPath == nil || outputDir == nil)
+		@throw [OGTKIncorrectConfigException exception];
+
 	OFString *libraryOutputDir =
 	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
 	        stringByAppendingPathComponent:@"src"];
@@ -176,40 +182,18 @@
 	                                      forLibraryNamed:libraryInfo.name
 	                         readAdditionalHeadersFromDir:baseClassPath];
 
-	if (baseClassPath == nil || libraryOutputDir == nil)
-		@throw [OGTKIncorrectConfigException exception];
+	OFLog(@"%@", @"Attempting to copy general base class files...");
+	[OGTKFileOperation
+	    copyFilesFromDir:[baseClassPath
+	                         stringByAppendingPathComponent:@"General"]
+	               toDir:libraryOutputDir];
 
-	OFLog(@"%@", @"Attempting to copy ObjGTK base class files...");
-	OFFileManager *fileMgr = [OFFileManager defaultManager];
-
-	OFArray *srcDirContents =
-	    [fileMgr contentsOfDirectoryAtPath:baseClassPath];
-
-	for (OFString *srcFile in srcDirContents) {
-		OFString *src = [baseClassPath
-		    stringByAppendingPathComponent:[srcFile lastPathComponent]];
-		OFString *dest = [libraryOutputDir
-		    stringByAppendingPathComponent:[srcFile lastPathComponent]];
-
-		if ([fileMgr fileExistsAtPath:dest]) {
-			OFLog(@"File [%@] already exists in destination [%@]. "
-			      @"Removing "
-			      @"existing file...",
-			    src, dest);
-
-			@try {
-				[fileMgr removeItemAtPath:dest];
-			} @catch (id exception) {
-				OFLog(
-				    @"Error removing file [%@]. Skipping file.",
-				    dest);
-				continue;
-			}
-		}
-
-		OFLog(@"Copying file [%@] to [%@]...", src, dest);
-		[fileMgr copyItemAtPath:src toPath:dest];
-	}
+	OFLog(@"Attempting to copy base class files specific for library %@...",
+	    libraryInfo.name);
+	[OGTKFileOperation
+	    copyFilesFromDir:[baseClassPath
+	                         stringByAppendingPathComponent:libraryInfo.name]
+	               toDir:libraryOutputDir];
 
 	// TODO
 	// Copy makefiles (based on libraryInfo)

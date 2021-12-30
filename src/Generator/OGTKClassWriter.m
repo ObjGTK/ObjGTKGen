@@ -29,6 +29,8 @@
  * Objective-C imports
  */
 #import "OGTKClassWriter.h"
+#include <ObjFW/OFReadFailedException.h>
+#include <ObjFW/OFString.h>
 
 @implementation OGTKClassWriter
 
@@ -337,28 +339,30 @@
 	if (additionalHeaderDir != nil) {
 		[output appendString:@"// Manually written classes\n"];
 
-		OFFileManager *fileMgr = [OFFileManager defaultManager];
+		[OGTKClassWriter
+		    addImportsForHeaderFilesInDir:
+		        [additionalHeaderDir
+		            stringByAppendingPathComponent:@"General"]
+		                         toString:output];
 
-		OFArray *srcDirContents =
-		    [fileMgr contentsOfDirectoryAtPath:additionalHeaderDir];
-
-		for (OFString *srcFile in srcDirContents) {
-			OFString *additionalFile = [srcFile lastPathComponent];
-			if ([additionalFile containsString:@".h"]) {
-				// Include OGTK headers only for ObjGTK
-				if ([additionalFile containsString:@"GTK"] &&
-				    ![libName isEqual:@"ObjGTK"])
-					continue;
-
-				[output appendFormat:@"#import \"%@\"\n",
-				        additionalFile];
-			}
+		@try {
+			[OGTKClassWriter
+			    addImportsForHeaderFilesInDir:
+			        [additionalHeaderDir
+			            stringByAppendingPathComponent:libName]
+			                         toString:output];
+		} @catch (OFReadFailedException *e) {
+			OFLog(@"No additional base classes dir for library %@, "
+			      @"importing only general and generated header "
+			      @"files.",
+			    libName);
 		}
 
 		[output appendString:@"\n"];
 	}
 
 	[output appendString:@"// Generated classes\n"];
+	// TODO Filter headers for only this library here
 	for (OFString *objCClassName in objCClassesDict) {
 		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
 	}
@@ -367,6 +371,28 @@
 	    [outputDir stringByAppendingPathComponent:fileName];
 
 	[output writeToFile:hFilePath];
+}
+
++ (void)addImportsForHeaderFilesInDir:(OFString *)dirPath
+                             toString:(OFMutableString *)string
+{
+	OFFileManager *fileMgr = [OFFileManager defaultManager];
+
+	if (![fileMgr directoryExistsAtPath:dirPath]) {
+		@throw [OFReadFailedException exceptionWithObject:dirPath
+		                                  requestedLength:0
+		                                            errNo:0];
+	}
+
+	OFArray *srcDirContents = [fileMgr contentsOfDirectoryAtPath:dirPath];
+
+	for (OFString *srcFile in srcDirContents) {
+		OFString *additionalFile = [srcFile lastPathComponent];
+		if ([additionalFile containsString:@".h"]) {
+			[string
+			    appendFormat:@"#import \"%@\"\n", additionalFile];
+		}
+	}
 }
 
 + (OFString *)generateCParameterListString:(OFArray *)params
