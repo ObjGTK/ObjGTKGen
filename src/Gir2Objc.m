@@ -28,9 +28,11 @@
 #import "Gir2Objc.h"
 
 #import "Generator/OGTKClassWriter.h"
+#import "Generator/OGTKFileOperation.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
-#import "Generator/OGTKFileOperation.h"
+
+#import "GIR/GIRInclude.h"
 
 #import "Exceptions/OGTKDataProcessingNotImplementedException.h"
 #import "Exceptions/OGTKIncorrectConfigException.h"
@@ -81,7 +83,7 @@
 			return [[[GIRAPI alloc] initWithDictionary:value]
 			    autorelease];
 		} else if ([value isKindOfClass:[OFDictionary class]]) {
-			return [Gir2Objc firstAPIFromDictionary:value];
+			return [self firstAPIFromDictionary:value];
 		}
 	}
 
@@ -92,9 +94,9 @@
 {
 	OFDictionary *girDict = nil;
 
-	[Gir2Objc parseGirFromFile:girFile intoDictionary:&girDict];
+	[self parseGirFromFile:girFile intoDictionary:&girDict];
 
-	return [Gir2Objc firstAPIFromDictionary:girDict];
+	return [self firstAPIFromDictionary:girDict];
 }
 
 + (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
@@ -109,11 +111,11 @@
 	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
 	libraryInfo.packageName = api.package;
 
-	for (OFString *include in api.cInclude) {
+	for (GIRInclude *include in api.cInclude) {
 		[libraryInfo addCInclude:include];
 	}
 
-	for (OFString *dependency in api.include) {
+	for (GIRInclude *dependency in api.include) {
 		[libraryInfo addDependency:dependency];
 	}
 
@@ -155,17 +157,17 @@
 
 	[mapper addLibrary:libraryInfo];
 
-	[Gir2Objc generateClassInfoFromNamespace:ns
-	                              forLibrary:libraryInfo
-	                              intoMapper:mapper];
+	[self generateClassInfoFromNamespace:ns
+	                          forLibrary:libraryInfo
+	                          intoMapper:mapper];
 
 	return libraryInfo;
 }
 
 + (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
-                            inDir:(OFString *)outputDir
+                            toDir:(OFString *)outputDir
     getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-     readAdditionalHeadersFromDir:(OFString *)baseClassPath
+     readAdditionalSourcesFromDir:(OFString *)baseClassPath
 {
 	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
 
@@ -192,11 +194,9 @@
 	    libraryInfo.name);
 	[OGTKFileOperation
 	    copyFilesFromDir:[baseClassPath
-	                         stringByAppendingPathComponent:libraryInfo.name]
+	                         stringByAppendingPathComponent:libraryInfo
+	                                                            .name]
 	               toDir:libraryOutputDir];
-
-	// TODO
-	// Copy makefiles (based on libraryInfo)
 }
 
 + (void)generateClassInfoFromNamespace:(GIRNamespace *)ns
@@ -218,9 +218,9 @@
 
 		OGTKClass *objCClass = [[[OGTKClass alloc] init] autorelease];
 
-		[Gir2Objc mapGIRClass:girClass
-		          toObjCClass:objCClass
-		       usingNamespace:ns];
+		[self mapGIRClass:girClass
+		       toObjCClass:objCClass
+		    usingNamespace:ns];
 
 		@try {
 			[mapper addClass:objCClass];
@@ -274,7 +274,7 @@
  * multi-library support.
  */
 + (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
-                            inDir:(OFString *)outputDir
+                            toDir:(OFString *)outputDir
     getClassDefinitionsFromMapper:(OGTKMapper *)mapper
 {
 	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
@@ -320,19 +320,19 @@
 	[objCClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
 
 	// Set constructors
-	[Gir2Objc addMappedGIRMethods:girClass.constructors
-	                  toObjCClass:objCClass
-	                usingSelector:@selector(addConstructor:)];
+	[self addMappedGIRMethods:girClass.constructors
+	              toObjCClass:objCClass
+	            usingSelector:@selector(addConstructor:)];
 
 	// Set functions
-	[Gir2Objc addMappedGIRMethods:girClass.functions
-	                  toObjCClass:objCClass
-	                usingSelector:@selector(addFunction:)];
+	[self addMappedGIRMethods:girClass.functions
+	              toObjCClass:objCClass
+	            usingSelector:@selector(addFunction:)];
 
 	// Set methods
-	[Gir2Objc addMappedGIRMethods:girClass.methods
-	                  toObjCClass:objCClass
-	                usingSelector:@selector(addMethod:)];
+	[self addMappedGIRMethods:girClass.methods
+	              toObjCClass:objCClass
+	            usingSelector:@selector(addMethod:)];
 }
 
 + (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(

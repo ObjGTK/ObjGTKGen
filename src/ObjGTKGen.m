@@ -61,14 +61,18 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 	// Write out classes definition
 	[Gir2Objc writeClassFilesForLibrary:libraryInfo
-	                              inDir:outputDir
+	                              toDir:outputDir
 	      getClassDefinitionsFromMapper:sharedMapper];
 
-	// Write and copy additional files to make the library build and run
+	// Write and copy additional files to complete the source and headers
+	// files for that library
 	[Gir2Objc writeLibraryAdditionsFor:libraryInfo
-	                             inDir:outputDir
+	                             toDir:outputDir
 	     getClassDefinitionsFromMapper:sharedMapper
-	      readAdditionalHeadersFromDir:baseClassPath];
+	      readAdditionalSourcesFromDir:baseClassPath];
+
+	// Prepare and copy build files
+	
 
 	OFLog(@"%@", @"Process complete");
 

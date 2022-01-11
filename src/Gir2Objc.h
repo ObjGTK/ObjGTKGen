@@ -62,9 +62,9 @@
                                  intoMapper:(OGTKMapper *)mapper;
 
 + (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
-                            inDir:(OFString *)outputDir
+                            toDir:(OFString *)outputDir
     getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-     readAdditionalHeadersFromDir:(OFString *)baseClassPath;
+     readAdditionalSourcesFromDir:(OFString *)baseClassPath;
 
 /**
  * Generates class information from the GIR Namespace level
@@ -74,7 +74,7 @@
                             intoMapper:(OGTKMapper *)mapper;
 
 + (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
-                            inDir:(OFString *)outputDir
+                            toDir:(OFString *)outputDir
     getClassDefinitionsFromMapper:(OGTKMapper *)mapper;
 
 @end

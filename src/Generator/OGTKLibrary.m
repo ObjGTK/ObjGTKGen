@@ -75,12 +75,38 @@
 
 - (OFString *)versionMinor
 {
-	return _version;
+	return [[self splitVersion:_version] firstObject];
 }
 
 - (OFString *)versionMajor
 {
-	return _version;
+	return [[self splitVersion:_version] lastObject];
+}
+
+- (OFArray *)splitVersion:(OFString *)versionString
+{
+	OFArray *versionParts =
+	    [versionString componentsSeparatedByString:@"."];
+
+	OFString *versionMajor = versionParts.firstObject;
+
+	OFMutableString *versionMinor =
+	    [[[OFMutableString alloc] init] autorelease];
+
+	if (versionParts.count > 2) {
+		for (size_t i = 1; i < versionParts.count; i++) {
+			[versionMinor
+			    appendString:[versionParts objectAtIndex:i]];
+
+			if (versionParts.count + 1 > i)
+				[versionMinor appendString:@"."];
+		}
+	}
+
+	OFArray *result = [[[OFArray alloc]
+	    initWithObjects:versionMajor, versionMinor, nil] autorelease];
+
+	return result;
 }
 
 - (void)addSharedLibrariesAsString:(OFString *)sharedLibrariesString
@@ -97,12 +123,12 @@
 	_sharedLibraries = [sharedLibrariesResult retain];
 }
 
-- (void)addDependency:(OFString *)dependency
+- (void)addDependency:(GIRInclude *)dependency
 {
 	[_dependencies addObject:dependency];
 }
 
-- (void)addCInclude:(OFString *)cInclude
+- (void)addCInclude:(GIRInclude *)cInclude
 {
 	[_cIncludes addObject:cInclude];
 }

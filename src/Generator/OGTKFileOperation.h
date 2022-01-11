@@ -27,8 +27,15 @@
 
 #import <ObjFW/ObjFW.h>
 
+#import "OGTKLibrary.h"
+
 @interface OGTKFileOperation: OFObject
 
-+ (void)copyFilesFromDir:(OFString *)source toDir:(OFString *)dest;
++ (void)copyFilesFromDir:(OFString *)sourceDir
+                            toDir:(OFString *)destDir
+    applyOnFileContentMethodNamed:(OFString *)methodName
+                 usingLibraryInfo:(OGTKLibrary *)libraryInfo;
+
++ (void)copyFilesFromDir:(OFString *)sourceDir toDir:(OFString *)destDir;
 
 @end
