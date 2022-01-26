@@ -46,6 +46,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	self = [super init];
 
 	@try {
+		_girNameToLibraryMapping = [[OFMutableDictionary alloc] init]; 
 		_gobjTypeToClassMapping = [[OFMutableDictionary alloc] init];
 		_girNameToClassMapping = [[OFMutableDictionary alloc] init];
 		_objcTypeToClassMapping = [[OFMutableDictionary alloc] init];
@@ -59,6 +60,7 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (void)dealloc
 {
+	[_girNameToLibraryMapping release];
 	[_gobjTypeToClassMapping release];
 	[_girNameToClassMapping release];
 	[_objcTypeToClassMapping release];
