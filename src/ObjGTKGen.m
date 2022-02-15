@@ -29,7 +29,9 @@
 
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Generator/OGTKClassWriter.h"
+#import "Generator/OGTKFileOperation.h"
 #import "Generator/OGTKLibrary.h"
+#import "Generator/OGTKPackage.h"
 #import "Gir2Objc.h"
 
 @interface ObjGTKGen: OFObject <OFApplicationDelegate>
@@ -72,7 +74,22 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	      readAdditionalSourcesFromDir:baseClassPath];
 
 	// Prepare and copy build files
-	
+	OFString *libraryOutputDir =
+	    [outputDir stringByAppendingPathComponent:libraryInfo.name];
+	OFString *templateDir =
+	    [OGTKUtil globalConfigValueFor:@"buildTemplateDir"];
+	OFString *templateSnippetsDir =
+	    [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"];
+	[OGTKFileOperation
+	                 copyFilesFromDir:templateDir
+	                            toDir:libraryOutputDir
+	    applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
+	                 usingReplaceDict:
+	                     [OGTKPackage
+	                         dictWithReplaceValuesForBuildFilesOfLibrary:
+	                             libraryInfo
+	                                             templateSnippetsFromDir:
+	                                                 templateSnippetsDir]];
 
 	OFLog(@"%@", @"Process complete");
 

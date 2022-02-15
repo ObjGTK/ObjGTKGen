@@ -73,7 +73,7 @@
 		} else if ([key isEqual:@"version"]) {
 			self.version = value;
 		} else if ([key isEqual:@"package"]) {
-			self.package = value;
+			self.package = [value valueForKey:@"name"];
 		} else if ([key isEqual:@"c:include"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRInclude class]

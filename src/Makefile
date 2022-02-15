@@ -35,6 +35,7 @@ SOURCES=ObjGTKGen.m \
 	Generator/OGTKUtil.m \
 	Generator/OGTKMapper.m \
 	Generator/OGTKFileOperation.m \
+	Generator/OGTKPackage.m \
 	Generator/OFDictionary+OGTKJsonDictionaryOfFile.m \
 	Gir2Objc.m \
 	Exceptions/OGTKIncorrectConfigException.m \

@@ -27,13 +27,15 @@
 
 #import "OGTKFileOperation.h"
 #import "../GIR/GIRInclude.h"
+#include <ObjFW/OFString.h>
+#include <ObjFWRT/ObjFWRT.h>
 
 @implementation OGTKFileOperation
 
 + (void)copyFilesFromDir:(OFString *)sourceDir
                             toDir:(OFString *)destDir
     applyOnFileContentMethodNamed:(OFString *)methodName
-                 usingLibraryInfo:(OGTKLibrary *)libraryInfo
+                 usingReplaceDict:(OFDictionary *)replaceDict
 {
 	OFFileManager *fileMgr = [OFFileManager defaultManager];
 
@@ -56,7 +58,7 @@
 			[self copyFilesFromDir:srcFile
 			                            toDir:destFile
 			    applyOnFileContentMethodNamed:methodName
-			                 usingLibraryInfo:libraryInfo];
+			                 usingReplaceDict:replaceDict];
 
 			continue;
 		}
@@ -79,18 +81,23 @@
 		}
 
 		// Apply method on contents of file if method given
-		SEL selector = @selector(methodName);
-		if (methodName != nil && libraryInfo != nil &&
-		    class_respondsToSelector(self, selector)) {
+		SEL selector;
+		if (methodName != nil) {
+			selector = sel_registerName([methodName
+			    cStringWithEncoding:OFStringEncodingUTF8]);
+		}
+
+		if (methodName != nil && replaceDict != nil &&
+		    [self respondsToSelector:selector]) {
 			OFLog(@"Applying method [%@] on file [%@] and copying "
 			      @"to [%@]...",
 			    methodName, srcFile, destFile);
 
 			OFString *fileContents =
 			    [OFString stringWithContentsOfFile:srcFile];
-			[self performSelector:selector
-			           withObject:fileContents
-			           withObject:libraryInfo];
+			fileContents = [self performSelector:selector
+			                          withObject:fileContents
+			                          withObject:replaceDict];
 			[fileContents writeToFile:destFile];
 
 			// Otherwise just copy
@@ -107,45 +114,21 @@
 	[self copyFilesFromDir:sourceDir
 	                            toDir:destDir
 	    applyOnFileContentMethodNamed:nil
-	                 usingLibraryInfo:nil];
+	                 usingReplaceDict:nil];
 }
 
-+ (void)prepareBuildFileContent:(OFString *)content
-          replaceWithValuesFrom:(OGTKLibrary *)libraryInfo
++ (OFString *)forFileContent:(OFString *)content
+                replaceUsing:(OFDictionary *)replaceDict
 {
-	content =
-	    [content stringByReplacingOccurrencesOfString:@"%%LIBNAME%%"
-	                                       withString:libraryInfo.name];
-	content =
-	    [content stringByReplacingOccurrencesOfString:@"%%LIBVERSION%%"
-	                                       withString:libraryInfo.version];
-
-	OFString *authorMail;
-	if (libraryInfo.authorMail != nil)
-		authorMail = libraryInfo.authorMail;
-	else
-		authorMail = @"unkown@host.com";
-	content =
-	    [content stringByReplacingOccurrencesOfString:@"%%LIBAUTHOREMAIL%%"
-	                                       withString:authorMail];
-
-	content = [content
-	    stringByReplacingOccurrencesOfString:@"%%UCLIBNAME%%"
-	                              withString:[libraryInfo
-	                                                 .cNSIdentifierPrefix
-	                                                     uppercaseString]];
-
-	content = [content
-	    stringByReplacingOccurrencesOfString:@" %%VERSIONLIBMAJOR%%"
-	                              withString:libraryInfo.versionMajor];
-
-	content = [content
-	    stringByReplacingOccurrencesOfString:@"%%VERSIONLIBMINOR%%"
-	                              withString:libraryInfo.versionMinor];
-
-	for(GIRInclude* dependency in libraryInfo.dependencies) {
-		// TODO: %%ACARGWITH%% and %%PKGCHECKMODULES%% with template snippets
+	for (OFString *search in replaceDict) {
+		content = [content
+		    stringByReplacingOccurrencesOfString:search
+		                              withString:
+		                                  [replaceDict
+		                                      valueForKey:search]];
 	}
+
+	return content;
 }
 
 @end

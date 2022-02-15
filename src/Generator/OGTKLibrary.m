@@ -75,12 +75,12 @@
 
 - (OFString *)versionMinor
 {
-	return [[self splitVersion:_version] firstObject];
+	return [[self splitVersion:_version] lastObject];
 }
 
 - (OFString *)versionMajor
 {
-	return [[self splitVersion:_version] lastObject];
+	return [[self splitVersion:_version] firstObject];
 }
 
 - (OFArray *)splitVersion:(OFString *)versionString

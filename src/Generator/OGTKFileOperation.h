@@ -34,8 +34,11 @@
 + (void)copyFilesFromDir:(OFString *)sourceDir
                             toDir:(OFString *)destDir
     applyOnFileContentMethodNamed:(OFString *)methodName
-                 usingLibraryInfo:(OGTKLibrary *)libraryInfo;
+                 usingReplaceDict:(OFDictionary *)replaceDict;
 
 + (void)copyFilesFromDir:(OFString *)sourceDir toDir:(OFString *)destDir;
+
++ (OFString *)forFileContent:(OFString *)content
+                replaceUsing:(OFDictionary *)replaceDict;
 
 @end

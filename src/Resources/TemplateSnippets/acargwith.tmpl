@@ -1,0 +1,9 @@
+AC_ARG_WITH(%%LCLIBNAME%%, AS_HELP_STRING([--with-%%LCLIBNAME%%=PREFIX],
+	[build with %%LIBNAME%% in the specified prefix]))
+AS_IF([test x"$with_%%LCLIBNAME%%" != x"no" -a x"$with_%%LCLIBNAME%%" != x""], [
+       %%UCLIBNAME%%_CPPFLAGS="$%%UCLIBNAME%%_CFLAGS -I$with_%%LCLIBNAME%%/include"
+       %%UCLIBNAME%%_LIBS="$%%UCLIBNAME%%_LIBS -L$with_%%LCLIBNAME%%/lib"
+       CPPFLAGS="$CPPFLAGS -I$with_%%LCLIBNAME%%/include"
+       LIBS="-L$with_%%LCLIBNAME%%/lib $LIBS"
+       FRAMEWORK_LIBS="-L$with_%%LCLIBNAME%%/lib $FRAMEWORK_LIBS"
+])
