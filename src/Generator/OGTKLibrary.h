@@ -61,8 +61,8 @@
 @property (copy, nonatomic) OFString *cNSIdentifierPrefix;
 @property (copy, nonatomic) OFString *cNSSymbolPrefix;
 @property (nonatomic) bool visited;
-@property (nonatomic) bool topmostGraphNode;
 
+@property (readonly, nonatomic) OFString *identifier;
 @property (readonly, nonatomic) OFString *versionMajor;
 @property (readonly, nonatomic) OFString *versionMinor;
 

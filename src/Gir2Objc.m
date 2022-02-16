@@ -135,9 +135,7 @@
 	libraryInfo.cNSIdentifierPrefix = ns.cIdentifierPrefixes;
 	libraryInfo.cNSSymbolPrefix = ns.cSymbolPrefixes;
 
-	OFString *libraryIdentifier =
-	    [OFString stringWithFormat:@"%@-%@", libraryInfo.girName,
-	              libraryInfo.version];
+	OFString *libraryIdentifier = libraryInfo.identifier;
 
 	// Load additional configuration provided manually by config file
 	OFDictionary *libraryConfig =
@@ -145,8 +143,6 @@
 
 	if ([libraryConfig valueForKey:@"customName"] != nil)
 		libraryInfo.name = [libraryConfig valueForKey:@"customName"];
-	else
-		libraryInfo.name = libraryIdentifier;
 
 	if ([libraryConfig valueForKey:@"excludeClasses"] != nil) {
 		OFArray *excludeClasses =

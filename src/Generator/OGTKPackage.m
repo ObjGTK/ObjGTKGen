@@ -26,8 +26,8 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name,
 	    @"%%LIBVERSION%%", libraryInfo.version, @"%%LIBAUTHOREMAIL%%",
 	    authorMail, @"%%UCLIBNAME%%",
-	    [libraryInfo.cNSIdentifierPrefix uppercaseString], @"%%LCLIBNAME%%",
-	    [libraryInfo.cNSIdentifierPrefix lowercaseString],
+	    [libraryInfo.name uppercaseString], @"%%LCLIBNAME%%",
+	    [libraryInfo.name lowercaseString],
 	    @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
 	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACARGWITH%%",
 	    acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules, nil];

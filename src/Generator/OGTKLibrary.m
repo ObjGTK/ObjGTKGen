@@ -35,8 +35,7 @@
             sharedLibraries = _sharedLibraries,
             excludeClasses = _excludeClasses,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
-            cNSSymbolPrefix = _cNSSymbolPrefix, visited = _visited,
-            topmostGraphNode = _topmostGraphNode;
+            cNSSymbolPrefix = _cNSSymbolPrefix, visited = _visited;
 
 - (instancetype)init
 {
@@ -73,6 +72,22 @@
 	[super dealloc];
 }
 
+- (OFString *)identifier
+{
+	if (_girName == nil || _version == nil)
+		return nil;
+
+	return [OFString stringWithFormat:@"%@-%@", _girName, _version];
+}
+
+- (OFString *)name
+{
+	if(_name != nil)
+		return _name;
+
+	return [OFString stringWithFormat:@"OG%@", _girName];
+}
+
 - (OFString *)versionMinor
 {
 	return [[self splitVersion:_version] lastObject];
@@ -92,6 +107,9 @@
 
 	OFMutableString *versionMinor =
 	    [[[OFMutableString alloc] init] autorelease];
+
+	if(versionParts.count == 2)
+		versionMinor = versionParts.lastObject;
 
 	if (versionParts.count > 2) {
 		for (size_t i = 1; i < versionParts.count; i++) {
