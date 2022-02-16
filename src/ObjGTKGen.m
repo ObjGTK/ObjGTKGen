@@ -80,16 +80,15 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	    [OGTKUtil globalConfigValueFor:@"buildTemplateDir"];
 	OFString *templateSnippetsDir =
 	    [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"];
-	[OGTKFileOperation
-	                 copyFilesFromDir:templateDir
-	                            toDir:libraryOutputDir
-	    applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
-	                 usingReplaceDict:
-	                     [OGTKPackage
-	                         dictWithReplaceValuesForBuildFilesOfLibrary:
-	                             libraryInfo
-	                                             templateSnippetsFromDir:
-	                                                 templateSnippetsDir]];
+
+	OFDictionary *replaceDict = [OGTKPackage
+	    dictWithReplaceValuesForBuildFilesOfLibrary:libraryInfo
+	                        templateSnippetsFromDir:templateSnippetsDir];
+
+	[OGTKFileOperation copyFilesFromDir:templateDir
+	                              toDir:libraryOutputDir
+	      applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
+	                   usingReplaceDict:replaceDict];
 
 	OFLog(@"%@", @"Process complete");
 
