@@ -28,16 +28,9 @@
  * Objective-C imports
  */
 #import "OGObject.h"
-#import "OGTKGObjectInitializationFailedException.h"
+#import "OGObjectInitializationFailedException.h"
 
 @implementation OGObject
-
-+ (OGObject *)withGtkWidget:(GtkWidget *)obj
-{
-	OGObject *retVal =
-	    [[OGObject alloc] initWithGObject:(GObject *)obj];
-	return [retVal autorelease];
-}
 
 + (OGObject *)withGObject:(GObject *)obj
 {
@@ -51,7 +44,7 @@
 
 	@try {
 		if (obj == NULL)
-			@throw [OGTKGObjectInitializationFailedException
+			@throw [OGObjectInitializationFailedException
 			    exceptionWithClass:[self class]];
 
 		[self setGObject:obj];
