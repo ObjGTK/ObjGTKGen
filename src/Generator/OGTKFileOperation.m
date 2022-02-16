@@ -38,6 +38,9 @@
 {
 	OFFileManager *fileMgr = [OFFileManager defaultManager];
 
+	if (![fileMgr directoryExistsAtPath:sourceDir])
+		return;
+
 	OFArray *srcDirContents = [fileMgr contentsOfDirectoryAtPath:sourceDir];
 
 	for (OFString *srcFilePath in srcDirContents) {
@@ -70,7 +73,6 @@
 		}
 
 		// else: src is a file
-
 		if ([fileMgr fileExistsAtPath:destFile]) {
 			OFLog(@"File [%@] already exists in destination [%@]. "
 			      @"Removing existing file...",
