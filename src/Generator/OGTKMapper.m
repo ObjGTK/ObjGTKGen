@@ -389,6 +389,8 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		[stack setObject:@"1" forKey:classInfo.cParentType];
 		[self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
+	} else {
+		classInfo.topMostGraphNode = true;
 	}
 
 	// OFLog(@"Checking dependencies of %@.", classInfo.cType);

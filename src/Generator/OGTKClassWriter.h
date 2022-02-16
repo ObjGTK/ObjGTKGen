@@ -33,6 +33,7 @@
 #import "OGTKClass.h"
 #import "OGTKMapper.h"
 #import "OGTKUtil.h"
+#import "OGTKLibrary.h"
 
 /**
  * Functions to write in memory Class representation to file as ObjGTK source
@@ -44,12 +45,14 @@
  * outputDir
  */
 + (void)generateFilesForClass:(OGTKClass *)cgtkClass
-                        inDir:(OFString *)outputDir;
+                        inDir:(OFString *)outputDir
+                   forLibrary:(OGTKLibrary *)library;
 
 /**
  * Generate header file contents based on class
  */
-+ (OFString *)headerStringFor:(OGTKClass *)cgtkClass;
++ (OFString *)headerStringFor:(OGTKClass *)cgtkClass
+                      library:(OGTKLibrary *)library;
 
 /**
  * Generate source file contents based on class

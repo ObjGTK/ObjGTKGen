@@ -26,13 +26,7 @@
  */
 
 #import <ObjFW/ObjFW.h>
-
-/*
- * C imports
- */
-#import <gtk/gtk-a11y.h>
-#import <gtk/gtk.h>
-#import <gtk/gtkx.h>
+#include <glib-2.0/glib-object.h>
 
 /**
  * The base class for all CoreGTK wrapper classes

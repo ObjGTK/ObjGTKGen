@@ -283,7 +283,8 @@
 	for (OFString *className in classesDict) {
 		[OGTKClassWriter
 		    generateFilesForClass:[classesDict objectForKey:className]
-		                    inDir:libraryOutputDir];
+		                    inDir:libraryOutputDir
+		               forLibrary:libraryInfo];
 	}
 }
 

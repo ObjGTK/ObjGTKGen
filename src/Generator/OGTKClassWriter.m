@@ -32,7 +32,9 @@
 
 @implementation OGTKClassWriter
 
-+ (void)generateFilesForClass:(OGTKClass *)cgtkClass inDir:(OFString *)outputDir
++ (void)generateFilesForClass:(OGTKClass *)cgtkClass
+                        inDir:(OFString *)outputDir
+                   forLibrary:(OGTKLibrary *)library
 {
 	OFFileManager *fileManager = [OFFileManager defaultManager];
 	if (![fileManager directoryExistsAtPath:outputDir]) {
@@ -45,7 +47,7 @@
 		OFString *hFilename =
 		    [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
 		        stringByAppendingString:@".h"];
-		[[OGTKClassWriter headerStringFor:cgtkClass]
+		[[OGTKClassWriter headerStringFor:cgtkClass library:library]
 		    writeToFile:hFilename];
 
 		// Source
@@ -63,6 +65,7 @@
 }
 
 + (OFString *)headerStringFor:(OGTKClass *)cgtkClass
+                      library:(OGTKLibrary *)library
 {
 	OFMutableString *output = [[OFMutableString alloc] init];
 
@@ -73,6 +76,15 @@
 	                                               [cgtkClass type]]]];
 
 	[output appendString:@"\n"];
+
+	// Library dependencies in case we have a class that is at the top of
+	// the class dependency graph
+	if (cgtkClass.topMostGraphNode) {
+		for(GIRInclude *cInclude in library.cIncludes) {
+			[output appendFormat:@"#include <%@>\n", cInclude.name];
+		}
+		[output appendString:@"\n"];
+	}
 
 	// Imports/Dependencies
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
