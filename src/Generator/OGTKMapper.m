@@ -46,7 +46,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	self = [super init];
 
 	@try {
-		_girNameToLibraryMapping = [[OFMutableDictionary alloc] init]; 
+		_girNameToLibraryMapping = [[OFMutableDictionary alloc] init];
 		_gobjTypeToClassMapping = [[OFMutableDictionary alloc] init];
 		_girNameToClassMapping = [[OFMutableDictionary alloc] init];
 		_objcTypeToClassMapping = [[OFMutableDictionary alloc] init];
@@ -389,7 +389,9 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		[stack setObject:@"1" forKey:classInfo.cParentType];
 		[self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
-	} else {
+	} else if (parentClassInfo == nil) {
+		//OFLog(@"Marked class %@ as topmost node. Parent cType is %@.",
+		//    classInfo.cName, classInfo.cParentType);
 		classInfo.topMostGraphNode = true;
 	}
 
@@ -418,7 +420,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		if (dependencyClassInfo == nil)
 			continue;
 
-		// We got a dependency to follow, so we are eady to visit that
+		// We got a dependency to follow, so we are ready to visit that
 		// dependency and follow its dependencies
 		[stack setObject:@"1" forKey:dependencyGobjName];
 
