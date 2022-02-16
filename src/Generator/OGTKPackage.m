@@ -15,22 +15,18 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	else
 		authorMail = @"unkown@host.com";
 
-	OFString *acArgWith =
-	    [self ACSnippetsForDependencies:libraryInfo.dependencies
-	            templateSnippetsFromDir:snippetDir];
+	OFString *acArgWith = [self ACSnippetForIncludes:libraryInfo.packageName
+	                         templateSnippetsFromDir:snippetDir];
 
 	OFString *pkgCheckModules =
 	    [self ACSnippetForPackage:libraryInfo.packageName
 	        templateSnippetFromDir:snippetDir];
 
-    // TODO: %%SOURCESLIST%% is missing
-
 	OFDictionary *dict = [OFDictionary
 	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name,
 	    @"%%LIBVERSION%%", libraryInfo.version, @"%%LIBAUTHOREMAIL%%",
 	    authorMail, @"%%UCLIBNAME%%",
-	    [libraryInfo.cNSIdentifierPrefix uppercaseString],
-        @"%%LCLIBNAME%%",
+	    [libraryInfo.cNSIdentifierPrefix uppercaseString], @"%%LCLIBNAME%%",
 	    [libraryInfo.cNSIdentifierPrefix lowercaseString],
 	    @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
 	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACARGWITH%%",
@@ -39,39 +35,43 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	return dict;
 }
 
-+ (OFString *)ACSnippetsForDependencies:(OFMutableSet *)dependencies
-                templateSnippetsFromDir:(OFString *)snippetDir
++ (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
+    (OGTKLibrary *)libraryInfo
 {
-	OFMutableString *result = [OFMutableString string];
+	OFDictionary *dict = [OFDictionary
+	    dictionaryWithKeysAndObjects:@"Template.oc.in",
+	    [OFString stringWithFormat:@"%@.oc.in", libraryInfo.name], nil];
 
-	for (GIRInclude *library in dependencies) {
-		OFString *fileName = [snippetDir
-		    stringByAppendingPathComponent:kACArgWithTemplateFile];
-		OFMutableString *snippet =
-		    [OFMutableString stringWithContentsOfFile:fileName];
-
-		[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
-		                         withString:library.name];
-
-		[snippet
-		    replaceOccurrencesOfString:@"%%LCLIBNAME%%"
-		                    withString:[library.name lowercaseString]];
-
-		[snippet
-		    replaceOccurrencesOfString:@"%%UCLIBNAME%%"
-		                    withString:[library.name uppercaseString]];
-
-		[snippet appendString:@"\n\n"];
-
-		[result appendString:snippet];
-	}
-
-	[result makeImmutable];
-
-	return result;
+	return dict;
 }
 
-+ (OFString *)ACSnippetForPackage:(OFString *)package
++ (OFString *)ACSnippetForIncludes:(OFString *)packageName
+           templateSnippetsFromDir:(OFString *)snippetDir
+{
+	OFString *fileName =
+	    [snippetDir stringByAppendingPathComponent:kACArgWithTemplateFile];
+	OFMutableString *snippet =
+	    [OFMutableString stringWithContentsOfFile:fileName];
+
+	OFString *shortName = [self shortNameFromPackageName:packageName];
+
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
+	                         withString:packageName];
+
+	[snippet replaceOccurrencesOfString:@"%%LCLIBNAME%%"
+	                         withString:[shortName lowercaseString]];
+
+	[snippet replaceOccurrencesOfString:@"%%UCLIBNAME%%"
+	                         withString:[shortName uppercaseString]];
+
+	[snippet appendString:@"\n"];
+
+	[snippet makeImmutable];
+
+	return snippet;
+}
+
++ (OFString *)ACSnippetForPackage:(OFString *)packageName
            templateSnippetFromDir:(OFString *)snippetDir
 {
 	OFString *fileName = [snippetDir
@@ -79,25 +79,18 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	OFMutableString *snippet =
 	    [OFMutableString stringWithContentsOfFile:fileName];
 
-	OFCharacterSet *charSet = [OFCharacterSet
-	    characterSetWithCharactersInString:@"+-_0123456789"];
-	size_t index = [package indexOfCharacterFromSet:charSet];
-
-	OFString *shortName;
-	if (index != OFNotFound)
-		shortName = [package substringToIndex:index];
-	else
-		shortName = package;
+	OFString *shortName = [self shortNameFromPackageName:packageName];
 
 	[snippet replaceOccurrencesOfString:@"%%LCLIBNAME%%"
 	                         withString:[shortName lowercaseString]];
 
-	[snippet replaceOccurrencesOfString:@"%%PKGNAME%%" withString:package];
+	[snippet replaceOccurrencesOfString:@"%%PKGNAME%%"
+	                         withString:packageName];
 
 	OFSubprocess *pkgConfigProcess = [OFSubprocess
 	    subprocessWithProgram:@"pkg-config"
 	                arguments:[OFArray arrayWithObjects:@"--modversion",
-	                                   package, nil]];
+	                                   packageName, nil]];
 
 	OFString *pkgversion = [pkgConfigProcess readLine];
 	if (pkgversion == nil)
@@ -109,11 +102,26 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%PKGVERSION%%"
 	                         withString:pkgversion];
 
-	[snippet appendString:@"\n\n"];
+	[snippet appendString:@"\n"];
 
 	[snippet makeImmutable];
 
 	return snippet;
+}
+
++ (OFString *)shortNameFromPackageName:(OFString *)packageName
+{
+	OFCharacterSet *charSet = [OFCharacterSet
+	    characterSetWithCharactersInString:@"+-_0123456789"];
+	size_t index = [packageName indexOfCharacterFromSet:charSet];
+
+	OFString *shortName;
+	if (index != OFNotFound)
+		shortName = [packageName substringToIndex:index];
+	else
+		shortName = packageName;
+
+	return shortName;
 }
 
 @end

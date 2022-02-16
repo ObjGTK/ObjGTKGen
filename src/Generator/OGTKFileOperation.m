@@ -27,8 +27,6 @@
 
 #import "OGTKFileOperation.h"
 #import "../GIR/GIRInclude.h"
-#include <ObjFW/OFString.h>
-#include <ObjFWRT/ObjFWRT.h>
 
 @implementation OGTKFileOperation
 
@@ -36,6 +34,7 @@
                             toDir:(OFString *)destDir
     applyOnFileContentMethodNamed:(OFString *)methodName
                  usingReplaceDict:(OFDictionary *)replaceDict
+                  usingRenameDict:(OFDictionary *)renameDict
 {
 	OFFileManager *fileMgr = [OFFileManager defaultManager];
 
@@ -46,9 +45,15 @@
 		OFString *srcFile = [sourceDir
 		    stringByAppendingPathComponent:[srcFilePath
 		                                       lastPathComponent]];
-		OFString *destFile = [destDir
-		    stringByAppendingPathComponent:[srcFilePath
-		                                       lastPathComponent]];
+
+		// Rename source file while copying if rename information given
+		OFString *destFileName = [srcFilePath lastPathComponent];
+		if (renameDict != nil &&
+		    [renameDict valueForKey:destFileName] != nil)
+			destFileName = [renameDict valueForKey:destFileName];
+
+		OFString *destFile =
+		    [destDir stringByAppendingPathComponent:destFileName];
 
 		// src is a directory
 		if ([fileMgr directoryExistsAtPath:srcFile]) {
@@ -58,7 +63,8 @@
 			[self copyFilesFromDir:srcFile
 			                            toDir:destFile
 			    applyOnFileContentMethodNamed:methodName
-			                 usingReplaceDict:replaceDict];
+			                 usingReplaceDict:replaceDict
+			                  usingRenameDict:renameDict];
 
 			continue;
 		}
@@ -114,7 +120,8 @@
 	[self copyFilesFromDir:sourceDir
 	                            toDir:destDir
 	    applyOnFileContentMethodNamed:nil
-	                 usingReplaceDict:nil];
+	                 usingReplaceDict:nil
+	                  usingRenameDict:nil];
 }
 
 + (OFString *)forFileContent:(OFString *)content

@@ -85,10 +85,14 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	    dictWithReplaceValuesForBuildFilesOfLibrary:libraryInfo
 	                        templateSnippetsFromDir:templateSnippetsDir];
 
+	OFDictionary *renameDict =
+	    [OGTKPackage dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
+
 	[OGTKFileOperation copyFilesFromDir:templateDir
 	                              toDir:libraryOutputDir
 	      applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
-	                   usingReplaceDict:replaceDict];
+	                   usingReplaceDict:replaceDict
+	                    usingRenameDict:renameDict];
 
 	OFLog(@"%@", @"Process complete");
 

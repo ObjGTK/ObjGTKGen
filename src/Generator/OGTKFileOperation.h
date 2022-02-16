@@ -34,7 +34,8 @@
 + (void)copyFilesFromDir:(OFString *)sourceDir
                             toDir:(OFString *)destDir
     applyOnFileContentMethodNamed:(OFString *)methodName
-                 usingReplaceDict:(OFDictionary *)replaceDict;
+                 usingReplaceDict:(OFDictionary *)replaceDict
+                  usingRenameDict:(OFDictionary *)renameDict;
 
 + (void)copyFilesFromDir:(OFString *)sourceDir toDir:(OFString *)destDir;
 
