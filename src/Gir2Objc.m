@@ -132,8 +132,10 @@
 	libraryInfo.namespace = ns.name;
 	libraryInfo.version = ns.version;
 	[libraryInfo addSharedLibrariesAsString:ns.sharedLibrary];
-	libraryInfo.cNSIdentifierPrefix = ns.cIdentifierPrefixes;
-	libraryInfo.cNSSymbolPrefix = ns.cSymbolPrefixes;
+	libraryInfo.cNSIdentifierPrefix =
+	    [self firstOfKommaSeparatedElements:ns.cIdentifierPrefixes];
+	libraryInfo.cNSSymbolPrefix =
+	    [self firstOfKommaSeparatedElements:ns.cSymbolPrefixes];
 
 	OFString *libraryIdentifier = libraryInfo.identifier;
 
@@ -158,6 +160,11 @@
 	                          intoMapper:mapper];
 
 	return libraryInfo;
+}
+
++ (OFString *)firstOfKommaSeparatedElements:(OFString *)elementString
+{
+	return [[elementString componentsSeparatedByString:@","] firstObject];
 }
 
 + (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
@@ -279,8 +286,10 @@
 
 	[objCClass setCSymbolPrefix:girClass.cSymbolPrefix];
 	[objCClass setNamespace:ns.name];
-	[objCClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
-	[objCClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
+	[objCClass setCNSIdentifierPrefix:[self firstOfKommaSeparatedElements:
+	                                            ns.cIdentifierPrefixes]];
+	[objCClass setCNSSymbolPrefix:
+	               [self firstOfKommaSeparatedElements:ns.cSymbolPrefixes]];
 
 	// Set constructors
 	[self addMappedGIRMethods:girClass.constructors
@@ -303,7 +312,6 @@
                 toObjCClass:(OGTKClass *)objCClass
               usingSelector:(SEL)addMethodSelector
 {
-	// Set constructors
 	for (id<GIRMethodMapping> girMethod in girMethodArray) {
 		bool foundVarArgs = false;
 
@@ -322,7 +330,13 @@
 
 		OGTKMethod *objcMethod = [[OGTKMethod alloc] init];
 
-		[objcMethod setName:girMethod.name];
+		OFString *methodName;
+		if([girMethod.name isEqual:@"errno"])
+			methodName = @"errNo";
+		else
+		 	methodName = girMethod.name;
+
+		[objcMethod setName:methodName];
 		[objcMethod setCIdentifier:girMethod.cIdentifier];
 		objcMethod.documentation = girMethod.doc.docText;
 

@@ -52,7 +52,7 @@ AS_IF([test x"$enable_static" = x"yes" -o x"$enable_shared" = x"no"], [
 	AC_SUBST(%%UCLIBNAME%%_STATIC_LIB, "lib%%LCLIBNAME%%.a")
 ])
 
-AC_ARG_WITH(gtk, AS_HELP_STRING([--with-glib=PREFIX],
+AC_ARG_WITH(glib, AS_HELP_STRING([--with-glib=PREFIX],
 	[build with glib-2.0 in the specified prefix]))
 AS_IF([test x"$with_glib" != x"no" -a x"$with_glib" != x""], [
        GLIB_CPPFLAGS="$GLIB_CFLAGS -I$with_glib/include"
