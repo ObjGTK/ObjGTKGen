@@ -129,7 +129,7 @@
 	GIRNamespace *ns = namespaces.firstObject;
 
 	// Map library information from namespace
-	libraryInfo.girName = ns.name;
+	libraryInfo.namespace = ns.name;
 	libraryInfo.version = ns.version;
 	[libraryInfo addSharedLibrariesAsString:ns.sharedLibrary];
 	libraryInfo.cNSIdentifierPrefix = ns.cIdentifierPrefixes;
@@ -257,18 +257,8 @@
 	for (OGTKClass *currentClass in classesToRemove)
 		[mapper removeClass:currentClass];
 	[classesToRemove release];
-
-	// Calculate dependencies for each class
-	[mapper determineDependencies];
-
-	// Set flags for fast necessary forward class definitions.
-	[mapper detectAndMarkCircularDependencies];
 }
 
-/**
- * Currently just writes all the classes - this has to be changed on
- * multi-library support.
- */
 + (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
                             toDir:(OFString *)outputDir
     getClassDefinitionsFromMapper:(OGTKMapper *)mapper
@@ -281,10 +271,12 @@
 
 	// Write the classes
 	for (OFString *className in classesDict) {
-		[OGTKClassWriter
-		    generateFilesForClass:[classesDict objectForKey:className]
-		                    inDir:libraryOutputDir
-		               forLibrary:libraryInfo];
+		OGTKClass *classInfo = [classesDict objectForKey:className];
+		if ([libraryInfo.namespace isEqual:classInfo.namespace]) {
+			[OGTKClassWriter generateFilesForClass:classInfo
+			                                 inDir:libraryOutputDir
+			                            forLibrary:libraryInfo];
+		}
 	}
 }
 
@@ -313,6 +305,7 @@
 	}
 
 	[objCClass setCSymbolPrefix:girClass.cSymbolPrefix];
+	[objCClass setNamespace:ns.name];
 	[objCClass setCNSIdentifierPrefix:ns.cIdentifierPrefixes];
 	[objCClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
 

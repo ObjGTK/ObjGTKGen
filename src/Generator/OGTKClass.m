@@ -32,9 +32,9 @@
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
-@synthesize cName = _cName, cType = _cType, parentName = _parentName,
-            cParentType = _cParentType, cSymbolPrefix = _cSymbolPrefix,
-            cNSSymbolPrefix = _cNSSymbolPrefix,
+@synthesize cName = _cName, cType = _cType, namespace = _namespace,
+            parentName = _parentName, cParentType = _cParentType,
+            cSymbolPrefix = _cSymbolPrefix, cNSSymbolPrefix = _cNSSymbolPrefix,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
             documentation = _documentation,
             dependsOnClasses = _dependsOnClasses,
@@ -65,6 +65,7 @@
 {
 	[_cName release];
 	[_cType release];
+	[_namespace release];
 	[_parentName release];
 	[_cParentType release];
 	[_cSymbolPrefix release];

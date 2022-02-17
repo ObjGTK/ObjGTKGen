@@ -35,6 +35,7 @@
 {
 	OFString *_cName;
 	OFString *_cType;
+	OFString *_namespace;
 	OFString *_parentName;
 	OFString *_cParentType;
 	OFString *_cSymbolPrefix;
@@ -55,6 +56,7 @@
 
 @property (copy, nonatomic) OFString *cName;
 @property (copy, nonatomic) OFString *cType;
+@property (copy, nonatomic) OFString *namespace;
 @property (readonly, nonatomic) OFString *type;
 @property (copy, nonatomic) OFString *parentName;
 @property (copy, nonatomic) OFString *cParentType;

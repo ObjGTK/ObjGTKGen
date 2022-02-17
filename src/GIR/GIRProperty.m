@@ -58,6 +58,24 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[_name release];
+	[_transferOwnership release];
+	[_version release];
+	[_deprecatedVersion release];
+	[_doc release];
+	[_docDeprecated release];
+	[_type release];
+	[_construct release];
+	[_writable release];
+	[_getter release];
+	[_setter release];
+	[_array release];
+
+	[super dealloc];
+}
+
 - (void)parseDictionary:(OFDictionary *)dict
 {
 	for (OFString *key in dict) {
@@ -105,22 +123,6 @@
 			[self logUnknownElement:key];
 		}
 	}
-}
-
-- (void)dealloc
-{
-	[_name release];
-	[_transferOwnership release];
-	[_version release];
-	[_deprecatedVersion release];
-	[_doc release];
-	[_docDeprecated release];
-	[_type release];
-	[_construct release];
-	[_writable release];
-	[_array release];
-
-	[super dealloc];
 }
 
 @end

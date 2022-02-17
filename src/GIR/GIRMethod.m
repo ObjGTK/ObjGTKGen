@@ -63,6 +63,24 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[_name release];
+	[_cIdentifier release];
+	[_version release];
+	[_glibGetForProperty release];
+	[_glibSetForProperty release];
+	[_returnValue release];
+	[_deprecatedVersion release];
+	[_invoker release];
+	[_doc release];
+	[_docDeprecated release];
+	[_parameters release];
+	[_instanceParameters release];
+
+	[super dealloc];
+}
+
 - (void)parseDictionary:(OFDictionary *)dict
 {
 	for (OFString *key in dict) {
@@ -133,22 +151,6 @@
 	}
 
 	return true;
-}
-
-- (void)dealloc
-{
-	[_name release];
-	[_cIdentifier release];
-	[_version release];
-	[_returnValue release];
-	[_deprecatedVersion release];
-	[_invoker release];
-	[_doc release];
-	[_docDeprecated release];
-	[_parameters release];
-	[_instanceParameters release];
-
-	[super dealloc];
 }
 
 @end

@@ -29,7 +29,7 @@
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKLibrary
-@synthesize girName = _girName, name = _name, version = _version,
+@synthesize namespace = _namespace, name = _name, version = _version,
             packageName = _packageName, authorMail = _authorMail,
             dependencies = _dependencies, cIncludes = _cIncludes,
             sharedLibraries = _sharedLibraries,
@@ -57,7 +57,7 @@
 
 - (void)dealloc
 {
-	[_girName release];
+	[_namespace release];
 	[_name release];
 	[_version release];
 	[_packageName release];
@@ -74,10 +74,10 @@
 
 - (OFString *)identifier
 {
-	if (_girName == nil || _version == nil)
+	if (_namespace == nil || _version == nil)
 		return nil;
 
-	return [OFString stringWithFormat:@"%@-%@", _girName, _version];
+	return [OFString stringWithFormat:@"%@-%@", _namespace, _version];
 }
 
 - (OFString *)name
@@ -85,7 +85,7 @@
 	if(_name != nil)
 		return _name;
 
-	return [OFString stringWithFormat:@"OG%@", _girName];
+	return [OFString stringWithFormat:@"OG%@", _namespace];
 }
 
 - (OFString *)versionMinor

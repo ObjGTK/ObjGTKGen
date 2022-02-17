@@ -34,7 +34,7 @@
  */
 @interface OGTKLibrary: OFObject
 {
-	OFString *_girName;
+	OFString *_namespace;
 	OFString *_name;
 	OFString *_version;
 	OFString *_packageName;
@@ -49,7 +49,7 @@
 	bool _topmostGraphNode;
 }
 
-@property (copy, nonatomic) OFString *girName;
+@property (copy, nonatomic) OFString *namespace;
 @property (copy, nonatomic) OFString *name;
 @property (copy, nonatomic) OFString *version;
 @property (copy, nonatomic) OFString *packageName;

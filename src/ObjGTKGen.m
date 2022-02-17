@@ -63,7 +63,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	if (api == nil)
 		@throw [OGTKNoGIRAPIException exception];
 
-	OFLog(@"%@", @"Attempting to generate ObjGTK...");
+	OFLog(@"%@", @"Attempting to generate library classes...");
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 	OFString *baseClassPath =
@@ -72,6 +72,12 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	// Parse library information
 	OGTKLibrary *libraryInfo =
 	    [Gir2Objc generateLibraryInfoFromAPI:api intoMapper:sharedMapper];
+
+	// Calculate dependencies for each class
+	[sharedMapper determineDependencies];
+
+	// Set flags for fast necessary forward class definitions.
+	[sharedMapper detectAndMarkCircularDependencies];
 
 	// Write out classes definition
 	[Gir2Objc writeClassFilesForLibrary:libraryInfo
