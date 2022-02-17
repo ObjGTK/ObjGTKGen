@@ -9,7 +9,7 @@ LIB_MINOR = %%VERSIONLIBMINOR%%
 SRCS = $(wildcard *.m)
 
 INCLUDES = ${SRCS:.m=.h} \
-	%%LIBNAME%%.h
+	%%LIBNAME%%-Umbrella.h
 
 include ../buildsys.mk
 

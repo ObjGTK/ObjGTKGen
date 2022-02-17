@@ -340,7 +340,7 @@
 {
 	OFMutableString *output = [OFMutableString string];
 
-	OFString *fileName = [OFString stringWithFormat:@"%@.h", libName];
+	OFString *fileName = [OFString stringWithFormat:@"%@-Umbrella.h", libName];
 	OFString *license = [OGTKClassWriter generateLicense:fileName];
 	[output appendString:license];
 
