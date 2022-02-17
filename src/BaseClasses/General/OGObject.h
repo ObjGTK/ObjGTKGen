@@ -26,7 +26,7 @@
  */
 
 #import <ObjFW/ObjFW.h>
-#include <glib-2.0/glib-object.h>
+#include <glib-object.h>
 
 /**
  * The base class for all CoreGTK wrapper classes

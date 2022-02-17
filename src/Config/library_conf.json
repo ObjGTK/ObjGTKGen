@@ -2,7 +2,7 @@
   "Gtk-3.0": {
     "customName": "ObjGTK3",
     "excludeClasses": [
-      "EntryIconAccessible", "NumerableIcon"
+      "EntryIconAccessible", "NumerableIcon", "FileChooserWidgetAccessible", "HeaderBarAccessible", "SocketAccessible"
     ]
   }
 }

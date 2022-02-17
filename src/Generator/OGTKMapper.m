@@ -400,18 +400,12 @@ static OGTKMapper *sharedMyMapper = nil;
 	// time
 	for (OFString *dependencyGobjName in classInfo.dependsOnClasses) {
 
-		// Add a forward declaration if the dependency is within the
-		// stack - we're inside a circular dependency structure then
-		if ([stack objectForKey:dependencyGobjName] != nil &&
-		    ![classInfo.cParentType isEqual:dependencyGobjName]) {
+		// Add a forward declaration if the dependency is not the parent
+		// class - we don't need an "#import" then
+		if (![classInfo.cParentType isEqual:dependencyGobjName]) {
 
-			// OFLog(
-			//     @"Detected circular dependency %@, adding forward
-			//     declaration.", dependencyGobjName);
 			[classInfo
 			    addForwardDeclarationForClass:dependencyGobjName];
-
-			continue;
 		}
 
 		OGTKClass *dependencyClassInfo =
