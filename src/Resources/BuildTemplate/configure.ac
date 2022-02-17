@@ -52,26 +52,26 @@ AS_IF([test x"$enable_static" = x"yes" -o x"$enable_shared" = x"no"], [
 	AC_SUBST(%%UCLIBNAME%%_STATIC_LIB, "lib%%LCLIBNAME%%.a")
 ])
 
+AC_ARG_WITH(gtk, AS_HELP_STRING([--with-glib=PREFIX],
+	[build with glib-2.0 in the specified prefix]))
+AS_IF([test x"$with_glib" != x"no" -a x"$with_glib" != x""], [
+       GLIB_CPPFLAGS="$GLIB_CFLAGS -I$with_glib/include"
+       GLIB_LIBS="$GLIB_LIBS -L$with_glib/lib"
+       CPPFLAGS="$CPPFLAGS -I$with_glib/include"
+       LIBS="-L$with_glib/lib $LIBS"
+       FRAMEWORK_LIBS="-L$with_glib/lib $FRAMEWORK_LIBS"
+])
+
+PKG_CHECK_MODULES(glib, [glib-2.0 >= 2.70.3], [
+	CPPFLAGS="$CPPFLAGS $glib_CFLAGS"
+	LIBS="$LIBS $glib_LIBS"
+], [
+	AC_MSG_ERROR(You need glib-2.0 >= 2.70.3 installed!)
+])
+
 %%ACARGWITH%%
 
-AC_ARG_WITH(gtk, AS_HELP_STRING([--with-gtk=PREFIX],
-	[build with GTK in the specified prefix]))
-AS_IF([test x"$with_gtk" != x"no" -a x"$with_gtk" != x""], [
-       GTK_CPPFLAGS="$GTK_CFLAGS -I$with_gtk/include"
-       GTK_LIBS="$GTK_LIBS -L$with_gtk/lib"
-       CPPFLAGS="$CPPFLAGS -I$with_gtk/include"
-       LIBS="-L$with_gtk/lib $LIBS"
-       FRAMEWORK_LIBS="-L$with_gtk/lib $FRAMEWORK_LIBS"
-])
-
 %%PKGCHECKMODULES%%
-
-PKG_CHECK_MODULES(gtk3, [gtk+-3.0 >= 3.24], [
-	CPPFLAGS="$CPPFLAGS $gtk3_CFLAGS"
-	LIBS="$LIBS $gtk3_LIBS"
-], [
-	AC_MSG_ERROR(You need gtk+-3.0 >= 3.24 installed!)
-])
 
 AS_IF([test x"$GOBJC" = x"yes"], [
 	OBJCFLAGS="$OBJCFLAGS -Wwrite-strings -Wpointer-arith -Werror"

@@ -27,6 +27,8 @@
 
 #import <ObjFW/ObjFW.h>
 
+#import "../GIR/GIRInclude.h"
+
 /**
  * Abstracts Library information
  */
@@ -37,9 +39,10 @@
 	OFString *_version;
 	OFString *_packageName;
 	OFString *_authorMail;
-	OFMutableSet *_dependencies;
-	OFMutableSet *_cIncludes;
+	OFMutableSet OF_GENERIC(GIRInclude*) *_dependencies;
+	OFMutableSet OF_GENERIC(GIRInclude*) *_cIncludes;
 	OFSet *_sharedLibraries;
+	OFSet *_excludeClasses;
 	OFString *_cNSIdentifierPrefix;
 	OFString *_cNSSymbolPrefix;
 	bool _visited;
@@ -51,14 +54,15 @@
 @property (copy, nonatomic) OFString *version;
 @property (copy, nonatomic) OFString *packageName;
 @property (copy, nonatomic) OFString *authorMail;
-@property (readonly, nonatomic) OFMutableSet *dependencies;
-@property (readonly, nonatomic) OFMutableSet *cIncludes;
+@property (readonly, nonatomic) OFMutableSet OF_GENERIC(GIRInclude*) *dependencies;
+@property (readonly, nonatomic) OFMutableSet OF_GENERIC(GIRInclude*) *cIncludes;
 @property (readonly, nonatomic) OFSet *sharedLibraries;
+@property (copy, nonatomic) OFSet *excludeClasses;
 @property (copy, nonatomic) OFString *cNSIdentifierPrefix;
 @property (copy, nonatomic) OFString *cNSSymbolPrefix;
 @property (nonatomic) bool visited;
-@property (nonatomic) bool topmostGraphNode;
 
+@property (readonly, nonatomic) OFString *identifier;
 @property (readonly, nonatomic) OFString *versionMajor;
 @property (readonly, nonatomic) OFString *versionMinor;
 
@@ -66,7 +70,7 @@
  * @brief List of shared libraries, separated by comma
  */
 - (void)addSharedLibrariesAsString:(OFString *)sharedLibrariesString;
-- (void)addDependency:(OFString *)dependency;
-- (void)addCInclude:(OFString *)cInclude;
+- (void)addDependency:(GIRInclude *)dependency;
+- (void)addCInclude:(GIRInclude *)cInclude;
 
 @end

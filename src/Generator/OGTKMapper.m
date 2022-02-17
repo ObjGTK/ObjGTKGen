@@ -46,6 +46,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	self = [super init];
 
 	@try {
+		_girNameToLibraryMapping = [[OFMutableDictionary alloc] init];
 		_gobjTypeToClassMapping = [[OFMutableDictionary alloc] init];
 		_girNameToClassMapping = [[OFMutableDictionary alloc] init];
 		_objcTypeToClassMapping = [[OFMutableDictionary alloc] init];
@@ -59,6 +60,7 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (void)dealloc
 {
+	[_girNameToLibraryMapping release];
 	[_gobjTypeToClassMapping release];
 	[_girNameToClassMapping release];
 	[_objcTypeToClassMapping release];
@@ -387,6 +389,10 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		[stack setObject:@"1" forKey:classInfo.cParentType];
 		[self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
+	} else if (parentClassInfo == nil) {
+		//OFLog(@"Marked class %@ as topmost node. Parent cType is %@.",
+		//    classInfo.cName, classInfo.cParentType);
+		classInfo.topMostGraphNode = true;
 	}
 
 	// OFLog(@"Checking dependencies of %@.", classInfo.cType);
@@ -394,18 +400,12 @@ static OGTKMapper *sharedMyMapper = nil;
 	// time
 	for (OFString *dependencyGobjName in classInfo.dependsOnClasses) {
 
-		// Add a forward declaration if the dependency is within the
-		// stack - we're inside a circular dependency structure then
-		if ([stack objectForKey:dependencyGobjName] != nil &&
-		    ![classInfo.cParentType isEqual:dependencyGobjName]) {
+		// Add a forward declaration if the dependency is not the parent
+		// class - we don't need an "#import" then
+		if (![classInfo.cParentType isEqual:dependencyGobjName]) {
 
-			// OFLog(
-			//     @"Detected circular dependency %@, adding forward
-			//     declaration.", dependencyGobjName);
 			[classInfo
 			    addForwardDeclarationForClass:dependencyGobjName];
-
-			continue;
 		}
 
 		OGTKClass *dependencyClassInfo =
@@ -414,7 +414,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		if (dependencyClassInfo == nil)
 			continue;
 
-		// We got a dependency to follow, so we are eady to visit that
+		// We got a dependency to follow, so we are ready to visit that
 		// dependency and follow its dependencies
 		[stack setObject:@"1" forKey:dependencyGobjName];
 

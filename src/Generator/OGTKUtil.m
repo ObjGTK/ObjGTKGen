@@ -37,6 +37,7 @@
 @implementation OGTKUtil
 
 static OFMutableDictionary *dictGlobalConf;
+static OFMutableDictionary *dictLibraryConf;
 
 + (OFString *)convertUSSToCamelCase:(OFString *)input
 {
@@ -119,6 +120,17 @@ static OFMutableDictionary *dictGlobalConf;
 	}
 
 	return [dictGlobalConf objectForKey:key];
+}
+
++ (id)libraryConfigFor:(OFString *)libraryIdentifier
+{
+	if (dictLibraryConf == nil) {
+		dictLibraryConf = [[OFMutableDictionary alloc]
+		    ogtk_initWithJsonDictionaryOfFile:
+		        @"Config/library_conf.json"];
+	}
+
+	return [dictLibraryConf objectForKey:libraryIdentifier];
 }
 
 @end

@@ -26,16 +26,16 @@
  */
 
 #import "Gir2Objc.h"
-#include "Exceptions/OGTKDataProcessingNotImplementedException.h"
-#include "GIR/GIRNamespace.h"
-#include <ObjFW/OFInvalidArgumentException.h>
 
 #import "Generator/OGTKClassWriter.h"
-#import "Generator/OGTKLibrary.h"
-#import "Generator/OGTKMapper.h"
+#import "Generator/OGTKFileOperation.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
 
+#import "GIR/GIRInclude.h"
+
+#import "Exceptions/OGTKDataProcessingNotImplementedException.h"
+#import "Exceptions/OGTKIncorrectConfigException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Exceptions/OGTKNoGIRDictException.h"
 
@@ -83,7 +83,7 @@
 			return [[[GIRAPI alloc] initWithDictionary:value]
 			    autorelease];
 		} else if ([value isKindOfClass:[OFDictionary class]]) {
-			return [Gir2Objc firstAPIFromDictionary:value];
+			return [self firstAPIFromDictionary:value];
 		}
 	}
 
@@ -94,29 +94,28 @@
 {
 	OFDictionary *girDict = nil;
 
-	[Gir2Objc parseGirFromFile:girFile intoDictionary:&girDict];
+	[self parseGirFromFile:girFile intoDictionary:&girDict];
 
-	return [Gir2Objc firstAPIFromDictionary:girDict];
+	return [self firstAPIFromDictionary:girDict];
 }
 
-+ (void)generateClassFilesFromAPI:(GIRAPI *)api
++ (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
+                                 intoMapper:(OGTKMapper *)mapper
 {
 	OFArray *namespaces = api.namespaces;
 
 	if (api == nil || namespaces == nil)
 		@throw [OGTKNoGIRAPIException exception];
 
-	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
-
 	// Map library information from API
 	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
-	libraryInfo.version = api.version;
 	libraryInfo.packageName = api.package;
-	for (OFString *include in api.cInclude) {
+
+	for (GIRInclude *include in api.cInclude) {
 		[libraryInfo addCInclude:include];
 	}
 
-	for (OFString *dependency in api.include) {
+	for (GIRInclude *dependency in api.include) {
 		[libraryInfo addDependency:dependency];
 	}
 
@@ -131,21 +130,74 @@
 
 	// Map library information from namespace
 	libraryInfo.girName = ns.name;
+	libraryInfo.version = ns.version;
 	[libraryInfo addSharedLibrariesAsString:ns.sharedLibrary];
 	libraryInfo.cNSIdentifierPrefix = ns.cIdentifierPrefixes;
 	libraryInfo.cNSSymbolPrefix = ns.cSymbolPrefixes;
 
-	[sharedMapper addLibrary:libraryInfo];
+	OFString *libraryIdentifier = libraryInfo.identifier;
 
-	[Gir2Objc generateClassInfoFromNamespace:ns];
+	// Load additional configuration provided manually by config file
+	OFDictionary *libraryConfig =
+	    [OGTKUtil libraryConfigFor:libraryIdentifier];
 
-	OFMutableDictionary *classesDict =
-	    [sharedMapper objcTypeToClassMapping];
+	if ([libraryConfig valueForKey:@"customName"] != nil)
+		libraryInfo.name = [libraryConfig valueForKey:@"customName"];
 
-	[Gir2Objc writeClassFilesFromClassesDict:classesDict];
+	if ([libraryConfig valueForKey:@"excludeClasses"] != nil) {
+		OFArray *excludeClasses =
+		    [libraryConfig valueForKey:@"excludeClasses"];
+		libraryInfo.excludeClasses =
+		    [OFSet setWithArray:excludeClasses];
+	}
+
+	[mapper addLibrary:libraryInfo];
+
+	[self generateClassInfoFromNamespace:ns
+	                          forLibrary:libraryInfo
+	                          intoMapper:mapper];
+
+	return libraryInfo;
+}
+
++ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
+     readAdditionalSourcesFromDir:(OFString *)baseClassPath
+{
+	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
+
+	if (baseClassPath == nil || outputDir == nil)
+		@throw [OGTKIncorrectConfigException exception];
+
+	OFString *libraryOutputDir =
+	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
+	        stringByAppendingPathComponent:@"src"];
+
+	// Write the umbrella header file for the lib
+	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
+	                                                inDir:libraryOutputDir
+	                                      forLibraryNamed:libraryInfo.name
+	                         readAdditionalHeadersFromDir:baseClassPath];
+
+	OFLog(@"%@", @"Attempting to copy general base class files...");
+	[OGTKFileOperation
+	    copyFilesFromDir:[baseClassPath
+	                         stringByAppendingPathComponent:@"General"]
+	               toDir:libraryOutputDir];
+
+	OFLog(@"Attempting to copy base class files specific for library %@...",
+	    libraryInfo.name);
+	[OGTKFileOperation
+	    copyFilesFromDir:[baseClassPath
+	                         stringByAppendingPathComponent:libraryInfo
+	                                                            .name]
+	               toDir:libraryOutputDir];
 }
 
 + (void)generateClassInfoFromNamespace:(GIRNamespace *)ns
+                            forLibrary:(OGTKLibrary *)libraryInfo
+                            intoMapper:(OGTKMapper *)mapper
 {
 	if (ns == nil)
 		@throw [OGTKNoGIRAPIException exception];
@@ -154,33 +206,33 @@
 	OFLog(@"C symbol prefix: %@", ns.cSymbolPrefixes);
 	OFLog(@"C identifier prefix: %@", ns.cIdentifierPrefixes);
 
-	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
-
 	for (GIRClass *girClass in ns.classes) {
-		@autoreleasepool {
-			OGTKClass *objCClass =
-			    [[[OGTKClass alloc] init] autorelease];
+		void *pool = objc_autoreleasePoolPush();
 
-			[Gir2Objc mapGIRClass:girClass
-			          toObjCClass:objCClass
-			       usingNamespace:ns];
+		if ([libraryInfo.excludeClasses containsObject:girClass.name])
+			continue;
 
-			@try {
-				[sharedMapper addClass:objCClass];
-			} @catch (id e) {
-				OFLog(@"Warning: Cannot add type %@ to mapper. "
-				      @"Exception %@, description: %@"
-				      @"Class definition may be incorrect. "
-				      @"Skipping…",
-				    objCClass.cName, [e class],
-				    [e description]);
-				[sharedMapper removeClass:objCClass];
-			}
+		OGTKClass *objCClass = [[[OGTKClass alloc] init] autorelease];
+
+		[self mapGIRClass:girClass
+		       toObjCClass:objCClass
+		    usingNamespace:ns];
+
+		@try {
+			[mapper addClass:objCClass];
+		} @catch (id e) {
+			OFLog(@"Warning: Cannot add type %@ to mapper. "
+			      @"Exception %@, description: %@"
+			      @"Class definition may be incorrect. "
+			      @"Skipping…",
+			    objCClass.cName, [e class], [e description]);
+			[mapper removeClass:objCClass];
 		}
+		objc_autoreleasePoolPop(pool);
 	}
 
 	// Set correct class names for parent classes
-	OFMutableDictionary *classesDict = sharedMapper.objcTypeToClassMapping;
+	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
 	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
 
 	for (OFString *className in classesDict) {
@@ -203,35 +255,36 @@
 	}
 
 	for (OGTKClass *currentClass in classesToRemove)
-		[sharedMapper removeClass:currentClass];
+		[mapper removeClass:currentClass];
 	[classesToRemove release];
 
 	// Calculate dependencies for each class
-	[sharedMapper determineDependencies];
+	[mapper determineDependencies];
 
 	// Set flags for fast necessary forward class definitions.
-	[sharedMapper detectAndMarkCircularDependencies];
-
-	// Informations is collected
+	[mapper detectAndMarkCircularDependencies];
 }
 
-+ (void)writeClassFilesFromClassesDict:(OFMutableDictionary *)classesDict
+/**
+ * Currently just writes all the classes - this has to be changed on
+ * multi-library support.
+ */
++ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
 {
-	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
-	OFString *baseClassPath =
-	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
+	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
 
-	// Write the umbrella header file for the lib
-	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
-	                                                inDir:outputDir
-	                                      forLibraryNamed:@"ObjGTK"
-	                         readAdditionalHeadersFromDir:baseClassPath];
+	OFString *libraryOutputDir =
+	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
+	        stringByAppendingPathComponent:@"src"];
 
 	// Write the classes
 	for (OFString *className in classesDict) {
 		[OGTKClassWriter
 		    generateFilesForClass:[classesDict objectForKey:className]
-		                    inDir:outputDir];
+		                    inDir:libraryOutputDir
+		               forLibrary:libraryInfo];
 	}
 }
 
@@ -264,19 +317,19 @@
 	[objCClass setCNSSymbolPrefix:ns.cSymbolPrefixes];
 
 	// Set constructors
-	[Gir2Objc addMappedGIRMethods:girClass.constructors
-	                  toObjCClass:objCClass
-	                usingSelector:@selector(addConstructor:)];
+	[self addMappedGIRMethods:girClass.constructors
+	              toObjCClass:objCClass
+	            usingSelector:@selector(addConstructor:)];
 
 	// Set functions
-	[Gir2Objc addMappedGIRMethods:girClass.functions
-	                  toObjCClass:objCClass
-	                usingSelector:@selector(addFunction:)];
+	[self addMappedGIRMethods:girClass.functions
+	              toObjCClass:objCClass
+	            usingSelector:@selector(addFunction:)];
 
 	// Set methods
-	[Gir2Objc addMappedGIRMethods:girClass.methods
-	                  toObjCClass:objCClass
-	                usingSelector:@selector(addMethod:)];
+	[self addMappedGIRMethods:girClass.methods
+	              toObjCClass:objCClass
+	            usingSelector:@selector(addMethod:)];
 }
 
 + (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(

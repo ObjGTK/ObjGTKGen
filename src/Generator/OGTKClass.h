@@ -47,6 +47,7 @@
 	OFMutableSet *_dependsOnClasses;
 	OFMutableSet *_forwardDeclarationForClasses;
 	bool _visited;
+	bool _topMostGraphNode;
 
       @private
 	OFString *_typeWithoutPrefix;
@@ -69,7 +70,8 @@
 @property (readonly, nonatomic) bool hasMethods;
 @property (readonly, nonatomic) OFMutableSet *dependsOnClasses;
 @property (readonly, nonatomic) OFMutableSet *forwardDeclarationForClasses;
-@property (nonatomic) bool visited;
+@property bool visited;
+@property bool topMostGraphNode;
 
 - (void)addConstructor:(OGTKMethod *)ctor;
 - (void)addFunction:(OGTKMethod *)fun;

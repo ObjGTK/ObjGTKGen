@@ -7,13 +7,13 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#import "OGTKGObjectInitializationFailedException.h"
+#import "OGObjectInitializationFailedException.h"
 
-@implementation OGTKGObjectInitializationFailedException
+@implementation OGObjectInitializationFailedException
 
 - (OFString *)description
 {
-	if (_inClass != Nil)
+	if (_inClass != nil)
 		return [OFString
 		    stringWithFormat:
 		        @"Initialization of GObject instance (or a child "

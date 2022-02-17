@@ -32,7 +32,7 @@
 
 @implementation GIRPrerequisite
 
-@synthesize name;
+@synthesize name = _name;
 
 - (instancetype)init
 {

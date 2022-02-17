@@ -11,7 +11,7 @@
 
 OF_ASSUME_NONNULL_BEGIN
 
-@interface OGTKGObjectInitializationFailedException
+@interface OGObjectInitializationFailedException
     : OFInitializationFailedException
 
 - (OFString *)description;

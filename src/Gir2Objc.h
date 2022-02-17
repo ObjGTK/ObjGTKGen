@@ -29,6 +29,8 @@
 
 #import "GIR/GIRAPI.h"
 #import "GIR/GIRNamespace.h"
+#import "Generator/OGTKLibrary.h"
+#import "Generator/OGTKMapper.h"
 
 /**
  * Provides functionality to convert GObject Introspection GIR files into ObjGTK
@@ -56,19 +58,23 @@
  */
 + (GIRAPI *)firstAPIFromGirFile:(OFString *)girFile;
 
-/**
- * Generates ObjGTK source from the GIR API level
- */
-+ (void)generateClassFilesFromAPI:(GIRAPI *)api;
++ (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
+                                 intoMapper:(OGTKMapper *)mapper;
+
++ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
+     readAdditionalSourcesFromDir:(OFString *)baseClassPath;
 
 /**
  * Generates class information from the GIR Namespace level
  */
-+ (void)generateClassInfoFromNamespace:(GIRNamespace *)ns;
++ (void)generateClassInfoFromNamespace:(GIRNamespace *)ns
+                            forLibrary:(OGTKLibrary *)libraryInfo
+                            intoMapper:(OGTKMapper *)mapper;
 
-/**
- * @brief Writes out the class information from the given dict
- */
-+ (void)writeClassFilesFromClassesDict:(OFMutableDictionary *)classesDict;
++ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper;
 
 @end

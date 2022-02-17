@@ -39,7 +39,7 @@
             documentation = _documentation,
             dependsOnClasses = _dependsOnClasses,
             forwardDeclarationForClasses = _forwardDeclarationForClasses,
-            visited = _visited;
+            visited = _visited, topMostGraphNode = _topMostGraphNode;
 
 - (instancetype)init
 {
@@ -52,6 +52,7 @@
 		_dependsOnClasses = [[OFMutableSet alloc] init];
 		_forwardDeclarationForClasses = [[OFMutableSet alloc] init];
 		_visited = false;
+		_topMostGraphNode = false;
 	} @catch (id e) {
 		[self release];
 		@throw e;

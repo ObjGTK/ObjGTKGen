@@ -32,7 +32,9 @@
 
 @implementation OGTKClassWriter
 
-+ (void)generateFilesForClass:(OGTKClass *)cgtkClass inDir:(OFString *)outputDir
++ (void)generateFilesForClass:(OGTKClass *)cgtkClass
+                        inDir:(OFString *)outputDir
+                   forLibrary:(OGTKLibrary *)library
 {
 	OFFileManager *fileManager = [OFFileManager defaultManager];
 	if (![fileManager directoryExistsAtPath:outputDir]) {
@@ -45,7 +47,7 @@
 		OFString *hFilename =
 		    [[outputDir stringByAppendingPathComponent:[cgtkClass type]]
 		        stringByAppendingString:@".h"];
-		[[OGTKClassWriter headerStringFor:cgtkClass]
+		[[OGTKClassWriter headerStringFor:cgtkClass library:library]
 		    writeToFile:hFilename];
 
 		// Source
@@ -63,6 +65,7 @@
 }
 
 + (OFString *)headerStringFor:(OGTKClass *)cgtkClass
+                      library:(OGTKLibrary *)library
 {
 	OFMutableString *output = [[OFMutableString alloc] init];
 
@@ -73,6 +76,15 @@
 	                                               [cgtkClass type]]]];
 
 	[output appendString:@"\n"];
+
+	// Library dependencies in case we have a class that is at the top of
+	// the class dependency graph
+	if (cgtkClass.topMostGraphNode) {
+		for(GIRInclude *cInclude in library.cIncludes) {
+			[output appendFormat:@"#include <%@>\n", cInclude.name];
+		}
+		[output appendString:@"\n"];
+	}
 
 	// Imports/Dependencies
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
@@ -337,28 +349,30 @@
 	if (additionalHeaderDir != nil) {
 		[output appendString:@"// Manually written classes\n"];
 
-		OFFileManager *fileMgr = [OFFileManager defaultManager];
+		[OGTKClassWriter
+		    addImportsForHeaderFilesInDir:
+		        [additionalHeaderDir
+		            stringByAppendingPathComponent:@"General"]
+		                         toString:output];
 
-		OFArray *srcDirContents =
-		    [fileMgr contentsOfDirectoryAtPath:additionalHeaderDir];
-
-		for (OFString *srcFile in srcDirContents) {
-			OFString *additionalFile = [srcFile lastPathComponent];
-			if ([additionalFile containsString:@".h"]) {
-				// Include OGTK headers only for ObjGTK
-				if ([additionalFile containsString:@"GTK"] &&
-				    ![libName isEqual:@"ObjGTK"])
-					continue;
-
-				[output appendFormat:@"#import \"%@\"\n",
-				        additionalFile];
-			}
+		@try {
+			[OGTKClassWriter
+			    addImportsForHeaderFilesInDir:
+			        [additionalHeaderDir
+			            stringByAppendingPathComponent:libName]
+			                         toString:output];
+		} @catch (OFReadFailedException *e) {
+			OFLog(@"No additional base classes dir for library %@, "
+			      @"importing only general and generated header "
+			      @"files.",
+			    libName);
 		}
 
 		[output appendString:@"\n"];
 	}
 
 	[output appendString:@"// Generated classes\n"];
+	// TODO Filter headers for only this library here
 	for (OFString *objCClassName in objCClassesDict) {
 		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
 	}
@@ -367,6 +381,28 @@
 	    [outputDir stringByAppendingPathComponent:fileName];
 
 	[output writeToFile:hFilePath];
+}
+
++ (void)addImportsForHeaderFilesInDir:(OFString *)dirPath
+                             toString:(OFMutableString *)string
+{
+	OFFileManager *fileMgr = [OFFileManager defaultManager];
+
+	if (![fileMgr directoryExistsAtPath:dirPath]) {
+		@throw [OFReadFailedException exceptionWithObject:dirPath
+		                                  requestedLength:0
+		                                            errNo:0];
+	}
+
+	OFArray *srcDirContents = [fileMgr contentsOfDirectoryAtPath:dirPath];
+
+	for (OFString *srcFile in srcDirContents) {
+		OFString *additionalFile = [srcFile lastPathComponent];
+		if ([additionalFile containsString:@".h"]) {
+			[string
+			    appendFormat:@"#import \"%@\"\n", additionalFile];
+		}
+	}
 }
 
 + (OFString *)generateCParameterListString:(OFArray *)params
@@ -390,7 +426,6 @@
 + (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
                                              andParams:(OFArray *)params
 {
-	int i;
 	OFMutableString *paramsOutput = [OFMutableString string];
 
 	[paramsOutput
@@ -402,6 +437,7 @@
 		OGTKParameter *p;
 
 		// Start at index 1
+		size_t i;
 		for (i = 0; i < [params count]; i++) {
 			p = [params objectAtIndex:i];
 			[paramsOutput

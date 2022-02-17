@@ -10,6 +10,7 @@
 #import "XMLReader.h"
 
 OFString *const kXMLReaderTextNodeKey = @"text";
+OFString *const kXMLNSGtkCore = @"http://www.gtk.org/introspection/core/1.0";
 OFString *const kXMLNSForPrefixC = @"http://www.gtk.org/introspection/c/1.0";
 OFString *const kXMLNSForPrefixXml = @"http://www.w3.org/XML/1998/namespace";
 OFString *const kXMLNSForPrefixGlib =
@@ -76,6 +77,10 @@ OFString *const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
           namespace:(OFString *)namespace
          attributes:(OFArray *)attributes
 {
+	// Restore elementName containing the namespace prefix
+	elementName = [self reAddPrefixToElement:elementName
+	                               namespace:namespace];
+
 	// Get the dictionary for the current level in the stack
 	OFMutableDictionary *parentDict = [_dictionaryStack lastObject];
 
@@ -144,6 +149,25 @@ OFString *const kXMLNSForPrefixXmlns = @"http://www.w3.org/2000/xmlns/";
 	}
 
 	return attributeName;
+}
+
+- (OFString *)reAddPrefixToElement:(OFString *)elementName
+                         namespace:(OFString *)namespace
+{
+	if (namespace == nil || [namespace isEqual:kXMLNSGtkCore])
+		return elementName;
+
+	if ([namespace isEqual:kXMLNSForPrefixC])
+		elementName = [OFString stringWithFormat:@"c:%@", elementName];
+	else if ([namespace isEqual:kXMLNSForPrefixGlib])
+		elementName =
+		    [OFString stringWithFormat:@"glib:%@", elementName];
+	else {
+		OFLog(@"Unknown namespace %@ for element %@", namespace,
+		    elementName);
+	}
+
+	return elementName;
 }
 
 - (void)parser:(OFXMLParser *)parser
