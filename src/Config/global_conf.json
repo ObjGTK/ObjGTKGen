@@ -4,5 +4,5 @@
   "baseClassDir": "BaseClasses",
   "buildTemplateDir": "Resources/BuildTemplate",
   "templateSnippetsDir": "Resources/TemplateSnippets",
-  "excludeLibraries": ["GObject", "Gio", "libxml2"]
+  "excludeLibraries": ["GObject", "Gio", "libxml2", "xlib"]
 }
