@@ -231,8 +231,12 @@ static OGTKMapper *sharedMyMapper = nil;
 		    stringWithFormat:@"[OFString stringWithUTF8String:%@]",
 		    name];
 	} else if ([fromType isEqual:@"OFString*"] &&
-	    ([toType isEqual:@"gchar*"] || [toType isEqual:@"const gchar*"])) {
+	    [toType isEqual:@"const gchar*"]) {
 		return [OFString stringWithFormat:@"[%@ UTF8String]", name];
+	} else if ([fromType isEqual:@"OFString*"] &&
+	    [toType isEqual:@"gchar*"]) {
+		return [OFString
+		    stringWithFormat:@"(gchar*) [%@ UTF8String]", name];
 	}
 
 	// Then try to return generic Gobj type conversion
@@ -390,8 +394,9 @@ static OGTKMapper *sharedMyMapper = nil;
 		[stack setObject:@"1" forKey:classInfo.cParentType];
 		[self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
 	} else if (parentClassInfo == nil) {
-		//OFLog(@"Marked class %@ as topmost node. Parent cType is %@.",
-		//    classInfo.cName, classInfo.cParentType);
+		// OFLog(@"Marked class %@ as topmost node. Parent cType is
+		// %@.",
+		//     classInfo.cName, classInfo.cParentType);
 		classInfo.topMostGraphNode = true;
 	}
 

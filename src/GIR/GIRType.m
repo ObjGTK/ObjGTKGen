@@ -49,6 +49,10 @@
 		if ([key isEqual:@"text"] || [key isEqual:@"type"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:type"]) {
+			// Fix if GIR file provides internal type names starting with _
+			if([value characterAtIndex:0] == '_')
+				value = [value substringFromIndex:1];
+
 			self.cType = value;
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
