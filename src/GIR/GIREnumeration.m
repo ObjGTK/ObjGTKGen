@@ -60,7 +60,8 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
+		if ([key isEqual:@"text"] || [key isEqual:@"source-position"] ||
+		    [key isEqual:@"glib:type-name"] ||
 		    [key isEqual:@"glib:get-type"] ||
 		    [key isEqual:@"glib:error-domain"]) {
 			// Do nothing

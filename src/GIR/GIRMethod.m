@@ -32,6 +32,8 @@
 @synthesize name = _name;
 @synthesize cIdentifier = _cIdentifier;
 @synthesize version = _version;
+@synthesize glibGetForProperty = _glibGetForProperty;
+@synthesize glibSetForProperty = _glibSetForProperty;
 @synthesize returnValue = _returnValue;
 @synthesize doc = _doc;
 @synthesize docDeprecated = _docDeprecated;
@@ -82,6 +84,10 @@
 		self.cIdentifier = value;
 	} else if ([key isEqual:@"version"]) {
 		self.version = value;
+	} else if ([key isEqual:@"glib:get-property"]) {
+		self.glibGetForProperty = value;
+	} else if ([key isEqual:@"glib:set-property"]) {
+		self.glibSetForProperty = value;
 	} else if ([key isEqual:@"return-value"]) {
 		self.returnValue = [[[GIRReturnValue alloc]
 		    initWithDictionary:value] autorelease];

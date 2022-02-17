@@ -39,6 +39,8 @@
 	OFString *_cIdentifier;
 	OFString *_version;
 	OFString *_invoker;
+	OFString *_glibGetForProperty;
+	OFString *_glibSetForProperty;
 	GIRReturnValue *_returnValue;
 	GIRDoc *_doc;
 	GIRDoc *_docDeprecated;
@@ -55,11 +57,13 @@
 @property (nonatomic, copy) OFString *name;
 @property (nonatomic, copy) OFString *cIdentifier;
 @property (nonatomic, copy) OFString *version;
+@property (nonatomic, copy) OFString *invoker;
+@property (nonatomic, copy) OFString *glibGetForProperty;
+@property (nonatomic, copy) OFString *glibSetForProperty;
 @property (nonatomic, retain) GIRReturnValue *returnValue;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) GIRDoc *docDeprecated;
 @property (nonatomic, copy) OFString *deprecatedVersion;
-@property (nonatomic, copy) OFString *invoker;
 @property (nonatomic) bool deprecated;
 @property (nonatomic) bool throws;
 @property (nonatomic) bool introspectable;

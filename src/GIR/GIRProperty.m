@@ -45,6 +45,8 @@
 @synthesize deprecated = _deprecated;
 @synthesize construct = _construct;
 @synthesize writable = _writable;
+@synthesize getter = _getter;
+@synthesize setter = _setter;
 @synthesize array = _array;
 
 - (instancetype)init
@@ -92,6 +94,10 @@
 			self.construct = value;
 		} else if ([key isEqual:@"writable"]) {
 			self.writable = value;
+		} else if ([key isEqual:@"getter"]) {
+			self.getter = value;
+		} else if ([key isEqual:@"setter"]) {
+			self.setter = value;
 		} else if ([key isEqual:@"array"]) {
 			self.array = [[[GIRArray alloc]
 			    initWithDictionary:value] autorelease];

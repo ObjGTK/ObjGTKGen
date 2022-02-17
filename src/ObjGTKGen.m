@@ -55,7 +55,6 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	}
 
 	OFString *girFile = [app.arguments firstObject];
-
 	girFile = [girDir stringByAppendingPathComponent:girFile];
 
 	OFLog(@"%@", @"Attempting to parse GIR file...");

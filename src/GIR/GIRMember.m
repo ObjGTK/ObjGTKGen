@@ -48,7 +48,8 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"glib:nick"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"glib:nick"] ||
+		    [key isEqual:@"glib:name"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:identifier"]) {
 			self.cIdentifier = value;

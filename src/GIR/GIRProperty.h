@@ -47,13 +47,15 @@
 	bool _deprecated;
 	OFString *_construct;
 	OFString *_writable;
+	OFString *_setter;
+	OFString *_getter;
 	GIRArray *_array;
 }
 
-@property (nonatomic, retain) OFString *name;
-@property (nonatomic, retain) OFString *transferOwnership;
-@property (nonatomic, retain) OFString *version;
-@property (nonatomic, retain) OFString *deprecatedVersion;
+@property (nonatomic, copy) OFString *name;
+@property (nonatomic, copy) OFString *transferOwnership;
+@property (nonatomic, copy) OFString *version;
+@property (nonatomic, copy) OFString *deprecatedVersion;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) GIRDoc *docDeprecated;
 @property (nonatomic, retain) GIRType *type;
@@ -61,8 +63,10 @@
 @property (nonatomic) bool constructOnly;
 @property (nonatomic) bool readable;
 @property (nonatomic) bool deprecated;
-@property (nonatomic, retain) OFString *construct;
-@property (nonatomic, retain) OFString *writable;
+@property (nonatomic, copy) OFString *construct;
+@property (nonatomic, copy) OFString *writable;
+@property (nonatomic, copy) OFString *getter;
+@property (nonatomic, copy) OFString *setter;
 @property (nonatomic, retain) GIRArray *array;
 
 @end
