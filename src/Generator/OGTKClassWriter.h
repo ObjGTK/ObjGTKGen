@@ -31,9 +31,9 @@
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKClass.h"
+#import "OGTKLibrary.h"
 #import "OGTKMapper.h"
 #import "OGTKUtil.h"
-#import "OGTKLibrary.h"
 
 /**
  * Functions to write in memory Class representation to file as ObjGTK source
@@ -66,7 +66,7 @@
 + (void)generateUmbrellaHeaderFileForClasses:
             (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
                                        inDir:(OFString *)outputDir
-                             forLibraryNamed:(OFString *)libName
+                                  forLibrary:(OGTKLibrary *)libraryInfo
                 readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
 
 /**

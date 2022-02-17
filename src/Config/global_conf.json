@@ -3,5 +3,6 @@
   "girDir": "/usr/share/gir-1.0",
   "baseClassDir": "BaseClasses",
   "buildTemplateDir": "Resources/BuildTemplate",
-  "templateSnippetsDir": "Resources/TemplateSnippets"
+  "templateSnippetsDir": "Resources/TemplateSnippets",
+  "excludeLibraries": ["GObject", "Gio", "libxml2"]
 }

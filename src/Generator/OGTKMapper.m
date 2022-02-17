@@ -121,6 +121,34 @@ static OGTKMapper *sharedMyMapper = nil;
 	            objectForKey:[self stripAsterisks:type]] != nil);
 }
 
+- (void)determineParentClassNames
+{
+	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
+
+	for (OFString *className in _objcTypeToClassMapping) {
+		OGTKClass *currentClass = [_objcTypeToClassMapping objectForKey:className];
+
+		if (currentClass.cParentType == nil) {
+			@try {
+				OFString *cParentType = [OGTKMapper
+				    getCTypeFromName:currentClass.parentName];
+
+				[currentClass setCParentType:cParentType];
+			} @catch (id e) {
+				OFLog(@"Could not get c type for parent of %@, "
+				      @"exception %@. "
+				      @"Skipping…",
+				    currentClass.cName, [e class]);
+				[classesToRemove addObject:currentClass];
+			}
+		}
+	}
+
+	for (OGTKClass *currentClass in classesToRemove)
+		[self removeClass:currentClass];
+	[classesToRemove release];
+}
+
 - (void)determineDependencies
 {
 	for (OFString *className in _objcTypeToClassMapping) {
@@ -294,9 +322,9 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	// Some shortcut definitions from libraries we do not want to add as
 	// dependencies
-	if ([name isEqual:@"Atk.Object"])
-		return @"AtkObject";
-	else if ([name isEqual:@"Gio.Application"])
+	// if ([name isEqual:@"Atk.Object"])
+	// 	return @"AtkObject";
+	if ([name isEqual:@"Gio.Application"])
 		return @"GApplication";
 	else if ([name isEqual:@"GObject.InitiallyUnowned"])
 		return @"GInitiallyUnowned";
@@ -311,7 +339,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		    objectForKey:[nameParts objectAtIndex:1]];
 
 		if (classInfo != nil &&
-		    [classInfo.cNSIdentifierPrefix
+		    [classInfo.namespace
 		        isEqual:[nameParts objectAtIndex:0]])
 			return classInfo.cType;
 	}

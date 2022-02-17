@@ -177,7 +177,7 @@
 	// Write the umbrella header file for the lib
 	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
 	                                                inDir:libraryOutputDir
-	                                      forLibraryNamed:libraryInfo.name
+	                                           forLibrary:libraryInfo
 	                         readAdditionalHeadersFromDir:baseClassPath];
 
 	OFLog(@"%@", @"Attempting to copy general base class files...");
@@ -230,33 +230,6 @@
 		}
 		objc_autoreleasePoolPop(pool);
 	}
-
-	// Set correct class names for parent classes
-	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
-	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
-
-	for (OFString *className in classesDict) {
-		OGTKClass *currentClass = [classesDict objectForKey:className];
-
-		if (currentClass.cParentType == nil) {
-			@try {
-				OFString *cParentType = [OGTKMapper
-				    getCTypeFromName:currentClass.parentName];
-
-				[currentClass setCParentType:cParentType];
-			} @catch (id e) {
-				OFLog(@"Could not get c type for parent of %@, "
-				      @"exception %@. "
-				      @"Skipping…",
-				    currentClass.cName, [e class]);
-				[classesToRemove addObject:currentClass];
-			}
-		}
-	}
-
-	for (OGTKClass *currentClass in classesToRemove)
-		[mapper removeClass:currentClass];
-	[classesToRemove release];
 }
 
 + (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo

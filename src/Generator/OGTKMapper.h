@@ -98,6 +98,15 @@
 - (void)removeClass:(OGTKClass *)classInfo;
 
 /**
+ * @brief Iterates through all the class information objects retained
+ * and tries to look up C types of parent classes from the other objects
+ *
+ * For this method to work all the class information objects need to be filled
+ * with correct data.
+ */
+- (void)determineParentClassNames;
+
+/**
  * @brief Iterates through all the class information objects retained in the
  * dict and looks for class dependencies
  * @details Dependencies are stored as Gobj types as well and should be

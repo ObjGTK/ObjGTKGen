@@ -80,7 +80,7 @@
 	// Library dependencies in case we have a class that is at the top of
 	// the class dependency graph
 	if (cgtkClass.topMostGraphNode) {
-		for(GIRInclude *cInclude in library.cIncludes) {
+		for (GIRInclude *cInclude in library.cIncludes) {
 			[output appendFormat:@"#include <%@>\n", cInclude.name];
 		}
 		[output appendString:@"\n"];
@@ -335,12 +335,14 @@
 + (void)generateUmbrellaHeaderFileForClasses:
             (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
                                        inDir:(OFString *)outputDir
-                             forLibraryNamed:(OFString *)libName
+                                  forLibrary:(OGTKLibrary *)libraryInfo
                 readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir
 {
+	OFString *libName = libraryInfo.name;
 	OFMutableString *output = [OFMutableString string];
 
-	OFString *fileName = [OFString stringWithFormat:@"%@-Umbrella.h", libName];
+	OFString *fileName =
+	    [OFString stringWithFormat:@"%@-Umbrella.h", libName];
 	OFString *license = [OGTKClassWriter generateLicense:fileName];
 	[output appendString:license];
 
@@ -372,9 +374,13 @@
 	}
 
 	[output appendString:@"// Generated classes\n"];
-	// TODO Filter headers for only this library here
+
 	for (OFString *objCClassName in objCClassesDict) {
-		[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
+		OGTKClass *classInfo =
+		    [objCClassesDict objectForKey:objCClassName];
+		if ([libraryInfo.namespace isEqual:classInfo.namespace])
+			[output
+			    appendFormat:@"#import \"%@.h\"\n", objCClassName];
 	}
 
 	OFString *hFilePath =

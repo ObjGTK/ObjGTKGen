@@ -54,24 +54,43 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 		[app terminate];
 	}
 
-	OFString *girFile = [app.arguments firstObject];
-	girFile = [girDir stringByAppendingPathComponent:girFile];
-
-	OFLog(@"%@", @"Attempting to parse GIR file...");
-	GIRAPI *api = [Gir2Objc firstAPIFromGirFile:girFile];
-
-	if (api == nil)
-		@throw [OGTKNoGIRAPIException exception];
-
-	OFLog(@"%@", @"Attempting to generate library classes...");
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 	OFString *baseClassPath =
 	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
+	OFArray *excludeLibraries =
+	    [OGTKUtil globalConfigValueFor:@"excludeLibraries"];
 
-	// Parse library information
-	OGTKLibrary *libraryInfo =
-	    [Gir2Objc generateLibraryInfoFromAPI:api intoMapper:sharedMapper];
+	// Load and parse base API from GIR file
+	OFString *girFile = [app.arguments firstObject];
+	girFile = [girDir stringByAppendingPathComponent:girFile];
+
+	OGTKLibrary *baseLibraryInfo = [self loadAPIFromFile:girFile
+	                                          intoMapper:sharedMapper];
+
+	// Load GIR files of depending libraries
+	OFMutableSet *dependencies = baseLibraryInfo.dependencies;
+	for (GIRInclude *dependency in dependencies) {
+		
+		bool continueLoop = false;
+		for(OFString *excludeLib in excludeLibraries) {
+			if([excludeLib isEqual:dependency.name])
+				continueLoop = true;
+		}
+		if(continueLoop)
+			continue;
+
+		OFString *depGirFile =
+		    [OFString stringWithFormat:@"%@-%@.gir", dependency.name,
+		              dependency.version];
+		depGirFile = [girDir stringByAppendingPathComponent:depGirFile];
+
+		[self loadAPIFromFile:depGirFile intoMapper:sharedMapper];
+
+	}
+
+	// Try to get parent class names for each class
+	[sharedMapper determineParentClassNames];
 
 	// Calculate dependencies for each class
 	[sharedMapper determineDependencies];
@@ -79,16 +98,52 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	// Set flags for fast necessary forward class definitions.
 	[sharedMapper detectAndMarkCircularDependencies];
 
+	OFMutableDictionary *libraries = sharedMapper.girNameToLibraryMapping;
+
+	for (OFString *namespace in libraries) {
+		OGTKLibrary *library = [libraries objectForKey:namespace];
+
+		[self writeAndCopyLibraryFilesFor:library
+		                          fromDir:baseClassPath
+		                            toDir:outputDir
+		                      usingMapper:sharedMapper];
+	}
+
+	OFLog(@"%@", @"Process complete");
+	[app terminate];
+}
+
+- (OGTKLibrary *)loadAPIFromFile:(OFString *)girFile
+                      intoMapper:(OGTKMapper *)mapper
+{
+	OFLog(@"Attempting to parse GIR file %@.", girFile);
+	GIRAPI *api = [Gir2Objc firstAPIFromGirFile:girFile];
+
+	if (api == nil)
+		@throw [OGTKNoGIRAPIException exception];
+
+	OFLog(@"%@", @"Attempting to parse library class information...");
+	OGTKLibrary *libraryInfo = [Gir2Objc generateLibraryInfoFromAPI:api
+	                                                     intoMapper:mapper];
+
+	return libraryInfo;
+}
+
+- (void)writeAndCopyLibraryFilesFor:(OGTKLibrary *)libraryInfo
+                            fromDir:(OFString *)baseClassPath
+                              toDir:(OFString *)outputDir
+                        usingMapper:(OGTKMapper *)mapper
+{
 	// Write out classes definition
 	[Gir2Objc writeClassFilesForLibrary:libraryInfo
 	                              toDir:outputDir
-	      getClassDefinitionsFromMapper:sharedMapper];
+	      getClassDefinitionsFromMapper:mapper];
 
 	// Write and copy additional files to complete the source and headers
 	// files for that library
 	[Gir2Objc writeLibraryAdditionsFor:libraryInfo
 	                             toDir:outputDir
-	     getClassDefinitionsFromMapper:sharedMapper
+	     getClassDefinitionsFromMapper:mapper
 	      readAdditionalSourcesFromDir:baseClassPath];
 
 	// Prepare and copy build files
@@ -111,10 +166,6 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	      applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
 	                   usingReplaceDict:replaceDict
 	                    usingRenameDict:renameDict];
-
-	OFLog(@"%@", @"Process complete");
-
-	[app terminate];
 }
 
 @end
