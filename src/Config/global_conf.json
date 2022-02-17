@@ -1,6 +1,6 @@
 {
   "outputDir": "Output",
-  "girFile": "/usr/share/gir-1.0/Gtk-3.0.gir",
+  "girDir": "/usr/share/gir-1.0",
   "baseClassDir": "BaseClasses",
   "buildTemplateDir": "Resources/BuildTemplate",
   "templateSnippetsDir": "Resources/TemplateSnippets"

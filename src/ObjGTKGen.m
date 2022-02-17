@@ -43,7 +43,20 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 - (void)applicationDidFinishLaunching
 {
-	OFString *girFile = [OGTKUtil globalConfigValueFor:@"girFile"];
+	OFString *girDir = [OGTKUtil globalConfigValueFor:@"girDir"];
+
+	OFApplication *app = [OFApplication sharedApplication];
+	if (app.arguments.count < 1 || app.arguments.firstObject.length == 0) {
+		OFLog(@"Missing argument!\n"
+		      @"Usage: %@ <girName>\n"
+		      @"Directory configured to look for gir files is: %@\n",
+		    app.programName, girDir);
+		[app terminate];
+	}
+
+	OFString *girFile = [app.arguments firstObject];
+
+	girFile = [girDir stringByAppendingPathComponent:girFile];
 
 	OFLog(@"%@", @"Attempting to parse GIR file...");
 	GIRAPI *api = [Gir2Objc firstAPIFromGirFile:girFile];
@@ -96,7 +109,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 	OFLog(@"%@", @"Process complete");
 
-	[OFApplication terminate];
+	[app terminate];
 }
 
 @end
