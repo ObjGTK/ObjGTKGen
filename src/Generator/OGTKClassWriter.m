@@ -77,15 +77,6 @@
 
 	[output appendString:@"\n"];
 
-	// Library dependencies in case we have a class that is at the top of
-	// the class dependency graph
-	if (cgtkClass.topMostGraphNode) {
-		for (GIRInclude *cInclude in library.cIncludes) {
-			[output appendFormat:@"#include <%@>\n", cInclude.name];
-		}
-		[output appendString:@"\n"];
-	}
-
 	// Imports/Dependencies
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
 
@@ -98,6 +89,15 @@
 			    appendString:[self importForDependency:dependency
 			                                   ofClass:cgtkClass]];
 		}
+	}
+
+	// Library dependencies in case we have a class that is at the top of
+	// the class dependency graph
+	if (cgtkClass.topMostGraphNode) {
+		for (GIRInclude *cInclude in library.cIncludes) {
+			[output appendFormat:@"#include <%@>\n", cInclude.name];
+		}
+		[output appendString:@"\n"];
 	}
 
 	[output appendString:@"\n"];
@@ -360,6 +360,11 @@
 		// the correct header directive
 		OGTKLibrary *libraryInfo = [OGTKMapper
 		    libraryInfoByNamespace:dependencyClassInfo.namespace];
+
+		// Make sure we include the libs own header, because the parent
+		// class will introduce headers of its library. Otherwise we
+		// may get undefined symbols for this class
+		classInfo.topMostGraphNode = true;
 
 		result = [OFString stringWithFormat:@"#import <%@/%@.h>\n",
 		                   libraryInfo.name,
