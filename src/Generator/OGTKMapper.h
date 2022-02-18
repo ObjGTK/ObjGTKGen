@@ -205,6 +205,10 @@
  */
 - (OFString *)getCTypeFromName:(OFString *)name;
 
+- (OGTKClass *)classInfoByGobjType:(OFString *)gobjType;
+
+- (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace;
+
 /**
  * @brief Return is ```type``` is known by the Gobj type dict
  *
@@ -256,5 +260,9 @@
  * @see -getCTypeFromName:
  */
 + (OFString *)getCTypeFromName:(OFString *)name;
+
++ (OGTKClass *)classInfoByGobjType:(OFString *)gobjType;
+
++ (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace;
 
 @end

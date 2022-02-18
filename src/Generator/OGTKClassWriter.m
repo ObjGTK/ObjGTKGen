@@ -88,12 +88,16 @@
 
 	// Imports/Dependencies
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
+
 		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGObject"])
 			[output appendString:@"#import \"OGObject.h\"\n"];
 		else if ([OGTKMapper isGobjType:dependency] &&
-		    [OGTKMapper isTypeSwappable:dependency])
-			[output appendFormat:@"#import \"%@.h\"\n",
-			        [OGTKMapper swapTypes:dependency]];
+		    [OGTKMapper isTypeSwappable:dependency]) {
+
+			[output
+			    appendString:[self importForDependency:dependency
+			                                   ofClass:cgtkClass]];
+		}
 	}
 
 	[output appendString:@"\n"];
@@ -184,9 +188,13 @@
 		for (OFString *gobjClassName in cgtkClass
 		         .forwardDeclarationForClasses) {
 			if ([OGTKMapper isGobjType:gobjClassName] &&
-			    [OGTKMapper isTypeSwappable:gobjClassName])
-				[output appendFormat:@"#import \"%@.h\"\n",
-				        [OGTKMapper swapTypes:gobjClassName]];
+			    [OGTKMapper isTypeSwappable:gobjClassName]) {
+
+				[output
+				    appendString:
+				        [self importForDependency:gobjClassName
+				                          ofClass:cgtkClass]];
+			}
 		}
 
 		[output appendString:@"\n"];
@@ -332,6 +340,35 @@
 	return [output autorelease];
 }
 
++ (OFString *)importForDependency:(OFString *)dependency
+                          ofClass:(OGTKClass *)classInfo
+{
+	OGTKClass *dependencyClassInfo =
+	    [OGTKMapper classInfoByGobjType:dependency];
+
+	OFString *result;
+
+	// If parent lib is from this library
+	if ([classInfo.namespace isEqual:dependencyClassInfo.namespace]) {
+
+		result = [OFString stringWithFormat:@"#import \"%@.h\"\n",
+		                   [OGTKMapper swapTypes:dependency]];
+
+	} else {
+		// We need to get the ObjC name of the
+		// external library in order to provide
+		// the correct header directive
+		OGTKLibrary *libraryInfo = [OGTKMapper
+		    libraryInfoByNamespace:dependencyClassInfo.namespace];
+
+		result = [OFString stringWithFormat:@"#import <%@/%@.h>\n",
+		                   libraryInfo.name,
+		                   [OGTKMapper swapTypes:dependency]];
+	}
+
+	return result;
+}
+
 + (void)generateUmbrellaHeaderFileForClasses:
             (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
                                        inDir:(OFString *)outputDir
@@ -364,8 +401,10 @@
 			            stringByAppendingPathComponent:libName]
 			                         toString:output];
 		} @catch (OFReadFailedException *e) {
-			OFLog(@"No additional base classes dir for library %@, "
-			      @"importing only general and generated header "
+			OFLog(@"No additional base classes dir for "
+			      @"library %@, "
+			      @"importing only general and generated "
+			      @"header "
 			      @"files.",
 			    libName);
 		}

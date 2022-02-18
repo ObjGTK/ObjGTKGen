@@ -82,7 +82,7 @@ static OGTKMapper *sharedMyMapper = nil;
 - (void)addLibrary:(OGTKLibrary *)libraryInfo
 {
 	[_girNameToLibraryMapping setObject:libraryInfo
-	                             forKey:libraryInfo.name];
+	                             forKey:libraryInfo.namespace];
 }
 
 - (void)addClass:(OGTKClass *)classInfo
@@ -126,19 +126,22 @@ static OGTKMapper *sharedMyMapper = nil;
 	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
 
 	for (OFString *className in _objcTypeToClassMapping) {
-		OGTKClass *currentClass = [_objcTypeToClassMapping objectForKey:className];
+		OGTKClass *currentClass =
+		    [_objcTypeToClassMapping objectForKey:className];
 
 		if (currentClass.cParentType == nil) {
 			@try {
-				OFString *cParentType = [OGTKMapper
+				OFString *cParentType = [self
 				    getCTypeFromName:currentClass.parentName];
 
 				[currentClass setCParentType:cParentType];
 			} @catch (id e) {
 				OFLog(@"Could not get c type for parent of %@, "
+				      @"parent: %@, \n"
 				      @"exception %@. "
-				      @"Skipping…",
-				    currentClass.cName, [e class]);
+				      @"Removing class…",
+				    currentClass.cName, currentClass.parentName,
+				    [e class]);
 				[classesToRemove addObject:currentClass];
 			}
 		}
@@ -189,7 +192,7 @@ static OGTKMapper *sharedMyMapper = nil;
 - (OFString *)swapTypes:(OFString *)type
 {
 	// Convert basic types by hardcoding
-	if ([type isEqual:@"AtkObject"] || [type isEqual:@"GApplication"] ||
+	if ([type isEqual:@"GApplication"] ||
 	    [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"] ||
 	    [type isEqual:@"GMountOperation"])
 		return @"OGObject";
@@ -322,13 +325,12 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	// Some shortcut definitions from libraries we do not want to add as
 	// dependencies
-	// if ([name isEqual:@"Atk.Object"])
-	// 	return @"AtkObject";
 	if ([name isEqual:@"Gio.Application"])
 		return @"GApplication";
 	else if ([name isEqual:@"GObject.InitiallyUnowned"])
 		return @"GInitiallyUnowned";
-	else if ([name isEqual:@"GObject.Object"])
+	else if ([name containsString:@"GObject."] ||
+	    [name containsString:@"Gio."] || [name containsString:@"Soup."])
 		return @"GObject";
 
 	// Case: Name has a namespace prefix
@@ -339,8 +341,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		    objectForKey:[nameParts objectAtIndex:1]];
 
 		if (classInfo != nil &&
-		    [classInfo.namespace
-		        isEqual:[nameParts objectAtIndex:0]])
+		    [classInfo.namespace isEqual:[nameParts objectAtIndex:0]])
 			return classInfo.cType;
 	}
 
@@ -351,6 +352,31 @@ static OGTKMapper *sharedMyMapper = nil;
 
 	// Case: We did not find any c type
 	@throw [OFInvalidArgumentException exception];
+}
+
+- (OGTKClass *)classInfoByGobjType:(OFString *)gobjType
+{
+	OGTKClass *classInfo = [_gobjTypeToClassMapping objectForKey:gobjType];
+
+	if (classInfo == nil)
+		@throw [OFUndefinedKeyException
+		    exceptionWithObject:_gobjTypeToClassMapping
+		                    key:gobjType];
+
+	return classInfo;
+}
+
+- (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace
+{
+	OGTKLibrary *libraryInfo =
+	    [_girNameToLibraryMapping objectForKey:libNamespace];
+
+	if (libraryInfo == nil)
+		@throw [OFUndefinedKeyException
+		    exceptionWithObject:_girNameToLibraryMapping
+		                    key:libNamespace];
+
+	return libraryInfo;
 }
 
 #pragma mark - Private methods - domain logic
@@ -509,6 +535,20 @@ static OGTKMapper *sharedMyMapper = nil;
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 
 	return [sharedMapper getCTypeFromName:name];
+}
+
++ (OGTKClass *)classInfoByGobjType:(OFString *)gobjType
+{
+	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
+
+	return [sharedMapper classInfoByGobjType:gobjType];
+}
+
++ (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace
+{
+	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
+
+	return [sharedMapper libraryInfoByNamespace:libNamespace];
 }
 
 @end
