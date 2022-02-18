@@ -27,6 +27,7 @@
 
 #import "OGTKRecentChooserDialog+OGTKButtonTextResponseDictionary.h"
 #import "OGTKTypeWrapper.h"
+#import "OGTKWindow.h"
 
 @implementation OGTKRecentChooserDialog (OGTKButtonTextResponseDictionary)
 

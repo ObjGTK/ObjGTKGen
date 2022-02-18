@@ -27,6 +27,7 @@
 
 #import "OGTKDialog+OGTKAddButton.h"
 #import "OGTKTypeWrapper.h"
+#import "OGTKWindow.h"
 
 @implementation OGTKDialog (OGTKAddButton)
 

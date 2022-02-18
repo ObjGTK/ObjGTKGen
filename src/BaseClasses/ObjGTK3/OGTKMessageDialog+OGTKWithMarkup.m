@@ -26,6 +26,7 @@
  */
 
 #import "OGTKMessageDialog+OGTKWithMarkup.h"
+#import "OGTKWindow.h"
 
 @implementation OGTKMessageDialog (OGTKWithMarkup)
 

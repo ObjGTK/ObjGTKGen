@@ -26,6 +26,7 @@
  */
 
 #import "OGTKDialog.h"
+@class OGTKWindow;
 
 @interface OGTKDialog (OGTKAddButton)
 

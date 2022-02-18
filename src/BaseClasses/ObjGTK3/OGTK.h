@@ -25,7 +25,7 @@
  * See the ChangeLog files for a list of changes.
  */
 
-#import "OGObject.h"
+#import <OGObject/OGObject.h>
 #import <gtk/gtk.h>
 
 extern OFString *const OGTKVersion;

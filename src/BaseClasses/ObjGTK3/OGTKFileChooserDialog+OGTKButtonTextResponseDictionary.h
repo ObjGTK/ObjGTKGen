@@ -26,6 +26,7 @@
  */
 
 #import "OGTKFileChooserDialog.h"
+@class OGTKWindow;
 
 @interface OGTKFileChooserDialog (OGTKButtonTextResponseDictionary)
 
