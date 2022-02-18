@@ -331,10 +331,10 @@
 		OGTKMethod *objcMethod = [[OGTKMethod alloc] init];
 
 		OFString *methodName;
-		if([girMethod.name isEqual:@"errno"])
+		if ([girMethod.name isEqual:@"errno"])
 			methodName = @"errNo";
 		else
-		 	methodName = girMethod.name;
+			methodName = girMethod.name;
 
 		[objcMethod setName:methodName];
 		[objcMethod setCIdentifier:girMethod.cIdentifier];
@@ -364,11 +364,20 @@
 			OGTKParameter *objcParam = [[OGTKParameter alloc] init];
 			objcParam.documentation = param.doc.docText;
 
+			OFString *cType;
 			if (param.type == nil && param.array != nil) {
-				[objcParam setCType:param.array.cType];
+				cType = param.array.cType;
 			} else {
-				[objcParam setCType:param.type.cType];
+				cType = param.type.cType;
 			}
+			if ([cType containsString:@"const _"]) {
+				cType = [cType
+				    stringByReplacingOccurrencesOfString:@"const _"
+				                              withString:
+				                                  @"const "
+				                                  @"struct _"];
+			}
+			[objcParam setCType:cType];
 
 			[objcParam setCName:param.name];
 			[paramArray addObject:objcParam];
