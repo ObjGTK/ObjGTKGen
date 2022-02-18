@@ -187,12 +187,6 @@
 	                                           forLibrary:libraryInfo
 	                         readAdditionalHeadersFromDir:baseClassPath];
 
-	OFLog(@"%@", @"Attempting to copy general base class files...");
-	[OGTKFileOperation
-	    copyFilesFromDir:[baseClassPath
-	                         stringByAppendingPathComponent:@"General"]
-	               toDir:libraryOutputDir];
-
 	OFLog(@"Attempting to copy base class files specific for library %@...",
 	    libraryInfo.name);
 	[OGTKFileOperation

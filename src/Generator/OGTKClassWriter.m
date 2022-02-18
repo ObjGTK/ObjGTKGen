@@ -90,7 +90,7 @@
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
 
 		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGObject"])
-			[output appendString:@"#import \"OGObject.h\"\n"];
+			[output appendString:@"#import <OGObject/OGObject.h>\n"];
 		else if ([OGTKMapper isGobjType:dependency] &&
 		    [OGTKMapper isTypeSwappable:dependency]) {
 
@@ -386,14 +386,6 @@
 	[output appendString:@"\n#import <ObjFW/ObjFW.h>\n\n"];
 
 	if (additionalHeaderDir != nil) {
-		[output appendString:@"// Manually written classes\n"];
-
-		[OGTKClassWriter
-		    addImportsForHeaderFilesInDir:
-		        [additionalHeaderDir
-		            stringByAppendingPathComponent:@"General"]
-		                         toString:output];
-
 		@try {
 			[OGTKClassWriter
 			    addImportsForHeaderFilesInDir:
