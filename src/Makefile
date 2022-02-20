@@ -51,7 +51,7 @@ OBJECTS=$(SOURCES:.m=.o)
 CC=clang
 
 #CFLAGS
-CFLAGS=`objfw-config --cppflags` -g -O0 -c -Wall
+CFLAGS=`objfw-config --cppflags` -g -O0 -c -Wall -std=c99
 
 #Objective-c specific flags
 OBJCFLAGS=`objfw-config --objcflags`

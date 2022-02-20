@@ -46,7 +46,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFString *girDir = [OGTKUtil globalConfigValueFor:@"girDir"];
 
 	OFApplication *app = [OFApplication sharedApplication];
-	if (app.arguments.count < 1 || app.arguments.firstObject.length == 0) {
+	if (app.arguments.count < 1 || [app.arguments.firstObject length] == 0) {
 		OFLog(@"Missing argument!\n"
 		      @"Usage: %@ <girName>\n"
 		      @"Directory configured to look for gir files is: %@\n",
