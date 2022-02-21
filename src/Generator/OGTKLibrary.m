@@ -28,6 +28,12 @@
 #import "OGTKLibrary.h"
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
+@interface OGTKLibrary()
+
+- (OFArray *)splitVersion:(OFString *)versionString;
+
+@end
+
 @implementation OGTKLibrary
 @synthesize namespace = _namespace, name = _name, version = _version,
             packageName = _packageName, authorMail = _authorMail,

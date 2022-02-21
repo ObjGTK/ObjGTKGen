@@ -1,5 +1,17 @@
 #import "OGTKPackage.h"
 
+@interface OGTKPackage()
+
++ (OFString *)ACSnippetForIncludes:(OFString *)packageName
+           templateSnippetsFromDir:(OFString *)snippetDir;
+
++ (OFString *)ACSnippetForPackage:(OFString *)packageName
+           templateSnippetFromDir:(OFString *)snippetDir;
+           
++ (OFString *)shortNameFromPackageName:(OFString *)packageName;
+
+@end
+
 @implementation OGTKPackage
 
 OFString *kACArgWithTemplateFile = @"acargwith.tmpl";

@@ -30,6 +30,19 @@
 #import "OGTKLibrary.h"
 #import "OGTKParameter.h"
 
+@interface OGTKMapper()
+
+- (OFString *)stripAsterisks:(OFString *)identifier;
+
+- (size_t)numberOfAsterisksIn:(OFString *)identifier;
+
+- (void)addDependenciesFromMethod:(OGTKMethod *)method to:(OGTKClass *)classInfo;
+
+- (void)walkDependencyTreeFrom:(OGTKClass *)classInfo
+                    usingStack:(OFMutableDictionary *)stack;
+
+@end
+
 static OGTKMapper *sharedMyMapper = nil;
 
 @implementation OGTKMapper

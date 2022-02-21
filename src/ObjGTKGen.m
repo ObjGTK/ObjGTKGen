@@ -37,6 +37,16 @@
 @interface ObjGTKGen: OFObject <OFApplicationDelegate>
 @end
 
+@interface ObjGTKGen()
+- (OGTKLibrary *)loadAPIFromFile:(OFString *)girFile
+                      intoMapper:(OGTKMapper *)mapper;
+                      
+- (void)writeAndCopyLibraryFilesFor:(OGTKLibrary *)libraryInfo
+                            fromDir:(OFString *)baseClassPath
+                              toDir:(OFString *)outputDir
+                        usingMapper:(OGTKMapper *)mapper;
+@end
+
 OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 @implementation ObjGTKGen
@@ -46,7 +56,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFString *girDir = [OGTKUtil globalConfigValueFor:@"girDir"];
 
 	OFApplication *app = [OFApplication sharedApplication];
-	if (app.arguments.count < 1 || [app.arguments.firstObject length] == 0) {
+	if (app.arguments.count < 1 || [(OFString *)app.arguments.firstObject length] == 0) {
 		OFLog(@"Missing argument!\n"
 		      @"Usage: %@ <girName>\n"
 		      @"Directory configured to look for gir files is: %@\n",

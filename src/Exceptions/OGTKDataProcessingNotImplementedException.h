@@ -16,7 +16,7 @@ OF_ASSUME_NONNULL_BEGIN
 	OFString *_description;
 }
 
-@property (copy, nonatomic) OFString *description;
+@property (readonly, nonatomic) OFString *description;
 
 + (instancetype)exception OF_UNAVAILABLE;
 + (instancetype)exceptionWithDescription:(OFString *)description;

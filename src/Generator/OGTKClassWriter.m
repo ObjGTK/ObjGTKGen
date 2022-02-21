@@ -30,6 +30,17 @@
  */
 #import "OGTKClassWriter.h"
 
+@interface OGTKClassWriter()
++ (OFString *)importForDependency:(OFString *)dependency
+                          ofClass:(OGTKClass *)classInfo;
+
++ (OFString *)preparedDocumentationStringCopy:(OFString *)unpreparedText;
+
++ (void)addImportsForHeaderFilesInDir:(OFString *)dirPath
+                             toString:(OFMutableString *)string;
+	
+@end
+
 @implementation OGTKClassWriter
 
 + (void)generateFilesForClass:(OGTKClass *)cgtkClass

@@ -41,6 +41,22 @@
 
 #import "XMLReader/XMLReader.h"
 
+@interface Gir2Objc()
+
++ (OFString *)firstOfKommaSeparatedElements:(OFString *)elementString;
+
++ (void)mapGIRClass:(GIRClass *)girClass
+        toObjCClass:(OGTKClass *)objCClass
+     usingNamespace:(GIRNamespace *)ns;
+     
++ (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(
+                                id<GIRMethodMapping>) *)girMethodArray
+                toObjCClass:(OGTKClass *)objCClass
+              usingSelector:(SEL)addMethodSelector;
+
+@end
+
+
 @implementation Gir2Objc
 
 + (void)parseGirFromFile:(OFString *)girFile
