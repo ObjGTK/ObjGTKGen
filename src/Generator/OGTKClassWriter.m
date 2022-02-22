@@ -88,15 +88,17 @@
 
 	[output appendString:@"\n"];
 
+
 	// Imports/Dependencies
+	OFMutableString *importDependencies = [OFMutableString string];
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
 
 		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGObject"])
-			[output appendString:@"#import <OGObject/OGObject.h>\n"];
+			[importDependencies appendString:@"#import <OGObject/OGObject.h>\n"];
 		else if ([OGTKMapper isGobjType:dependency] &&
 		    [OGTKMapper isTypeSwappable:dependency]) {
 
-			[output
+			[importDependencies
 			    appendString:[self importForDependency:dependency
 			                                   ofClass:cgtkClass]];
 		}
@@ -104,13 +106,16 @@
 
 	// Library dependencies in case we have a class that is at the top of
 	// the class dependency graph
+	OFMutableString *includes = [OFMutableString string];
 	if (cgtkClass.topMostGraphNode) {
 		for (GIRInclude *cInclude in library.cIncludes) {
-			[output appendFormat:@"#include <%@>\n", cInclude.name];
+			[includes appendFormat:@"#include <%@>\n", cInclude.name];
 		}
-		[output appendString:@"\n"];
+		[includes appendString:@"\n"];
 	}
-
+	
+	[output appendString:includes];
+	[output appendString:importDependencies];
 	[output appendString:@"\n"];
 
 	// Forward class declarations (for circular dependencies)
