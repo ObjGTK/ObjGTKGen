@@ -24,6 +24,10 @@
  * See the ChangeLog files for a list of changes.
  */
 
+#include <gtk/gtk.h>
+#include <gtk/gtkx.h>
+#include <gtk/gtk-a11y.h>
+
 #import <ObjFW/ObjFW.h>
 
 #import "OGTKBuilder.h"
