@@ -289,7 +289,7 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		return
 		    [OFString stringWithFormat:
-		                  @"[[%@ alloc] initWithGObject:(GObject*)%@]",
+		                  @"[[[%@ alloc] initWithGObject:(GObject*)%@] autorelease]",
 		              [self stripAsterisks:toType], name];
 
 	} else if ([self isObjcType:fromType] && [self isGobjType:toType]) {
