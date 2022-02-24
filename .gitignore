@@ -1,5 +1,14 @@
 *.o
+*.a
 *.dep
+.deps
+configure
+configure~
+config.log
+config.status
+buildsys.mk
+aclocal.m4
+autom4te.cache
 build
 objgtkgen
 .DS_Store
