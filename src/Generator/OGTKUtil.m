@@ -34,6 +34,13 @@
 #import "OFDictionary+OGTKJsonDictionaryOfFile.h"
 #import "OGTKMapper.h"
 
+/* Reference for static linking */
+void
+_reference_to_category_of_ofdictionary(void)
+{
+	_OFDictionary_OGTKJsonDictionaryOfFile_reference = 1;
+}
+
 @implementation OGTKUtil
 
 static OFMutableDictionary *dictGlobalConf;
