@@ -37,10 +37,10 @@
 @interface ObjGTKGen: OFObject <OFApplicationDelegate>
 @end
 
-@interface ObjGTKGen()
+@interface ObjGTKGen ()
 - (OGTKLibrary *)loadAPIFromFile:(OFString *)girFile
                       intoMapper:(OGTKMapper *)mapper;
-                      
+
 - (void)writeAndCopyLibraryFilesFor:(OGTKLibrary *)libraryInfo
                             fromDir:(OFString *)baseClassPath
                               toDir:(OFString *)outputDir
@@ -56,7 +56,8 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFString *girDir = [OGTKUtil globalConfigValueFor:@"girDir"];
 
 	OFApplication *app = [OFApplication sharedApplication];
-	if (app.arguments.count < 1 || [(OFString *)app.arguments.firstObject length] == 0) {
+	if (app.arguments.count < 1 ||
+	    [(OFString *)app.arguments.firstObject length] == 0) {
 		OFLog(@"Missing argument!\n"
 		      @"Usage: %@ <girName>\n"
 		      @"Directory configured to look for gir files is: %@\n",
@@ -81,13 +82,13 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	// Load GIR files of depending libraries
 	OFMutableSet *dependencies = baseLibraryInfo.dependencies;
 	for (GIRInclude *dependency in dependencies) {
-		
+
 		bool continueLoop = false;
-		for(OFString *excludeLib in excludeLibraries) {
-			if([excludeLib isEqual:dependency.name])
+		for (OFString *excludeLib in excludeLibraries) {
+			if ([excludeLib isEqual:dependency.name])
 				continueLoop = true;
 		}
-		if(continueLoop)
+		if (continueLoop)
 			continue;
 
 		OFString *depGirFile =
@@ -96,7 +97,6 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 		depGirFile = [girDir stringByAppendingPathComponent:depGirFile];
 
 		[self loadAPIFromFile:depGirFile intoMapper:sharedMapper];
-
 	}
 
 	// Try to get parent class names for each class
@@ -145,16 +145,16 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
                         usingMapper:(OGTKMapper *)mapper
 {
 	// Write out classes definition
-	[Gir2Objc writeClassFilesForLibrary:libraryInfo
-	                              toDir:outputDir
-	      getClassDefinitionsFromMapper:mapper];
+	[OGTKFileOperation writeClassFilesForLibrary:libraryInfo
+	                                       toDir:outputDir
+	               getClassDefinitionsFromMapper:mapper];
 
 	// Write and copy additional files to complete the source and headers
 	// files for that library
-	[Gir2Objc writeLibraryAdditionsFor:libraryInfo
-	                             toDir:outputDir
-	     getClassDefinitionsFromMapper:mapper
-	      readAdditionalSourcesFromDir:baseClassPath];
+	[OGTKFileOperation writeLibraryAdditionsFor:libraryInfo
+	                                      toDir:outputDir
+	              getClassDefinitionsFromMapper:mapper
+	               readAdditionalSourcesFromDir:baseClassPath];
 
 	// Prepare and copy build files
 	OFString *libraryOutputDir =

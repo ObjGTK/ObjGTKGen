@@ -27,15 +27,13 @@
 
 #import "Gir2Objc.h"
 
-#import "Generator/OGTKClassWriter.h"
-#import "Generator/OGTKFileOperation.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
+#import "Generator/OGTKClass.h"
 
 #import "GIR/GIRInclude.h"
 
 #import "Exceptions/OGTKDataProcessingNotImplementedException.h"
-#import "Exceptions/OGTKIncorrectConfigException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Exceptions/OGTKNoGIRDictException.h"
 
@@ -87,6 +85,15 @@
 	}
 }
 
++ (GIRAPI *)firstAPIFromGirFile:(OFString *)girFile
+{
+	OFDictionary *girDict = nil;
+
+	[self parseGirFromFile:girFile intoDictionary:&girDict];
+
+	return [self firstAPIFromDictionary:girDict];
+}
+
 + (GIRAPI *)firstAPIFromDictionary:(OFDictionary *)girDict
 {
 	if (girDict == nil)
@@ -104,15 +111,6 @@
 	}
 
 	return nil;
-}
-
-+ (GIRAPI *)firstAPIFromGirFile:(OFString *)girFile
-{
-	OFDictionary *girDict = nil;
-
-	[self parseGirFromFile:girFile intoDictionary:&girDict];
-
-	return [self firstAPIFromDictionary:girDict];
 }
 
 + (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
@@ -178,39 +176,6 @@
 	return libraryInfo;
 }
 
-+ (OFString *)firstOfKommaSeparatedElements:(OFString *)elementString
-{
-	return [[elementString componentsSeparatedByString:@","] firstObject];
-}
-
-+ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-     readAdditionalSourcesFromDir:(OFString *)baseClassPath
-{
-	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
-
-	if (baseClassPath == nil || outputDir == nil)
-		@throw [OGTKIncorrectConfigException exception];
-
-	OFString *libraryOutputDir =
-	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
-	        stringByAppendingPathComponent:@"src"];
-
-	// Write the umbrella header file for the lib
-	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
-	                                                inDir:libraryOutputDir
-	                                           forLibrary:libraryInfo
-	                         readAdditionalHeadersFromDir:baseClassPath];
-
-	OFLog(@"Attempting to copy base class files specific for library %@...",
-	    libraryInfo.name);
-	[OGTKFileOperation
-	    copyFilesFromDir:[baseClassPath
-	                         stringByAppendingPathComponent:libraryInfo.identifier]
-	               toDir:libraryOutputDir];
-}
-
 + (void)generateClassInfoFromNamespace:(GIRNamespace *)ns
                             forLibrary:(OGTKLibrary *)libraryInfo
                             intoMapper:(OGTKMapper *)mapper
@@ -245,27 +210,6 @@
 			[mapper removeClass:objCClass];
 		}
 		objc_autoreleasePoolPop(pool);
-	}
-}
-
-+ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-{
-	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
-
-	OFString *libraryOutputDir =
-	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
-	        stringByAppendingPathComponent:@"src"];
-
-	// Write the classes
-	for (OFString *className in classesDict) {
-		OGTKClass *classInfo = [classesDict objectForKey:className];
-		if ([libraryInfo.namespace isEqual:classInfo.namespace]) {
-			[OGTKClassWriter generateFilesForClass:classInfo
-			                                 inDir:libraryOutputDir
-			                            forLibrary:libraryInfo];
-		}
 	}
 }
 
@@ -401,6 +345,11 @@
 		                withObject:objcMethod];
 		[objcMethod release];
 	}
+}
+
++ (OFString *)firstOfKommaSeparatedElements:(OFString *)elementString
+{
+	return [[elementString componentsSeparatedByString:@","] firstObject];
 }
 
 @end

@@ -27,6 +27,11 @@
 
 #import "OGTKFileOperation.h"
 #import "../GIR/GIRInclude.h"
+#import "OGTKLibrary.h"
+#import "OGTKMapper.h"
+#import "OGTKClass.h"
+#import "OGTKClassWriter.h"
+#import "../Exceptions/OGTKIncorrectConfigException.h"
 
 @implementation OGTKFileOperation
 
@@ -138,6 +143,55 @@
 	}
 
 	return content;
+}
+
++ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
+{
+	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
+
+	OFString *libraryOutputDir =
+	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
+	        stringByAppendingPathComponent:@"src"];
+
+	// Write the classes
+	for (OFString *className in classesDict) {
+		OGTKClass *classInfo = [classesDict objectForKey:className];
+		if ([libraryInfo.namespace isEqual:classInfo.namespace]) {
+			[OGTKClassWriter generateFilesForClass:classInfo
+			                                 inDir:libraryOutputDir
+			                            forLibrary:libraryInfo];
+		}
+	}
+}
+
++ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
+     readAdditionalSourcesFromDir:(OFString *)baseClassPath
+{
+	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
+
+	if (baseClassPath == nil || outputDir == nil)
+		@throw [OGTKIncorrectConfigException exception];
+
+	OFString *libraryOutputDir =
+	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
+	        stringByAppendingPathComponent:@"src"];
+
+	// Write the umbrella header file for the lib
+	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
+	                                                inDir:libraryOutputDir
+	                                           forLibrary:libraryInfo
+	                         readAdditionalHeadersFromDir:baseClassPath];
+
+	OFLog(@"Attempting to copy base class files specific for library %@...",
+	    libraryInfo.name);
+	[OGTKFileOperation
+	    copyFilesFromDir:[baseClassPath
+	                         stringByAppendingPathComponent:libraryInfo.identifier]
+	               toDir:libraryOutputDir];
 }
 
 @end

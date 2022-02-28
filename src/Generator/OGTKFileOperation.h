@@ -27,7 +27,8 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "OGTKLibrary.h"
+@class OGTKLibrary;
+@class OGTKMapper;
 
 @interface OGTKFileOperation: OFObject
 
@@ -41,5 +42,14 @@
 
 + (OFString *)forFileContent:(OFString *)content
                 replaceUsing:(OFDictionary *)replaceDict;
+
++ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper;
+
++ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
+                            toDir:(OFString *)outputDir
+    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
+     readAdditionalSourcesFromDir:(OFString *)baseClassPath;
 
 @end

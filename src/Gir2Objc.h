@@ -61,20 +61,11 @@
 + (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
                                  intoMapper:(OGTKMapper *)mapper;
 
-+ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-     readAdditionalSourcesFromDir:(OFString *)baseClassPath;
-
 /**
  * Generates class information from the GIR Namespace level
  */
 + (void)generateClassInfoFromNamespace:(GIRNamespace *)ns
                             forLibrary:(OGTKLibrary *)libraryInfo
                             intoMapper:(OGTKMapper *)mapper;
-
-+ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper;
 
 @end
