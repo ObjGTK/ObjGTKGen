@@ -380,7 +380,7 @@
 
 		if (libraryInfo == nil)
 			@throw [OFUndefinedKeyException
-			    exceptionWithObject:libraryInfo
+			    exceptionWithObject:[OGTKMapper sharedMapper]
 			                    key:dependencyClassInfo.namespace];
 
 		// Make sure we include the libs own header, because the parent

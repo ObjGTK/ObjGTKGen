@@ -193,7 +193,6 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 		} @catch (OGTKNamespaceContainsNoClassesException *exception) {
 			OFLog(@"Library %@-%@ contains no classes. Skipping…",
 			    dependency.name, dependency.version);
-			;
 		}
 	}
 }
