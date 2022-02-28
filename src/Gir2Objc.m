@@ -207,8 +207,7 @@
 	    libraryInfo.name);
 	[OGTKFileOperation
 	    copyFilesFromDir:[baseClassPath
-	                         stringByAppendingPathComponent:libraryInfo
-	                                                            .name]
+	                         stringByAppendingPathComponent:libraryInfo.identifier]
 	               toDir:libraryOutputDir];
 }
 

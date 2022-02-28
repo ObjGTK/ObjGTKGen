@@ -30,7 +30,7 @@
  */
 #import "OGTKClassWriter.h"
 
-@interface OGTKClassWriter()
+@interface OGTKClassWriter ()
 + (OFString *)importForDependency:(OFString *)dependency
                           ofClass:(OGTKClass *)classInfo;
 
@@ -38,7 +38,7 @@
 
 + (void)addImportsForHeaderFilesInDir:(OFString *)dirPath
                              toString:(OFMutableString *)string;
-	
+
 @end
 
 @implementation OGTKClassWriter
@@ -88,13 +88,13 @@
 
 	[output appendString:@"\n"];
 
-
 	// Imports/Dependencies
 	OFMutableString *importDependencies = [OFMutableString string];
 	for (OFString *dependency in cgtkClass.dependsOnClasses) {
 
 		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGObject"])
-			[importDependencies appendString:@"#import <OGObject/OGObject.h>\n"];
+			[importDependencies
+			    appendString:@"#import <OGObject/OGObject.h>\n"];
 		else if ([OGTKMapper isGobjType:dependency] &&
 		    [OGTKMapper isTypeSwappable:dependency]) {
 
@@ -109,11 +109,12 @@
 	OFMutableString *includes = [OFMutableString string];
 	if (cgtkClass.topMostGraphNode) {
 		for (GIRInclude *cInclude in library.cIncludes) {
-			[includes appendFormat:@"#include <%@>\n", cInclude.name];
+			[includes
+			    appendFormat:@"#include <%@>\n", cInclude.name];
 		}
 		[includes appendString:@"\n"];
 	}
-	
+
 	[output appendString:includes];
 	[output appendString:importDependencies];
 	[output appendString:@"\n"];
@@ -408,11 +409,11 @@
 
 	if (additionalHeaderDir != nil) {
 		@try {
-			[OGTKClassWriter
-			    addImportsForHeaderFilesInDir:
-			        [additionalHeaderDir
-			            stringByAppendingPathComponent:libName]
-			                         toString:output];
+			[OGTKClassWriter addImportsForHeaderFilesInDir:
+			                     [additionalHeaderDir
+			                         stringByAppendingPathComponent:
+			                             libraryInfo.identifier]
+			                                      toString:output];
 		} @catch (OFReadFailedException *e) {
 			OFLog(@"No additional base classes dir for "
 			      @"library %@, "
