@@ -68,7 +68,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
 	OFString *baseClassPath =
-	    [OGTKUtil globalConfigValueFor:@"baseClassDir"];
+	    [OGTKUtil globalConfigValueFor:@"librarySourceAdditionsDir"];
 	OFArray *excludeLibraries =
 	    [OGTKUtil globalConfigValueFor:@"excludeLibraries"];
 

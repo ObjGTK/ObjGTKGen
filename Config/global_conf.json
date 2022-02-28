@@ -1,7 +1,7 @@
 {
   "outputDir": "Output",
   "girDir": "/usr/share/gir-1.0",
-  "baseClassDir": "BaseClasses",
+  "librarySourceAdditionsDir": "LibrarySourceAdditions",
   "buildTemplateDir": "Resources/BuildTemplate",
   "templateSnippetsDir": "Resources/TemplateSnippets",
   "excludeLibraries": ["GObject", "Gio", "GLib", "libxml2", "xlib", "Soup"]
