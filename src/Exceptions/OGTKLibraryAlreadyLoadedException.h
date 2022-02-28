@@ -11,7 +11,7 @@
 
 OF_ASSUME_NONNULL_BEGIN
 
-@interface OGTKIncorrectConfigException: OFException
+@interface OGTKLibraryAlreadyLoadedException: OFException
 
 @end
 

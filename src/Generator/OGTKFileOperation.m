@@ -26,12 +26,12 @@
  */
 
 #import "OGTKFileOperation.h"
+#import "../Exceptions/OGTKIncorrectConfigException.h"
 #import "../GIR/GIRInclude.h"
-#import "OGTKLibrary.h"
-#import "OGTKMapper.h"
 #import "OGTKClass.h"
 #import "OGTKClassWriter.h"
-#import "../Exceptions/OGTKIncorrectConfigException.h"
+#import "OGTKLibrary.h"
+#import "OGTKMapper.h"
 
 @implementation OGTKFileOperation
 
@@ -155,6 +155,9 @@
 	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
 	        stringByAppendingPathComponent:@"src"];
 
+	OFLog(@"Attempting to generate and write class files for library %@...",
+	    libraryInfo.name);
+
 	// Write the classes
 	for (OFString *className in classesDict) {
 		OGTKClass *classInfo = [classesDict objectForKey:className];
@@ -190,7 +193,8 @@
 	    libraryInfo.name);
 	[OGTKFileOperation
 	    copyFilesFromDir:[baseClassPath
-	                         stringByAppendingPathComponent:libraryInfo.identifier]
+	                         stringByAppendingPathComponent:libraryInfo
+	                                                            .identifier]
 	               toDir:libraryOutputDir];
 }
 

@@ -7,12 +7,8 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#import <ObjFW/ObjFW.h>
+#import "OGTKNamespaceContainsNoClassesException.h"
 
-OF_ASSUME_NONNULL_BEGIN
-
-@interface OGTKIncorrectConfigException: OFException
+@implementation OGTKNamespaceContainsNoClassesException
 
 @end
-
-OF_ASSUME_NONNULL_END

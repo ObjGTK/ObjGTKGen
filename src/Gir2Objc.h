@@ -58,8 +58,7 @@
  */
 + (GIRAPI *)firstAPIFromGirFile:(OFString *)girFile;
 
-+ (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
-                                 intoMapper:(OGTKMapper *)mapper;
++ (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api;
 
 /**
  * Generates class information from the GIR Namespace level

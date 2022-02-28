@@ -4,5 +4,14 @@
   "librarySourceAdditionsDir": "LibrarySourceAdditions",
   "buildTemplateDir": "Resources/BuildTemplate",
   "templateSnippetsDir": "Resources/TemplateSnippets",
-  "excludeLibraries": ["GObject", "Gio", "GLib", "libxml2", "xlib", "Soup"]
+  "excludeLibraries": [
+    "GObject",
+    "Gio",
+    "GLib",
+    "GModule",
+    "libxml2",
+    "xlib",
+    "cairo",
+    "Soup"
+  ]
 }

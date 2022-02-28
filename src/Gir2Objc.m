@@ -27,33 +27,33 @@
 
 #import "Gir2Objc.h"
 
+#import "Generator/OGTKClass.h"
 #import "Generator/OGTKParameter.h"
 #import "Generator/OGTKUtil.h"
-#import "Generator/OGTKClass.h"
 
 #import "GIR/GIRInclude.h"
 
 #import "Exceptions/OGTKDataProcessingNotImplementedException.h"
+#import "Exceptions/OGTKNamespaceContainsNoClassesException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Exceptions/OGTKNoGIRDictException.h"
 
 #import "XMLReader/XMLReader.h"
 
-@interface Gir2Objc()
+@interface Gir2Objc ()
 
 + (OFString *)firstOfKommaSeparatedElements:(OFString *)elementString;
 
 + (void)mapGIRClass:(GIRClass *)girClass
         toObjCClass:(OGTKClass *)objCClass
      usingNamespace:(GIRNamespace *)ns;
-     
+
 + (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(
                                 id<GIRMethodMapping>) *)girMethodArray
                 toObjCClass:(OGTKClass *)objCClass
               usingSelector:(SEL)addMethodSelector;
 
 @end
-
 
 @implementation Gir2Objc
 
@@ -114,7 +114,6 @@
 }
 
 + (OGTKLibrary *)generateLibraryInfoFromAPI:(GIRAPI *)api
-                                 intoMapper:(OGTKMapper *)mapper
 {
 	OFArray *namespaces = api.namespaces;
 
@@ -167,12 +166,6 @@
 		    [OFSet setWithArray:excludeClasses];
 	}
 
-	[mapper addLibrary:libraryInfo];
-
-	[self generateClassInfoFromNamespace:ns
-	                          forLibrary:libraryInfo
-	                          intoMapper:mapper];
-
 	return libraryInfo;
 }
 
@@ -186,6 +179,9 @@
 	OFLog(@"Namespace name: %@", ns.name);
 	OFLog(@"C symbol prefix: %@", ns.cSymbolPrefixes);
 	OFLog(@"C identifier prefix: %@", ns.cIdentifierPrefixes);
+
+	if ([ns.classes count] == 0)
+		@throw [OGTKNamespaceContainsNoClassesException exception];
 
 	for (GIRClass *girClass in ns.classes) {
 		void *pool = objc_autoreleasePoolPush();
@@ -325,7 +321,8 @@
 			}
 			if ([cType containsString:@"const _"]) {
 				cType = [cType
-				    stringByReplacingOccurrencesOfString:@"const _"
+				    stringByReplacingOccurrencesOfString:
+				        @"const _"
 				                              withString:
 				                                  @"const "
 				                                  @"struct _"];

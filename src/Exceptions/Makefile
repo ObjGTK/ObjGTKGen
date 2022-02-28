@@ -1,5 +1,7 @@
 SRCS = OGTKDataProcessingNotImplementedException.m \
 	OGTKIncorrectConfigException.m \
+	OGTKLibraryAlreadyLoadedException.m \
+	OGTKNamespaceContainsNoClassesException.m \
 	OGTKNoGIRAPIException.m \
 	OGTKNoGIRDictException.m \
 	OGTKReceivedNilExpectedStringException.m

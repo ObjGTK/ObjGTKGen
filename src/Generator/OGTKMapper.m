@@ -30,13 +30,14 @@
 #import "OGTKLibrary.h"
 #import "OGTKParameter.h"
 
-@interface OGTKMapper()
+@interface OGTKMapper ()
 
 - (OFString *)stripAsterisks:(OFString *)identifier;
 
 - (size_t)numberOfAsterisksIn:(OFString *)identifier;
 
-- (void)addDependenciesFromMethod:(OGTKMethod *)method to:(OGTKClass *)classInfo;
+- (void)addDependenciesFromMethod:(OGTKMethod *)method
+                               to:(OGTKClass *)classInfo;
 
 - (void)walkDependencyTreeFrom:(OGTKClass *)classInfo
                     usingStack:(OFMutableDictionary *)stack;
@@ -96,6 +97,17 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	[_girNameToLibraryMapping setObject:libraryInfo
 	                             forKey:libraryInfo.namespace];
+}
+
+- (void)removeLibrary:(OGTKLibrary *)libraryInfo
+{
+	if (libraryInfo.namespace != nil &&
+	    [_girNameToLibraryMapping objectForKey:libraryInfo.namespace] !=
+	        nil) {
+
+		[_girNameToLibraryMapping
+		    removeObjectForKey:libraryInfo.namespace];
+	}
 }
 
 - (void)addClass:(OGTKClass *)classInfo
@@ -289,7 +301,8 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		return
 		    [OFString stringWithFormat:
-		                  @"[[[%@ alloc] initWithGObject:(GObject*)%@] autorelease]",
+		                  @"[[[%@ alloc] initWithGObject:(GObject*)%@] "
+		                  @"autorelease]",
 		              [self stripAsterisks:toType], name];
 
 	} else if ([self isObjcType:fromType] && [self isGobjType:toType]) {
@@ -381,15 +394,7 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace
 {
-	OGTKLibrary *libraryInfo =
-	    [_girNameToLibraryMapping objectForKey:libNamespace];
-
-	if (libraryInfo == nil)
-		@throw [OFUndefinedKeyException
-		    exceptionWithObject:_girNameToLibraryMapping
-		                    key:libNamespace];
-
-	return libraryInfo;
+	return [_girNameToLibraryMapping objectForKey:libNamespace];
 }
 
 #pragma mark - Private methods - domain logic

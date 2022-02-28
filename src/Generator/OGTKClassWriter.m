@@ -378,6 +378,11 @@
 		OGTKLibrary *libraryInfo = [OGTKMapper
 		    libraryInfoByNamespace:dependencyClassInfo.namespace];
 
+		if (libraryInfo == nil)
+			@throw [OFUndefinedKeyException
+			    exceptionWithObject:libraryInfo
+			                    key:dependencyClassInfo.namespace];
+
 		// Make sure we include the libs own header, because the parent
 		// class will introduce headers of its library. Otherwise we
 		// may get undefined symbols for this class

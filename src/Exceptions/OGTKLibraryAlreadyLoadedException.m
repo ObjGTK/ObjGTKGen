@@ -7,12 +7,8 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#import <ObjFW/ObjFW.h>
+#import "OGTKLibraryAlreadyLoadedException.h"
 
-OF_ASSUME_NONNULL_BEGIN
-
-@interface OGTKIncorrectConfigException: OFException
+@implementation OGTKLibraryAlreadyLoadedException
 
 @end
-
-OF_ASSUME_NONNULL_END

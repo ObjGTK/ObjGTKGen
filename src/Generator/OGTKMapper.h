@@ -86,6 +86,12 @@
 - (void)addLibrary:(OGTKLibrary *)libraryInfo;
 
 /**
+ * @brief Removes a library from the mapping dictionary
+ * @param libraryInfo The object describing the library
+ */
+- (void)removeLibrary:(OGTKLibrary *)libraryInfo;
+
+/**
  * @brief Adds a class to the mapping dictionaries
  * @param classInfo The object describing the class
  */
