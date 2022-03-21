@@ -1,3 +1,9 @@
+/*
+ * Copyright The ObjGTK authors, see AUTHORS file
+ *
+ * SPDX-License-Identifier: GPL-3.0+
+ */
+
 #import "OGTKLibrary.h"
 #import <ObjFW/ObjFW.h>
 

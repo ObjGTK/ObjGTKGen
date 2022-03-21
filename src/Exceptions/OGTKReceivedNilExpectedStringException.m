@@ -1,10 +1,7 @@
 /*
- * Copyright 2022 Johannes Brakensiek <objfw at codingpastor.de>
+ * Copyright The ObjGTK authors, see AUTHORS file
  *
- * This software is licensed under the GNU General Public License
- * (version 2.0 or later). See the LICENSE file in this distribution.
- *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-3.0+
  */
 
 #import "OGTKReceivedNilExpectedStringException.h"

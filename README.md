@@ -1,7 +1,7 @@
 ObjGTKGen
 ==========
 
-ObjGTKGen is a utility that generates Objective-C language bindings for ObjGTK using GObject Introspection (parsing GIR files). ObjGTKGen is free software, licensed under the GNU LGPL.
+ObjGTKGen is a utility that generates Objective-C language bindings for ObjGTK using GObject Introspection (parsing GIR files). ObjGTKGen is free software, licensed under the GNU GPL 3.0 or later with exception of the LibrarySourceAdditions, which will be part of the generated libraries, which are licensed under GNU LGPL 2.1 or later.
 
 ObjGTK is a fork of [CoreGTK](https://github.com/coregtk)(Gen) by Tyler Burton for [ObjFW](https://objfw.nil.im/) from Jonathan Schleifer.
 
