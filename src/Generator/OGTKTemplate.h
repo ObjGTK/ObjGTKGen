@@ -11,7 +11,8 @@
 
 + (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
-                        templateSnippetsFromDir:(OFString *)snippetDir;
+                        templateSnippetsFromDir:(OFString *)snippetDir
+                                     classFiles:(OFString *)classFiles;
 
 + (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
     (OGTKLibrary *)libraryInfo;

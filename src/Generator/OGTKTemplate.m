@@ -5,15 +5,17 @@
  */
 
 #import "OGTKTemplate.h"
+#import "OGTKClass.h"
+#import "OGTKMapper.h"
 
-@interface OGTKTemplate()
+@interface OGTKTemplate ()
 
 + (OFString *)ACSnippetForIncludes:(OFString *)packageName
            templateSnippetsFromDir:(OFString *)snippetDir;
 
 + (OFString *)ACSnippetForPackage:(OFString *)packageName
            templateSnippetFromDir:(OFString *)snippetDir;
-           
+
 + (OFString *)shortNameFromPackageName:(OFString *)packageName;
 
 @end
@@ -26,6 +28,7 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 + (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
                         templateSnippetsFromDir:(OFString *)snippetDir
+                                     classFiles:(OFString *)classFiles
 {
 	OFString *authorMail;
 	if (libraryInfo.authorMail != nil)
@@ -43,12 +46,12 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	OFDictionary *dict = [OFDictionary
 	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name,
 	    @"%%LIBVERSION%%", libraryInfo.version, @"%%LIBAUTHOREMAIL%%",
-	    authorMail, @"%%UCLIBNAME%%",
-	    [libraryInfo.name uppercaseString], @"%%LCLIBNAME%%",
-	    [libraryInfo.name lowercaseString],
+	    authorMail, @"%%UCLIBNAME%%", [libraryInfo.name uppercaseString],
+	    @"%%LCLIBNAME%%", [libraryInfo.name lowercaseString],
 	    @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
 	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACARGWITH%%",
-	    acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules, nil];
+	    acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules,
+	    @"%%CLASSFILES%%", classFiles, nil];
 
 	return dict;
 }

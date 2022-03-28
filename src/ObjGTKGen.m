@@ -200,9 +200,16 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFString *templateSnippetsDir =
 	    [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"];
 
+	OFString *classFiles = [OGTKLibraryWriter
+	        stringForFilesInDir:[libraryOutputDir
+	                                stringByAppendingPathComponent:@"src"]
+	               addingFormat:@"%@ \\\n\t"
+	    lookingForFileExtension:@".m"];
+
 	OFDictionary *replaceDict = [OGTKTemplate
 	    dictWithReplaceValuesForBuildFilesOfLibrary:libraryInfo
-	                        templateSnippetsFromDir:templateSnippetsDir];
+	                        templateSnippetsFromDir:templateSnippetsDir
+	                                     classFiles:classFiles];
 
 	OFDictionary *renameDict =
 	    [OGTKTemplate dictWithRenamesForBuildFilesOfLibrary:libraryInfo];

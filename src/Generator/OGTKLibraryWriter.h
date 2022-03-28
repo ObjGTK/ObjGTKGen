@@ -42,4 +42,8 @@
                                   forLibrary:(OGTKLibrary *)libraryInfo
                 readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
 
++ (OFString *)stringForFilesInDir:(OFString *)dirPath
+                     addingFormat:(OFConstantString *)format
+          lookingForFileExtension:(OFString *)fileExtension;
+
 @end

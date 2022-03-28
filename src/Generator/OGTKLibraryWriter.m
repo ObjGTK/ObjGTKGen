@@ -168,7 +168,8 @@
 	                                forLibrary:libraryInfo
 	              readAdditionalHeadersFromDir:baseClassPath];
 
-	OFLog(@"Attempting to copy base class files specific for library %@...",
+	OFLog(@"Attempting to copy additional source files specific for "
+	      @"library %@...",
 	    libraryInfo.name);
 	[self
 	    copyFilesFromDir:[baseClassPath
@@ -195,11 +196,16 @@
 
 	if (additionalHeaderDir != nil) {
 		@try {
-			[self addImportsForHeaderFilesInDir:
-			          [additionalHeaderDir
-			              stringByAppendingPathComponent:
-			                  libraryInfo.identifier]
-			                           toString:output];
+			OFString *headerDir = [additionalHeaderDir
+			    stringByAppendingPathComponent:libraryInfo
+			                                       .identifier];
+
+			[output
+			    appendString:
+			        [self stringForFilesInDir:headerDir
+			                       addingFormat:@"#import \"%@\"\n"
+			            lookingForFileExtension:@".h"]];
+
 		} @catch (OFReadFailedException *e) {
 			OFLog(@"No additional base classes dir for "
 			      @"library %@, "
@@ -214,7 +220,9 @@
 
 	[output appendString:@"// Generated classes\n"];
 
-	for (OFString *objCClassName in objCClassesDict) {
+	OFArray *sortedKeys = [[objCClassesDict allKeys] sortedArray];
+
+	for (OFString *objCClassName in sortedKeys) {
 		OGTKClass *classInfo =
 		    [objCClassesDict objectForKey:objCClassName];
 		if ([libraryInfo.namespace isEqual:classInfo.namespace])
@@ -228,9 +236,12 @@
 	[output writeToFile:hFilePath];
 }
 
-+ (void)addImportsForHeaderFilesInDir:(OFString *)dirPath
-                             toString:(OFMutableString *)string
++ (OFString *)stringForFilesInDir:(OFString *)dirPath
+                     addingFormat:(OFConstantString *)format
+          lookingForFileExtension:(OFString *)fileExtension;
 {
+	OFMutableString *string = [OFMutableString string];
+
 	OFFileManager *fileMgr = [OFFileManager defaultManager];
 
 	if (![fileMgr directoryExistsAtPath:dirPath]) {
@@ -240,14 +251,17 @@
 	}
 
 	OFArray *srcDirContents = [fileMgr contentsOfDirectoryAtPath:dirPath];
+	OFArray *sortedDirContents = [srcDirContents sortedArray];
 
-	for (OFString *srcFile in srcDirContents) {
+	for (OFString *srcFile in sortedDirContents) {
 		OFString *additionalFile = [srcFile lastPathComponent];
-		if ([additionalFile containsString:@".h"]) {
-			[string
-			    appendFormat:@"#import \"%@\"\n", additionalFile];
+		if ([additionalFile containsString:fileExtension]) {
+			[string appendFormat:format, additionalFile];
 		}
 	}
+
+	[string makeImmutable];
+	return string;
 }
 
 @end
