@@ -10,8 +10,8 @@
 #import "Exceptions/OGTKNamespaceContainsNoClassesException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Generator/OGTKClassWriter.h"
-#import "Generator/OGTKFileOperation.h"
 #import "Generator/OGTKLibrary.h"
+#import "Generator/OGTKLibraryWriter.h"
 #import "Generator/OGTKPackage.h"
 #import "Gir2Objc.h"
 
@@ -181,13 +181,13 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
                               toDir:(OFString *)outputDir
 {
 	// Write out classes definition
-	[OGTKFileOperation writeClassFilesForLibrary:libraryInfo
+	[OGTKLibraryWriter writeClassFilesForLibrary:libraryInfo
 	                                       toDir:outputDir
 	               getClassDefinitionsFromMapper:_sharedMapper];
 
 	// Write and copy additional files to complete the source and headers
 	// files for that library
-	[OGTKFileOperation writeLibraryAdditionsFor:libraryInfo
+	[OGTKLibraryWriter writeLibraryAdditionsFor:libraryInfo
 	                                      toDir:outputDir
 	              getClassDefinitionsFromMapper:_sharedMapper
 	               readAdditionalSourcesFromDir:baseClassPath];
@@ -207,7 +207,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFDictionary *renameDict =
 	    [OGTKPackage dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
 
-	[OGTKFileOperation copyFilesFromDir:templateDir
+	[OGTKLibraryWriter copyFilesFromDir:templateDir
 	                              toDir:libraryOutputDir
 	      applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
 	                   usingReplaceDict:replaceDict

@@ -1,7 +1,7 @@
 SRCS = OFDictionary+OGTKJsonDictionaryOfFile.m \
 	OGTKClass.m \
 	OGTKClassWriter.m \
-	OGTKFileOperation.m \
+	OGTKLibraryWriter.m \
 	OGTKLibrary.m \
 	OGTKMapper.m \
 	OGTKMethod.m \

@@ -8,8 +8,9 @@
 
 @class OGTKLibrary;
 @class OGTKMapper;
+@class OGTKClass;
 
-@interface OGTKFileOperation: OFObject
+@interface OGTKLibraryWriter: OFObject
 
 + (void)copyFilesFromDir:(OFString *)sourceDir
                             toDir:(OFString *)destDir
@@ -30,5 +31,15 @@
                             toDir:(OFString *)outputDir
     getClassDefinitionsFromMapper:(OGTKMapper *)mapper
      readAdditionalSourcesFromDir:(OFString *)baseClassPath;
+
+/**
+ * @brief Generates the umbrella header file for the lib named and saves it in
+ * outputDir. Assumes that keys of the dict passed are ObjC class names
+ */
++ (void)generateUmbrellaHeaderFileForClasses:
+            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
+                                       inDir:(OFString *)outputDir
+                                  forLibrary:(OGTKLibrary *)libraryInfo
+                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
 
 @end

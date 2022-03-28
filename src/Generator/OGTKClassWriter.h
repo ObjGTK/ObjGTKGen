@@ -39,16 +39,6 @@
 + (OFString *)sourceStringFor:(OGTKClass *)cgtkClass;
 
 /**
- * @brief Generates the umbrella header file for the lib named and saves it in
- * outputDir. Assumes that keys of the dict passed are ObjC class names
- */
-+ (void)generateUmbrellaHeaderFileForClasses:
-            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
-                                       inDir:(OFString *)outputDir
-                                  forLibrary:(OGTKLibrary *)libraryInfo
-                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
-
-/**
  * Generate list of paramters to pass to underlying C function
  */
 + (OFString *)generateCParameterListString:(OFArray *)params;

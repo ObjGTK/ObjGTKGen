@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#import "OGTKFileOperation.h"
+#import "OGTKLibraryWriter.h"
 #import "../Exceptions/OGTKIncorrectConfigException.h"
 #import "../GIR/GIRInclude.h"
 #import "OGTKClass.h"
@@ -12,7 +12,7 @@
 #import "OGTKLibrary.h"
 #import "OGTKMapper.h"
 
-@implementation OGTKFileOperation
+@implementation OGTKLibraryWriter
 
 + (void)copyFilesFromDir:(OFString *)sourceDir
                             toDir:(OFString *)destDir
@@ -163,18 +163,91 @@
 	        stringByAppendingPathComponent:@"src"];
 
 	// Write the umbrella header file for the lib
-	[OGTKClassWriter generateUmbrellaHeaderFileForClasses:classesDict
-	                                                inDir:libraryOutputDir
-	                                           forLibrary:libraryInfo
-	                         readAdditionalHeadersFromDir:baseClassPath];
+	[self generateUmbrellaHeaderFileForClasses:classesDict
+	                                     inDir:libraryOutputDir
+	                                forLibrary:libraryInfo
+	              readAdditionalHeadersFromDir:baseClassPath];
 
 	OFLog(@"Attempting to copy base class files specific for library %@...",
 	    libraryInfo.name);
-	[OGTKFileOperation
+	[self
 	    copyFilesFromDir:[baseClassPath
 	                         stringByAppendingPathComponent:libraryInfo
 	                                                            .identifier]
 	               toDir:libraryOutputDir];
+}
+
++ (void)generateUmbrellaHeaderFileForClasses:
+            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
+                                       inDir:(OFString *)outputDir
+                                  forLibrary:(OGTKLibrary *)libraryInfo
+                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir
+{
+	OFString *libName = libraryInfo.name;
+	OFMutableString *output = [OFMutableString string];
+
+	OFString *fileName =
+	    [OFString stringWithFormat:@"%@-Umbrella.h", libName];
+	OFString *license = [OGTKClassWriter generateLicense:fileName];
+	[output appendString:license];
+
+	[output appendString:@"\n#import <ObjFW/ObjFW.h>\n\n"];
+
+	if (additionalHeaderDir != nil) {
+		@try {
+			[self addImportsForHeaderFilesInDir:
+			          [additionalHeaderDir
+			              stringByAppendingPathComponent:
+			                  libraryInfo.identifier]
+			                           toString:output];
+		} @catch (OFReadFailedException *e) {
+			OFLog(@"No additional base classes dir for "
+			      @"library %@, "
+			      @"importing only general and generated "
+			      @"header "
+			      @"files.",
+			    libName);
+		}
+
+		[output appendString:@"\n"];
+	}
+
+	[output appendString:@"// Generated classes\n"];
+
+	for (OFString *objCClassName in objCClassesDict) {
+		OGTKClass *classInfo =
+		    [objCClassesDict objectForKey:objCClassName];
+		if ([libraryInfo.namespace isEqual:classInfo.namespace])
+			[output
+			    appendFormat:@"#import \"%@.h\"\n", objCClassName];
+	}
+
+	OFString *hFilePath =
+	    [outputDir stringByAppendingPathComponent:fileName];
+
+	[output writeToFile:hFilePath];
+}
+
++ (void)addImportsForHeaderFilesInDir:(OFString *)dirPath
+                             toString:(OFMutableString *)string
+{
+	OFFileManager *fileMgr = [OFFileManager defaultManager];
+
+	if (![fileMgr directoryExistsAtPath:dirPath]) {
+		@throw [OFReadFailedException exceptionWithObject:dirPath
+		                                  requestedLength:0
+		                                            errNo:0];
+	}
+
+	OFArray *srcDirContents = [fileMgr contentsOfDirectoryAtPath:dirPath];
+
+	for (OFString *srcFile in srcDirContents) {
+		OFString *additionalFile = [srcFile lastPathComponent];
+		if ([additionalFile containsString:@".h"]) {
+			[string
+			    appendFormat:@"#import \"%@\"\n", additionalFile];
+		}
+	}
 }
 
 @end
