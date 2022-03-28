@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0+
  */
 
-#import "OGTKPackage.h"
+#import "OGTKTemplate.h"
 
-@interface OGTKPackage()
+@interface OGTKTemplate()
 
 + (OFString *)ACSnippetForIncludes:(OFString *)packageName
            templateSnippetsFromDir:(OFString *)snippetDir;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation OGTKPackage
+@implementation OGTKTemplate
 
 OFString *kACArgWithTemplateFile = @"acargwith.tmpl";
 OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";

@@ -7,7 +7,7 @@
 #import "OGTKLibrary.h"
 #import <ObjFW/ObjFW.h>
 
-@interface OGTKPackage: OFObject
+@interface OGTKTemplate: OFObject
 
 + (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo

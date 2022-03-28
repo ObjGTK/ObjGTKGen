@@ -12,7 +12,7 @@
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKLibrary.h"
 #import "Generator/OGTKLibraryWriter.h"
-#import "Generator/OGTKPackage.h"
+#import "Generator/OGTKTemplate.h"
 #import "Gir2Objc.h"
 
 @interface ObjGTKGen: OFObject <OFApplicationDelegate>
@@ -200,12 +200,12 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	OFString *templateSnippetsDir =
 	    [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"];
 
-	OFDictionary *replaceDict = [OGTKPackage
+	OFDictionary *replaceDict = [OGTKTemplate
 	    dictWithReplaceValuesForBuildFilesOfLibrary:libraryInfo
 	                        templateSnippetsFromDir:templateSnippetsDir];
 
 	OFDictionary *renameDict =
-	    [OGTKPackage dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
+	    [OGTKTemplate dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
 
 	[OGTKLibraryWriter copyFilesFromDir:templateDir
 	                              toDir:libraryOutputDir
