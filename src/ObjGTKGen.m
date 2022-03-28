@@ -33,7 +33,7 @@
 @interface ObjGTKGen ()
 - (OGTKLibrary *)loadAPIFromFile:(OFString *)girFile;
 
-- (void)loadDependenciesOf:(OGTKLibrary *)baseLibraryInfo;
+- (void)loadLibraryDependenciesOf:(OGTKLibrary *)baseLibraryInfo;
 
 - (void)writeAndCopyLibraryFilesFor:(OGTKLibrary *)libraryInfo
                             fromDir:(OFString *)baseClassPath
@@ -81,16 +81,16 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 	OGTKLibrary *baseLibraryInfo = [self loadAPIFromFile:girFile];
 
-	[self loadDependenciesOf:baseLibraryInfo];
+	[self loadLibraryDependenciesOf:baseLibraryInfo];
 
 	// Try to get parent class names for each class
 	[_sharedMapper determineParentClassNames];
 
 	// Calculate dependencies for each class
-	[_sharedMapper determineDependencies];
+	[_sharedMapper determineClassDependencies];
 
 	// Set flags for fast necessary forward class definitions.
-	[_sharedMapper detectAndMarkCircularDependencies];
+	[_sharedMapper detectAndMarkCircularClassDependencies];
 
 	OFMutableDictionary *libraries = _sharedMapper.girNameToLibraryMapping;
 
@@ -142,7 +142,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 /**
  * @brief Load library dependencies recursively.
  */
-- (void)loadDependenciesOf:(OGTKLibrary *)baseLibraryInfo
+- (void)loadLibraryDependenciesOf:(OGTKLibrary *)baseLibraryInfo
 {
 	// Load GIR files of depending libraries
 	OFMutableSet *dependencies = baseLibraryInfo.dependencies;
@@ -165,7 +165,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 		OGTKLibrary *depLibraryInfo;
 		@try {
 			depLibraryInfo = [self loadAPIFromFile:depGirFile];
-			[self loadDependenciesOf:depLibraryInfo];
+			[self loadLibraryDependenciesOf:depLibraryInfo];
 		} @catch (OGTKLibraryAlreadyLoadedException *exception) {
 			OFLog(@"Library %@-%@ already loaded.", dependency.name,
 			    dependency.version);

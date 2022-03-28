@@ -156,7 +156,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	[classesToRemove release];
 }
 
-- (void)determineDependencies
+- (void)determineClassDependencies
 {
 	for (OFString *className in _objcTypeToClassMapping) {
 		OGTKClass *classInfo =
@@ -177,7 +177,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	}
 }
 
-- (void)detectAndMarkCircularDependencies
+- (void)detectAndMarkCircularClassDependencies
 {
 	for (OFString *className in _objcTypeToClassMapping) {
 		OGTKClass *classInfo =

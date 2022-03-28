@@ -100,7 +100,7 @@
  * For this method to work all the class information objects need to be filled
  * with correct data.
  */
-- (void)determineDependencies;
+- (void)determineClassDependencies;
 
 /**
  * @brief Iterates through all the dependencies of all the class information
@@ -108,7 +108,7 @@
  * @details This will only work if ```determineDependencies``` is called before
  * @see -determineDependencies
  */
-- (void)detectAndMarkCircularDependencies;
+- (void)detectAndMarkCircularClassDependencies;
 
 /**
  * @brief Returns if a given type string is listed as Gobj class type
