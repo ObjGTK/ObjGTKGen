@@ -28,7 +28,7 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 + (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
                         templateSnippetsFromDir:(OFString *)snippetDir
-                                     classFiles:(OFString *)classFiles
+                                    sourceFiles:(OFString *)sourceFiles
 {
 	OFString *authorMail;
 	if (libraryInfo.authorMail != nil)
@@ -51,7 +51,7 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	    @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
 	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACARGWITH%%",
 	    acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules,
-	    @"%%CLASSFILES%%", classFiles, nil];
+	    @"%%SOURCEFILES%%", sourceFiles, nil];
 
 	return dict;
 }
