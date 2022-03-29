@@ -200,7 +200,8 @@ static OGTKMapper *sharedMyMapper = nil;
 	    [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"] ||
 	    [type isEqual:@"GMountOperation"])
 		return @"OGObject";
-	else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"])
+	else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"] ||
+	    [type isEqual:@"const char*"] || [type isEqual:@"gchar*"])
 		return @"OFString*";
 	else if ([type isEqual:@"Gtk"])
 		return @"OGTK";
@@ -250,6 +251,7 @@ static OGTKMapper *sharedMyMapper = nil;
 - (bool)isTypeSwappable:(OFString *)type
 {
 	return [type isEqual:@"gchar*"] || [type isEqual:@"const gchar*"] ||
+	    [type isEqual:@"char*"] || [type isEqual:@"const char*"] ||
 	    [type isEqual:@"OFString*"] || [type isEqual:@"OFArray*"] ||
 	    [self isGobjType:type] || [self isObjcType:type];
 }
@@ -260,7 +262,9 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	// Try to return conversion for string types first
 	if (([fromType isEqual:@"gchar*"] ||
-	        [fromType isEqual:@"const gchar*"]) &&
+	        [fromType isEqual:@"const gchar*"] ||
+	        [fromType isEqual:@"gchar*"] ||
+	        [fromType isEqual:@"const char*"]) &&
 	    [toType isEqual:@"OFString*"]) {
 		return [OFString
 		    stringWithFormat:@"[OFString stringWithUTF8String:%@]",
