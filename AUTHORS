@@ -1,8 +1,8 @@
 Author:
-        Tyler Burton <software@tylerburton.ca>
+        Tyler Burton <software@tylerburton.ca>, 2015-2017 (CoreGTK)
 
 Maintainers:
-        Johannes Brakensiek <objfw@codingpastor.de> - Port to ObjFW
+        Johannes Brakensiek <objfw@codingpastor.de>, 2021-2022 (ObjGTK)
 
 Contributors:
         Jonathan Schleifer <js@nil.im>
