@@ -4,7 +4,7 @@
 // Original source here
 // http://troybrant.net/blog/2010/09/simple-xml-to-nsdictionary-converter/
 //
-// Ported to ObjFW by Johannes Brakensiek, 2021
+// Ported to ObjFW by Johannes Brakensiek, 2021/2022
 //
 
 #import "XMLReader.h"

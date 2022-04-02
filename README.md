@@ -1,15 +1,31 @@
 ObjGTKGen
 ==========
 
-ObjGTKGen is a utility that generates Objective-C language bindings for ObjGTK using GObject Introspection (parsing GIR files). ObjGTKGen is free software, licensed under the GNU GPL 3.0 or later with exception of the LibrarySourceAdditions, which will be part of the generated libraries, which are licensed under GNU LGPL 2.1 or later.
+ObjGTKGen is a utility that generates Objective-C language bindings for GNOME GLib/Gobject based libraries using GObject Introspection (GOI), which it does by parsing GIR files.
 
-ObjGTK is a fork of [CoreGTK](https://github.com/coregtk)(Gen) by Tyler Burton for [ObjFW](https://objfw.nil.im/) from Jonathan Schleifer.
+ObjGTK is a fork of [CoreGTK](https://github.com/coregtk)(Gen) by Tyler Burton for use
+with [ObjFW](https://objfw.nil.im/) by Jonathan Schleifer.
+
+## Usage
+
+// FIXME
+
+## Licensing
+
+ObjGTKGen is free software. Its source files Tyler Burton originally released under
+GNU LGPL 2.1 or later. This licensing was kept for the files existing and for the directory LibrarySourceAdditions, which is meant to be part of the generated libraries and is NOT part of the generator.
+
+The additions to the generator written by Johannes Brakensiek are added under GNU GPL 3.0 or later. So any generator binary built using these files will need to be distributed under the terms of GNU GPL 3.0 or later.
+
+Regarding GTK3 (and 4 or any other library wrapper) the generator is meant to generate wrapper source files which may be distributed under LGPL 2.1 or later.
+
+## Code base
 
 The ObjGTK code base should be compatible with the Objective C dialect of GCC ("Objective C 2.0") as introduced as of Mac OS X 10.5. So there should be no need to use clang. There are plans to implement advanced support of clang language features, especially memory management via Automatic Reference Counting (ARC).
 
 Currently there are only untested, unstable preview releases of ObjGTK. Take care when using. API is going to change. See [milestones](https://codeberg.org/Letterus/objgtkgen/milestones) for the further release plan.
 
-## Hacking / How it works
+## How it works
 
 The generator does the following currently:
 
