@@ -52,6 +52,11 @@ AS_IF([test x"$enable_static" = x"yes" -o x"$enable_shared" = x"no"], [
 	AC_SUBST(%%UCLIBNAME%%_STATIC_LIB, "lib%%LCLIBNAME%%.a")
 ])
 
+AC_MSG_CHECKING(for ObjFW package OGObject)
+AS_IF([$OBJFW_CONFIG --package OGObject], [AC_MSG_RESULT(yes)], [
+	AC_MSG_ERROR(You need ObjFW package OGObject installed.)
+])
+
 %%ACARGWITH%%
 
 %%PKGCHECKMODULES%%
