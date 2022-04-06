@@ -57,6 +57,8 @@ AS_IF([$OBJFW_CONFIG --package OGObject], [AC_MSG_RESULT(yes)], [
 	AC_MSG_ERROR(You need ObjFW package OGObject installed.)
 ])
 
+%%ACOCCHECKING%%
+
 %%ACARGWITH%%
 
 %%PKGCHECKMODULES%%

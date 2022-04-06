@@ -6,15 +6,22 @@
 
 #import "OGTKLibrary.h"
 #import <ObjFW/ObjFW.h>
+@class OGTKMapper;
 
 @interface OGTKTemplate: OFObject
+{
+	OFString *_snippetDir;
+	OGTKMapper *_sharedMapper;
+}
 
-+ (OFDictionary *)
+@property (copy, nonatomic) OFString *snippetDir;
+@property (retain, nonatomic) OGTKMapper *sharedMapper;
+
+- (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
-                        templateSnippetsFromDir:(OFString *)snippetDir
                                     sourceFiles:(OFString *)sourceFiles;
 
-+ (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
+- (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
     (OGTKLibrary *)libraryInfo;
 
 @end

@@ -207,13 +207,16 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	               addingFormat:@"%@ \\\n\t"
 	    lookingForFileExtension:@".m"];
 
-	OFDictionary *replaceDict = [OGTKTemplate
+	OGTKTemplate *templating = [[[OGTKTemplate alloc] init] autorelease];
+	templating.snippetDir = templateSnippetsDir;
+	templating.sharedMapper = _sharedMapper;
+
+	OFDictionary *replaceDict = [templating
 	    dictWithReplaceValuesForBuildFilesOfLibrary:libraryInfo
-	                        templateSnippetsFromDir:templateSnippetsDir
 	                                    sourceFiles:sourceFiles];
 
 	OFDictionary *renameDict =
-	    [OGTKTemplate dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
+	    [templating dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
 
 	[OGTKLibraryWriter copyFilesFromDir:templateDir
 	                              toDir:libraryOutputDir

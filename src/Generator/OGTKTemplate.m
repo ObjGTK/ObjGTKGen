@@ -10,38 +10,54 @@
 
 @interface OGTKTemplate ()
 
-+ (OFString *)ACSnippetForIncludes:(OFString *)packageName
-           templateSnippetsFromDir:(OFString *)snippetDir;
+- (OFString *)ACSnippetForObjFWDependencies:(OFMutableSet *)dependencies;
 
-+ (OFString *)ACSnippetForPackage:(OFString *)packageName
-           templateSnippetFromDir:(OFString *)snippetDir;
+- (OFString *)ACSnippetForIncludes:(OFString *)packageName;
 
-+ (OFString *)shortNameFromPackageName:(OFString *)packageName;
+- (OFString *)ACSnippetForPackage:(OFString *)packageName;
+
+- (OFString *)shortNameFromPackageName:(OFString *)packageName;
 
 @end
 
 @implementation OGTKTemplate
 
-OFString *kACArgWithTemplateFile = @"acargwith.tmpl";
-OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
+@synthesize snippetDir = _snippetDir, sharedMapper = _sharedMapper;
 
-+ (OFDictionary *)
+OFString *const kACArgWithTemplateFile = @"acargwith.tmpl";
+OFString *const kACOCCheckingTemplateFile = @"acocchecking.tmpl";
+OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
+
+- (void)dealloc
+{
+	[_snippetDir release];
+	[_sharedMapper release];
+
+	[super dealloc];
+}
+
+- (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
-                        templateSnippetsFromDir:(OFString *)snippetDir
                                     sourceFiles:(OFString *)sourceFiles
 {
+	// FIXME OGTKRequiredPropertyNotSetException
+	if (self.snippetDir == nil)
+		@throw [OFException exception];
+
 	OFString *authorMail;
 	if (libraryInfo.authorMail != nil)
 		authorMail = libraryInfo.authorMail;
 	else
 		authorMail = @"unkown@host.com";
 
-	OFString *acArgWith = [self ACSnippetForIncludes:libraryInfo.packageName
-	                         templateSnippetsFromDir:snippetDir];
+	OFString *acOCChecking =
+	    [self ACSnippetForObjFWDependencies:libraryInfo.dependencies];
+
+	OFString *acArgWith =
+	    [self ACSnippetForIncludes:libraryInfo.packageName];
 
 	OFString *pkgCheckModules =
-	    [self ACSnippetForPackage:libraryInfo.packageName
-	        templateSnippetFromDir:snippetDir];
+	    [self ACSnippetForPackage:libraryInfo.packageName];
 
 	OFDictionary *dict = [OFDictionary
 	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name,
@@ -49,14 +65,15 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	    authorMail, @"%%UCLIBNAME%%", [libraryInfo.name uppercaseString],
 	    @"%%LCLIBNAME%%", [libraryInfo.name lowercaseString],
 	    @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
-	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACARGWITH%%",
-	    acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules,
-	    @"%%SOURCEFILES%%", sourceFiles, nil];
+	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor,
+	    @"%%ACOCCHECKING%%", acOCChecking, @"%%ACARGWITH%%", acArgWith,
+	    @"%%PKGCHECKMODULES%%", pkgCheckModules, @"%%SOURCEFILES%%",
+	    sourceFiles, nil];
 
 	return dict;
 }
 
-+ (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
+- (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
     (OGTKLibrary *)libraryInfo
 {
 	OFDictionary *dict = [OFDictionary
@@ -66,11 +83,46 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	return dict;
 }
 
-+ (OFString *)ACSnippetForIncludes:(OFString *)packageName
-           templateSnippetsFromDir:(OFString *)snippetDir
+- (OFString *)ACSnippetForObjFWDependencies:(OFMutableSet OF_GENERIC(
+                                                GIRInclude *) *)dependencies
 {
-	OFString *fileName =
-	    [snippetDir stringByAppendingPathComponent:kACArgWithTemplateFile];
+	if (self.sharedMapper == nil)
+		// FIXME OGTKRequiredPropertyNotSetException
+		@throw [OFException exception];
+
+	OFString *fileName = [self.snippetDir
+	    stringByAppendingPathComponent:kACOCCheckingTemplateFile];
+	OFString *snippet = [OFString stringWithContentsOfFile:fileName];
+
+	OFMutableString *result = [OFMutableString string];
+
+	for (GIRInclude *dependency in dependencies) {
+		OGTKLibrary *libraryInfo =
+		    [self.sharedMapper libraryInfoByNamespace:dependency.name];
+
+		if (libraryInfo == nil)
+			continue;
+
+		OFString *libraryName = libraryInfo.name;
+
+		OFString *preparedSnippet =
+		    [snippet stringByReplacingOccurrencesOfString:@"%%LIBNAME%%"
+		                                       withString:libraryName];
+
+		[result appendString:preparedSnippet];
+		[result appendString:@"\n\n"];
+	}
+
+	[result deleteEnclosingWhitespaces];
+	[result makeImmutable];
+
+	return result;
+}
+
+- (OFString *)ACSnippetForIncludes:(OFString *)packageName
+{
+	OFString *fileName = [self.snippetDir
+	    stringByAppendingPathComponent:kACArgWithTemplateFile];
 	OFMutableString *snippet =
 	    [OFMutableString stringWithContentsOfFile:fileName];
 
@@ -85,17 +137,14 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%UCLIBNAME%%"
 	                         withString:[shortName uppercaseString]];
 
-	[snippet appendString:@"\n"];
-
 	[snippet makeImmutable];
 
 	return snippet;
 }
 
-+ (OFString *)ACSnippetForPackage:(OFString *)packageName
-           templateSnippetFromDir:(OFString *)snippetDir
+- (OFString *)ACSnippetForPackage:(OFString *)packageName
 {
-	OFString *fileName = [snippetDir
+	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kPkgCheckModulesTemplateFile];
 	OFMutableString *snippet =
 	    [OFMutableString stringWithContentsOfFile:fileName];
@@ -123,14 +172,12 @@ OFString *kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%PKGVERSION%%"
 	                         withString:pkgversion];
 
-	[snippet appendString:@"\n"];
-
 	[snippet makeImmutable];
 
 	return snippet;
 }
 
-+ (OFString *)shortNameFromPackageName:(OFString *)packageName
+- (OFString *)shortNameFromPackageName:(OFString *)packageName
 {
 	OFCharacterSet *charSet = [OFCharacterSet
 	    characterSetWithCharactersInString:@"+-_0123456789"];

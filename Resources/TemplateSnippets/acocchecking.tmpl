@@ -1,0 +1,4 @@
+AC_MSG_CHECKING(for ObjFW package %%LIBNAME%%)
+AS_IF([$OBJFW_CONFIG --package %%LIBNAME%%], [AC_MSG_RESULT(yes)], [
+	AC_MSG_ERROR(You need ObjFW package %%LIBNAME%% installed.)
+])
