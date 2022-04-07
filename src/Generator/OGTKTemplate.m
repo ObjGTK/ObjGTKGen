@@ -43,8 +43,7 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 			@throw [OFInvalidArgumentException exception];
 
 		_snippetDir = [snippetDir copy];
-		[sharedMapper retain];
-		_sharedMapper = sharedMapper;
+		_sharedMapper = [sharedMapper retain];
 
 	} @catch (id e) {
 		[self release];
