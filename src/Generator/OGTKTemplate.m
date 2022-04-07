@@ -28,6 +28,32 @@ OFString *const kACArgWithTemplateFile = @"acargwith.tmpl";
 OFString *const kACOCCheckingTemplateFile = @"acocchecking.tmpl";
 OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 
+- (instancetype)init
+{
+	OF_INVALID_INIT_METHOD
+}
+
+- (instancetype)initWithSnippetDir:(OFString *)snippetDir
+                      sharedMapper:(OGTKMapper *)sharedMapper
+{
+	self = [super init];
+
+	@try {
+		if (snippetDir == nil || sharedMapper == nil)
+			@throw [OFInvalidArgumentException exception];
+
+		_snippetDir = [snippetDir copy];
+		[sharedMapper retain];
+		_sharedMapper = sharedMapper;
+
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+
+	return self;
+}
+
 - (void)dealloc
 {
 	[_snippetDir release];
@@ -40,10 +66,6 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
                                     sourceFiles:(OFString *)sourceFiles
 {
-	// FIXME OGTKRequiredPropertyNotSetException
-	if (self.snippetDir == nil)
-		@throw [OFException exception];
-
 	OFString *authorMail;
 	if (libraryInfo.authorMail != nil)
 		authorMail = libraryInfo.authorMail;
@@ -86,10 +108,6 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 - (OFString *)ACSnippetForObjFWDependencies:(OFMutableSet OF_GENERIC(
                                                 GIRInclude *) *)dependencies
 {
-	if (self.sharedMapper == nil)
-		// FIXME OGTKRequiredPropertyNotSetException
-		@throw [OFException exception];
-
 	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kACOCCheckingTemplateFile];
 	OFString *snippet = [OFString stringWithContentsOfFile:fileName];

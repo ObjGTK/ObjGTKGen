@@ -17,6 +17,11 @@
 @property (copy, nonatomic) OFString *snippetDir;
 @property (retain, nonatomic) OGTKMapper *sharedMapper;
 
+- (instancetype) init OF_UNAVAILABLE;
+
+- (instancetype)initWithSnippetDir:(OFString *)snippetDir
+                      sharedMapper:(OGTKMapper *)sharedMapper;
+
 - (OFDictionary *)
     dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
                                     sourceFiles:(OFString *)sourceFiles;
