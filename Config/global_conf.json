@@ -1,6 +1,5 @@
 {
   "outputDir": "Output",
-  "girDir": "/usr/share/gir-1.0",
   "librarySourceAdditionsDir": "LibrarySourceAdditions",
   "buildTemplateDir": "Resources/BuildTemplate",
   "templateSnippetsDir": "Resources/TemplateSnippets",

@@ -59,16 +59,16 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 - (void)applicationDidFinishLaunching
 {
 	_excludeLibraries = [OGTKUtil globalConfigValueFor:@"excludeLibraries"];
-	_girDir = [OGTKUtil globalConfigValueFor:@"girDir"];
 	_sharedMapper = [OGTKMapper sharedMapper];
 
 	OFApplication *app = [OFApplication sharedApplication];
 	if (app.arguments.count < 1 ||
 	    [(OFString *)app.arguments.firstObject length] == 0) {
 		OFLog(@"Missing argument!\n"
-		      @"Usage: %@ <girName>\n"
-		      @"Directory configured to look for gir files is: %@\n",
-		    app.programName, _girDir);
+		      @"Usage: %@ </path/to/file.gir>\n"
+		      @"Linux distribution often store gir files at "
+		      @"/usr/share/gir-1.0\n",
+		    app.programName);
 		[app terminate];
 	}
 
@@ -78,7 +78,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 	// Load and parse base API from GIR file
 	OFString *girFile = [app.arguments firstObject];
-	girFile = [_girDir stringByAppendingPathComponent:girFile];
+	_girDir = [girFile stringByDeletingLastPathComponent];
 
 	OGTKLibrary *baseLibraryInfo = [self loadAPIFromFile:girFile];
 
