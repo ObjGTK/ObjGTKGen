@@ -8,7 +8,22 @@ with [ObjFW](https://objfw.nil.im/) by Jonathan Schleifer.
 
 ## Usage
 
-// FIXME
+`objgtkgen` currently is meant to be run within a local directory like the one given in this repository. Next to the binary it expects a `Config` dir containing the two files provided and it is going put its output into a directory specified in `global_conf.json`.
+
+Run it like so:
+
+```
+./objgtkgen </path/to/file.gir>
+```
+
+f.e.
+```
+./objgtkgen /usr/share/gir-1.0/Gtk-3.0.gir
+```
+
+This will generate the library definition for GTK3 into the output dir, including all the library dependencies specified by `Gtk-3.0.gir`.
+
+The generator is going to lookup these dependencies recursively at the path of the gir file specified as argument. You may exclude library and class dependencies of each library by modifying `global_conf.json` and `library_conf.json`.
 
 ## Licensing
 
@@ -21,7 +36,7 @@ Regarding GTK3 (and 4 or any other library wrapper) the generator is meant to ge
 
 ## Code base
 
-The ObjGTK code base should be compatible with the Objective C dialect of GCC ("Objective C 2.0") as introduced as of Mac OS X 10.5. So there should be no need to use clang. There are plans to implement advanced support of clang language features, especially memory management via Automatic Reference Counting (ARC).
+The code base of ObjGTK should be compatible with the Objective C dialect of GCC ("Objective C 2.0") as introduced as of Mac OS X 10.5. So there should be no need to use clang. There are plans to implement advanced support of clang language features, especially memory management via Automatic Reference Counting (ARC).
 
 Currently there are only untested, unstable preview releases of ObjGTK. Take care when using. API is going to change. See [milestones](https://codeberg.org/Letterus/objgtkgen/milestones) for the further release plan.
 
@@ -31,7 +46,11 @@ The generator does the following currently:
 
 1. It parses a GIR file (.gir) using `XMLReader` into object instances of the GIR classes (see directory `src/GIR`) (source models)
 2. `Gir2Objc` then maps the information of the GIR models into the models prefixed with `OGTK` (see directory `src/Generator`) (target models). Please note that these models still hold API/class informationen using C names and types as used by the Glib/GObject libraries. These models provide methods to transform their Glib ("c") data/names/types into Objective C classes/names/types.
-3. Finally `OGTKClassWriter` is called which writes out ObjC class definitions. Doing so it maps GObject types to Objective C / OGTK types (swaps them) by using `OGTKMapper`.
-4. When all classes are written, necessary base classes at `src/BaseClasses` are added to `Output` (the generated library) to actually make it compile and run. Please note that the classes at `src/BaseClasses` are **not** used by the generator itself at any time.
+3. It does the same for further libraries iterating recursively through all the libraries specified as dependencies by the gir file given.
+4. When all library and class definitions are held in memory to resolve class dependencies correctly using `OGTKMapper`, then `OGTKLibraryWriter` is called to first invoke `OGTKClassWriter`.
+5. `OGTKClassWriter` is going to write out the ObjC class definitions. It does so by mapping GObject types to Objective C / OGTK types (swapping them) using the class definitions hold in multiple `OFDictionary`s by `OGTKMapper`.
+6. When all classes are written, additional manual source files, that may be added at `LibrarySourceAdditions` are added to `Output` (the generated library) to actually make it compile and run. Please note the classes at `LibrarySourceAdditions` are **not** part of the generator itself. You may add your own code by creating new directories which naming convention needs to meet that of the corresponding gir file.
 
-You will find the main business logik in `Gir2Objc.m` and `Generator/OGTKMapper.m` as `Gir2Objc` calls `OGTKMapper` for multiple loops through all the parsed (Gobj) class/API information to complete dependency information (naming of parent classes) and the dependency graph (parent classes, depending classes). This is necessary to correctly insert `#import` and `@class` statements when generating the ObjC class definitions without getting stuck in a circular dependency loop.
+You will find the main business logik preparing data structures in `Gir2Objc.m` and `Generator/OGTKMapper.m` as `Gir2Objc` calls `OGTKMapper` for multiple loops through all the parsed (Gobj) class/API information to complete dependency information (naming of parent classes) and the dependency graph (parent classes, depending classes). This is necessary to correctly insert `#import` and `@class` statements when generating the ObjC class definitions without getting stuck in a circular dependency loop.
+
+For the actual generation and composition of the source files see `Generator/OGTKLibraryWriter.m` and `Generator/OGTKClassWriter.m`.
