@@ -30,6 +30,8 @@ The generator is going to lookup these dependencies recursively at the path of t
 ### Dependencies
 
 - You need [ObjFW](https://objfw.nil.im/).
+- The [GIR files](https://gi.readthedocs.io/en/latest/) required for your library. You may generate them manually, but the easiest way usually is to use those provided by your Linux distribution. F.e. for Debian and GTK3 use `apt install gir1.2-gtk-3.0`
+    - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
 - For building a generated library you need [OGObject](https://codeberg.org/ObjGTK/OGObject).
 
 ### Building
@@ -56,7 +58,7 @@ Currently there are only untested, unstable preview releases of ObjGTK. Take car
 
 The generator does the following currently:
 
-1. Using `XMLReader` it parses a GIR file (.gir) into object instances of the GIR classes (see directory `src/GIR`) (source models)
+1. Using `XMLReader` it parses a [GIR file (.gir)](https://gi.readthedocs.io/en/latest/) into object instances of the GIR classes (see directory `src/GIR`) (source models)
 2. `Gir2Objc` then maps the information of the GIR models into the models prefixed with `OGTK` (see directory `src/Generator`) (target models). Please note that these models still hold API/class informationen using C names and types as used by the Glib/GObject libraries. These models provide methods to transform their Glib ("c") data/names/types into Objective C classes/names/types.
 3. It does the same for further libraries iterating recursively through all the libraries specified as dependencies by the gir file given.
 4. When all library and class definitions are held in memory necessary to resolve class dependencies correctly using `OGTKMapper`, then `OGTKLibraryWriter` is called to first invoke `OGTKClassWriter`.
