@@ -25,6 +25,18 @@ This will generate the library definition for GTK3 into the output dir, includin
 
 The generator is going to lookup these dependencies recursively at the path of the gir file specified as argument. You may exclude library and class dependencies of each library by modifying `global_conf.json` and `library_conf.json`.
 
+## Dependencies and building
+
+### Dependencies
+
+- You need [ObjFW](https://objfw.nil.im/).
+- For building a generated library you need [OGObject](https://codeberg.org/ObjGTK/OGObject).
+
+### Building
+
+- `chmod +x autogen.sh && ./autogen.sh && ./configure && make`
+
+
 ## Licensing
 
 ObjGTKGen is free software. Its source files Tyler Burton originally released under
