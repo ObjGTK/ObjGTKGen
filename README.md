@@ -44,7 +44,7 @@ The generator is going to lookup these dependencies recursively at the path of t
 ObjGTKGen is free software. Its source files Tyler Burton originally released under
 GNU LGPL 2.1 or later. This licensing was kept for the files existing and for the directory LibrarySourceAdditions, which is meant to be part of the generated libraries and is NOT part of the generator.
 
-The additions to the generator written by Johannes Brakensiek are added under GNU GPL 3.0 or later. So any generator binary built using these files will need to be distributed under the terms of GNU GPL 3.0 or later.
+In consent with Tyler Burton the generator itself is released under GNU GPL 3.0 or later.
 
 Regarding GTK3 (and 4 or any other library wrapper) the generator is meant to generate wrapper source files which may be distributed under LGPL 2.1 or later.
 
