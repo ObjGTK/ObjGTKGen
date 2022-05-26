@@ -14,6 +14,7 @@
 @synthesize cSymbolPrefix = _cSymbolPrefix;
 @synthesize doc = _doc;
 @synthesize fields = _fields;
+@synthesize functions = _functions;
 @synthesize methods = _methods;
 @synthesize virtualMethods = _virtualMethods;
 @synthesize properties = _properties;
@@ -26,6 +27,7 @@
 	@try {
 		_elementTypeName = @"GIRInterface";
 		_fields = [[OFMutableArray alloc] init];
+		_functions = [[OFMutableArray alloc] init];
 		_methods = [[OFMutableArray alloc] init];
 		_virtualMethods = [[OFMutableArray alloc] init];
 		_properties = [[OFMutableArray alloc] init];
@@ -66,6 +68,10 @@
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRMethod class]
 			                      andArray:_methods];
+		} else if ([key isEqual:@"function"]) {
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRMethod class]
+			                      andArray:_functions];
 		} else if ([key isEqual:@"virtual-method"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRVirtualMethod class]

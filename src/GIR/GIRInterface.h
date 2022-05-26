@@ -23,6 +23,7 @@
 	OFString *_cSymbolPrefix;
 	GIRDoc *_doc;
 	OFMutableArray *_fields;
+	OFMutableArray *_functions;
 	OFMutableArray *_methods;
 	OFMutableArray *_virtualMethods;
 	OFMutableArray *_properties;
@@ -34,6 +35,7 @@
 @property (nonatomic, retain) OFString *cSymbolPrefix;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) OFMutableArray *fields;
+@property (nonatomic, retain) OFMutableArray *functions;
 @property (nonatomic, retain) OFMutableArray *methods;
 @property (nonatomic, retain) OFMutableArray *virtualMethods;
 @property (nonatomic, retain) OFMutableArray *properties;
