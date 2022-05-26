@@ -59,9 +59,10 @@
 
 		// else: src is a file
 		if ([fileMgr fileExistsAtPath:destFile]) {
-			OFLog(@"File [%@] already exists in destination [%@]. "
-			      @"Removing existing file...",
-			    srcFile, destFile);
+			// OFLog(@"File [%@] already exists in destination [%@].
+			// "
+			//       @"Removing existing file...",
+			//     srcFile, destFile);
 
 			@try {
 				[fileMgr removeItemAtPath:destFile];
@@ -82,9 +83,10 @@
 
 		if (methodName != nil && replaceDict != nil &&
 		    [self respondsToSelector:selector]) {
-			OFLog(@"Applying method [%@] on file [%@] and copying "
-			      @"to [%@]...",
-			    methodName, srcFile, destFile);
+			// OFLog(@"Applying method [%@] on file [%@] and copying
+			// "
+			//       @"to [%@]...",
+			//     methodName, srcFile, destFile);
 
 			OFString *fileContents =
 			    [OFString stringWithContentsOfFile:srcFile];
@@ -95,8 +97,9 @@
 
 			// Otherwise just copy
 		} else {
-			OFLog(
-			    @"Copying file [%@] to [%@]...", srcFile, destFile);
+			// OFLog(
+			//     @"Copying file [%@] to [%@]...", srcFile,
+			//     destFile);
 			[fileMgr copyItemAtPath:srcFile toPath:destFile];
 		}
 	}
@@ -135,7 +138,7 @@
 	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
 	        stringByAppendingPathComponent:@"src"];
 
-	OFLog(@"Attempting to generate and write class files for library %@...",
+	OFLog(@"Going to generate and write class files for library %@...",
 	    libraryInfo.name);
 
 	// Write the classes
@@ -208,11 +211,9 @@
 			            lookingForFileExtension:@".h"]];
 
 		} @catch (OFReadFailedException *e) {
-			OFLog(@"No additional base classes dir for "
-			      @"library %@, "
-			      @"importing only general and generated "
-			      @"header "
-			      @"files.",
+			OFLog(@"No additional source files for library %@, "
+			      @"generating header file for generated sources "
+			      @"only.",
 			    libName);
 		}
 

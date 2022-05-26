@@ -66,7 +66,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	    [(OFString *)app.arguments.firstObject length] == 0) {
 		OFLog(@"Missing argument!\n"
 		      @"Usage: %@ </path/to/file.gir>\n"
-		      @"Linux distribution often store gir files at "
+		      @"Linux distributions often store gir files at "
 		      @"/usr/share/gir-1.0\n",
 		    app.programName);
 		[app terminate];
