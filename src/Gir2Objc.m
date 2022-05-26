@@ -157,8 +157,8 @@
 		@throw [OGTKNoGIRAPIException exception];
 
 	OFLog(@"Namespace name: %@", ns.name);
-	OFLog(@"C symbol prefix: %@", ns.cSymbolPrefixes);
-	OFLog(@"C identifier prefix: %@", ns.cIdentifierPrefixes);
+	OFLog(@"C symbol prefixex: %@", ns.cSymbolPrefixes);
+	OFLog(@"C identifier prefixes: %@", ns.cIdentifierPrefixes);
 
 	if ([ns.classes count] == 0)
 		@throw [OGTKNamespaceContainsNoClassesException exception];

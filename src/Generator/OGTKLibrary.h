@@ -25,7 +25,7 @@
 	OFString *_cNSIdentifierPrefix;
 	OFString *_cNSSymbolPrefix;
 	bool _visited;
-	bool _topmostGraphNode;
+	bool _hasAdditionalSourceFiles;
 }
 
 @property (copy, nonatomic) OFString *namespace;
@@ -40,6 +40,7 @@
 @property (copy, nonatomic) OFString *cNSIdentifierPrefix;
 @property (copy, nonatomic) OFString *cNSSymbolPrefix;
 @property (nonatomic) bool visited;
+@property (nonatomic) bool hasAdditionalSourceFiles;
 
 @property (readonly, nonatomic) OFString *identifier;
 @property (readonly, nonatomic) OFString *versionMajor;

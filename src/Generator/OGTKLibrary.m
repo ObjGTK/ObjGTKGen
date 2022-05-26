@@ -20,7 +20,8 @@
             sharedLibraries = _sharedLibraries,
             excludeClasses = _excludeClasses,
             cNSIdentifierPrefix = _cNSIdentifierPrefix,
-            cNSSymbolPrefix = _cNSSymbolPrefix, visited = _visited;
+            cNSSymbolPrefix = _cNSSymbolPrefix, visited = _visited,
+			hasAdditionalSourceFiles = _hasAdditionalSourceFiles;
 
 - (instancetype)init
 {
@@ -31,7 +32,7 @@
 		_cIncludes = [[OFMutableSet alloc] init];
 		_sharedLibraries = [[OFSet alloc] init];
 		_visited = false;
-		_topmostGraphNode = false;
+		_hasAdditionalSourceFiles = true;
 	} @catch (id e) {
 		[self release];
 		@throw e;

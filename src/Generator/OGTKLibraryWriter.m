@@ -172,9 +172,13 @@
 	                                forLibrary:libraryInfo
 	              readAdditionalHeadersFromDir:baseClassPath];
 
-	OFLog(@"Attempting to copy additional source files specific for "
-	      @"library %@...",
+	if (!libraryInfo.hasAdditionalSourceFiles)
+		return;
+
+	OFLog(
+	    @"Going to copy additional source files specific for library %@...",
 	    libraryInfo.name);
+
 	[self
 	    copyFilesFromDir:[baseClassPath
 	                         stringByAppendingPathComponent:libraryInfo
@@ -211,10 +215,15 @@
 			            lookingForFileExtension:@".h"]];
 
 		} @catch (OFReadFailedException *e) {
-			OFLog(@"No additional source files for library %@, "
-			      @"generating header file for generated sources "
-			      @"only.",
-			    libName);
+			// Do nothing, set flag to not try to copy anything
+			// later
+			libraryInfo.hasAdditionalSourceFiles = false;
+
+			// OFLog(@"No additional source files for library %@, "
+			//       @"generating header file for generated sources
+			//       "
+			//       @"only.",
+			//     libName);
 		}
 
 		[output appendString:@"\n"];
