@@ -44,7 +44,8 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"source-position"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"source-position"] ||
+		    [key isEqual:@"shadowed-by"] || [key isEqual:@"shadows"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
