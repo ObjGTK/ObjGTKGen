@@ -271,10 +271,11 @@ static OGTKMapper *sharedMyMapper = nil;
 		    stringWithFormat:@"[OFString stringWithUTF8String:%@]",
 		    name];
 	} else if ([fromType isEqual:@"OFString*"] &&
-	    [toType isEqual:@"const gchar*"]) {
+	    ([toType isEqual:@"const gchar*"] ||
+	        [toType isEqual:@"const char*"])) {
 		return [OFString stringWithFormat:@"[%@ UTF8String]", name];
 	} else if ([fromType isEqual:@"OFString*"] &&
-	    [toType isEqual:@"gchar*"]) {
+	    ([toType isEqual:@"gchar*"] || [toType isEqual:@"char*"])) {
 		return [OFString
 		    stringWithFormat:@"(gchar*) [%@ UTF8String]", name];
 	}
