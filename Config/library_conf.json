@@ -9,7 +9,7 @@
       "SocketAccessible"
     ]
   },
-  "Gdk-3.0": {
+  "GdkPixbuf-2.0": {
     "excludeClasses": [
       "PixbufNonAnim",
       "PixbufSimpleAnimIter"
