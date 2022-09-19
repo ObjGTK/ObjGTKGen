@@ -26,7 +26,7 @@ AC_PROG_INSTALL
 
 CPP="$OBJCPP"
 CPPFLAGS="$CPPFLAGS $OBJCPPFLAGS $($OBJFW_CONFIG --cppflags)"
-OBJCFLAGS="$OBJCFLAGS -std=c11 -Wall -Wno-unknown-pragmas $($OBJFW_CONFIG --objcflags)"
+OBJCFLAGS="$OBJCFLAGS -std=c11 -Werror -Wall -Wno-unknown-pragmas $($OBJFW_CONFIG --objcflags)"
 LDFLAGS="$LDFLAGS $($OBJFW_CONFIG --ldflags --rpath)"
 LIBS="$($OBJFW_CONFIG --libs --rpath)"
 
