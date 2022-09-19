@@ -120,7 +120,7 @@
 	                            componentsSeparatedByString:@","]];
 
 	OFSet *sharedLibrariesResult =
-	    [_sharedLibraries setByAddingSet:sharedLibrariesSet];
+	    [_sharedLibraries setByAddingObjectsFromSet:sharedLibrariesSet];
 
 	[_sharedLibraries release];
 
