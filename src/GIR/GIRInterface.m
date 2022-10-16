@@ -18,7 +18,7 @@
 @synthesize methods = _methods;
 @synthesize virtualMethods = _virtualMethods;
 @synthesize properties = _properties;
-@synthesize prerequisite = _prerequisite;
+@synthesize prerequisites = _prerequisites;
 
 - (instancetype)init
 {
@@ -31,12 +31,28 @@
 		_methods = [[OFMutableArray alloc] init];
 		_virtualMethods = [[OFMutableArray alloc] init];
 		_properties = [[OFMutableArray alloc] init];
+		_prerequisites = [[OFMutableArray alloc] init];
 	} @catch (id e) {
 		[self release];
 		@throw e;
 	}
 
 	return self;
+}
+
+- (void)dealloc
+{
+	[_name release];
+	[_cType release];
+	[_cSymbolPrefix release];
+	[_doc release];
+	[_fields release];
+	[_methods release];
+	[_virtualMethods release];
+	[_properties release];
+	[_prerequisites release];
+
+	[super dealloc];
 }
 
 - (void)parseDictionary:(OFDictionary *)dict
@@ -81,27 +97,30 @@
 			                     withClass:[GIRProperty class]
 			                      andArray:_properties];
 		} else if ([key isEqual:@"prerequisite"]) {
-			self.prerequisite = [[[GIRPrerequisite alloc]
-			    initWithDictionary:value] autorelease];
+
+			if ([value isKindOfClass:[OFDictionary class]]) {
+				GIRPrerequisite *newPrerequisite =
+				    [[[GIRPrerequisite alloc]
+				        initWithDictionary:value] autorelease];
+
+				[self.prerequisites addObject:newPrerequisite];
+
+			} else if ([value isKindOfClass:[OFArray class]]) {
+				for (OFDictionary *dict in value) {
+					GIRPrerequisite *newPrerequisite =
+					    [[[GIRPrerequisite alloc]
+					        initWithDictionary:dict]
+					        autorelease];
+							
+					[self.prerequisites
+					    addObject:newPrerequisite];
+				}
+			}
+
 		} else {
 			[self logUnknownElement:key];
 		}
 	}
-}
-
-- (void)dealloc
-{
-	[_name release];
-	[_cType release];
-	[_cSymbolPrefix release];
-	[_doc release];
-	[_fields release];
-	[_methods release];
-	[_virtualMethods release];
-	[_properties release];
-	[_prerequisite release];
-
-	[super dealloc];
 }
 
 @end
