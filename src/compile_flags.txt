@@ -1,0 +1,4 @@
+-x
+objective-c
+-fconstant-string-class=OFConstantString
+-fno-constant-cfstrings
