@@ -75,7 +75,7 @@
 - (bool)tryParseWithKey:(OFString *)key andValue:(id)value
 {
 	if ([key isEqual:@"text"] || [key isEqual:@"source-position"] ||
-	    [key isEqual:@"doc-version"]) {
+	    [key isEqual:@"moved-to"] || [key isEqual:@"doc-version"]) {
 		// Do nothing
 	} else if ([key isEqual:@"name"]) {
 		self.name = value;
@@ -83,6 +83,11 @@
 		self.cIdentifier = value;
 	} else if ([key isEqual:@"version"]) {
 		self.version = value;
+
+		// TODO Use attribute to define for which property this is a
+		// getter or setter?
+	} else if ([key isEqual:@"attribute"]) {
+		// Do nothing right now.
 	} else if ([key isEqual:@"glib:get-property"]) {
 		self.glibGetForProperty = value;
 	} else if ([key isEqual:@"glib:set-property"]) {

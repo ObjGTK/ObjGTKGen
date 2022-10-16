@@ -90,6 +90,8 @@
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRInterface class]
 			                      andArray:_interfaces];
+		} else if ([key isEqual:@"glib:boxed"]) {
+			// TODO: This is important for memory managemant and needs to be handled
 		} else {
 			[self logUnknownElement:key];
 		}

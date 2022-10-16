@@ -33,8 +33,9 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		// TODO: Do we need nullable?
-		if ([key isEqual:@"text"] || [key isEqual:@"nullable"]) {
+		// TODO: Do we need to translate nullable into ObjC?
+		if ([key isEqual:@"text"] || [key isEqual:@"nullable"] ||
+		    [key isEqual:@"attribute"]) {
 			// Do nothing
 		} else if ([key isEqual:@"transfer-ownership"]) {
 			self.transferOwnership = value;
