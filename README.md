@@ -55,7 +55,8 @@ echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.ll
 deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-14 main" | sudo tee /etc/apt/sources.list.d/clang.list
 sudo apt update
 sudo apt-get install clang-14 clang-tools-14 clang-14-doc libclang-common-14-dev libclang-14-dev libclang1-14 clang-format-14 python3-clang-14 clangd-14 clang-tidy-14 lldb-14 lld-14
-sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 140 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-14 --slave /usr/share/man/man1/clang.1.gz clang.1.gz /usr/share/man/man1/clang-14.1.gz --slave /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-14  --slave /usr/bin/clang-format clang-format /usr/bin/clang-format-14 --slave /usr/bin/clangd clangd /usr/bin/clangd-14udo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-14 140
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 140 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-14 --slave /usr/share/man/man1/clang.1.gz clang.1.gz /usr/share/man/man1/clang-14.1.gz --slave /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-14  --slave /usr/bin/clang-format clang-format /usr/bin/clang-format-14 --slave /usr/bin/clangd clangd /usr/bin/clangd-14 --slave /usr/bin/lldb lldb /usr/bin/lldb-14
+sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-14 140
 sudo update-alternatives --config cc
 ```
 
