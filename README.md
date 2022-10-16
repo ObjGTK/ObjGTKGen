@@ -34,7 +34,7 @@ The generator is going to lookup these dependencies recursively at the path of t
 - The [GIR files](https://gi.readthedocs.io/en/latest/) required for your library.
 
 You may use the GIR files provided by your Linux distribution. F.e. for Debian Unstable and GTK3 use `apt install gir1.2-gtk-3.0`. This approach has the advantage you are able to install the library headers and binaries fitting the description of the GIR files.
-    - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
+  - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
 
 But the GIR packages of a Linux distribution may be out of date and lacking features required by this generator. Thus it is probably more appropriate to use some more recent GIR files. You may use the GIR files provided [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-files). If you want to get the current libraries (read: daily builds of the GNOME SDK) as well you may use the flatpak as described by the page linked above. 
 
