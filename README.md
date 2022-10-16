@@ -33,11 +33,14 @@ The generator is going to lookup these dependencies recursively at the path of t
 - For building a generated library you need [OGObject](https://codeberg.org/ObjGTK/OGObject).
 - The [GIR files](https://gi.readthedocs.io/en/latest/), its library files (shared library, headers, pkg-config description) and the dependending libraries required for your library. The pkg-config information is required for generating a ObjFW package correctly. Shared libraries and headers are only needed if the generated files shall get compiled.
 
+### GIR files
+
 You may use the GIR files and libraries provided by your Linux distribution. F.e. for Debian Unstable and GTK3 use `apt install gir1.2-gtk-3.0`.
   - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
 
 If you don't use a rolling Linux distribution, the GIR packages and its library sets may be out of date and lack features required by this generator. Then it is probably more appropriate to use some more recent library releases. If you want to get the current libraries (read: daily builds of the GNOME SDK) you may use flatpak as described [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-files). 
 
+As noted there it may be helpful to consult the [GIR format reference](https://gi.readthedocs.io/en/latest/annotations/giannotations.html) or the [XML schema](https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/main/docs/gir-1.2.rnc).
 
 ### Building
 
