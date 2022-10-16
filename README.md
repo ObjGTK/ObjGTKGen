@@ -44,7 +44,7 @@ The generator is going to lookup these dependencies recursively at the path of t
 
 `clang >= 12` is recommended to make `clang-format` work correctly. Install [latest stable clang/llvm](https://apt.llvm.org/) on Debian like so:
 
-```#!/bin/bash
+```bash
 wget -O- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/llvm-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-14 main
 deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-14 main" | sudo tee /etc/apt/sources.list.d/clang.list
@@ -56,7 +56,7 @@ sudo update-alternatives --config cc
 
 ### IDE: VSCodium
 
-VSCodium is nice to work with Objective-C.
+VSCodium is nice to work with Objective-C, especially if used in conjunction with clang/llvm and its tools.
 
 Install VSCodium on Linux [as documented](https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo).
 
