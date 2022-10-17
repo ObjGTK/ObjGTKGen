@@ -39,8 +39,7 @@ dnl We don't call AC_PROG_CPP, but only AC_PROG_OBJCPP and set CPP to OBJCPP
 dnl and add OBJCPPFLAGS to CPPFLAGS, thus we need to AC_SUBST these ourself.
 AC_SUBST(CPP)
 AC_SUBST(CPPFLAGS)
-AC_SUBST(CPP, $OBJC)
-AC_SUBST(CPPFLAGS, $OBJCFLAGS)
+AC_SUBST(LIBS)
 
 AC_CONFIG_FILES([buildsys.mk])
 AC_OUTPUT
