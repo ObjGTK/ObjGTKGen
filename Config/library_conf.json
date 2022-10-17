@@ -9,6 +9,15 @@
       "SocketAccessible"
     ]
   },
+  "Gdk-3.0": {
+    "customName": "OGdk3"
+  },
+  "Gtk-4.0": {
+    "customName": "ObjGTK4"
+  },
+  "Gdk-4.0": {
+    "customName": "OGdk4"
+  },
   "GdkPixbuf-2.0": {
     "excludeClasses": [
       "PixbufNonAnim",
