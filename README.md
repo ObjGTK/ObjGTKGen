@@ -38,13 +38,26 @@ The generator is going to lookup these dependencies recursively at the path of t
 You may use the GIR files and libraries provided by your Linux distribution. F.e. for Debian Unstable and GTK3 use `apt install gir1.2-gtk-3.0`.
   - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
 
-If you don't use a rolling Linux distribution, the GIR packages and its library sets may be out of date and lack features required by this generator. Then it is probably more appropriate to use some more recent library releases. If you want to get the current libraries (read: daily builds of the GNOME SDK) you may use flatpak as described [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-files). 
+If you don't use a rolling Linux distribution, the GIR packages and its library sets may be out of date and lack features required by this generator. Then it is probably more appropriate to use some more recent library releases. If you want to get the current libraries (read: daily builds of the GNOME SDK) you may use flatpak (see below).
 
-As noted there it may be helpful to consult the [GIR format reference](https://gi.readthedocs.io/en/latest/annotations/giannotations.html) or the [XML schema](https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/main/docs/gir-1.2.rnc).
+As noted [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-files) it may be helpful to consult the [GIR format reference](https://gi.readthedocs.io/en/latest/annotations/giannotations.html) or the [XML schema](https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/main/docs/gir-1.2.rnc).
 
 ### Building
 
 - `chmod +x autogen.sh && ./autogen.sh && ./configure && make`
+
+#### Flatpak
+
+```bash
+# Install SDK
+flatpak install org.gnome.Sdk//master -y --noninteractive
+
+# Build binary and install it in its sandbox
+flatpak-builder build-dir --force-clean org.codeberg.objgtk.objgtkgen.yml --user --install
+
+# Run the app: This will use the most current GIR files from the SDK and output ObjGTK3 to your local working directory:
+flatpak run org.codeberg.ObjGTK.ObjGTKGen /usr/share/gir-1.0/Gtk-3.0.gir
+```
 
 ## Developing
 
