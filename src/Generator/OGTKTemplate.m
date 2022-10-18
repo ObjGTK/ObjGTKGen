@@ -174,20 +174,12 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%PKGNAME%%"
 	                         withString:packageName];
 
-	OFSubprocess *pkgConfigProcess = [OFSubprocess
-	    subprocessWithProgram:@"pkg-config"
-	                arguments:[OFArray arrayWithObjects:@"--modversion",
-	                                   packageName, nil]];
-
-	OFString *pkgversion = [pkgConfigProcess readLine];
-	if (pkgversion == nil)
-		@throw [OFReadFailedException
-		    exceptionWithObject:pkgConfigProcess
-		        requestedLength:[pkgversion length]
-		                  errNo:0];
-
-	[snippet replaceOccurrencesOfString:@"%%PKGVERSION%%"
-	                         withString:pkgversion];
+	[snippet
+	    replaceOccurrencesOfString:@"%%PKGVERSION%%"
+	                    withString:[OFString
+	                                   stringWithFormat:
+	                                       @"$(pkg-config --modversion %@)",
+	                                   packageName]];
 
 	[snippet makeImmutable];
 
