@@ -49,6 +49,9 @@ As noted [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-fi
 #### Flatpak
 
 ```bash
+# Add the GNOME Nightly repo
+flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
+
 # Install SDK
 flatpak install org.gnome.Sdk//master -y --noninteractive
 
