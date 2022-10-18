@@ -100,7 +100,7 @@ static OFMutableDictionary *dictLibraryConf;
 	if (dictGlobalConf == nil) {
 		dictGlobalConf = [[OFMutableDictionary alloc]
 		    ogtk_initWithJsonDictionaryOfFile:
-		        @"Config/global_conf.json"];
+		        @"/app/share/ObjGTKGen/Config/global_conf.json"];
 	}
 
 	return [dictGlobalConf objectForKey:key];
@@ -111,7 +111,7 @@ static OFMutableDictionary *dictLibraryConf;
 	if (dictLibraryConf == nil) {
 		dictLibraryConf = [[OFMutableDictionary alloc]
 		    ogtk_initWithJsonDictionaryOfFile:
-		        @"Config/library_conf.json"];
+		        @"/app/share/ObjGTKGen/Config/library_conf.json"];
 	}
 
 	return [dictLibraryConf objectForKey:libraryIdentifier];

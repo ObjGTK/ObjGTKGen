@@ -422,7 +422,7 @@
 + (OFString *)generateLicense:(OFString *)fileName
 {
 	OFString *licText =
-	    [OFString stringWithContentsOfFile:@"Config/license.txt"];
+	    [OFString stringWithContentsOfFile:@"/app/share/ObjGTKGen/Config/license.txt"];
 
 	return [licText stringByReplacingOccurrencesOfString:@"@@@FILENAME@@@"
 	                                          withString:fileName];
