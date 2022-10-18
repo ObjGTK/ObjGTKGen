@@ -52,8 +52,9 @@ As noted [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-fi
 # Add the GNOME Nightly repo
 flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
 
-# Install SDK
+# Install SDK and LLVM extension
 flatpak install org.gnome.Sdk//master -y --noninteractive
+flatpak install org.freedesktop.Sdk.Extension.llvm14//22.08 -y --noninteractive
 
 # Build binary and install it in its sandbox
 flatpak-builder build-dir --force-clean org.codeberg.objgtk.objgtkgen.yml --user --install
