@@ -13,7 +13,8 @@
 @synthesize name = _name, cIdentifier = _cIdentifier,
             cReturnType = _cReturnType, documentation = _documentation,
             returnValueDocumentation = _returnValueDocumentation,
-            parameters = _parameters, throws = _throws;
+            parameters = _parameters, throws = _throws, isGetter = _isGetter,
+            isSetter = _isSetter;
 
 - (instancetype)init
 {

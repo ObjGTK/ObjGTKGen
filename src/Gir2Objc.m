@@ -265,6 +265,21 @@
 		else
 			methodName = girMethod.name;
 
+		if ([girMethod isKindOfClass:[GIRMethod class]]) {
+			GIRMethod *girMethodInstance = (GIRMethod*) girMethod;
+			if (girMethodInstance.glibGetForProperty != nil &&
+			    girMethodInstance.glibGetForProperty.length != 0)
+				objcMethod.isGetter = true;
+			if (girMethodInstance.glibSetForProperty != nil &&
+			    girMethodInstance.glibSetForProperty.length != 0)
+				objcMethod.isSetter = true;
+		}
+
+		if (objcMethod.isGetter &&
+		    [[objcMethod.name substringToIndex:3] isEqual:@"get"]) {
+			methodName = [methodName substringFromIndex:3];
+		}
+
 		[objcMethod setName:methodName];
 		[objcMethod setCIdentifier:girMethod.cIdentifier];
 		objcMethod.documentation = girMethod.doc.docText;

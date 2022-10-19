@@ -9,11 +9,13 @@
 
 @protocol GIRMethodMapping
 
-@property (nonatomic, copy) OFString *name;
-@property (nonatomic, copy) OFString *cIdentifier;
-@property (nonatomic, retain) OFMutableArray *parameters;
-@property (nonatomic, retain) GIRReturnValue *returnValue;
-@property (nonatomic, retain) GIRDoc *doc;
+@property (nonatomic, copy) OFString *_Nonnull name;
+@property (nonatomic, copy) OFString *_Nonnull cIdentifier;
+@property (nonatomic, retain) OFMutableArray *_Nullable parameters;
+@property (nonatomic, retain) GIRReturnValue *_Nonnull returnValue;
+@property (nonatomic, retain) GIRDoc *_Nullable doc;
 @property (nonatomic) bool throws;
+
+- (bool)isKindOfClass:(nonnull Class)class_;
 
 @end

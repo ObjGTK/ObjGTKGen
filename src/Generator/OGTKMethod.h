@@ -20,6 +20,8 @@
 	OFString *_returnValueDocumentation;
 	OFArray *_parameters;
 	bool _throws;
+	bool _isGetter;
+	bool _isSetter;
 }
 
 @property (copy, nonatomic) OFString *name;
@@ -32,5 +34,7 @@
 @property (readonly, nonatomic) bool returnsVoid;
 @property (copy, nonatomic) OFArray *parameters;
 @property (nonatomic) bool throws;
+@property (nonatomic) bool isGetter;
+@property (nonatomic) bool isSetter;
 
 @end
