@@ -10,6 +10,8 @@ buildsys.mk
 aclocal.m4
 autom4te.cache
 build
+build-dir
+.flatpak-builder
 objgtkgen
 .DS_Store
 Output
