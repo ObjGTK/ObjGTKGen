@@ -97,26 +97,9 @@
 			                     withClass:[GIRProperty class]
 			                      andArray:_properties];
 		} else if ([key isEqual:@"prerequisite"]) {
-
-			if ([value isKindOfClass:[OFDictionary class]]) {
-				GIRPrerequisite *newPrerequisite =
-				    [[[GIRPrerequisite alloc]
-				        initWithDictionary:value] autorelease];
-
-				[self.prerequisites addObject:newPrerequisite];
-
-			} else if ([value isKindOfClass:[OFArray class]]) {
-				for (OFDictionary *dict in value) {
-					GIRPrerequisite *newPrerequisite =
-					    [[[GIRPrerequisite alloc]
-					        initWithDictionary:dict]
-					        autorelease];
-							
-					[self.prerequisites
-					    addObject:newPrerequisite];
-				}
-			}
-
+			[self processArrayOrDictionary:value
+			                     withClass:[GIRPrerequisite class]
+			                      andArray:_prerequisites];
 		} else {
 			[self logUnknownElement:key];
 		}
