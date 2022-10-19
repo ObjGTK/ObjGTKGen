@@ -276,7 +276,7 @@
 		}
 
 		if (objcMethod.isGetter &&
-		    [[objcMethod.name substringToIndex:3] isEqual:@"get"]) {
+		    [[methodName substringToIndex:3] isEqual:@"get"]) {
 			methodName = [methodName substringFromIndex:3];
 		}
 
