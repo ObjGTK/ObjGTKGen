@@ -58,7 +58,8 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"introspectable"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"introspectable"] ||
+		    [key isEqual:@"attribute"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
@@ -89,10 +90,6 @@
 			self.construct = value;
 		} else if ([key isEqual:@"writable"]) {
 			self.writable = value;
-
-			// TODO: Use attribute to define getter and setter
-		} else if ([key isEqual:@"attribute"]) {
-			// Do nothing right now
 		} else if ([key isEqual:@"getter"]) {
 			self.getter = value;
 		} else if ([key isEqual:@"setter"]) {
