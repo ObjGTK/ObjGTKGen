@@ -58,6 +58,8 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 - (void)applicationDidFinishLaunching
 {
+	[OGTKUtil setDataDir:@DATA_DIR];
+
 	_excludeLibraries = [OGTKUtil globalConfigValueFor:@"excludeLibraries"];
 	_sharedMapper = [OGTKMapper sharedMapper];
 
@@ -198,8 +200,9 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	    [outputDir stringByAppendingPathComponent:libraryInfo.name];
 	OFString *templateDir =
 	    [OGTKUtil globalConfigValueFor:@"buildTemplateDir"];
-	OFString *templateSnippetsDir =
-	    [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"];
+	OFString *templateSnippetsDir = [[OGTKUtil dataDir]
+	    stringByAppendingPathComponent:
+	        [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"]];
 
 	OFString *sourceFiles = [OGTKLibraryWriter
 	        stringForFilesInDir:[libraryOutputDir

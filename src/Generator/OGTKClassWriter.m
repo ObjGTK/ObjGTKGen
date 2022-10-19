@@ -421,8 +421,10 @@
 
 + (OFString *)generateLicense:(OFString *)fileName
 {
-	OFString *licText =
-	    [OFString stringWithContentsOfFile:@"/app/share/ObjGTKGen/Config/license.txt"];
+	OFString *licText = [OFString
+	    stringWithContentsOfFile:
+	        [[OGTKUtil dataDir]
+	            stringByAppendingPathComponent:@"Config/license.txt"]];
 
 	return [licText stringByReplacingOccurrencesOfString:@"@@@FILENAME@@@"
 	                                          withString:fileName];

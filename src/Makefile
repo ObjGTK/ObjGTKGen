@@ -14,3 +14,5 @@ SRCS = Gir2Objc.m \
 	ObjGTKGen.m
 
 include ../buildsys.mk
+
+CPPFLAGS += -DDATA_DIR='"${DESTDIR}${datadir}/${PACKAGE_NAME}"'

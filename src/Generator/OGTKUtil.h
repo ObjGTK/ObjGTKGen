@@ -42,12 +42,26 @@
                                   withConstructor:(OFString *)cCtor;
 
 /**
+ * Returns the base pase for all config and resource files to be loaded.
+ * Returns "." if none configured.
+ */
++ (OFString *)dataDir;
+
+/**
+ * Set the base path for all config and resource files to be loaded.
+ * This method is going to set it to "." if it won't find expected dirs
+ * at the location given.
+ */
++ (void)setDataDir:(OFString *)dataDir;
+
+/**
  * Returns the configuration value for the provided key
  */
 + (id)globalConfigValueFor:(OFString *)key;
 
 /**
- * Returns the configuration for the library identified by namespaceName-versionNumber
+ * Returns the configuration for the library identified by
+ * namespaceName-versionNumber
  */
 + (id)libraryConfigFor:(OFString *)libraryIdentifier;
 

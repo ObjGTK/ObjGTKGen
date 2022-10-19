@@ -12,8 +12,7 @@
 #import "OGTKMapper.h"
 
 /* Reference for static linking */
-void
-_reference_to_category_of_ofdictionary(void)
+void _reference_to_category_of_ofdictionary(void)
 {
 	_OFDictionary_OGTKJsonDictionaryOfFile_reference = 1;
 }
@@ -22,6 +21,7 @@ _reference_to_category_of_ofdictionary(void)
 
 static OFMutableDictionary *dictGlobalConf;
 static OFMutableDictionary *dictLibraryConf;
+static OFString *myDataDir;
 
 + (OFString *)convertUSSToCamelCase:(OFString *)input
 {
@@ -95,12 +95,30 @@ static OFMutableDictionary *dictLibraryConf;
 	return false;
 }
 
++ (void)setDataDir:(OFString *)dataDir
+{
+	if ([[OFFileManager defaultManager] directoryExistsAtPath:dataDir])
+		myDataDir = [dataDir retain];
+	else
+		myDataDir = @".";
+}
+
++ (OFString *)dataDir
+{
+	if (myDataDir != nil)
+		return [[myDataDir copy] autorelease];
+
+	return @".";
+}
+
 + (id)globalConfigValueFor:(OFString *)key
 {
 	if (dictGlobalConf == nil) {
+
 		dictGlobalConf = [[OFMutableDictionary alloc]
 		    ogtk_initWithJsonDictionaryOfFile:
-		        @"/app/share/ObjGTKGen/Config/global_conf.json"];
+		        [myDataDir stringByAppendingPathComponent:
+		                       @"Config/global_conf.json"]];
 	}
 
 	return [dictGlobalConf objectForKey:key];
@@ -111,7 +129,8 @@ static OFMutableDictionary *dictLibraryConf;
 	if (dictLibraryConf == nil) {
 		dictLibraryConf = [[OFMutableDictionary alloc]
 		    ogtk_initWithJsonDictionaryOfFile:
-		        @"/app/share/ObjGTKGen/Config/library_conf.json"];
+		        [myDataDir stringByAppendingPathComponent:
+		                       @"Config/library_conf.json"]];
 	}
 
 	return [dictLibraryConf objectForKey:libraryIdentifier];

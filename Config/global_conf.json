@@ -1,8 +1,8 @@
 {
   "outputDir": "Output",
-  "librarySourceAdditionsDir": "/app/share/ObjGTKGen/LibrarySourceAdditions",
-  "buildTemplateDir": "/app/share/ObjGTKGen/Resources/BuildTemplate",
-  "templateSnippetsDir": "/app/share/ObjGTKGen/Resources/TemplateSnippets",
+  "librarySourceAdditionsDir": "LibrarySourceAdditions",
+  "buildTemplateDir": "Resources/BuildTemplate",
+  "templateSnippetsDir": "Resources/TemplateSnippets",
   "excludeLibraries": [
     "GObject",
     "Gio",
