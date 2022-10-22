@@ -265,8 +265,18 @@
 		else
 			methodName = girMethod.name;
 
+		// Memory management is encapsulated using the ObjC way, so
+		// leave out the GObject API
+		if ([methodName isEqual:@"ref"] ||
+		    [methodName isEqual:@"unref"]) {
+
+			[objcMethod release];
+			continue;
+
+		}
+
 		if ([girMethod isKindOfClass:[GIRMethod class]]) {
-			GIRMethod *girMethodInstance = (GIRMethod*) girMethod;
+			GIRMethod *girMethodInstance = (GIRMethod *)girMethod;
 			if (girMethodInstance.glibGetForProperty != nil &&
 			    girMethodInstance.glibGetForProperty.length != 0)
 				objcMethod.isGetter = true;
