@@ -1,9 +1,9 @@
-AC_ARG_WITH(%%LCLIBNAME%%, AS_HELP_STRING([--with-%%LCLIBNAME%%=PREFIX],
-	[build with %%LIBNAME%% in the specified prefix]))
-AS_IF([test x"$with_%%LCLIBNAME%%" != x"no" -a x"$with_%%LCLIBNAME%%" != x""], [
-       %%UCLIBNAME%%_CPPFLAGS="$%%UCLIBNAME%%_CFLAGS -I$with_%%LCLIBNAME%%/include"
-       %%UCLIBNAME%%_LIBS="$%%UCLIBNAME%%_LIBS -L$with_%%LCLIBNAME%%/lib"
-       CPPFLAGS="$CPPFLAGS -I$with_%%LCLIBNAME%%/include"
-       LIBS="-L$with_%%LCLIBNAME%%/lib $LIBS"
-       FRAMEWORK_LIBS="-L$with_%%LCLIBNAME%%/lib $FRAMEWORK_LIBS"
+AC_ARG_WITH(%%LCDEPNAME%%, AS_HELP_STRING([--with-%%LCDEPNAME%%=PREFIX],
+	[build with %%DEPNAME%% in the specified prefix]))
+AS_IF([test x"$with_%%LCDEPNAME%%" != x"no" -a x"$with_%%LCDEPNAME%%" != x""], [
+       %%LIBNAME%%_CPPFLAGS="$%%LIBNAME%%_CPPFLAGS -I$with_%%LCDEPNAME%%/include"
+       %%LIBNAME%%_LIBS="$%%LIBNAME%%_LIBS -L$with_%%LCDEPNAME%%/lib"
+       CPPFLAGS="-I$with_%%LCDEPNAME%%/include $CPPFLAGS"
+       LIBS="-L$with_%%LCDEPNAME%%/lib $LIBS"
+       FRAMEWORK_LIBS="-L$with_%%LCDEPNAME%%/lib $FRAMEWORK_LIBS"
 ])

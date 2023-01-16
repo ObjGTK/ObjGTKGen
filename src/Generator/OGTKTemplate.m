@@ -10,11 +10,15 @@
 
 @interface OGTKTemplate ()
 
-- (OFString *)ACSnippetForObjFWDependencies:(OFMutableSet *)dependencies;
+- (OFString *)ACSnippetsForDependencies:(OFMutableSet OF_GENERIC(
+                                            GIRInclude *) *)dependencies
+                        forLibraryNamed:(OFString *)parentLibName;
 
-- (OFString *)ACSnippetForIncludes:(OFString *)packageName;
+- (OFString *)ACSnippetForIncludesOf:(OFString *)dependencyName
+                     forLibraryNamed:(OFString *)parentLibName;
 
-- (OFString *)ACSnippetForPackage:(OFString *)packageName;
+- (OFString *)ACSnippetForPackage:(OFString *)dependencyName
+                  forLibraryNamed:(OFString *)parentLibName;
 
 - (OFString *)shortNameFromPackageName:(OFString *)packageName;
 
@@ -72,13 +76,16 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 		authorMail = @"unkown@host.com";
 
 	OFString *acOCChecking =
-	    [self ACSnippetForObjFWDependencies:libraryInfo.dependencies];
+	    [self ACSnippetsForDependencies:libraryInfo.dependencies
+	                    forLibraryNamed:libraryInfo.name];
 
 	OFString *acArgWith =
-	    [self ACSnippetForIncludes:libraryInfo.packageName];
+	    [self ACSnippetForIncludesOf:libraryInfo.packageName
+	                 forLibraryNamed:libraryInfo.name];
 
 	OFString *pkgCheckModules =
-	    [self ACSnippetForPackage:libraryInfo.packageName];
+	    [self ACSnippetForPackage:libraryInfo.packageName
+	              forLibraryNamed:libraryInfo.name];
 
 	OFDictionary *dict = [OFDictionary
 	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name,
@@ -104,12 +111,14 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	return dict;
 }
 
-- (OFString *)ACSnippetForObjFWDependencies:(OFMutableSet OF_GENERIC(
-                                                GIRInclude *) *)dependencies
+- (OFString *)ACSnippetsForDependencies:(OFMutableSet OF_GENERIC(
+                                            GIRInclude *) *)dependencies
+                        forLibraryNamed:(OFString *)parentLibName
 {
 	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kACOCCheckingTemplateFile];
-	OFString *snippet = [OFString stringWithContentsOfFile:fileName];
+	OFString *objfwPackageSnippet =
+	    [OFString stringWithContentsOfFile:fileName];
 
 	OFMutableString *result = [OFMutableString string];
 
@@ -122,11 +131,16 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 
 		OFString *libraryName = libraryInfo.name;
 
-		OFString *preparedSnippet =
-		    [snippet stringByReplacingOccurrencesOfString:@"%%LIBNAME%%"
-		                                       withString:libraryName];
+		objfwPackageSnippet = [objfwPackageSnippet
+		    stringByReplacingOccurrencesOfString:@"%%DEPNAME%%"
+		                              withString:libraryName];
 
-		[result appendString:preparedSnippet];
+		objfwPackageSnippet = [objfwPackageSnippet
+		    stringByReplacingOccurrencesOfString:@"%%LIBNAME%%"
+		                              withString:[parentLibName
+		                                             uppercaseString]];
+
+		[result appendString:objfwPackageSnippet];
 		[result appendString:@"\n\n"];
 	}
 
@@ -136,50 +150,58 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	return result;
 }
 
-- (OFString *)ACSnippetForIncludes:(OFString *)packageName
+- (OFString *)ACSnippetForIncludesOf:(OFString *)dependencyName
+                     forLibraryNamed:(OFString *)parentLibName
 {
 	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kACArgWithTemplateFile];
 	OFMutableString *snippet =
 	    [OFMutableString stringWithContentsOfFile:fileName];
 
-	OFString *shortName = [self shortNameFromPackageName:packageName];
+	OFString *shortName = [self shortNameFromPackageName:dependencyName];
+	parentLibName = [parentLibName uppercaseString];
 
-	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
-	                         withString:packageName];
+	[snippet replaceOccurrencesOfString:@"%%DEPNAME%%"
+	                         withString:dependencyName];
 
-	[snippet replaceOccurrencesOfString:@"%%LCLIBNAME%%"
+	[snippet replaceOccurrencesOfString:@"%%LCDEPNAME%%"
 	                         withString:[shortName lowercaseString]];
 
-	[snippet replaceOccurrencesOfString:@"%%UCLIBNAME%%"
+	[snippet replaceOccurrencesOfString:@"%%UCDEPNAME%%"
 	                         withString:[shortName uppercaseString]];
+
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%" withString:parentLibName];
 
 	[snippet makeImmutable];
 
 	return snippet;
 }
 
-- (OFString *)ACSnippetForPackage:(OFString *)packageName
+- (OFString *)ACSnippetForPackage:(OFString *)dependencyName
+                  forLibraryNamed:(OFString *)parentLibName
 {
 	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kPkgCheckModulesTemplateFile];
 	OFMutableString *snippet =
 	    [OFMutableString stringWithContentsOfFile:fileName];
 
-	OFString *shortName = [self shortNameFromPackageName:packageName];
+	OFString *shortName = [self shortNameFromPackageName:dependencyName];
+	parentLibName = [parentLibName uppercaseString];
 
-	[snippet replaceOccurrencesOfString:@"%%LCLIBNAME%%"
+	[snippet replaceOccurrencesOfString:@"%%LCPKGNAME%%"
 	                         withString:[shortName lowercaseString]];
 
 	[snippet replaceOccurrencesOfString:@"%%PKGNAME%%"
-	                         withString:packageName];
+	                         withString:dependencyName];
 
 	[snippet
 	    replaceOccurrencesOfString:@"%%PKGVERSION%%"
 	                    withString:[OFString
 	                                   stringWithFormat:
 	                                       @"$(pkg-config --modversion %@)",
-	                                   packageName]];
+	                                   dependencyName]];
+
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%" withString:parentLibName];
 
 	[snippet makeImmutable];
 
