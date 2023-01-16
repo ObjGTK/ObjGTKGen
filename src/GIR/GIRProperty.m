@@ -59,7 +59,8 @@
 		id value = [dict objectForKey:key];
 
 		if ([key isEqual:@"text"] || [key isEqual:@"introspectable"] ||
-		    [key isEqual:@"attribute"]) {
+		    [key isEqual:@"attribute"] ||
+		    [key isEqual:@"default-value"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
