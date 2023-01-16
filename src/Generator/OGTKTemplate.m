@@ -117,12 +117,13 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 {
 	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kACOCCheckingTemplateFile];
-	OFString *objfwPackageSnippet =
-	    [OFString stringWithContentsOfFile:fileName];
 
 	OFMutableString *result = [OFMutableString string];
 
 	for (GIRInclude *dependency in dependencies) {
+		OFString *objfwPackageSnippet =
+		    [OFString stringWithContentsOfFile:fileName];
+
 		OGTKLibrary *libraryInfo =
 		    [self.sharedMapper libraryInfoByNamespace:dependency.name];
 
@@ -170,7 +171,8 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%UCDEPNAME%%"
 	                         withString:[shortName uppercaseString]];
 
-	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%" withString:parentLibName];
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
+	                         withString:parentLibName];
 
 	[snippet makeImmutable];
 
@@ -201,7 +203,8 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	                                       @"$(pkg-config --modversion %@)",
 	                                   dependencyName]];
 
-	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%" withString:parentLibName];
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
+	                         withString:parentLibName];
 
 	[snippet makeImmutable];
 
