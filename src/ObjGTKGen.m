@@ -56,7 +56,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	[super dealloc];
 }
 
-- (void)applicationDidFinishLaunching
+- (void)applicationDidFinishLaunching:(OFNotification*)notification
 {
 	[OGTKUtil setDataDir:@DATA_DIR];
 
