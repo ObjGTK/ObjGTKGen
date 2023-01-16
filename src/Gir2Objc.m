@@ -289,6 +289,12 @@
 			methodName = [methodName substringFromIndex:3];
 		}
 
+		// Special case: The method/function name was only "get".
+		// We assume in this case we want to get an instance of
+		// the class (f.e. singleton pattern)
+		if(methodName.length == 0)
+			methodName = @"instance";
+
 		[objcMethod setName:methodName];
 		[objcMethod setCIdentifier:girMethod.cIdentifier];
 		objcMethod.documentation = girMethod.doc.docText;

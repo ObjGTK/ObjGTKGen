@@ -126,6 +126,10 @@
 		[output appendString:@"/**\n * Functions\n */\n"];
 
 		for (OGTKMethod *func in [cgtkClass functions]) {
+			[output appendFormat:@"\n%@\n",
+			        [OGTKClassWriter
+			            generateDocumentationForMethod:func]];
+
 			[output appendFormat:@"+ (%@)%@;\n", [func returnType],
 			        [func sig]];
 		}
