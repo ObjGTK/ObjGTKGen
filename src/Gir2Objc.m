@@ -272,7 +272,6 @@
 
 			[objcMethod release];
 			continue;
-
 		}
 
 		if ([girMethod isKindOfClass:[GIRMethod class]]) {
@@ -285,14 +284,14 @@
 				objcMethod.isSetter = true;
 		}
 
-		if ([[methodName substringToIndex:3] isEqual:@"get"]) {
+		if ([methodName hasPrefix:@"get"]) {
 			methodName = [methodName substringFromIndex:3];
 		}
 
 		// Special case: The method/function name was only "get".
 		// We assume in this case we want to get an instance of
 		// the class (f.e. singleton pattern)
-		if(methodName.length == 0)
+		if (methodName.length == 0)
 			methodName = @"instance";
 
 		[objcMethod setName:methodName];

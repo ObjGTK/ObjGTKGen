@@ -7,7 +7,7 @@
 #import "GIRReturnValue.h"
 #import <ObjFW/ObjFW.h>
 
-@protocol GIRMethodMapping
+@protocol GIRMethodMapping <OFObject>
 
 @property (nonatomic, copy) OFString *_Nonnull name;
 @property (nonatomic, copy) OFString *_Nonnull cIdentifier;
