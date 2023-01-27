@@ -16,6 +16,4 @@
 @property (nonatomic, retain) GIRDoc *_Nullable doc;
 @property (nonatomic) bool throws;
 
-- (bool)isKindOfClass:(nonnull Class)class_;
-
 @end
