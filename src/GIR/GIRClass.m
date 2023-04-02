@@ -11,6 +11,7 @@
 
 @synthesize name = _name;
 @synthesize cType = _cType;
+@synthesize glibTypeName = _glibTypeName;
 @synthesize cSymbolPrefix = _cSymbolPrefix;
 @synthesize parent = _parent;
 @synthesize version = _version;
@@ -45,13 +46,33 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[_name release];
+	[_cType release];
+	[_glibTypeName release];
+	[_cSymbolPrefix release];
+	[_parent release];
+	[_version release];
+	[_doc release];
+	[_constructors release];
+	[_fields release];
+	[_methods release];
+	[_virtualMethods release];
+	[_properties release];
+	[_implements release];
+	[_functions release];
+
+	[super dealloc];
+}
+
 - (void)parseDictionary:(OFDictionary *)dict
 {
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
 		// TODO: Do we need signal?
-		if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
+		if ([key isEqual:@"text"] ||
 		    [key isEqual:@"glib:type-struct"] ||
 		    [key isEqual:@"glib:get-type"] ||
 		    [key isEqual:@"glib:signal"] ||
@@ -70,6 +91,8 @@
 			self.cType = value;
 		} else if ([key isEqual:@"c:symbol-prefix"]) {
 			self.cSymbolPrefix = value;
+		} else if([key isEqual:@"glib:type-name"]) {
+			self.glibTypeName = value;
 		} else if ([key isEqual:@"parent"]) {
 			self.parent = value;
 		} else if ([key isEqual:@"version"]) {
@@ -111,25 +134,6 @@
 			[self logUnknownElement:key];
 		}
 	}
-}
-
-- (void)dealloc
-{
-	[_name release];
-	[_cType release];
-	[_cSymbolPrefix release];
-	[_parent release];
-	[_version release];
-	[_doc release];
-	[_constructors release];
-	[_fields release];
-	[_methods release];
-	[_virtualMethods release];
-	[_properties release];
-	[_implements release];
-	[_functions release];
-
-	[super dealloc];
 }
 
 @end

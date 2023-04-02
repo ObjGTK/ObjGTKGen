@@ -21,6 +21,7 @@
 {
 	OFString *_name;
 	OFString *_cType;
+	OFString *_glibTypeName;
 	OFString *_cSymbolPrefix;
 	OFString *_parent;
 	OFString *_version;
@@ -37,6 +38,7 @@
 
 @property (nonatomic, copy) OFString *name;
 @property (nonatomic, copy) OFString *cType;
+@property (nonatomic, copy) OFString *glibTypeName;
 @property (nonatomic, copy) OFString *cSymbolPrefix;
 @property (nonatomic, copy) OFString *parent;
 @property (nonatomic, copy) OFString *version;

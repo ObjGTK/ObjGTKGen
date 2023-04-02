@@ -103,6 +103,7 @@
 	// Map library information from API
 	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
 	libraryInfo.packageName = api.package;
+	// TODO Throw exception if not present: Can't generate a working autoconf file without the package name
 
 	for (GIRInclude *include in api.cInclude) {
 		[libraryInfo addCInclude:include];
@@ -195,7 +196,13 @@
 {
 	// Set basic class properties
 	[objCClass setCName:girClass.name];
-	[objCClass setCType:girClass.cType];
+
+	if(girClass.cType != nil && girClass.cType.length > 0)
+		objCClass.cType = girClass.cType;
+	else if(girClass.glibTypeName != nil && girClass.glibTypeName.length > 0)
+		objCClass.cType = girClass.glibTypeName;
+	// TODO else: throw exception here
+
 	[objCClass setDocumentation:girClass.doc.docText];
 
 	// Set parent name
