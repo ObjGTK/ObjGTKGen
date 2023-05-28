@@ -31,14 +31,14 @@ The generator is going to lookup these dependencies recursively at the path of t
 
 - You need [ObjFW](https://objfw.nil.im/).
 - For building a generated library you need [OGObject](https://codeberg.org/ObjGTK/OGObject).
-- The [GIR files](https://gi.readthedocs.io/en/latest/) for the library to generate a wrapper for - and all if its depending GIR files. This will be enough for generation of the wrapper source files. You are going to need all library files (shared library, headers, pkg-config description) and the files of the dependending libraries required for your library at build time (only).
+- The [GIR files](https://gi.readthedocs.io/en/latest/) for the library to generate a wrapper for - and all of its depending GIR files. This will be enough for generation of the wrapper source files. You are going to need all library files (shared library, headers, pkg-config description) and the files of the dependending libraries required for your library at build time (only).
 
 ### GIR files
 
 You may use the GIR files and libraries provided by your Linux distribution. F.e. for Debian Unstable and GTK3 use `apt install gir1.2-gtk-3.0`.
   - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
 
-If you don't use a rolling Linux distribution, the GIR packages and its library sets may be out of date and lack features required by this generator. Then it may be more appropriate to use some more recent library releases. If you want to get the current libraries (read: daily builds of the GNOME SDK) you may use flatpak (see below).
+If you don't use a rolling Linux distribution, the GIR packages and its library sets may be out of date and lack features required by this generator. It then may be more appropriate to use some more recent library releases. If you want to get the current libraries (read: daily builds of the GNOME SDK) you may use flatpak (see below).
 
 As noted [by the GTK bindings for Rust project](https://github.com/gtk-rs/gir-files) it may be helpful to consult the [GIR format reference](https://gi.readthedocs.io/en/latest/annotations/giannotations.html) or the [XML schema](https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/main/docs/gir-1.2.rnc).
 
@@ -130,11 +130,11 @@ Currently there are only untested, unstable preview releases of ObjGTK. Take car
 The generator does the following currently:
 
 1. Using `XMLReader` it parses a [GIR file (.gir)](https://gi.readthedocs.io/en/latest/) into object instances of the GIR classes (see directory `src/GIR`) (source models)
-2. `Gir2Objc` then maps the information of the GIR models into the models prefixed with `OGTK` (see directory `src/Generator`) (target models). Please note that these models still hold API/class informationen using C names and types as used by the Glib/GObject libraries. These models provide methods to transform their Glib ("c") data/names/types into Objective-C classes/names/types.
+2. `Gir2Objc` then maps the information of the GIR models into the models prefixed with `OGTK` (see directory `src/Generator`) (target models, "information objects"). Please note that these models still hold API/class informationen using C names and types as used by the Glib/GObject libraries. These models provide methods to transform their Glib ("c") data/names/types into Objective-C classes/names/types.
 3. It does the same for further libraries iterating recursively through all the libraries specified as dependencies by the GIR file given.
 4. When all library and class definitions are held in memory necessary to resolve class dependencies correctly using `OGTKMapper`, then `OGTKLibraryWriter` is called to first invoke `OGTKClassWriter`.
-5. `OGTKClassWriter` is going to write out the Objective-C class definitions. It does so by resolving GObject types to Objective-C/OGTK types (swapping them) using the class mappings and definitions hold in multiple `OFDictionary`s by `OGTKMapper`.
-6. When all classes are written, additional source files, written manually, that may be provided through a directory within the directory named `LibrarySourceAdditions` are added to the `Output` directory (the generated library). Please note the classes at the directory named `LibrarySourceAdditions` are **not** part of the generator itself. You may add your own code by creating new directories which naming convention needs to meet that of the corresponding gir file.
+5. `OGTKClassWriter` is going to write out the Objective-C class definitions (header and source files). It does so by resolving GObject types to Objective-C/OGTK types (swapping them) using the class mappings and definitions hold in multiple `OFDictionary`s by `OGTKMapper`. It wraps GObject C functions calls with Objective-C method calls/message sends.
+6. When all class files are written, additional source files, written manually, that may be provided through a directory within the directory named `LibrarySourceAdditions` are added to the `Output` directory (the generated library). Please note the classes located in the directory named `LibrarySourceAdditions` are **not** part of the generator itself. You may add your own code by creating new directories which naming convention needs to meet that of the corresponding gir file.
 
 You will find the main business logic preparing data structures in `Gir2Objc.m` and `Generator/OGTKMapper.m` as `Gir2Objc` calls `OGTKMapper` for multiple loops through all the parsed (Gobj) class/API information to complete dependency information (naming of parent classes) and the dependency graph (parent classes, depending classes). This is necessary to correctly insert `#import` and `@class` statements when generating the ObjC class definitions without getting stuck in a circular dependency loop.
 
