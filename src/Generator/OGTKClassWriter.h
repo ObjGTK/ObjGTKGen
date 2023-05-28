@@ -13,44 +13,73 @@
 #import "OGTKUtil.h"
 
 /**
- * Functions to write in memory Class representation to file as ObjGTK source
+ * @brief Functions to write in-memory representations of classes to file as
+ * Obj-C source file.
  */
 @interface OGTKClassWriter: OFObject
 
 /**
- * Generate both header and source files based on class and save them in
- * outputDir
+ * @brief Generates both header and source files for a class based on a class
+ * and a library description object given, writes them to outputDir.
+ * @param cgtkClass The class description object
+ * @param outputDir The directory to write the output to.
+ * @param library The library description object
  */
 + (void)generateFilesForClass:(OGTKClass *)cgtkClass
                         inDir:(OFString *)outputDir
                    forLibrary:(OGTKLibrary *)library;
 
 /**
- * Generate header file contents based on class
+ * @brief Generates header file contents based on a class and a library
+ * description object given.
+ * @param cgtkClass The class description object
+ * @param library The library description object
+ * @return The header file content string
  */
 + (OFString *)headerStringFor:(OGTKClass *)cgtkClass
                       library:(OGTKLibrary *)library;
 
 /**
- * Generate source file contents based on class
+ * @brief Generates source file contents based on a class description object
+ * given.
+ * @param cgtkClass The class description object
+ * @return The source file content string
  */
 + (OFString *)sourceStringFor:(OGTKClass *)cgtkClass;
 
 /**
- * Generate list of paramters to pass to underlying C function
+ * @brief Generates a list of parameters to pass to an underlying C function.
+ * @param params The array of function/method parameters
+ * @return The string containing the list of parameters, formatted correctly
  */
-+ (OFString *)generateCParameterListString:(OFArray *)params;
-+ (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
-                                             andParams:(OFArray *)params;
++ (OFString *)generateCParameterListString:(OFArray OF_GENERIC(
+                                               OGTKParameter *) *)params;
 
 /**
- * Reads the text from conf/license.txt and replaces "@@@FILENAME@@@" with
- * fileName
+ * @brief Generates list of parameters to pass to an underlying C function
+ * including the call to get a referene to an instance of the class.
+ * @param instanceType The Gobj/C instance type
+ * @param params An array of parameters to generate the list for
+ * @return The string containing the list of parameters, formatted correctly
+ */
++ (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
+                                             andParams:
+                                                 (OFArray OF_GENERIC(
+                                                     OGTKParameter *) *)params;
+
+/**
+ * @brief Reads the text from conf/license.txt and replaces "@@@FILENAME@@@"
+ * with fileName.
+ * @param fileName The file name to insert into the license content string
+ * @return The generated license content string
  */
 + (OFString *)generateLicense:(OFString *)fileName;
 
 /**
- * Uses the information in the method to return documentation for the method
+ * @brief Uses the information description object to return correctly formatted
+ * documentation for this method.
+ * @param meth The method description object
+ * @return The documentation block formatted correctly
  */
 + (OFString *)generateDocumentationForMethod:(OGTKMethod *)meth;
 

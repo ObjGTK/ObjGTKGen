@@ -9,7 +9,7 @@
 #import <ObjFW/ObjFW.h>
 
 /**
- * Abstracts Method operations
+ * @brief Abstracts Method operations
  */
 @interface OGTKMethod: OFObject
 {

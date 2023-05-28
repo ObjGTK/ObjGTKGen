@@ -10,6 +10,13 @@
 @class OGTKClass;
 @class OGTKLibrary;
 
+/**
+ * @brief Essential class that does the main work of mapping GObject/C data
+ * types (called "Gobj") to ObjGTK/Objective-C classes (called "ObjC").
+ * @details It aims to be implemented library agnostic to allow the generic
+ * generation of wrappers for any GLib/GObject library that provides a GIR
+ * introspection description file.
+ */
 @interface OGTKMapper: OFObject
 {
 	OFMutableDictionary OF_GENERIC(OFString *, OGTKLibrary *) *
@@ -24,30 +31,36 @@
 }
 
 /**
+ * @property girNameToLibraryMapping
  * @brief Dictionary that maps general API names that are specified in the .gir
- * file to library information (OGTKLibrary)
+ * file to library information objects of type OGTKLibrary.
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
     OFString *, OGTKLibrary *)
     * girNameToLibraryMapping;
 
 /**
- * @brief Dictionary that maps Gobj type names to class information (OGTKClass)
+ * @property gobjTypeToClassMapping
+ * @brief Dictionary that maps Gobj type names to class information objects of
+ * type OGTKClass.
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
     OFString *, OGTKClass *)
     * gobjTypeToClassMapping;
 
 /**
+ * @property girNameToClassMapping
  * @brief Dictionary that maps general type names that are specified in the .gir
- * file to class information (OGTKClass)
+ * file to class information objects of type OGTKClass.
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
     OFString *, OGTKClass *)
     * girNameToClassMapping;
 
 /**
- * @brief Dictionary that maps ObjC type names to class information (OGTKClass)
+ * @property objcTypeToClassMapping
+ * @brief Dictionary that maps ObjC type names to class information objects of
+ * type OGTKClass.
  */
 @property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
     OFString *, OGTKClass *)
@@ -179,20 +192,30 @@
 - (OFString *)selfTypeMethodCall:(OFString *)type;
 
 /**
- * @brief Returns the cType (Gobj type) for a name provided by a gir file
- * @details In some cases the gir files do not provide cTypes (Gobj/Glib type
- * names). Then this method may be used to retrieve the correct cType for gir
- * class (name) definition.
+ * @brief Returns the cType (Gobj type) for a name following the gir file naming
+ * convention
+ * @details In some cases the gir format files do not provide cTypes (Gobj/Glib
+ * type names). Then this method may be used to retrieve the correct cType for
+ * gir class (name) definition.
  *
  * This only works if the necessary class information has been provided using
  * ```addClass:``` before.
  * @see -addClass:
- *
  */
 - (OFString *)getCTypeFromName:(OFString *)name;
 
+/**
+ * @brief Returns the class info object if found in the dictionary by the Gobj
+ * type name given
+ * @param gobjType The Gobj type name to look for
+ */
 - (OGTKClass *)classInfoByGobjType:(OFString *)gobjType;
 
+/**
+ * @brief Returns the library info object if found in the dictionary by the name
+ * of the library/namespace given
+ * @param libNamespace The name of the namespace/library to look for
+ */
 - (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace;
 
 /**
@@ -240,15 +263,30 @@
 + (OFString *)selfTypeMethodCall:(OFString *)type;
 
 /**
- * @brief Returns the appropriate self referencing method call for the type
- * (i.e. -(type)[self TYPE] or GTK_TYPE([self GOBJECT]) to unwrap the Gobj
- * object instance. Singleton access shortcut.
+ * @brief Returns the cType (Gobj type) for a name following the gir file naming
+ * convention. Singleton access shortcut.
+ * @details In some cases the gir format files do not provide cTypes (Gobj/Glib
+ * type names). Then this method may be used to retrieve the correct cType for
+ * gir class (name) definition.
+ *
+ * This only works if the necessary class information has been provided using
+ * ```addClass:``` before.
  * @see -getCTypeFromName:
  */
 + (OFString *)getCTypeFromName:(OFString *)name;
 
+/**
+ * @brief Returns the class info object if found in the dictionary by the Gobj
+ * type name given. Singleton access shortcut.
+ * @param gobjType The Gobj type name to look for
+ */
 + (OGTKClass *)classInfoByGobjType:(OFString *)gobjType;
 
+/**
+ * @brief Returns the library info object if found in the dictionary by the name
+ * of the library/namespace given. Singleton access shortcut.
+ * @param libNamespace The name of the namespace/library to look for
+ */
 + (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace;
 
 @end

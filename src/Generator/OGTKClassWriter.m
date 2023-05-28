@@ -374,7 +374,8 @@
 	return result;
 }
 
-+ (OFString *)generateCParameterListString:(OFArray *)params
++ (OFString *)generateCParameterListString:(OFArray OF_GENERIC(
+                                               OGTKParameter *) *)params
 {
 	OFMutableString *paramsOutput = [OFMutableString string];
 

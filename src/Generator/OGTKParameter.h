@@ -10,7 +10,7 @@
 #import "OGTKMapper.h"
 
 /**
- * Abstracts Parameter operations
+ * @brief Abstracts Parameter operations
  */
 @interface OGTKParameter: OFObject
 {

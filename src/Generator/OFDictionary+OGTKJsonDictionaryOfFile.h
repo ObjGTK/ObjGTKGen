@@ -10,6 +10,13 @@ extern int _OFDictionary_OGTKJsonDictionaryOfFile_reference;
 
 @interface OFDictionary (OGTKJsonDictionaryOfFile)
 
+/**
+ * @brief Tries to initialize an OFDictionary with the dictionary as parsed from
+ * a JSON file
+ * @param filePath Path to the JSON file to parse
+ * @throws OFInvalidJSONException If the JSON file at filePath does not contain
+ * a dictionary
+ */
 - (instancetype)ogtk_initWithJsonDictionaryOfFile:(OFString *)filePath;
 
 @end
