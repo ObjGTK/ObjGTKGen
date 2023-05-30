@@ -166,7 +166,7 @@
 
 + (OFString *)sourceStringFor:(OGTKClass *)cgtkClass
 {
-	OFMutableString *output = [[OFMutableString alloc] init];
+	OFMutableString *output = [OFMutableString string];
 
 	// OFLog(@"Writing implementation file for class %@.", [cgtkClass
 	// type]);
@@ -332,7 +332,7 @@
 	// End implementation
 	[output appendString:@"\n@end"];
 
-	return [output autorelease];
+	return output;
 }
 
 + (OFString *)importForDependency:(OFString *)dependency
@@ -388,6 +388,8 @@
 
 		if (i++ < count - 1)
 			[paramsOutput appendString:@", "];
+
+		// TODO: if throws
 	}
 
 	return paramsOutput;
@@ -419,9 +421,11 @@
 				[paramsOutput appendString:@", "];
 			}
 		}
+
+		// TODO: if throws
 	}
 
-	return [paramsOutput autorelease];
+	return paramsOutput;
 }
 
 + (OFString *)generateLicense:(OFString *)fileName
@@ -448,7 +452,7 @@
 
 + (OFString *)generateDocumentationForMethod:(OGTKMethod *)meth
 {
-	OFMutableString *doc = [[OFMutableString alloc] init];
+	OFMutableString *doc = [OFMutableString string];
 
 	OFString *docText;
 
@@ -497,7 +501,7 @@
 
 	[doc appendString:@" */"];
 
-	return [doc autorelease];
+	return doc;
 }
 
 @end

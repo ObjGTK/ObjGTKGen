@@ -1,7 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2015-2017 Tyler Burton <software@tylerburton.ca>
- * SPDX-FileCopyrightText: 2021-2022 Johannes Brakensiek <objfw@codingpastor.de>
- * SPDX-FileCopyrightText: 2015-2022 The ObjGTK authors, see AUTHORS file
+ * SPDX-FileCopyrightText: 2021-2023 Johannes Brakensiek <objfw@codingpastor.de>
+ * SPDX-FileCopyrightText: 2015-2023 The ObjGTK authors, see AUTHORS file
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -86,29 +86,6 @@
 - (bool)returnsVoid
 {
 	return [_cReturnType isEqual:@"void"];
-}
-
-- (void)setParameters:(OFArray *)params
-{
-	OFMutableArray *mutParams = [[params mutableCopy] autorelease];
-
-	// TODO: Replace this by an OFException implemention within the writer
-	if (_throws) {
-		OGTKParameter *param =
-		    [[[OGTKParameter alloc] init] autorelease];
-		param.cType = @"GError**";
-		param.cName = @"err";
-		[mutParams addObject:param];
-	}
-
-	[_parameters release];
-	[mutParams makeImmutable];
-	_parameters = [mutParams copy];
-}
-
-- (OFArray *)parameters
-{
-	return [[_parameters copy] autorelease];
 }
 
 @end
