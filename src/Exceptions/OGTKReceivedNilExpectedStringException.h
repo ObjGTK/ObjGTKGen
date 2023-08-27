@@ -9,7 +9,14 @@
 OF_ASSUME_NONNULL_BEGIN
 
 @interface OGTKReceivedNilExpectedStringException: OFInvalidFormatException
+{
+	OFString *_parameterName;
+}
 
+@property (copy, nonatomic) OFString *parameterName;
+
+- (instancetype)initForParameter:(OFString *)parameterName;
++ (instancetype)exceptionForParameter:(OFString *)parameterName;
 - (OFString *)description;
 
 @end
