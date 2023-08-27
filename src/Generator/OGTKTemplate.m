@@ -5,6 +5,7 @@
  */
 
 #import "OGTKTemplate.h"
+#import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 #import "OGTKClass.h"
 #import "OGTKMapper.h"
 
@@ -151,19 +152,26 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	return result;
 }
 
-- (OFString *)ACSnippetForIncludesOf:(OFString *)dependencyName
-                     forLibraryNamed:(OFString *)parentLibName
+- (OFString *)ACSnippetForIncludesOf:(OFString *)packageName
+                     forLibraryNamed:(OFString *)libName
 {
+	if (packageName == nil)
+		@throw [OGTKReceivedNilExpectedStringException
+		    exceptionForParameter:@"packageName"];
+	if (libName == nil)
+		@throw [OGTKReceivedNilExpectedStringException
+		    exceptionForParameter:@"libName"];
+
 	OFString *fileName = [self.snippetDir
 	    stringByAppendingPathComponent:kACArgWithTemplateFile];
 	OFMutableString *snippet =
 	    [OFMutableString stringWithContentsOfFile:fileName];
 
-	OFString *shortName = [self shortNameFromPackageName:dependencyName];
-	parentLibName = [parentLibName uppercaseString];
+	OFString *shortName = [self shortNameFromPackageName:packageName];
+	libName = [libName uppercaseString];
 
 	[snippet replaceOccurrencesOfString:@"%%DEPNAME%%"
-	                         withString:dependencyName];
+	                         withString:packageName];
 
 	[snippet replaceOccurrencesOfString:@"%%LCDEPNAME%%"
 	                         withString:[shortName lowercaseString]];
@@ -171,8 +179,7 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%UCDEPNAME%%"
 	                         withString:[shortName uppercaseString]];
 
-	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
-	                         withString:parentLibName];
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%" withString:libName];
 
 	[snippet makeImmutable];
 
