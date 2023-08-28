@@ -292,12 +292,8 @@ static OGTKMapper *sharedMyMapper = nil;
 
 	} else if ([self isObjcType:fromType] && [self isGobjType:toType]) {
 		// Converting from Objc -> Gobj
-
-		OGTKClass *toClass = [_objcTypeToClassMapping
-		    objectForKey:[self stripAsterisks:fromType]];
-
-		return [OFString stringWithFormat:@"[%@ %@]", name,
-		                 [toClass.cName uppercaseString]];
+		return [OFString
+		    stringWithFormat:@"[%@ %@]", name, @"castedGObject"];
 	}
 
 	// Otherwise don't do any conversion (including bool types, as ObjFW
@@ -309,11 +305,7 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	// Convert OGTKFooBar into [self FOOBAR]
 	if ([self isObjcType:type]) {
-		OGTKClass *toClass = [_objcTypeToClassMapping
-		    objectForKey:[self stripAsterisks:type]];
-
-		return [OFString stringWithFormat:@"[self %@]",
-		                 [toClass.cName uppercaseString]];
+		return @"[self castedGObject]";
 	}
 
 	// Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
@@ -326,7 +318,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		    classInfo.cSymbolPrefix] uppercaseString];
 
 		return [OFString stringWithFormat:@"%@%@", functionMacroName,
-		                 @"([self GOBJECT])"];
+		                 @"([self gObject])"];
 	}
 
 	return type;

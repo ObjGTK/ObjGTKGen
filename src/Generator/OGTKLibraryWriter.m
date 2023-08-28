@@ -145,9 +145,13 @@
 	for (OFString *className in classesDict) {
 		OGTKClass *classInfo = [classesDict objectForKey:className];
 		if ([libraryInfo.namespace isEqual:classInfo.namespace]) {
-			[OGTKClassWriter generateFilesForClass:classInfo
-			                                 inDir:libraryOutputDir
-			                            forLibrary:libraryInfo];
+			OGTKClassWriter *classWriter =
+			    [[OGTKClassWriter alloc] initWithClass:classInfo
+			                                   library:libraryInfo];
+
+			[classWriter generateFilesInDir:libraryOutputDir];
+
+			[classWriter release];
 		}
 	}
 }
