@@ -426,18 +426,15 @@
 	if (params != nil && [params count] > 0) {
 		[paramsOutput appendString:@", "];
 
-		OGTKParameter *p;
-
 		// Start at index 1
-		size_t i;
-		for (i = 0; i < [params count]; i++) {
-			p = [params objectAtIndex:i];
+		size_t i = 0, count = params.count;
+		for (OGTKParameter *param in params) {
 			[paramsOutput
-			    appendString:[OGTKMapper convertType:[p type]
-			                                withName:[p name]
-			                                  toType:[p cType]]];
+			    appendString:[OGTKMapper convertType:param.type
+			                                withName:param.name
+			                                  toType:param.cType]];
 
-			if (i < [params count] - 1) {
+			if (i++ < count - 1) {
 				[paramsOutput appendString:@", "];
 			}
 		}
