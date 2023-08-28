@@ -104,6 +104,15 @@
 - (void)generateUmbrellaHeaderFileWithAdditionalHeadersFromDir:
     (OFString *)additionalHeaderDir;
 
+/**
+ * @brief      Copies the files for the build system for our library. To adjust
+ * them according to the needs of the libraries the build files are templates
+ * supplemented by snippets.
+ *
+ * @param      templateDir  Directory containing the template files
+ * @param      templateSnippetsDir Directory containing the supplemental
+ * template snippets
+ */
 - (void)templateAndCopyBuildFilesFromDir:(OFString *)templateDir
                     usingSnippetsFromDir:(OFString *)templateSnippetsDir;
 
