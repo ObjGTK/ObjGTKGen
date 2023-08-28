@@ -423,11 +423,13 @@
 	[paramsOutput
 	    appendString:[OGTKMapper selfTypeMethodCall:instanceType]];
 
-	if (params != nil && [params count] > 0) {
+	size_t count = params.count;
+
+	if (params != nil && count > 0) {
 		[paramsOutput appendString:@", "];
 
 		// Start at index 1
-		size_t i = 0, count = params.count;
+		size_t i = 0;
 		for (OGTKParameter *param in params) {
 			[paramsOutput
 			    appendString:[OGTKMapper convertType:param.type
