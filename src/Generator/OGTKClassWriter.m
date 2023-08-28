@@ -175,7 +175,7 @@
 
 	[output appendString:@"\n/**\n * Methods\n */\n\n"];
 
-	// Self type method declaration
+	// GObject getter method declaration
 	[output appendFormat:@"- (%@*)%@;\n", _classDescription.cType,
 	        @"castedGObject"];
 
@@ -223,7 +223,6 @@
 	// Implementation declaration
 	[output appendFormat:@"@implementation %@\n\n", _classDescription.type];
 
-	// Function implementations
 	for (OGTKMethod *func in _classDescription.functions) {
 		[output appendFormat:@"+ (%@)%@", func.returnType, func.sig];
 
@@ -241,19 +240,19 @@
 
 			if ([OGTKMapper isTypeSwappable:[func cReturnType]]) {
 				// Need to swap type on return
-				[output
-				    appendString:
-				        [OGTKMapper
-				            convertType:func.cReturnType
-				               withName:
-				                   [OFString
-				                       stringWithFormat:
-				                           @"%@(%@)",
-				                       [func cIdentifier],
-				                       [self
-				                           generateCParameterListString:
-				                               func.parameters]]
-				                 toType:func.returnType]];
+
+				OFString *returnCall = [OFString
+				    stringWithFormat:@"%@(%@)",
+				    [func cIdentifier],
+				    [self generateCParameterListString:
+				              func.parameters]];
+
+				[output appendString:
+				            [OGTKMapper
+				                convertType:func.cReturnType
+				                   withName:returnCall
+				                     toType:func.returnType]];
+
 			} else {
 				[output appendFormat:@"%@(%@)",
 				        func.cIdentifier,
@@ -274,25 +273,23 @@
 
 		[output appendString:@"\n{\n"];
 
+		OFString *constructorCall = [OFString
+		    stringWithFormat:@"%@(%@)", ctor.cIdentifier,
+		    [self generateCParameterListString:ctor.parameters]];
+
 		[output
 		    appendFormat:@"\tself = %@;\n\n",
 		    [OGTKUtil
 		        getFunctionCallForConstructorOfType:_classDescription
 		                                                .cType
-		                            withConstructor:
-		                                [OFString
-		                                    stringWithFormat:@"%@(%@)",
-		                                    ctor.cIdentifier,
-		                                    [self
-		                                        generateCParameterListString:
-		                                            ctor.parameters]]]];
+		                            withConstructor:constructorCall]];
 
 		[output appendString:@"\treturn self;\n"];
 
 		[output appendString:@"}\n\n"];
 	}
 
-	// Self type method implementation
+	// GObject getter method implementation
 	[output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n",
 	        _classDescription.cType, @"castedGObject",
 	        [OGTKMapper selfTypeMethodCall:_classDescription.cType]];
@@ -317,22 +314,21 @@
 
 			if ([OGTKMapper isTypeSwappable:meth.cReturnType]) {
 				// Need to swap type on return
-				[output
-				    appendString:
-				        [OGTKMapper
-				            convertType:meth.cReturnType
-				               withName:
-				                   [OFString
-				                       stringWithFormat:
-				                           @"%@(%@)",
-				                       meth.cIdentifier,
-				                       [self
-				                           generateCParameterListWithInstanceString:
-				                               _classDescription
-				                                   .type
-				                                                          andParams:
-				                                                              meth.parameters]]
-				                 toType:meth.returnType]];
+
+				OFString *returnCall = [OFString
+				    stringWithFormat:@"%@(%@)",
+				    meth.cIdentifier,
+				    [self
+				        generateCParameterListWithInstanceString:
+				            _classDescription.type
+				                                       andParams:
+				                                           meth.parameters]];
+
+				[output appendString:
+				            [OGTKMapper
+				                convertType:meth.cReturnType
+				                   withName:returnCall
+				                     toType:meth.returnType]];
 			} else {
 				[output
 				    appendFormat:@"%@(%@)", meth.cIdentifier,
