@@ -13,7 +13,6 @@
 #import "Generator/OGTKClassWriter.h"
 #import "Generator/OGTKLibrary.h"
 #import "Generator/OGTKLibraryWriter.h"
-#import "Generator/OGTKTemplate.h"
 #import "Gir2Objc.h"
 
 @interface ObjGTKGen: OFObject <OFApplicationDelegate>
@@ -56,7 +55,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	[super dealloc];
 }
 
-- (void)applicationDidFinishLaunching:(OFNotification*)notification
+- (void)applicationDidFinishLaunching:(OFNotification *)notification
 {
 	[OGTKUtil setDataDir:@DATA_DIR];
 
@@ -183,50 +182,32 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
                             fromDir:(OFString *)baseClassPath
                               toDir:(OFString *)outputDir
 {
-	// Write out classes definition
-	[OGTKLibraryWriter writeClassFilesForLibrary:libraryInfo
-	                                       toDir:outputDir
-	               getClassDefinitionsFromMapper:_sharedMapper];
+	OFString *libraryOutputDir =
+	    [outputDir stringByAppendingPathComponent:libraryInfo.name];
+
+	OGTKLibraryWriter *libraryWriter =
+	    [[OGTKLibraryWriter alloc] initWithLibrary:libraryInfo
+	                                        mapper:_sharedMapper
+	                                     outputDir:libraryOutputDir];
+
+	// Write out classes definitions
+	[libraryWriter writeClassFiles];
 
 	// Write and copy additional files to complete the source and headers
 	// files for that library
-	[OGTKLibraryWriter writeLibraryAdditionsFor:libraryInfo
-	                                      toDir:outputDir
-	              getClassDefinitionsFromMapper:_sharedMapper
-	               readAdditionalSourcesFromDir:baseClassPath];
+	[libraryWriter writeLibraryAdditionsWithSourcesFromDir:baseClassPath];
 
 	// Prepare and copy build files
-	OFString *libraryOutputDir =
-	    [outputDir stringByAppendingPathComponent:libraryInfo.name];
 	OFString *templateDir =
 	    [OGTKUtil globalConfigValueFor:@"buildTemplateDir"];
 	OFString *templateSnippetsDir = [[OGTKUtil dataDir]
 	    stringByAppendingPathComponent:
 	        [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"]];
 
-	OFString *sourceFiles = [OGTKLibraryWriter
-	        stringForFilesInDir:[libraryOutputDir
-	                                stringByAppendingPathComponent:@"src"]
-	               addingFormat:@"%@ \\\n\t"
-	    lookingForFileExtension:@".m"];
+	[libraryWriter templateAndCopyBuildFilesFromDir:templateDir
+	                           usingSnippetsFromDir:templateSnippetsDir];
 
-	OGTKTemplate *templating =
-	    [[OGTKTemplate alloc] initWithSnippetDir:templateSnippetsDir
-	                                sharedMapper:_sharedMapper];
-	[templating autorelease];
-
-	OFDictionary *replaceDict = [templating
-	    dictWithReplaceValuesForBuildFilesOfLibrary:libraryInfo
-	                                    sourceFiles:sourceFiles];
-
-	OFDictionary *renameDict =
-	    [templating dictWithRenamesForBuildFilesOfLibrary:libraryInfo];
-
-	[OGTKLibraryWriter copyFilesFromDir:templateDir
-	                              toDir:libraryOutputDir
-	      applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
-	                   usingReplaceDict:replaceDict
-	                    usingRenameDict:renameDict];
+	[libraryWriter release];
 }
 
 @end
