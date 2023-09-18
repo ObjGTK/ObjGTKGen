@@ -17,6 +17,14 @@
 @synthesize classDescription = _classDescription,
             libraryDescription = _libraryDescription;
 
+static OFString *const CErrorParameterName = @"&err";
+static OFString *const MacroPrepareErrorHandling =
+    @"\tOG_PREPARE_GERROR_AS_EXCEPTION_HANDLING(GError* err)\n\n";
+static OFString *const MacroErrorHandling =
+    @"\tOG_HANDLE_GERROR_AS_EXCEPTION(err)\n\n";
+static OFString *const MacroInitErrorHandling =
+    @"\tOG_INIT_HANDLE_GERROR_AS_EXCEPTION(err)\n\n";
+
 - (instancetype)init
 {
 	OF_INVALID_INIT_METHOD
@@ -223,20 +231,28 @@
 	// Implementation declaration
 	[output appendFormat:@"@implementation %@\n\n", _classDescription.type];
 
+	// Class function implementation
 	for (OGTKMethod *func in _classDescription.functions) {
 		[output appendFormat:@"+ (%@)%@", func.returnType, func.sig];
 
 		[output appendString:@"\n{\n"];
 
+		if (func.throws)
+			[output appendString:MacroPrepareErrorHandling];
+
 		if (func.returnsVoid) {
 			[output
 			    appendFormat:@"\t%@(%@);\n", func.cIdentifier,
-			    [self
-			        generateCParameterListString:func.parameters]];
+			    [self generateCParameterListString:func.parameters
+			                       throwsException:func.throws]];
+
+			if (func.throws)
+				[output appendString:MacroErrorHandling];
 
 		} else {
 			// Need to add "return ..."
-			[output appendString:@"\treturn "];
+			[output appendFormat:@"\t%@ returnValue = ",
+			        func.returnType];
 
 			if ([OGTKMapper isTypeSwappable:[func cReturnType]]) {
 				// Need to swap type on return
@@ -245,7 +261,9 @@
 				    stringWithFormat:@"%@(%@)",
 				    [func cIdentifier],
 				    [self generateCParameterListString:
-				              func.parameters]];
+				              func.parameters
+				                       throwsException:
+				                           func.throws]];
 
 				[output appendString:
 				            [OGTKMapper
@@ -257,10 +275,17 @@
 				[output appendFormat:@"%@(%@)",
 				        func.cIdentifier,
 				        [self generateCParameterListString:
-				                  func.parameters]];
+				                  func.parameters
+				                           throwsException:
+				                               func.throws]];
 			}
 
-			[output appendString:@";\n"];
+			[output appendString:@";\n\n"];
+
+			if (func.throws)
+				[output appendString:MacroErrorHandling];
+
+			[output appendString:@"\treturn returnValue;\n"];
 		}
 
 		[output appendString:@"}\n\n"];
@@ -273,9 +298,13 @@
 
 		[output appendString:@"\n{\n"];
 
-		OFString *constructorCall = [OFString
-		    stringWithFormat:@"%@(%@)", ctor.cIdentifier,
-		    [self generateCParameterListString:ctor.parameters]];
+		if (ctor.throws)
+			[output appendString:MacroPrepareErrorHandling];
+
+		OFString *constructorCall =
+		    [OFString stringWithFormat:@"%@(%@)", ctor.cIdentifier,
+		              [self generateCParameterListString:ctor.parameters
+		                                 throwsException:ctor.throws]];
 
 		[output
 		    appendFormat:@"\tself = %@;\n\n",
@@ -283,6 +312,9 @@
 		        getFunctionCallForConstructorOfType:_classDescription
 		                                                .cType
 		                            withConstructor:constructorCall]];
+
+		if (ctor.throws)
+			[output appendString:MacroInitErrorHandling];
 
 		[output appendString:@"\treturn self;\n"];
 
@@ -294,10 +326,14 @@
 	        _classDescription.cType, @"castedGObject",
 	        [OGTKMapper selfTypeMethodCall:_classDescription.cType]];
 
+	// Method implementations
 	for (OGTKMethod *meth in _classDescription.methods) {
 		[output appendFormat:@"- (%@)%@", meth.returnType, meth.sig];
 
 		[output appendString:@"\n{\n"];
+
+		if (meth.throws)
+			[output appendString:MacroPrepareErrorHandling];
 
 		if (meth.returnsVoid) {
 			[output
@@ -306,11 +342,17 @@
 			        generateCParameterListWithInstanceString:
 			            _classDescription.type
 			                                       andParams:
-			                                           meth.parameters]];
+			                                           meth.parameters
+			                                 throwsException:
+			                                     meth.throws]];
+
+			if (meth.throws)
+				[output appendString:MacroErrorHandling];
 
 		} else {
 			// Need to add "return ..."
-			[output appendString:@"\treturn "];
+			[output appendFormat:@"\t%@ returnValue = ",
+			        meth.returnType];
 
 			if ([OGTKMapper isTypeSwappable:meth.cReturnType]) {
 				// Need to swap type on return
@@ -322,7 +364,9 @@
 				        generateCParameterListWithInstanceString:
 				            _classDescription.type
 				                                       andParams:
-				                                           meth.parameters]];
+				                                           meth.parameters
+				                                 throwsException:
+				                                     meth.throws]];
 
 				[output appendString:
 				            [OGTKMapper
@@ -336,10 +380,17 @@
 				        generateCParameterListWithInstanceString:
 				            _classDescription.type
 				                                       andParams:
-				                                           meth.parameters]];
+				                                           meth.parameters
+				                                 throwsException:
+				                                     meth.throws]];
 			}
 
-			[output appendString:@";\n"];
+			[output appendString:@";\n\n"];
+
+			if (meth.throws)
+				[output appendString:MacroErrorHandling];
+
+			[output appendString:@"\treturn returnValue;\n"];
 		}
 
 		[output appendString:@"}\n\n"];
@@ -394,6 +445,7 @@
 
 - (OFString *)generateCParameterListString:(OFArray OF_GENERIC(
                                                OGTKParameter *) *)params
+                           throwsException:(bool)throws
 {
 	OFMutableString *paramsOutput = [OFMutableString string];
 
@@ -406,8 +458,12 @@
 
 		if (i++ < count - 1)
 			[paramsOutput appendString:@", "];
+	}
 
-		// TODO: if throws
+	if (throws && count > 0) {
+		[paramsOutput appendFormat:@", %@", CErrorParameterName];
+	} else if (throws && count == 0) {
+		[paramsOutput appendString:CErrorParameterName];
 	}
 
 	return paramsOutput;
@@ -417,6 +473,7 @@
                                              andParams:
                                                  (OFArray OF_GENERIC(
                                                      OGTKParameter *) *)params
+                                       throwsException:(bool)throws
 {
 	OFMutableString *paramsOutput = [OFMutableString string];
 
@@ -440,9 +497,10 @@
 				[paramsOutput appendString:@", "];
 			}
 		}
-
-		// TODO: if throws
 	}
+
+	if (throws)
+		[paramsOutput appendFormat:@", %@", CErrorParameterName];
 
 	return paramsOutput;
 }

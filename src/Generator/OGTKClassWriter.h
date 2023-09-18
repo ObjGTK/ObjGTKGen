@@ -80,22 +80,26 @@
  * @brief Generates a list of parameters to pass to an underlying C
  * function.
  * @param params The array of function/method parameters
+ * @param throws True to add a parameter for error handling
  * @return The string containing the list of parameters, formatted correctly
  */
 - (OFString *)generateCParameterListString:(OFArray OF_GENERIC(
-                                               OGTKParameter *) *)params;
+                                               OGTKParameter *) *)params
+                           throwsException:(bool)throws;
 
 /**
  * @brief Generates list of parameters to pass to an underlying C function
  * including the call to get a referene to an instance of the class.
  * @param instanceType The Gobj/C instance type
  * @param params An array of parameters to generate the list for
+ * @param throws True to add a parameter for error handling
  * @return The string containing the list of parameters, formatted correctly
  */
 - (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
                                              andParams:
                                                  (OFArray OF_GENERIC(
-                                                     OGTKParameter *) *)params;
+                                                     OGTKParameter *) *)params
+                                       throwsException:(bool)throws;
 
 /**
  * @brief Uses the information description object to return correctly formatted
