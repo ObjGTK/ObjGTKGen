@@ -30,7 +30,7 @@
 	self = [super init];
 
 	@try {
-		_description = [_description copy];
+		_description = [description copy];
 	} @catch (id e) {
 		[self release];
 		@throw e;

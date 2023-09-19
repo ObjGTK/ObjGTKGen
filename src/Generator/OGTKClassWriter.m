@@ -18,12 +18,26 @@
             libraryDescription = _libraryDescription;
 
 static OFString *const CErrorParameterName = @"&err";
-static OFString *const MacroPrepareErrorHandling =
-    @"\tOG_PREPARE_GERROR_AS_EXCEPTION_HANDLING(GError* err)\n\n";
-static OFString *const MacroErrorHandling =
-    @"\tOG_HANDLE_GERROR_AS_EXCEPTION(err)\n\n";
-static OFString *const MacroInitErrorHandling =
-    @"\tOG_INIT_HANDLE_GERROR_AS_EXCEPTION(err)\n\n";
+static OFString *const PrepareErrorHandling = @"\tGError* err = NULL;\n\n";
+static OFString *const ErrorHandling =
+    @"\tif(err != NULL) {\n"
+    @"\t\tOGErrorException* exception = [OGErrorException "
+    @"exceptionWithGError:err];\n"
+    @"\t\tg_error_free(err);\n"
+    @"\t\t@throw exception;\n"
+    @"\t}\n\n";
+static OFString *const InitErrorHandling =
+    @"\t@try {"
+    @"\t\tif(err != NULL) {\n"
+    @"\t\t\tOGErrorException* exception = [OGErrorException "
+    @"exceptionWithGError:err];\n"
+    @"\t\t\tg_error_free(err);\n"
+    @"\t\t\t@throw exception;\n"
+    @"\t\t}\n"
+    @"\t} @catch (id e) {"
+    @"\t\t[self release];"
+    @"\t\t@throw e;"
+    @"\t}";
 
 - (instancetype)init
 {
@@ -238,7 +252,7 @@ static OFString *const MacroInitErrorHandling =
 		[output appendString:@"\n{\n"];
 
 		if (func.throws)
-			[output appendString:MacroPrepareErrorHandling];
+			[output appendString:PrepareErrorHandling];
 
 		if (func.returnsVoid) {
 			[output
@@ -247,7 +261,7 @@ static OFString *const MacroInitErrorHandling =
 			                       throwsException:func.throws]];
 
 			if (func.throws)
-				[output appendString:MacroErrorHandling];
+				[output appendString:ErrorHandling];
 
 		} else {
 			// Need to add "return ..."
@@ -283,7 +297,7 @@ static OFString *const MacroInitErrorHandling =
 			[output appendString:@";\n\n"];
 
 			if (func.throws)
-				[output appendString:MacroErrorHandling];
+				[output appendString:ErrorHandling];
 
 			[output appendString:@"\treturn returnValue;\n"];
 		}
@@ -299,7 +313,7 @@ static OFString *const MacroInitErrorHandling =
 		[output appendString:@"\n{\n"];
 
 		if (ctor.throws)
-			[output appendString:MacroPrepareErrorHandling];
+			[output appendString:PrepareErrorHandling];
 
 		OFString *constructorCall =
 		    [OFString stringWithFormat:@"%@(%@)", ctor.cIdentifier,
@@ -314,7 +328,7 @@ static OFString *const MacroInitErrorHandling =
 		                            withConstructor:constructorCall]];
 
 		if (ctor.throws)
-			[output appendString:MacroInitErrorHandling];
+			[output appendString:InitErrorHandling];
 
 		[output appendString:@"\treturn self;\n"];
 
@@ -333,7 +347,7 @@ static OFString *const MacroInitErrorHandling =
 		[output appendString:@"\n{\n"];
 
 		if (meth.throws)
-			[output appendString:MacroPrepareErrorHandling];
+			[output appendString:PrepareErrorHandling];
 
 		if (meth.returnsVoid) {
 			[output
@@ -347,7 +361,7 @@ static OFString *const MacroInitErrorHandling =
 			                                     meth.throws]];
 
 			if (meth.throws)
-				[output appendString:MacroErrorHandling];
+				[output appendString:ErrorHandling];
 
 		} else {
 			// Need to add "return ..."
@@ -388,7 +402,7 @@ static OFString *const MacroInitErrorHandling =
 			[output appendString:@";\n\n"];
 
 			if (meth.throws)
-				[output appendString:MacroErrorHandling];
+				[output appendString:ErrorHandling];
 
 			[output appendString:@"\treturn returnValue;\n"];
 		}
@@ -436,8 +450,8 @@ static OFString *const MacroInitErrorHandling =
 		_classDescription.topMostGraphNode = true;
 
 		result = [OFString stringWithFormat:@"#import <%@/%@.h>\n",
-		                   _libraryDescription.name,
-		                   [OGTKMapper swapTypes:dependencyGobjType]];
+		                   depLibDescr.name,
+		                   dependencyClassDescription.type];
 	}
 
 	return result;
