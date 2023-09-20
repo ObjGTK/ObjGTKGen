@@ -315,7 +315,8 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 	} else {
 		// Need to add "return ..."
-		if ([_mapper isTypeSwappable:[method cReturnType]]) {
+		if (([_mapper numberOfAsterisksIn:method.cReturnType] < 2) &&
+		    [_mapper isTypeSwappable:[method cReturnType]]) {
 			// Need to swap type on return
 
 			// First execute the GObject API call and hold
@@ -357,10 +358,8 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			[output appendFormat:@"\t%@ returnValue = ", method.returnType];
 
 			if (isClassMethod) {
-				[output appendString:@"\t"];
 				[output appendString:cClassFuncSig];
 			} else {
-				[output appendString:@"\t"];
 				[output appendString:cInstanceFuncSig];
 			}
 
@@ -368,7 +367,8 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 			if (method.throws) {
 				OFString *varName = nil;
-				if ([_mapper isGobjType:method.cReturnType])
+				if ([_mapper isGobjType:method.cReturnType] &&
+				    ([_mapper numberOfAsterisksIn:method.cReturnType] < 2))
 					varName = @"returnValue";
 
 				[output appendString:[self errorHandlingForGObjectVar:varName]];

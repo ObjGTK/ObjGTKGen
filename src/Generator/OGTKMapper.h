@@ -19,15 +19,11 @@
  */
 @interface OGTKMapper: OFObject
 {
-	OFMutableDictionary OF_GENERIC(OFString *, OGTKLibrary *) *
-	    _girNameToLibraryMapping;
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKLibrary *) * _girNameToLibraryMapping;
 
-	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
-	    _gobjTypeToClassMapping;
-	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
-	    _girNameToClassMapping;
-	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
-	    _objcTypeToClassMapping;
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) * _gobjTypeToClassMapping;
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) * _girNameToClassMapping;
+	OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) * _objcTypeToClassMapping;
 }
 
 /**
@@ -35,36 +31,32 @@
  * @brief Dictionary that maps general API names that are specified in the .gir
  * file to library information objects of type OGTKLibrary.
  */
-@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString *, OGTKLibrary *)
-    * girNameToLibraryMapping;
+@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(OFString *, OGTKLibrary *) *
+    girNameToLibraryMapping;
 
 /**
  * @property gobjTypeToClassMapping
  * @brief Dictionary that maps Gobj type names to class information objects of
  * type OGTKClass.
  */
-@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString *, OGTKClass *)
-    * gobjTypeToClassMapping;
+@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
+    gobjTypeToClassMapping;
 
 /**
  * @property girNameToClassMapping
  * @brief Dictionary that maps general type names that are specified in the .gir
  * file to class information objects of type OGTKClass.
  */
-@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString *, OGTKClass *)
-    * girNameToClassMapping;
+@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
+    girNameToClassMapping;
 
 /**
  * @property objcTypeToClassMapping
  * @brief Dictionary that maps ObjC type names to class information objects of
  * type OGTKClass.
  */
-@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(
-    OFString *, OGTKClass *)
-    * objcTypeToClassMapping;
+@property (readonly, nonatomic) OFMutableDictionary OF_GENERIC(OFString *, OGTKClass *) *
+    objcTypeToClassMapping;
 
 /**
  * @brief Singleton
@@ -175,9 +167,7 @@
  * ```toType``` holding ```name``` as variable name
  *
  */
-- (OFString *)convertType:(OFString *)fromType
-                 withName:(OFString *)name
-                   toType:(OFString *)toType;
+- (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type
@@ -219,6 +209,15 @@
 - (OGTKLibrary *)libraryInfoByNamespace:(OFString *)libNamespace;
 
 /**
+ * @brief      Returns the number of asterisk chars in given identifier
+ *
+ * @param      identifier  The identifier string
+ *
+ * @return     Number of asterisk chars
+ */
+- (size_t)numberOfAsterisksIn:(OFString *)identifier;
+
+/**
  * @brief Return is ```type``` is known by the Gobj type dict
  *
  */
@@ -250,9 +249,7 @@
  * access shortcut.
  * @see -convertType:withName:toType:
  */
-+ (OFString *)convertType:(OFString *)fromType
-                 withName:(OFString *)name
-                   toType:(OFString *)toType;
++ (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type
