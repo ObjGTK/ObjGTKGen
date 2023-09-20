@@ -20,6 +20,7 @@
 {
 	OGTKClass *_classDescription;
 	OGTKLibrary *_libraryDescription;
+	OGTKMapper *_mapper;
 }
 
 /**
@@ -33,6 +34,11 @@
  * used to write out the wrapper strings
  */
 @property (retain, nonatomic) OGTKLibrary *libraryDescription;
+
+/**
+ * @brief Shared mapper instance
+ */
+@property (retain, nonatomic) OGTKMapper *mapper;
 
 /**
  * @brief Reads the text from conf/license.txt and replaces "@@@FILENAME@@@"
@@ -52,7 +58,8 @@
  * @return     instancetype
  */
 - (instancetype)initWithClass:(OGTKClass *)classDescription
-                      library:(OGTKLibrary *)libraryDescription;
+                      library:(OGTKLibrary *)libraryDescription
+                       mapper:(OGTKMapper *)sharedMapper;
 
 /**
  * @brief Generates both header and source files for a class based on the class
@@ -83,8 +90,7 @@
  * @param throws True to add a parameter for error handling
  * @return The string containing the list of parameters, formatted correctly
  */
-- (OFString *)generateCParameterListString:(OFArray OF_GENERIC(
-                                               OGTKParameter *) *)params
+- (OFString *)generateCParameterListString:(OFArray OF_GENERIC(OGTKParameter *) *)params
                            throwsException:(bool)throws;
 
 /**
@@ -96,9 +102,7 @@
  * @return The string containing the list of parameters, formatted correctly
  */
 - (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
-                                             andParams:
-                                                 (OFArray OF_GENERIC(
-                                                     OGTKParameter *) *)params
+                                             andParams:(OFArray OF_GENERIC(OGTKParameter *) *)params
                                        throwsException:(bool)throws;
 
 /**

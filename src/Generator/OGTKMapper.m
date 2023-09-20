@@ -16,11 +16,9 @@
 
 - (size_t)numberOfAsterisksIn:(OFString *)identifier;
 
-- (void)addDependenciesFromMethod:(OGTKMethod *)method
-                               to:(OGTKClass *)classInfo;
+- (void)addDependenciesFromMethod:(OGTKMethod *)method to:(OGTKClass *)classInfo;
 
-- (void)walkDependencyTreeFrom:(OGTKClass *)classInfo
-                    usingStack:(OFMutableDictionary *)stack;
+- (void)walkDependencyTreeFrom:(OGTKClass *)classInfo usingStack:(OFMutableDictionary *)stack;
 
 @end
 
@@ -75,18 +73,15 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (void)addLibrary:(OGTKLibrary *)libraryInfo
 {
-	[_girNameToLibraryMapping setObject:libraryInfo
-	                             forKey:libraryInfo.namespace];
+	[_girNameToLibraryMapping setObject:libraryInfo forKey:libraryInfo.namespace];
 }
 
 - (void)removeLibrary:(OGTKLibrary *)libraryInfo
 {
 	if (libraryInfo.namespace != nil &&
-	    [_girNameToLibraryMapping objectForKey:libraryInfo.namespace] !=
-	        nil) {
+	    [_girNameToLibraryMapping objectForKey:libraryInfo.namespace] != nil) {
 
-		[_girNameToLibraryMapping
-		    removeObjectForKey:libraryInfo.namespace];
+		[_girNameToLibraryMapping removeObjectForKey:libraryInfo.namespace];
 	}
 }
 
@@ -101,12 +96,10 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (void)removeClass:(OGTKClass *)classInfo
 {
-	if (classInfo.cType != nil &&
-	    [_gobjTypeToClassMapping objectForKey:classInfo.cType] != nil)
+	if (classInfo.cType != nil && [_gobjTypeToClassMapping objectForKey:classInfo.cType] != nil)
 		[_gobjTypeToClassMapping removeObjectForKey:classInfo.cType];
 
-	if (classInfo.cName != nil &&
-	    [_girNameToClassMapping objectForKey:classInfo.cName] != nil)
+	if (classInfo.cName != nil && [_girNameToClassMapping objectForKey:classInfo.cName] != nil)
 		[_girNameToClassMapping removeObjectForKey:classInfo.cName];
 
 	if (classInfo.cType != nil && classInfo.type != nil &&
@@ -116,14 +109,12 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (bool)isGobjType:(OFString *)type
 {
-	return ([_gobjTypeToClassMapping
-	            objectForKey:[self stripAsterisks:type]] != nil);
+	return ([_gobjTypeToClassMapping objectForKey:[self stripAsterisks:type]] != nil);
 }
 
 - (bool)isObjcType:(OFString *)type
 {
-	return ([_objcTypeToClassMapping
-	            objectForKey:[self stripAsterisks:type]] != nil);
+	return ([_objcTypeToClassMapping objectForKey:[self stripAsterisks:type]] != nil);
 }
 
 - (void)determineParentClassNames
@@ -131,13 +122,12 @@ static OGTKMapper *sharedMyMapper = nil;
 	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
 
 	for (OFString *className in _objcTypeToClassMapping) {
-		OGTKClass *currentClass =
-		    [_objcTypeToClassMapping objectForKey:className];
+		OGTKClass *currentClass = [_objcTypeToClassMapping objectForKey:className];
 
 		if (currentClass.cParentType == nil) {
 			@try {
-				OFString *cParentType = [self
-				    getCTypeFromName:currentClass.parentName];
+				OFString *cParentType =
+				    [self getCTypeFromName:currentClass.parentName];
 
 				[currentClass setCParentType:cParentType];
 			} @catch (id e) {
@@ -145,8 +135,7 @@ static OGTKMapper *sharedMyMapper = nil;
 				      @"parent: %@, \n"
 				      @"exception %@. "
 				      @"Removing class…",
-				    currentClass.cName, currentClass.parentName,
-				    [e class]);
+				    currentClass.cName, currentClass.parentName, [e class]);
 				[classesToRemove addObject:currentClass];
 			}
 		}
@@ -160,15 +149,13 @@ static OGTKMapper *sharedMyMapper = nil;
 - (void)determineClassDependencies
 {
 	for (OFString *className in _objcTypeToClassMapping) {
-		OGTKClass *classInfo =
-		    [_objcTypeToClassMapping objectForKey:className];
+		OGTKClass *classInfo = [_objcTypeToClassMapping objectForKey:className];
 
 		if (classInfo.cParentType != nil)
 			[classInfo addDependency:classInfo.cParentType];
 
 		for (OGTKMethod *constructor in classInfo.constructors)
-			[self addDependenciesFromMethod:constructor
-			                             to:classInfo];
+			[self addDependenciesFromMethod:constructor to:classInfo];
 
 		for (OGTKMethod *function in classInfo.functions)
 			[self addDependenciesFromMethod:function to:classInfo];
@@ -181,8 +168,7 @@ static OGTKMapper *sharedMyMapper = nil;
 - (void)detectAndMarkCircularClassDependencies
 {
 	for (OFString *className in _objcTypeToClassMapping) {
-		OGTKClass *classInfo =
-		    [_objcTypeToClassMapping objectForKey:className];
+		OGTKClass *classInfo = [_objcTypeToClassMapping objectForKey:className];
 
 		OFMutableDictionary *stack = [[OFMutableDictionary alloc] init];
 
@@ -197,9 +183,8 @@ static OGTKMapper *sharedMyMapper = nil;
 - (OFString *)swapTypes:(OFString *)type
 {
 	// Convert basic types by hardcoding
-	if ([type isEqual:@"GApplication"] ||
-	    [type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"] ||
-	    [type isEqual:@"GMountOperation"])
+	if ([type isEqual:@"GApplication"] || [type isEqual:@"GInitiallyUnowned"] ||
+	    [type isEqual:@"GObject"] || [type isEqual:@"GMountOperation"])
 		return @"OGObject";
 	else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"] ||
 	    [type isEqual:@"const char*"] || [type isEqual:@"gchar*"])
@@ -223,27 +208,23 @@ static OGTKMapper *sharedMyMapper = nil;
 	OFString *strippedType = [self stripAsterisks:type];
 
 	// Gobj -> ObjC type swapping
-	OGTKClass *objcClassInfo =
-	    [_gobjTypeToClassMapping objectForKey:strippedType];
+	OGTKClass *objcClassInfo = [_gobjTypeToClassMapping objectForKey:strippedType];
 
 	if (objcClassInfo != nil) {
 		if ([strippedType isEqual:type])
 			return objcClassInfo.type;
 		else
-			return [OFString
-			    stringWithFormat:@"%@*", objcClassInfo.type];
+			return [OFString stringWithFormat:@"%@*", objcClassInfo.type];
 	}
 
 	// ObjC -> Gobj type swapping
-	OGTKClass *gobjClassInfo =
-	    [_objcTypeToClassMapping objectForKey:strippedType];
+	OGTKClass *gobjClassInfo = [_objcTypeToClassMapping objectForKey:strippedType];
 
 	if (gobjClassInfo != nil) {
 		if ([strippedType isEqual:type])
 			return gobjClassInfo.cType;
 		else
-			return [OFString
-			    stringWithFormat:@"%@*", gobjClassInfo.cType];
+			return [OFString stringWithFormat:@"%@*", gobjClassInfo.cType];
 	}
 
 	return type;
@@ -253,47 +234,36 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	return [type isEqual:@"gchar*"] || [type isEqual:@"const gchar*"] ||
 	    [type isEqual:@"char*"] || [type isEqual:@"const char*"] ||
-	    [type isEqual:@"OFString*"] || [type isEqual:@"OFArray*"] ||
-	    [self isGobjType:type] || [self isObjcType:type];
+	    [type isEqual:@"OFString*"] || [type isEqual:@"OFArray*"] || [self isGobjType:type] ||
+	    [self isObjcType:type];
 }
 
-- (OFString *)convertType:(OFString *)fromType
-                 withName:(OFString *)name
-                   toType:(OFString *)toType
+- (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType
 {
 	// Try to return conversion for string types first
-	if (([fromType isEqual:@"gchar*"] ||
-	        [fromType isEqual:@"const gchar*"] ||
-	        [fromType isEqual:@"gchar*"] ||
-	        [fromType isEqual:@"const char*"]) &&
+	if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"] ||
+	        [fromType isEqual:@"gchar*"] || [fromType isEqual:@"const char*"]) &&
 	    [toType isEqual:@"OFString*"]) {
-		return [OFString
-		    stringWithFormat:@"[OFString stringWithUTF8String:%@]",
-		    name];
+		return [OFString stringWithFormat:@"[OFString stringWithUTF8String:%@]", name];
 	} else if ([fromType isEqual:@"OFString*"] &&
-	    ([toType isEqual:@"const gchar*"] ||
-	        [toType isEqual:@"const char*"])) {
+	    ([toType isEqual:@"const gchar*"] || [toType isEqual:@"const char*"])) {
 		return [OFString stringWithFormat:@"[%@ UTF8String]", name];
 	} else if ([fromType isEqual:@"OFString*"] &&
 	    ([toType isEqual:@"gchar*"] || [toType isEqual:@"char*"])) {
-		return [OFString
-		    stringWithFormat:@"(gchar*) [%@ UTF8String]", name];
+		return [OFString stringWithFormat:@"(gchar*) [%@ UTF8String]", name];
 	}
 
 	// Then try to return generic Gobj type conversion
 	if ([self isGobjType:fromType] && [self isObjcType:toType]) {
 		// Converting from Gobjc -> Objc
 
-		return
-		    [OFString stringWithFormat:
-		                  @"[[[%@ alloc] initWithGObject:(GObject*)%@] "
-		                  @"autorelease]",
-		              [self stripAsterisks:toType], name];
+		return [OFString stringWithFormat:@"[[[%@ alloc] initWithGObject:(GObject*)%@] "
+		                                  @"autorelease]",
+		                 [self stripAsterisks:toType], name];
 
 	} else if ([self isObjcType:fromType] && [self isGobjType:toType]) {
 		// Converting from Objc -> Gobj
-		return [OFString
-		    stringWithFormat:@"[%@ %@]", name, @"castedGObject"];
+		return [OFString stringWithFormat:@"[%@ %@]", name, @"castedGObject"];
 	}
 
 	// Otherwise don't do any conversion (including bool types, as ObjFW
@@ -310,15 +280,12 @@ static OGTKMapper *sharedMyMapper = nil;
 
 	// Convert GtkFooBar into GTK_FOO_BAR([self GOBJECT])
 	if ([self isGobjType:type]) {
-		OGTKClass *classInfo = [_gobjTypeToClassMapping
-		    objectForKey:[self stripAsterisks:type]];
+		OGTKClass *classInfo =
+		    [_gobjTypeToClassMapping objectForKey:[self stripAsterisks:type]];
 
-		OFString *functionMacroName = [[OFString
-		    stringWithFormat:@"%@_%@", classInfo.cNSSymbolPrefix,
-		    classInfo.cSymbolPrefix] uppercaseString];
+		OFString *functionMacroName = classInfo.macroCastGObject;
 
-		return [OFString stringWithFormat:@"%@%@", functionMacroName,
-		                 @"([self gObject])"];
+		return [OFString stringWithFormat:@"%@%@", functionMacroName, @"([self gObject])"];
 	}
 
 	return type;
@@ -332,19 +299,18 @@ static OGTKMapper *sharedMyMapper = nil;
 		return @"GApplication";
 	else if ([name isEqual:@"GObject.InitiallyUnowned"])
 		return @"GInitiallyUnowned";
-	else if ([name containsString:@"GObject."] ||
-	    [name containsString:@"Gio."] || [name containsString:@"Soup."])
+	else if ([name containsString:@"GObject."] || [name containsString:@"Gio."] ||
+	    [name containsString:@"Soup."])
 		return @"GObject";
 
 	// Case: Name has a namespace prefix
 	if ([name containsString:@"."]) {
 		OFArray *nameParts = [name componentsSeparatedByString:@"."];
 
-		OGTKClass *classInfo = [_girNameToClassMapping
-		    objectForKey:[nameParts objectAtIndex:1]];
+		OGTKClass *classInfo =
+		    [_girNameToClassMapping objectForKey:[nameParts objectAtIndex:1]];
 
-		if (classInfo != nil &&
-		    [classInfo.namespace isEqual:[nameParts objectAtIndex:0]])
+		if (classInfo != nil && [classInfo.namespace isEqual:[nameParts objectAtIndex:0]])
 			return classInfo.cType;
 	}
 
@@ -362,9 +328,8 @@ static OGTKMapper *sharedMyMapper = nil;
 	OGTKClass *classInfo = [_gobjTypeToClassMapping objectForKey:gobjType];
 
 	if (classInfo == nil)
-		@throw [OFUndefinedKeyException
-		    exceptionWithObject:_gobjTypeToClassMapping
-		                    key:gobjType];
+		@throw [OFUndefinedKeyException exceptionWithObject:_gobjTypeToClassMapping
+		                                                key:gobjType];
 
 	return classInfo;
 }
@@ -378,8 +343,7 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (OFString *)stripAsterisks:(OFString *)identifier
 {
-	OFCharacterSet *charSet =
-	    [OFCharacterSet characterSetWithCharactersInString:@"*"];
+	OFCharacterSet *charSet = [OFCharacterSet characterSetWithCharactersInString:@"*"];
 	size_t index = [identifier indexOfCharacterFromSet:charSet];
 
 	if (index == OFNotFound)
@@ -390,8 +354,7 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (size_t)numberOfAsterisksIn:(OFString *)identifier
 {
-	OFCharacterSet *charSet =
-	    [OFCharacterSet characterSetWithCharactersInString:@"*"];
+	OFCharacterSet *charSet = [OFCharacterSet characterSetWithCharactersInString:@"*"];
 	size_t index = [identifier indexOfCharacterFromSet:charSet];
 
 	if (index == OFNotFound)
@@ -409,8 +372,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		[classInfo addDependency:strippedReturnType];
 
 	for (OGTKParameter *parameter in method.parameters) {
-		OFString *strippedParameterCType =
-		    [self stripAsterisks:parameter.cType];
+		OFString *strippedParameterCType = [self stripAsterisks:parameter.cType];
 
 		if ([self isTypeSwappable:strippedParameterCType] &&
 		    ![strippedParameterCType isEqual:classInfo.cType])
@@ -418,8 +380,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	}
 }
 
-- (void)walkDependencyTreeFrom:(OGTKClass *)classInfo
-                    usingStack:(OFMutableDictionary *)stack
+- (void)walkDependencyTreeFrom:(OGTKClass *)classInfo usingStack:(OFMutableDictionary *)stack
 {
 	if (classInfo.visited) {
 		// OFLog(@"Class %@ aleady visited. Skipping…",
@@ -434,11 +395,9 @@ static OGTKMapper *sharedMyMapper = nil;
 	OGTKClass *parentClassInfo = nil;
 
 	if (classInfo.cParentType != nil)
-		parentClassInfo = [_gobjTypeToClassMapping
-		    objectForKey:classInfo.cParentType];
+		parentClassInfo = [_gobjTypeToClassMapping objectForKey:classInfo.cParentType];
 
-	if (parentClassInfo != nil &&
-	    [stack objectForKey:classInfo.cParentType] == nil) {
+	if (parentClassInfo != nil && [stack objectForKey:classInfo.cParentType] == nil) {
 
 		[stack setObject:@"1" forKey:classInfo.cParentType];
 		[self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
@@ -458,8 +417,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		// class - we don't need an "#import" then
 		if (![classInfo.cParentType isEqual:dependencyGobjName]) {
 
-			[classInfo
-			    addForwardDeclarationForClass:dependencyGobjName];
+			[classInfo addForwardDeclarationForClass:dependencyGobjName];
 		}
 
 		OGTKClass *dependencyClassInfo =
@@ -472,8 +430,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		// dependency and follow its dependencies
 		[stack setObject:@"1" forKey:dependencyGobjName];
 
-		[self walkDependencyTreeFrom:dependencyClassInfo
-		                  usingStack:stack];
+		[self walkDependencyTreeFrom:dependencyClassInfo usingStack:stack];
 	}
 
 	[classInfo removeForwardDeclarationsFromDependencies];
@@ -509,9 +466,7 @@ static OGTKMapper *sharedMyMapper = nil;
 	return [sharedMapper isObjcType:type];
 }
 
-+ (OFString *)convertType:(OFString *)fromType
-                 withName:(OFString *)name
-                   toType:(OFString *)toType
++ (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType
 {
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 

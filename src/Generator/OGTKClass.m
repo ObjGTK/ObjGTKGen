@@ -9,14 +9,12 @@
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
-@synthesize cName = _cName, cType = _cType, namespace = _namespace,
-            parentName = _parentName, cParentType = _cParentType,
-            cSymbolPrefix = _cSymbolPrefix, cNSSymbolPrefix = _cNSSymbolPrefix,
-            cNSIdentifierPrefix = _cNSIdentifierPrefix,
-            documentation = _documentation,
-            dependsOnClasses = _dependsOnClasses,
-            forwardDeclarationForClasses = _forwardDeclarationForClasses,
-            visited = _visited, topMostGraphNode = _topMostGraphNode;
+@synthesize cName = _cName, cType = _cType, namespace = _namespace, parentName = _parentName,
+            cParentType = _cParentType, cSymbolPrefix = _cSymbolPrefix,
+            cNSSymbolPrefix = _cNSSymbolPrefix, cNSIdentifierPrefix = _cNSIdentifierPrefix,
+            documentation = _documentation, dependsOnClasses = _dependsOnClasses,
+            forwardDeclarationForClasses = _forwardDeclarationForClasses, visited = _visited,
+            topMostGraphNode = _topMostGraphNode;
 
 - (instancetype)init
 {
@@ -65,22 +63,25 @@
 	if (self.cType == nil)
 		@throw [OGTKReceivedNilExpectedStringException exception];
 
-	if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] &&
-	    [self.cType hasPrefix:@"Gtk"]) {
+	if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] && [self.cType hasPrefix:@"Gtk"]) {
 
 		if (_typeWithoutPrefix == nil) {
 			size_t prefixLength = self.cNSIdentifierPrefix.length;
 
-			_typeWithoutPrefix =
-			    [self.cType substringFromIndex:prefixLength];
+			_typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
 
 			[_typeWithoutPrefix retain];
 		}
 
-		return
-		    [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
+		return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
 	}
 	return [OFString stringWithFormat:@"OG%@", self.cType];
+}
+
+- (OFString *)macroCastGObject
+{
+	return [[OFString stringWithFormat:@"%@_%@", _cNSSymbolPrefix, _cSymbolPrefix]
+	    uppercaseString];
 }
 
 - (void)addConstructor:(OGTKMethod *)constructor

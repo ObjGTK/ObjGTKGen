@@ -14,30 +14,17 @@
 
 @implementation OGTKClassWriter
 
-@synthesize classDescription = _classDescription,
-            libraryDescription = _libraryDescription;
+@synthesize classDescription = _classDescription, libraryDescription = _libraryDescription,
+            mapper = _mapper;
 
 static OFString *const CErrorParameterName = @"&err";
 static OFString *const PrepareErrorHandling = @"\tGError* err = NULL;\n\n";
-static OFString *const ErrorHandling =
-    @"\tif(err != NULL) {\n"
-    @"\t\tOGErrorException* exception = [OGErrorException "
-    @"exceptionWithGError:err];\n"
-    @"\t\tg_error_free(err);\n"
-    @"\t\t@throw exception;\n"
-    @"\t}\n\n";
-static OFString *const InitErrorHandling =
-    @"\t@try {"
-    @"\t\tif(err != NULL) {\n"
-    @"\t\t\tOGErrorException* exception = [OGErrorException "
-    @"exceptionWithGError:err];\n"
-    @"\t\t\tg_error_free(err);\n"
-    @"\t\t\t@throw exception;\n"
-    @"\t\t}\n"
-    @"\t} @catch (id e) {"
-    @"\t\t[self release];"
-    @"\t\t@throw e;"
-    @"\t}";
+static OFString *const InitTry = @"\t@try {\n";
+static OFString *const InitCatch = @"\t} @catch (id e) {\n"
+                                   @"\t\tg_object_unref(gobjectValue);\n"
+                                   @"\t\t[self release];\n"
+                                   @"\t\t@throw e;\n"
+                                   @"\t}\n\n";
 
 - (instancetype)init
 {
@@ -46,6 +33,7 @@ static OFString *const InitErrorHandling =
 
 - (instancetype)initWithClass:(OGTKClass *)classDescription
                       library:(OGTKLibrary *)libraryDescription
+                       mapper:(OGTKMapper *)sharedMapper
 {
 	self = [super init];
 
@@ -55,6 +43,9 @@ static OFString *const InitErrorHandling =
 
 		_libraryDescription = libraryDescription;
 		[_libraryDescription retain];
+
+		_mapper = sharedMapper;
+		[sharedMapper retain];
 	} @catch (id e) {
 		[self release];
 		@throw e;
@@ -67,6 +58,7 @@ static OFString *const InitErrorHandling =
 {
 	[_classDescription release];
 	[_libraryDescription release];
+	[_mapper release];
 
 	[super dealloc];
 }
@@ -75,22 +67,21 @@ static OFString *const InitErrorHandling =
 {
 	OFFileManager *fileManager = [OFFileManager defaultManager];
 	if (![fileManager directoryExistsAtPath:outputDir]) {
-		[fileManager createDirectoryAtPath:outputDir
-		                     createParents:true];
+		[fileManager createDirectoryAtPath:outputDir createParents:true];
 	}
 
 	@try {
 		// Header
-		OFString *hFilename = [[outputDir
-		    stringByAppendingPathComponent:_classDescription.type]
-		    stringByAppendingString:@".h"];
+		OFString *hFilename =
+		    [[outputDir stringByAppendingPathComponent:_classDescription.type]
+		        stringByAppendingString:@".h"];
 
 		[[self headerString] writeToFile:hFilename];
 
 		// Source
-		OFString *sFilename = [[outputDir
-		    stringByAppendingPathComponent:_classDescription.type]
-		    stringByAppendingString:@".m"];
+		OFString *sFilename =
+		    [[outputDir stringByAppendingPathComponent:_classDescription.type]
+		        stringByAppendingString:@".m"];
 
 		[[self sourceString] writeToFile:sFilename];
 	} @catch (id e) {
@@ -106,10 +97,8 @@ static OFString *const InitErrorHandling =
 	OFMutableString *output = [[OFMutableString alloc] init];
 
 	// OFLog(@"Writing header file for class %@.", _classDescription.type);
-	[output appendString:[OGTKClassWriter
-	                         generateLicense:[OFString
-	                                             stringWithFormat:@"%@.h",
-	                                             _classDescription.type]]];
+	[output appendString:[OGTKClassWriter generateLicense:[OFString stringWithFormat:@"%@.h",
+	                                                                _classDescription.type]]];
 
 	[output appendString:@"\n"];
 
@@ -118,13 +107,11 @@ static OFString *const InitErrorHandling =
 	for (OFString *dependency in _classDescription.dependsOnClasses) {
 
 		if ([[OGTKMapper swapTypes:dependency] isEqual:@"OGObject"])
-			[importDependencies
-			    appendString:@"#import <OGObject/OGObject.h>\n"];
+			[importDependencies appendString:@"#import <OGObject/OGObject.h>\n"];
 		else if ([OGTKMapper isGobjType:dependency] &&
 		    [OGTKMapper isTypeSwappable:dependency]) {
 
-			[importDependencies
-			    appendString:[self importForDependency:dependency]];
+			[importDependencies appendString:[self importForDependency:dependency]];
 		}
 	}
 
@@ -133,8 +120,7 @@ static OFString *const InitErrorHandling =
 	OFMutableString *includes = [OFMutableString string];
 	if (_classDescription.topMostGraphNode) {
 		for (GIRInclude *cInclude in _libraryDescription.cIncludes) {
-			[includes
-			    appendFormat:@"#include <%@>\n", cInclude.name];
+			[includes appendFormat:@"#include <%@>\n", cInclude.name];
 		}
 		[includes appendString:@"\n"];
 	}
@@ -145,8 +131,7 @@ static OFString *const InitErrorHandling =
 
 	// Forward class declarations (for circular dependencies)
 	if (_classDescription.forwardDeclarationForClasses.count > 0) {
-		for (OFString *gobjClassName in _classDescription
-		         .forwardDeclarationForClasses) {
+		for (OFString *gobjClassName in _classDescription.forwardDeclarationForClasses) {
 			if ([OGTKMapper isGobjType:gobjClassName] &&
 			    [OGTKMapper isTypeSwappable:gobjClassName])
 				[output appendFormat:@"@class %@;\n",
@@ -159,8 +144,7 @@ static OFString *const InitErrorHandling =
 	// Class documentation
 	if (_classDescription.documentation != nil) {
 		OFString *docText =
-		    [self preparedDocumentationStringCopy:_classDescription
-		                                              .documentation];
+		    [self preparedDocumentationStringCopy:_classDescription.documentation];
 
 		[output appendFormat:@"/**\n * %@\n *\n */\n", docText];
 
@@ -168,8 +152,7 @@ static OFString *const InitErrorHandling =
 	}
 
 	// Interface declaration
-	[output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n",
-	        [_classDescription type],
+	[output appendFormat:@"@interface %@ : %@\n{\n\n}\n\n", [_classDescription type],
 	        [OGTKMapper swapTypes:[_classDescription cParentType]]];
 
 	// Function declarations
@@ -177,11 +160,9 @@ static OFString *const InitErrorHandling =
 		[output appendString:@"/**\n * Functions\n */\n"];
 
 		for (OGTKMethod *func in _classDescription.functions) {
-			[output appendFormat:@"\n%@\n",
-			        [self generateDocumentationForMethod:func]];
+			[output appendFormat:@"\n%@\n", [self generateDocumentationForMethod:func]];
 
-			[output appendFormat:@"+ (%@)%@;\n", func.returnType,
-			        func.sig];
+			[output appendFormat:@"+ (%@)%@;\n", func.returnType, func.sig];
 		}
 	}
 
@@ -198,12 +179,10 @@ static OFString *const InitErrorHandling =
 	[output appendString:@"\n/**\n * Methods\n */\n\n"];
 
 	// GObject getter method declaration
-	[output appendFormat:@"- (%@*)%@;\n", _classDescription.cType,
-	        @"castedGObject"];
+	[output appendFormat:@"- (%@*)%@;\n", _classDescription.cType, @"castedGObject"];
 
 	for (OGTKMethod *meth in _classDescription.methods) {
-		[output appendFormat:@"\n%@\n",
-		        [self generateDocumentationForMethod:meth]];
+		[output appendFormat:@"\n%@\n", [self generateDocumentationForMethod:meth]];
 		[output appendFormat:@"- (%@)%@;\n", meth.returnType, meth.sig];
 	}
 
@@ -219,8 +198,7 @@ static OFString *const InitErrorHandling =
 
 	// OFLog(@"Writing implementation file for class %@.",
 	// _classDescription.type);
-	OFString *fileName =
-	    [OFString stringWithFormat:@"%@.m", _classDescription.type];
+	OFString *fileName = [OFString stringWithFormat:@"%@.m", _classDescription.type];
 	OFString *license = [OGTKClassWriter generateLicense:fileName];
 	[output appendString:license];
 
@@ -229,13 +207,11 @@ static OFString *const InitErrorHandling =
 
 	// Imports for forward class declarations (for circular dependencies)
 	if (_classDescription.forwardDeclarationForClasses.count > 0) {
-		for (OFString *gobjClassName in _classDescription
-		         .forwardDeclarationForClasses) {
+		for (OFString *gobjClassName in _classDescription.forwardDeclarationForClasses) {
 			if ([OGTKMapper isGobjType:gobjClassName] &&
 			    [OGTKMapper isTypeSwappable:gobjClassName]) {
 
-				[output appendString:[self importForDependency:
-				                               gobjClassName]];
+				[output appendString:[self importForDependency:gobjClassName]];
 			}
 		}
 
@@ -247,62 +223,7 @@ static OFString *const InitErrorHandling =
 
 	// Class function implementation
 	for (OGTKMethod *func in _classDescription.functions) {
-		[output appendFormat:@"+ (%@)%@", func.returnType, func.sig];
-
-		[output appendString:@"\n{\n"];
-
-		if (func.throws)
-			[output appendString:PrepareErrorHandling];
-
-		if (func.returnsVoid) {
-			[output
-			    appendFormat:@"\t%@(%@);\n", func.cIdentifier,
-			    [self generateCParameterListString:func.parameters
-			                       throwsException:func.throws]];
-
-			if (func.throws)
-				[output appendString:ErrorHandling];
-
-		} else {
-			// Need to add "return ..."
-			[output appendFormat:@"\t%@ returnValue = ",
-			        func.returnType];
-
-			if ([OGTKMapper isTypeSwappable:[func cReturnType]]) {
-				// Need to swap type on return
-
-				OFString *returnCall = [OFString
-				    stringWithFormat:@"%@(%@)",
-				    [func cIdentifier],
-				    [self generateCParameterListString:
-				              func.parameters
-				                       throwsException:
-				                           func.throws]];
-
-				[output appendString:
-				            [OGTKMapper
-				                convertType:func.cReturnType
-				                   withName:returnCall
-				                     toType:func.returnType]];
-
-			} else {
-				[output appendFormat:@"%@(%@)",
-				        func.cIdentifier,
-				        [self generateCParameterListString:
-				                  func.parameters
-				                           throwsException:
-				                               func.throws]];
-			}
-
-			[output appendString:@";\n\n"];
-
-			if (func.throws)
-				[output appendString:ErrorHandling];
-
-			[output appendString:@"\treturn returnValue;\n"];
-		}
-
-		[output appendString:@"}\n\n"];
+		[self appendMethodDefinitionOf:func toString:output classMethod:true];
 	}
 
 	// Constructor implementations
@@ -315,99 +236,37 @@ static OFString *const InitErrorHandling =
 		if (ctor.throws)
 			[output appendString:PrepareErrorHandling];
 
+		// Init GObject and hold result
 		OFString *constructorCall =
 		    [OFString stringWithFormat:@"%@(%@)", ctor.cIdentifier,
 		              [self generateCParameterListString:ctor.parameters
 		                                 throwsException:ctor.throws]];
+		[output appendFormat:@"\t%@* gobjectValue = %@;\n\n", _classDescription.cType,
+		        constructorCall];
 
-		[output
-		    appendFormat:@"\tself = %@;\n\n",
-		    [OGTKUtil
-		        getFunctionCallForConstructorOfType:_classDescription
-		                                                .cType
-		                            withConstructor:constructorCall]];
-
+		// Process error handling of the GObject init
 		if (ctor.throws)
-			[output appendString:InitErrorHandling];
+			[output appendString:[self errorHandlingForGObjectVar:@"gobjectValue"]];
 
+		[output appendString:InitTry];
+		[output appendFormat:@"\t\tself = %@;\n",
+		        [OGTKUtil getFunctionCallForConstructorOfType:_classDescription.cType
+		                                      withConstructor:@"gobjectValue"]];
+
+		[output appendString:InitCatch];
+
+		[output appendString:@"\tg_object_unref(gobjectValue);\n"];
 		[output appendString:@"\treturn self;\n"];
-
 		[output appendString:@"}\n\n"];
 	}
 
 	// GObject getter method implementation
-	[output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n",
-	        _classDescription.cType, @"castedGObject",
-	        [OGTKMapper selfTypeMethodCall:_classDescription.cType]];
+	[output appendFormat:@"- (%@*)%@\n{\n\treturn %@;\n}\n\n", _classDescription.cType,
+	        @"castedGObject", [_mapper selfTypeMethodCall:_classDescription.cType]];
 
 	// Method implementations
 	for (OGTKMethod *meth in _classDescription.methods) {
-		[output appendFormat:@"- (%@)%@", meth.returnType, meth.sig];
-
-		[output appendString:@"\n{\n"];
-
-		if (meth.throws)
-			[output appendString:PrepareErrorHandling];
-
-		if (meth.returnsVoid) {
-			[output
-			    appendFormat:@"\t%@(%@);\n", meth.cIdentifier,
-			    [self
-			        generateCParameterListWithInstanceString:
-			            _classDescription.type
-			                                       andParams:
-			                                           meth.parameters
-			                                 throwsException:
-			                                     meth.throws]];
-
-			if (meth.throws)
-				[output appendString:ErrorHandling];
-
-		} else {
-			// Need to add "return ..."
-			[output appendFormat:@"\t%@ returnValue = ",
-			        meth.returnType];
-
-			if ([OGTKMapper isTypeSwappable:meth.cReturnType]) {
-				// Need to swap type on return
-
-				OFString *returnCall = [OFString
-				    stringWithFormat:@"%@(%@)",
-				    meth.cIdentifier,
-				    [self
-				        generateCParameterListWithInstanceString:
-				            _classDescription.type
-				                                       andParams:
-				                                           meth.parameters
-				                                 throwsException:
-				                                     meth.throws]];
-
-				[output appendString:
-				            [OGTKMapper
-				                convertType:meth.cReturnType
-				                   withName:returnCall
-				                     toType:meth.returnType]];
-			} else {
-				[output
-				    appendFormat:@"%@(%@)", meth.cIdentifier,
-				    [self
-				        generateCParameterListWithInstanceString:
-				            _classDescription.type
-				                                       andParams:
-				                                           meth.parameters
-				                                 throwsException:
-				                                     meth.throws]];
-			}
-
-			[output appendString:@";\n\n"];
-
-			if (meth.throws)
-				[output appendString:ErrorHandling];
-
-			[output appendString:@"\treturn returnValue;\n"];
-		}
-
-		[output appendString:@"}\n\n"];
+		[self appendMethodDefinitionOf:meth toString:output classMethod:false];
 	}
 
 	// End implementation
@@ -416,16 +275,145 @@ static OFString *const InitErrorHandling =
 	return output;
 }
 
+- (void)appendMethodDefinitionOf:(OGTKMethod *)method
+                        toString:(OFMutableString *)output
+                     classMethod:(bool)isClassMethod
+{
+	if (isClassMethod)
+		[output appendFormat:@"+ (%@)%@", method.returnType, method.sig];
+	else
+		[output appendFormat:@"- (%@)%@", method.returnType, method.sig];
+
+	[output appendString:@"\n{\n"];
+
+	if (method.throws)
+		[output appendString:PrepareErrorHandling];
+
+	OFString *cClassFuncSig = [OFString stringWithFormat:@"%@(%@);\n", method.cIdentifier,
+	                                    [self generateCParameterListString:method.parameters
+	                                                       throwsException:method.throws]];
+	OFString *cInstanceFuncSig =
+	    [OFString stringWithFormat:@"%@(%@);\n", method.cIdentifier,
+	              [self generateCParameterListWithInstanceString:_classDescription.type
+	                                                   andParams:method.parameters
+	                                             throwsException:method.throws]];
+
+	// No return type/GObject/ObjC object
+	if (method.returnsVoid) {
+		if (isClassMethod) {
+			[output appendString:@"\t"];
+			[output appendString:cClassFuncSig];
+		} else {
+			[output appendString:@"\t"];
+			[output appendString:cInstanceFuncSig];
+		}
+
+		if (method.throws) {
+			[output appendString:@"\n"];
+			[output appendString:[self errorHandling]];
+		}
+
+	} else {
+		// Need to add "return ..."
+		if ([_mapper isTypeSwappable:[method cReturnType]]) {
+			// Need to swap type on return
+
+			// First execute the GObject API call and hold
+			// the result
+			[output appendFormat:@"\t%@ gobjectValue = ", method.cReturnType];
+
+			if (isClassMethod) {
+				[output appendString:cClassFuncSig];
+			} else {
+				[output appendString:cInstanceFuncSig];
+			}
+
+			[output appendString:@"\n"];
+
+			// Process error handling of the API call
+			if (method.throws) {
+				// Make sure objects are released in
+				// case of error
+				if ([_mapper isGobjType:method.cReturnType])
+					[output appendString:[self errorHandlingForGObjectVar:
+					                               @"gobjectValue"]];
+				else
+					[output appendString:[self errorHandling]];
+			}
+
+			// Then try to convert the result
+			[output appendFormat:@"\t%@ returnValue = ", method.returnType];
+
+			[output appendString:[OGTKMapper convertType:method.cReturnType
+			                                    withName:@"gobjectValue"
+			                                      toType:method.returnType]];
+			[output appendString:@";\n"];
+
+			if ([_mapper isGobjType:method.cReturnType])
+				[output appendString:@"\tg_object_unref(gobjectValue);\n\n"];
+
+			// Return type, but no type conversion for return type
+		} else {
+			[output appendFormat:@"\t%@ returnValue = ", method.returnType];
+
+			if (isClassMethod) {
+				[output appendString:@"\t"];
+				[output appendString:cClassFuncSig];
+			} else {
+				[output appendString:@"\t"];
+				[output appendString:cInstanceFuncSig];
+			}
+
+			[output appendString:@"\n"];
+
+			if (method.throws) {
+				OFString *varName = nil;
+				if ([_mapper isGobjType:method.cReturnType])
+					varName = @"returnValue";
+
+				[output appendString:[self errorHandlingForGObjectVar:varName]];
+			}
+		}
+
+		[output appendString:@"\treturn returnValue;\n"];
+	}
+
+	[output appendString:@"}\n\n"];
+}
+
+- (OFString *)errorHandling
+{
+	return [self errorHandlingForGObjectVar:nil];
+}
+
+- (OFString *)errorHandlingForGObjectVar:(OFString *)varName
+{
+	OFMutableString *returnString = [OFMutableString string];
+	[returnString appendString:@"\tif(err != NULL) {\n"
+	                           @"\t\tOGErrorException* exception = [OGErrorException "
+	                           @"exceptionWithGError:err];\n"
+	                           @"\t\tg_error_free(err);\n"];
+
+	if (varName != nil) {
+		[returnString appendFormat:@"\t\tif(%@ != NULL)\n", varName];
+		[returnString appendFormat:@"\t\t\tg_object_unref(%@);\n", varName];
+	}
+
+	[returnString appendString:@"\t\t@throw exception;\n"
+	                           @"\t}\n\n"];
+
+	[returnString makeImmutable];
+	return returnString;
+}
+
 - (OFString *)importForDependency:(OFString *)dependencyGobjType
 {
-	OGTKClass *dependencyClassDescription =
-	    [OGTKMapper classInfoByGobjType:dependencyGobjType];
+	OGTKClass *dependencyClassDescription = [OGTKMapper classInfoByGobjType:dependencyGobjType];
 
 	OFString *result;
 
 	// If parent lib is from this library
-	if ([_classDescription.namespace
-	        isEqual:dependencyClassDescription.namespace]) {
+	if ([_classDescription.namespace isEqual:dependencyClassDescription.namespace]) {
 
 		result = [OFString stringWithFormat:@"#import \"%@.h\"\n",
 		                   [OGTKMapper swapTypes:dependencyGobjType]];
@@ -434,41 +422,36 @@ static OFString *const InitErrorHandling =
 		// We need to get the ObjC name of the
 		// external library in order to provide
 		// the correct header directive
-		OGTKLibrary *depLibDescr = [OGTKMapper
-		    libraryInfoByNamespace:dependencyClassDescription
-		                               .namespace];
+		OGTKLibrary *depLibDescr =
+		    [OGTKMapper libraryInfoByNamespace:dependencyClassDescription.namespace];
 
 		if (depLibDescr == nil)
 			@throw [OFUndefinedKeyException
 			    exceptionWithObject:[OGTKMapper sharedMapper]
-			                    key:dependencyClassDescription
-			                            .namespace];
+			                    key:dependencyClassDescription.namespace];
 
 		// Make sure we include the libs own header, because the parent
 		// class will introduce headers of its library. Otherwise we
 		// may get undefined symbols for this class
 		_classDescription.topMostGraphNode = true;
 
-		result = [OFString stringWithFormat:@"#import <%@/%@.h>\n",
-		                   depLibDescr.name,
+		result = [OFString stringWithFormat:@"#import <%@/%@.h>\n", depLibDescr.name,
 		                   dependencyClassDescription.type];
 	}
 
 	return result;
 }
 
-- (OFString *)generateCParameterListString:(OFArray OF_GENERIC(
-                                               OGTKParameter *) *)params
+- (OFString *)generateCParameterListString:(OFArray OF_GENERIC(OGTKParameter *) *)params
                            throwsException:(bool)throws
 {
 	OFMutableString *paramsOutput = [OFMutableString string];
 
 	size_t i = 0, count = params.count;
 	for (OGTKParameter *param in params) {
-		[paramsOutput
-		    appendString:[OGTKMapper convertType:param.type
-		                                withName:param.name
-		                                  toType:param.cType]];
+		[paramsOutput appendString:[OGTKMapper convertType:param.type
+		                                          withName:param.name
+		                                            toType:param.cType]];
 
 		if (i++ < count - 1)
 			[paramsOutput appendString:@", "];
@@ -484,15 +467,12 @@ static OFString *const InitErrorHandling =
 }
 
 - (OFString *)generateCParameterListWithInstanceString:(OFString *)instanceType
-                                             andParams:
-                                                 (OFArray OF_GENERIC(
-                                                     OGTKParameter *) *)params
+                                             andParams:(OFArray OF_GENERIC(OGTKParameter *) *)params
                                        throwsException:(bool)throws
 {
 	OFMutableString *paramsOutput = [OFMutableString string];
 
-	[paramsOutput
-	    appendString:[OGTKMapper selfTypeMethodCall:instanceType]];
+	[paramsOutput appendString:[OGTKMapper selfTypeMethodCall:instanceType]];
 
 	size_t count = params.count;
 
@@ -502,10 +482,9 @@ static OFString *const InitErrorHandling =
 		// Start at index 1
 		size_t i = 0;
 		for (OGTKParameter *param in params) {
-			[paramsOutput
-			    appendString:[OGTKMapper convertType:param.type
-			                                withName:param.name
-			                                  toType:param.cType]];
+			[paramsOutput appendString:[OGTKMapper convertType:param.type
+			                                          withName:param.name
+			                                            toType:param.cType]];
 
 			if (i++ < count - 1) {
 				[paramsOutput appendString:@", "];
@@ -522,12 +501,10 @@ static OFString *const InitErrorHandling =
 + (OFString *)generateLicense:(OFString *)fileName
 {
 	OFString *licText = [OFString
-	    stringWithContentsOfFile:
-	        [[OGTKUtil dataDir]
-	            stringByAppendingPathComponent:@"Config/license.txt"]];
+	    stringWithContentsOfFile:[[OGTKUtil dataDir]
+	                                 stringByAppendingPathComponent:@"Config/license.txt"]];
 
-	return [licText stringByReplacingOccurrencesOfString:@"@@@FILENAME@@@"
-	                                          withString:fileName];
+	return [licText stringByReplacingOccurrencesOfString:@"@@@FILENAME@@@" withString:fileName];
 }
 
 - (OFString *)preparedDocumentationStringCopy:(OFString *)unpreparedText
@@ -548,8 +525,7 @@ static OFString *const InitErrorHandling =
 	OFString *docText;
 
 	if (meth.documentation != nil) {
-		docText =
-		    [self preparedDocumentationStringCopy:meth.documentation];
+		docText = [self preparedDocumentationStringCopy:meth.documentation];
 
 		[doc appendFormat:@"/**\n * %@\n *\n", docText];
 		[docText release];
@@ -561,24 +537,22 @@ static OFString *const InitErrorHandling =
 		for (OGTKParameter *parameter in meth.parameters) {
 
 			if (parameter.documentation != nil) {
-				docText = [self preparedDocumentationStringCopy:
-				                    parameter.documentation];
+				docText =
+				    [self preparedDocumentationStringCopy:parameter.documentation];
 
-				[doc appendFormat:@" * @param %@ %@\n",
-				     parameter.name, docText];
+				[doc appendFormat:@" * @param %@ %@\n", parameter.name, docText];
 
 				[docText release];
 			} else {
-				[doc appendFormat:@" * @param %@\n",
-				     parameter.name];
+				[doc appendFormat:@" * @param %@\n", parameter.name];
 			}
 		}
 	}
 
 	if (![meth returnsVoid]) {
 		if (meth.returnValueDocumentation != nil) {
-			docText = [self preparedDocumentationStringCopy:
-			                    meth.returnValueDocumentation];
+			docText =
+			    [self preparedDocumentationStringCopy:meth.returnValueDocumentation];
 
 			[doc appendFormat:@" * @return %@\n", docText];
 
