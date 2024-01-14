@@ -54,13 +54,13 @@ flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome
 
 # Install SDK and LLVM extension
 flatpak install org.gnome.Sdk//master -y --noninteractive
-flatpak install org.freedesktop.Sdk.Extension.llvm14//22.08 -y --noninteractive
+flatpak install org.freedesktop.Sdk.Extension.llvm17 -y --noninteractive
 
 # Build binary and install it in its sandbox
 flatpak-builder build-dir --force-clean org.codeberg.objgtk.objgtkgen.yml --user --install
 
-# Run the app: This will use the most current GIR files from the SDK and output ObjGTK3 to your local working directory:
-flatpak run org.codeberg.ObjGTK.ObjGTKGen /usr/share/gir-1.0/Gtk-3.0.gir
+# Run the app: This will use the most current GIR files from the SDK and output ObjGTK4 to your local working directory:
+flatpak run org.codeberg.ObjGTK.ObjGTKGen /usr/share/gir-1.0/Gtk-4.0.gir
 ```
 
 ## Developing

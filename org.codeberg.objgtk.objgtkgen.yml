@@ -1,7 +1,7 @@
 app-id: org.codeberg.ObjGTK.ObjGTKGen
 runtime: org.gnome.Sdk//master
 sdk: org.gnome.Sdk//master
-sdk-extensions: ['org.freedesktop.Sdk.Extension.llvm14']
+sdk-extensions: ['org.freedesktop.Sdk.Extension.llvm17']
 command: objgtkgen
 finish-args:
   - --filesystem=home
@@ -14,8 +14,8 @@ finish-args:
   # for Update Exchange Rates
   #- --share=network
 build-options:
-  append-path: /usr/lib/sdk/llvm14/bin
-  prepend-ld-library-path: /usr/lib/sdk/llvm14/lib
+  append-path: /usr/lib/sdk/llvm17/bin
+  prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
   env:
     C_INCLUDE_PATH: /include
     CFLAGS: -I/include
