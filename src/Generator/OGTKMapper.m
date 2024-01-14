@@ -241,20 +241,28 @@ static OGTKMapper *sharedMyMapper = nil;
 - (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType
 {
 	// Try to return conversion for string types first
-	if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"] ||
-	        [fromType isEqual:@"gchar*"] || [fromType isEqual:@"const char*"]) &&
+	// Owned strings
+	if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"char*"]) &&
 	    [toType isEqual:@"OFString*"]) {
 		return
 		    [OFString stringWithFormat:
 		                  @"((%@ != NULL) ? [OFString stringWithUTF8StringNoCopy:(char * "
 		                  @"_Nonnull)%@ freeWhenDone:true] : nil)",
 		              name, name];
+		// Unowned strings
+	} else if (([fromType isEqual:@"const char*"] || [fromType isEqual:@"const gchar*"]) &&
+	    [toType isEqual:@"OFString*"]) {
+		return
+		    [OFString stringWithFormat:
+		                  @"((%@ != NULL) ? [OFString stringWithUTF8StringNoCopy:(char * "
+		                  @"_Nonnull)%@ freeWhenDone:false] : nil)",
+		              name, name];
 	} else if ([fromType isEqual:@"OFString*"] &&
 	    ([toType isEqual:@"const gchar*"] || [toType isEqual:@"const char*"])) {
 		return [OFString stringWithFormat:@"[%@ UTF8String]", name];
 	} else if ([fromType isEqual:@"OFString*"] &&
 	    ([toType isEqual:@"gchar*"] || [toType isEqual:@"char*"])) {
-		return [OFString stringWithFormat:@"(gchar*) [%@ UTF8String]", name];
+		return [OFString stringWithFormat:@"g_strdup([%@ UTF8String])", name];
 	}
 
 	// Then try to return generic Gobj type conversion
