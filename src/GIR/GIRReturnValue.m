@@ -7,6 +7,12 @@
 
 #import "GIRReturnValue.h"
 
+OFString *const kOwnershipTransferTypeNone = @"none";
+OFString *const kOwnershipTransferTypeContainer = @"container";
+OFString *const kOwnershipTransferTypeFull = @"full";
+// Alias for none
+OFString *const kOwnershipTransferTypeFloating = @"floating";
+
 @implementation GIRReturnValue
 
 @synthesize transferOwnership = _transferOwnership;
@@ -28,6 +34,15 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[_doc release];
+	[_type release];
+	[_array release];
+
+	[super dealloc];
+}
+
 - (void)parseDictionary:(OFDictionary *)dict
 {
 	for (OFString *key in dict) {
@@ -38,30 +53,29 @@
 		    [key isEqual:@"attribute"]) {
 			// Do nothing
 		} else if ([key isEqual:@"transfer-ownership"]) {
-			self.transferOwnership = value;
+			if ([value isEqual:kOwnershipTransferTypeNone] ||
+			    [value isEqual:kOwnershipTransferTypeFloating]) {
+				self.transferOwnership = kNone;
+			} else if ([value isEqual:kOwnershipTransferTypeContainer]) {
+				self.transferOwnership = kContainer;
+			} else if ([value isEqual:kOwnershipTransferTypeFull]) {
+				self.transferOwnership = kFull;
+			} else {
+				[self
+				    logUnknownElement:
+				        [OFString stringWithFormat:@"Unknown value %@ for key %@.",
+				                  value, key]];
+			}
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"type"]) {
-			self.type = [[[GIRType alloc] initWithDictionary:value]
-			    autorelease];
+			self.type = [[[GIRType alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"array"]) {
-			self.array = [[[GIRArray alloc]
-			    initWithDictionary:value] autorelease];
+			self.array = [[[GIRArray alloc] initWithDictionary:value] autorelease];
 		} else {
 			[self logUnknownElement:key];
 		}
 	}
-}
-
-- (void)dealloc
-{
-	[_transferOwnership release];
-	[_doc release];
-	[_type release];
-	[_array release];
-
-	[super dealloc];
 }
 
 @end

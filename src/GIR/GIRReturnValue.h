@@ -12,15 +12,17 @@
 #import "GIRDoc.h"
 #import "GIRType.h"
 
+typedef enum GIROwnershipTransferType { kNone, kContainer, kFull } GIROwnershipTransferType;
+
 @interface GIRReturnValue: GIRBase
 {
-	OFString *_transferOwnership;
+	GIROwnershipTransferType _transferOwnership;
 	GIRDoc *_doc;
 	GIRType *_type;
 	GIRArray *_array;
 }
 
-@property (nonatomic, retain) OFString *transferOwnership;
+@property (atomic) GIROwnershipTransferType transferOwnership;
 @property (nonatomic, retain) GIRDoc *doc;
 @property (nonatomic, retain) GIRType *type;
 @property (nonatomic, retain) GIRArray *array;
