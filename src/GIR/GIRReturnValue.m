@@ -55,11 +55,11 @@ OFString *const kOwnershipTransferTypeFloating = @"floating";
 		} else if ([key isEqual:@"transfer-ownership"]) {
 			if ([value isEqual:kOwnershipTransferTypeNone] ||
 			    [value isEqual:kOwnershipTransferTypeFloating]) {
-				self.transferOwnership = kNone;
+				self.transferOwnership = GIRReturnValueOwnershipNone;
 			} else if ([value isEqual:kOwnershipTransferTypeContainer]) {
-				self.transferOwnership = kContainer;
+				self.transferOwnership = GIRReturnValueOwnershipContainer;
 			} else if ([value isEqual:kOwnershipTransferTypeFull]) {
-				self.transferOwnership = kFull;
+				self.transferOwnership = GIRReturnValueOwnershipFull;
 			} else {
 				[self
 				    logUnknownElement:

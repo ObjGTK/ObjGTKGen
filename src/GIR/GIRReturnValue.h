@@ -12,7 +12,11 @@
 #import "GIRDoc.h"
 #import "GIRType.h"
 
-typedef enum { kNone, kContainer, kFull } GIROwnershipTransferType;
+typedef enum {
+	GIRReturnValueOwnershipNone,
+	GIRReturnValueOwnershipContainer,
+	GIRReturnValueOwnershipFull
+} GIROwnershipTransferType;
 
 @interface GIRReturnValue: GIRBase
 {

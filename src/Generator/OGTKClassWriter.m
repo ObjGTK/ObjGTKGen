@@ -364,8 +364,9 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			[output appendString:@";\n"];
 
 			if ([_mapper isGobjType:method.cReturnType] &&
-			    (method.cOwnershipTransferType == kFull ||
-			        method.cOwnershipTransferType == kContainer)) {
+			    (method.cOwnershipTransferType == GIRReturnValueOwnershipFull ||
+			        method.cOwnershipTransferType ==
+			            GIRReturnValueOwnershipContainer)) {
 				[output appendString:@"\tg_object_unref(gobjectValue);\n\n"];
 			}
 		} else {
@@ -387,10 +388,14 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 				    ([_mapper numberOfAsterisksIn:method.cReturnType] < 2))
 					varName = @"returnValue";
 
-				// Don't take care ownership if we return plain C types (kNone!)
-				// That's the task of the caller in this case
-				[output appendString:[self errorHandlingForGObjectVar:varName
-				                                            ownership:kNone]];
+				// Don't take care ownership if we return plain C types
+				// (GIRReturnValueOwnershipNone!) That's the task of the caller in
+				// this case
+				[output
+				    appendString:
+				        [self errorHandlingForGObjectVar:varName
+				                               ownership:
+				                                   GIRReturnValueOwnershipNone]];
 			}
 		}
 
@@ -402,7 +407,7 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 - (OFString *)errorHandling
 {
-	return [self errorHandlingForGObjectVar:nil ownership:kNone];
+	return [self errorHandlingForGObjectVar:nil ownership:GIRReturnValueOwnershipNone];
 }
 
 - (OFString *)errorHandlingForGObjectVar:(OFString *)varName
@@ -414,7 +419,9 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 	                           @"exceptionWithGError:err];\n"
 	                           @"\t\tg_error_free(err);\n"];
 
-	if (varName != nil && (ownershipType == kFull || ownershipType == kContainer)) {
+	if (varName != nil &&
+	    (ownershipType == GIRReturnValueOwnershipFull ||
+	        ownershipType == GIRReturnValueOwnershipContainer)) {
 		[returnString appendFormat:@"\t\tif(%@ != NULL)\n", varName];
 		[returnString appendFormat:@"\t\t\tg_object_unref(%@);\n", varName];
 	}
