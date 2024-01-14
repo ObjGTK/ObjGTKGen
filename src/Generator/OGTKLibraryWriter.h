@@ -15,6 +15,16 @@
  * Bundles methods to copy and generate source files for a specific library.
  */
 @interface OGTKLibraryWriter: OFObject
+{
+	OGTKLibrary *_libraryDescription;
+	OGTKMapper *_mapper;
+	OFString *_outputDir;
+}
+
+@property (retain, nonatomic) OGTKLibrary *libraryDescription;
+@property (retain, nonatomic) OGTKMapper *mapper;
+@property (copy, nonatomic) OFString *outputDir;
+@property (readonly) OFString *sourceOutputDir;
 
 /**
  * @brief      Copies files and directories recursively and applies a
@@ -52,49 +62,59 @@
                 replaceUsing:(OFDictionary *)replaceDict;
 
 /**
+ * @brief      Initializes the with library description object which is then
+ * used to write out the wrapper strings to files in outputDir. Depending data
+ * is collected from the mapper.
+ *
+ * @param       libraryDescription     The library description object
+ * @param       sharedMapper           The shared mapper which holds all
+ * information
+ * @param       outputDir             The directory the generated lib should be
+ * saved to
+ *
+ * @return     instancetype
+ */
+- (instancetype)initWithLibrary:(OGTKLibrary *)libraryDescription
+                         mapper:(OGTKMapper *)sharedMapper
+                      outputDir:(OFString *)outputDir;
+
+/**
  * @brief      Generates the actual output of this generator: For each class of
  * the library held within memory (passed by using the mapper object) it writes
- * its class definition to the specified directory.
- *
- * @param      libraryInfo  The library information object
- * @param      outputDir    The output directory
- * @param      mapper       The mapper object holding the GObject to ObjC
- *                          mappings/bindings
+ * its class definition to the specified output directory (see initializer).
  */
-+ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper;
+- (void)writeClassFiles;
 
 /**
  * @brief      Adds manually written source files to previously genereted
  * generic library definitions (mappings/bindings).
  *
- * @param      libraryInfo    The library information object
- * @param      outputDir      The output directory
- * @param      mapper         The mapper object holding the GObject to ObjC
- *                            mappings/bindings
  * @param      baseClassPath  The path where to look for the library source
  *                            additions
  */
-+ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-     readAdditionalSourcesFromDir:(OFString *)baseClassPath;
+- (void)writeLibraryAdditionsWithSourcesFromDir:(OFString *)baseClassPath;
 
 /**
  * @brief      Generates the umbrella header file for the lib named and saves it
- * in outputDir. Assumes that keys of the dict passed are ObjC class names
+ * to output dir for this library.
  *
- * @param      outputDir            The output directory
- * @param      libraryInfo          The library information class
  * @param      additionalHeaderDir  The directory to look into for additional
  * headers
  */
-+ (void)generateUmbrellaHeaderFileForClasses:
-            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
-                                       inDir:(OFString *)outputDir
-                                  forLibrary:(OGTKLibrary *)libraryInfo
-                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
+- (void)generateUmbrellaHeaderFileWithAdditionalHeadersFromDir:
+    (OFString *)additionalHeaderDir;
+
+/**
+ * @brief      Copies the files for the build system for our library. To adjust
+ * them according to the needs of the libraries the build files are templates
+ * supplemented by snippets.
+ *
+ * @param      templateDir  Directory containing the template files
+ * @param      templateSnippetsDir Directory containing the supplemental
+ * template snippets
+ */
+- (void)templateAndCopyBuildFilesFromDir:(OFString *)templateDir
+                    usingSnippetsFromDir:(OFString *)templateSnippetsDir;
 
 /**
  * @brief      Looks for files inside a directory having a specific file
@@ -103,13 +123,14 @@
  * @param      dirPath        The directory in which to look for the files.
  * @param      format         A string format instruction using which
  *                            the list of file names is concatenated, f.e.
- *                            '@"#import \"%@\"\n"' for a umbrella header file.
- * @param      fileExtension  The file extension to look for. Only files having
- *                            this extensions will be listed.
+ *                            '@"#import \"%@\"\n"' for a umbrella header
+ * file.
+ * @param      fileExtension  The file extension to look for. Only files
+ * having this extensions will be listed.
  *
  * @return     A list of matching file names within one string.
  */
-+ (OFString *)stringForFilesInDir:(OFString *)dirPath
+- (OFString *)stringForFilesInDir:(OFString *)dirPath
                      addingFormat:(OFConstantString *)format
           lookingForFileExtension:(OFString *)fileExtension;
 

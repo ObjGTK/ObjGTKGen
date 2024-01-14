@@ -12,8 +12,11 @@
 #import "OGTKClassWriter.h"
 #import "OGTKLibrary.h"
 #import "OGTKMapper.h"
+#import "OGTKTemplate.h"
 
 @implementation OGTKLibraryWriter
+
+@synthesize libraryDescription = _libraryDescription, mapper = _mapper, outputDir = _outputDir;
 
 + (void)copyFilesFromDir:(OFString *)sourceDir
                             toDir:(OFString *)destDir
@@ -30,18 +33,15 @@
 
 	for (OFString *srcFilePath in srcDirContents) {
 
-		OFString *srcFile = [sourceDir
-		    stringByAppendingPathComponent:[srcFilePath
-		                                       lastPathComponent]];
+		OFString *srcFile =
+		    [sourceDir stringByAppendingPathComponent:[srcFilePath lastPathComponent]];
 
 		// Rename source file while copying if rename information given
 		OFString *destFileName = [srcFilePath lastPathComponent];
-		if (renameDict != nil &&
-		    [renameDict valueForKey:destFileName] != nil)
+		if (renameDict != nil && [renameDict valueForKey:destFileName] != nil)
 			destFileName = [renameDict valueForKey:destFileName];
 
-		OFString *destFile =
-		    [destDir stringByAppendingPathComponent:destFileName];
+		OFString *destFile = [destDir stringByAppendingPathComponent:destFileName];
 
 		// src is a directory
 		if ([fileMgr directoryExistsAtPath:srcFile]) {
@@ -67,9 +67,7 @@
 			@try {
 				[fileMgr removeItemAtPath:destFile];
 			} @catch (id exception) {
-				OFLog(
-				    @"Error removing file [%@]. Skipping file.",
-				    destFile);
+				OFLog(@"Error removing file [%@]. Skipping file.", destFile);
 				continue;
 			}
 		}
@@ -77,19 +75,17 @@
 		// Apply method on contents of file if method given
 		SEL selector;
 		if (methodName != nil) {
-			selector = sel_registerName([methodName
-			    cStringWithEncoding:OFStringEncodingUTF8]);
+			selector =
+			    sel_registerName([methodName cStringWithEncoding:OFStringEncodingUTF8]);
 		}
 
-		if (methodName != nil && replaceDict != nil &&
-		    [self respondsToSelector:selector]) {
+		if (methodName != nil && replaceDict != nil && [self respondsToSelector:selector]) {
 			// OFLog(@"Applying method [%@] on file [%@] and copying
 			// "
 			//       @"to [%@]...",
 			//     methodName, srcFile, destFile);
 
-			OFString *fileContents =
-			    [OFString stringWithContentsOfFile:srcFile];
+			OFString *fileContents = [OFString stringWithContentsOfFile:srcFile];
 			fileContents = [self performSelector:selector
 			                          withObject:fileContents
 			                          withObject:replaceDict];
@@ -114,89 +110,109 @@
 	                  usingRenameDict:nil];
 }
 
-+ (OFString *)forFileContent:(OFString *)content
-                replaceUsing:(OFDictionary *)replaceDict
++ (OFString *)forFileContent:(OFString *)content replaceUsing:(OFDictionary *)replaceDict
 {
 	for (OFString *search in replaceDict) {
-		content = [content
-		    stringByReplacingOccurrencesOfString:search
-		                              withString:
-		                                  [replaceDict
-		                                      valueForKey:search]];
+		content =
+		    [content stringByReplacingOccurrencesOfString:search
+		                                       withString:[replaceDict valueForKey:search]];
 	}
 
 	return content;
 }
 
-+ (void)writeClassFilesForLibrary:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
+- (instancetype)init
 {
-	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
+	OF_INVALID_INIT_METHOD
+}
 
-	OFString *libraryOutputDir =
-	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
-	        stringByAppendingPathComponent:@"src"];
+- (instancetype)initWithLibrary:(OGTKLibrary *)libraryDescription
+                         mapper:(OGTKMapper *)sharedMapper
+                      outputDir:(OFString *)outputDir
+{
+	self = [super init];
 
-	OFLog(@"Going to generate and write class files for library %@...",
-	    libraryInfo.name);
+	@try {
+		_libraryDescription = libraryDescription;
+		[_libraryDescription retain];
+
+		_mapper = sharedMapper;
+		[_mapper retain];
+
+		_outputDir = [outputDir copy];
+	} @catch (id e) {
+		[self release];
+		@throw e;
+	}
+
+	return self;
+}
+
+- (void)dealloc
+{
+	[_libraryDescription release];
+	[_mapper release];
+	[_outputDir release];
+
+	[super dealloc];
+}
+
+- (OFString *)sourceOutputDir
+{
+	return [_outputDir stringByAppendingPathComponent:@"src"];
+}
+
+- (void)writeClassFiles
+{
+	OFMutableDictionary *classesDict = _mapper.objcTypeToClassMapping;
+
+	OFLog(
+	    @"Going to generate and write class files for library %@...", _libraryDescription.name);
 
 	// Write the classes
 	for (OFString *className in classesDict) {
-		OGTKClass *classInfo = [classesDict objectForKey:className];
-		if ([libraryInfo.namespace isEqual:classInfo.namespace]) {
-			[OGTKClassWriter generateFilesForClass:classInfo
-			                                 inDir:libraryOutputDir
-			                            forLibrary:libraryInfo];
+		OGTKClass *classDescription = [classesDict objectForKey:className];
+
+		if ([_libraryDescription.namespace isEqual:classDescription.namespace]) {
+
+			OGTKClassWriter *classWriter =
+			    [[OGTKClassWriter alloc] initWithClass:classDescription
+			                                   library:_libraryDescription
+			                                    mapper:_mapper];
+
+			[classWriter generateFilesInDir:self.sourceOutputDir];
+
+			[classWriter release];
 		}
 	}
 }
 
-+ (void)writeLibraryAdditionsFor:(OGTKLibrary *)libraryInfo
-                            toDir:(OFString *)outputDir
-    getClassDefinitionsFromMapper:(OGTKMapper *)mapper
-     readAdditionalSourcesFromDir:(OFString *)baseClassPath
+- (void)writeLibraryAdditionsWithSourcesFromDir:(OFString *)baseClassPath
 {
-	OFMutableDictionary *classesDict = mapper.objcTypeToClassMapping;
-
-	if (baseClassPath == nil || outputDir == nil)
+	if (baseClassPath == nil)
 		@throw [OGTKIncorrectConfigException exception];
 
-	OFString *libraryOutputDir =
-	    [[outputDir stringByAppendingPathComponent:libraryInfo.name]
-	        stringByAppendingPathComponent:@"src"];
-
 	// Write the umbrella header file for the lib
-	[self generateUmbrellaHeaderFileForClasses:classesDict
-	                                     inDir:libraryOutputDir
-	                                forLibrary:libraryInfo
-	              readAdditionalHeadersFromDir:baseClassPath];
+	[self generateUmbrellaHeaderFileWithAdditionalHeadersFromDir:baseClassPath];
 
-	if (!libraryInfo.hasAdditionalSourceFiles)
+	if (!_libraryDescription.hasAdditionalSourceFiles)
 		return;
 
-	OFLog(
-	    @"Going to copy additional source files specific for library %@...",
-	    libraryInfo.name);
+	OFLog(@"Going to copy additional source files specific for library %@...",
+	    _libraryDescription.name);
 
-	[self
+	[OGTKLibraryWriter
 	    copyFilesFromDir:[baseClassPath
-	                         stringByAppendingPathComponent:libraryInfo
-	                                                            .identifier]
-	               toDir:libraryOutputDir];
+	                         stringByAppendingPathComponent:_libraryDescription.identifier]
+	               toDir:self.sourceOutputDir];
 }
 
-+ (void)generateUmbrellaHeaderFileForClasses:
-            (OFDictionary OF_GENERIC(OFString *, OGTKClass *) *)objCClassesDict
-                                       inDir:(OFString *)outputDir
-                                  forLibrary:(OGTKLibrary *)libraryInfo
-                readAdditionalHeadersFromDir:(OFString *)additionalHeaderDir
+- (void)generateUmbrellaHeaderFileWithAdditionalHeadersFromDir:(OFString *)additionalHeaderDir
 {
-	OFString *libName = libraryInfo.name;
+	OFString *libName = _libraryDescription.name;
 	OFMutableString *output = [OFMutableString string];
 
-	OFString *fileName =
-	    [OFString stringWithFormat:@"%@-Umbrella.h", libName];
+	OFString *fileName = [OFString stringWithFormat:@"%@-Umbrella.h", libName];
 	OFString *license = [OGTKClassWriter generateLicense:fileName];
 	[output appendString:license];
 
@@ -205,19 +221,16 @@
 	if (additionalHeaderDir != nil) {
 		@try {
 			OFString *headerDir = [additionalHeaderDir
-			    stringByAppendingPathComponent:libraryInfo
-			                                       .identifier];
+			    stringByAppendingPathComponent:_libraryDescription.identifier];
 
-			[output
-			    appendString:
-			        [self stringForFilesInDir:headerDir
-			                       addingFormat:@"#import \"%@\"\n"
-			            lookingForFileExtension:@".h"]];
+			[output appendString:[self stringForFilesInDir:headerDir
+			                                    addingFormat:@"#import \"%@\"\n"
+			                         lookingForFileExtension:@".h"]];
 
 		} @catch (OFReadFailedException *e) {
 			// Do nothing, set flag to not try to copy anything
 			// later
-			libraryInfo.hasAdditionalSourceFiles = false;
+			_libraryDescription.hasAdditionalSourceFiles = false;
 
 			// OFLog(@"No additional source files for library %@, "
 			//       @"generating header file for generated sources
@@ -231,23 +244,21 @@
 
 	[output appendString:@"// Generated classes\n"];
 
+	OFMutableDictionary *objCClassesDict = _mapper.objcTypeToClassMapping;
 	OFArray *sortedKeys = [[objCClassesDict allKeys] sortedArray];
 
 	for (OFString *objCClassName in sortedKeys) {
-		OGTKClass *classInfo =
-		    [objCClassesDict objectForKey:objCClassName];
-		if ([libraryInfo.namespace isEqual:classInfo.namespace])
-			[output
-			    appendFormat:@"#import \"%@.h\"\n", objCClassName];
+		OGTKClass *classDescription = [objCClassesDict objectForKey:objCClassName];
+		if ([_libraryDescription.namespace isEqual:classDescription.namespace])
+			[output appendFormat:@"#import \"%@.h\"\n", objCClassName];
 	}
 
-	OFString *hFilePath =
-	    [outputDir stringByAppendingPathComponent:fileName];
+	OFString *hFilePath = [self.sourceOutputDir stringByAppendingPathComponent:fileName];
 
 	[output writeToFile:hFilePath];
 }
 
-+ (OFString *)stringForFilesInDir:(OFString *)dirPath
+- (OFString *)stringForFilesInDir:(OFString *)dirPath
                      addingFormat:(OFConstantString *)format
           lookingForFileExtension:(OFString *)fileExtension;
 {
@@ -273,6 +284,31 @@
 
 	[string makeImmutable];
 	return string;
+}
+
+- (void)templateAndCopyBuildFilesFromDir:(OFString *)templateDir
+                    usingSnippetsFromDir:(OFString *)templateSnippetsDir
+{
+	OFString *sourceFiles = [self stringForFilesInDir:self.sourceOutputDir
+	                                     addingFormat:@"%@ \\\n\t"
+	                          lookingForFileExtension:@".m"];
+
+	OGTKTemplate *templating = [[OGTKTemplate alloc] initWithSnippetDir:templateSnippetsDir
+	                                                       sharedMapper:self.mapper];
+	[templating autorelease];
+
+	OFDictionary *replaceDict =
+	    [templating dictWithReplaceValuesForBuildFilesOfLibrary:self.libraryDescription
+	                                                sourceFiles:sourceFiles];
+
+	OFDictionary *renameDict =
+	    [templating dictWithRenamesForBuildFilesOfLibrary:self.libraryDescription];
+
+	[OGTKLibraryWriter copyFilesFromDir:templateDir
+	                              toDir:self.outputDir
+	      applyOnFileContentMethodNamed:@"forFileContent:replaceUsing:"
+	                   usingReplaceDict:replaceDict
+	                    usingRenameDict:renameDict];
 }
 
 @end

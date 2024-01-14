@@ -55,6 +55,10 @@
 @property bool visited;
 @property bool topMostGraphNode;
 
+/**
+ * @brief      Return the Gobject cast macro for this class
+ */
+- (OFString *)macroCastGObject;
 - (void)addConstructor:(OGTKMethod *)ctor;
 - (void)addFunction:(OGTKMethod *)fun;
 - (void)addMethod:(OGTKMethod *)meth;
