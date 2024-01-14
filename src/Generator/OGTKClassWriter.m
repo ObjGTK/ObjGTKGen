@@ -116,7 +116,7 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 	}
 
 	// Library dependencies in case we have a class that is at the top of
-	// the class dependency graph
+	// the class dependency tree
 	OFMutableString *includes = [OFMutableString string];
 	if (_classDescription.topMostGraphNode) {
 		for (GIRInclude *cInclude in _libraryDescription.cIncludes) {
@@ -319,7 +319,7 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 		    [_mapper isTypeSwappable:[method cReturnType]]) {
 			// Need to swap type on return
 
-			// First execute the GObject API call and hold
+			// Generated source: First execute the GObject API call and hold
 			// the result
 			[output appendFormat:@"\t%@ gobjectValue = ", method.cReturnType];
 
@@ -331,9 +331,9 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 			[output appendString:@"\n"];
 
-			// Process error handling of the API call
+			// Generated source: Process error handling of the API call
 			if (method.throws) {
-				// Make sure objects are released in
+				// Generated source: Make sure objects are released in
 				// case of error
 				if ([_mapper isGobjType:method.cReturnType])
 					[output appendString:[self errorHandlingForGObjectVar:
@@ -342,7 +342,7 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 					[output appendString:[self errorHandling]];
 			}
 
-			// Then try to convert the result
+			// Generated source: Then try to convert the result
 			[output appendFormat:@"\t%@ returnValue = ", method.returnType];
 
 			[output appendString:[OGTKMapper convertType:method.cReturnType
