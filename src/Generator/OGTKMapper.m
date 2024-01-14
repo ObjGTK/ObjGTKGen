@@ -244,9 +244,11 @@ static OGTKMapper *sharedMyMapper = nil;
 	if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"const gchar*"] ||
 	        [fromType isEqual:@"gchar*"] || [fromType isEqual:@"const char*"]) &&
 	    [toType isEqual:@"OFString*"]) {
-		return [OFString
-		    stringWithFormat:@"[OFString stringWithUTF8StringNoCopy:%@ freeWhenDone:true]",
-		    name];
+		return
+		    [OFString stringWithFormat:
+		                  @"((%@ != NULL) ? [OFString stringWithUTF8StringNoCopy:(char * "
+		                  @"_Nonnull)%@ freeWhenDone:true] : nil)",
+		              name, name];
 	} else if ([fromType isEqual:@"OFString*"] &&
 	    ([toType isEqual:@"const gchar*"] || [toType isEqual:@"const char*"])) {
 		return [OFString stringWithFormat:@"[%@ UTF8String]", name];

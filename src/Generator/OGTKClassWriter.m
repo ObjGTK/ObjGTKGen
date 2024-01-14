@@ -237,10 +237,14 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			[output appendString:PrepareErrorHandling];
 
 		// Init GObject and hold result
-		OFString *constructorCall =
-		    [OFString stringWithFormat:@"%@(%@)", ctor.cIdentifier,
-		              [self generateCParameterListString:ctor.parameters
-		                                 throwsException:ctor.throws]];
+		OFMutableString *constructorCall =
+		    [OFMutableString stringWithString:_classDescription.macroCastGObject];
+		[constructorCall appendString:@"("];
+		[constructorCall appendFormat:@"%@(%@)", ctor.cIdentifier,
+		                 [self generateCParameterListString:ctor.parameters
+		                                    throwsException:ctor.throws]];
+		[constructorCall appendString:@")"];
+
 		[output appendFormat:@"\t%@* gobjectValue = %@;\n\n", _classDescription.cType,
 		        constructorCall];
 
