@@ -1,7 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2015-2017 Tyler Burton <software@tylerburton.ca>
- * SPDX-FileCopyrightText: 2021-2022 Johannes Brakensiek <objfw@codingpastor.de>
- * SPDX-FileCopyrightText: 2015-2022 The ObjGTK authors, see AUTHORS file
+ * SPDX-FileCopyrightText: 2021-2024 Johannes Brakensiek <objfw@codingpastor.de>
+ * SPDX-FileCopyrightText: 2015-2024 The ObjGTK authors, see AUTHORS file
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -28,8 +28,7 @@
         toObjCClass:(OGTKClass *)objCClass
      usingNamespace:(GIRNamespace *)ns;
 
-+ (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(
-                                id<GIRMethodMapping>) *)girMethodArray
++ (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(id<GIRMethodMapping>) *)girMethodArray
                 toObjCClass:(OGTKClass *)objCClass
               usingSelector:(SEL)addMethodSelector;
 
@@ -37,13 +36,11 @@
 
 @implementation Gir2Objc
 
-+ (void)parseGirFromFile:(OFString *)girFile
-          intoDictionary:(OFDictionary **)girDict;
++ (void)parseGirFromFile:(OFString *)girFile intoDictionary:(OFDictionary **)girDict;
 {
 	*girDict = nil;
 
-	OFString *girContents =
-	    [[[OFString alloc] initWithContentsOfFile:girFile] autorelease];
+	OFString *girContents = [[[OFString alloc] initWithContentsOfFile:girFile] autorelease];
 
 	if (girContents == nil) {
 		@throw [OFReadFailedException exceptionWithObject:girFile
@@ -83,8 +80,7 @@
 		id value = [girDict objectForKey:key];
 
 		if ([key isEqual:@"api"] || [key isEqual:@"repository"]) {
-			return [[[GIRAPI alloc] initWithDictionary:value]
-			    autorelease];
+			return [[[GIRAPI alloc] initWithDictionary:value] autorelease];
 		} else if ([value isKindOfClass:[OFDictionary class]]) {
 			return [self firstAPIFromDictionary:value];
 		}
@@ -117,10 +113,9 @@
 
 	if (namespaces.count > 1)
 		@throw [OGTKDataProcessingNotImplementedException
-		    exceptionWithDescription:
-		        @"Found more than one namespace within an GIR API. "
-		        @"That's unexpected and not implemented yet. Please "
-		        @"contact the maintainer."];
+		    exceptionWithDescription:@"Found more than one namespace within an GIR API. "
+		                             @"That's unexpected and not implemented yet. Please "
+		                             @"contact the maintainer."];
 
 	GIRNamespace *ns = namespaces.firstObject;
 
@@ -130,23 +125,19 @@
 	[libraryInfo addSharedLibrariesAsString:ns.sharedLibrary];
 	libraryInfo.cNSIdentifierPrefix =
 	    [self firstOfKommaSeparatedElements:ns.cIdentifierPrefixes];
-	libraryInfo.cNSSymbolPrefix =
-	    [self firstOfKommaSeparatedElements:ns.cSymbolPrefixes];
+	libraryInfo.cNSSymbolPrefix = [self firstOfKommaSeparatedElements:ns.cSymbolPrefixes];
 
 	OFString *libraryIdentifier = libraryInfo.identifier;
 
 	// Load additional configuration provided manually by config file
-	OFDictionary *libraryConfig =
-	    [OGTKUtil libraryConfigFor:libraryIdentifier];
+	OFDictionary *libraryConfig = [OGTKUtil libraryConfigFor:libraryIdentifier];
 
 	if ([libraryConfig valueForKey:@"customName"] != nil)
 		libraryInfo.name = [libraryConfig valueForKey:@"customName"];
 
 	if ([libraryConfig valueForKey:@"excludeClasses"] != nil) {
-		OFArray *excludeClasses =
-		    [libraryConfig valueForKey:@"excludeClasses"];
-		libraryInfo.excludeClasses =
-		    [OFSet setWithArray:excludeClasses];
+		OFArray *excludeClasses = [libraryConfig valueForKey:@"excludeClasses"];
+		libraryInfo.excludeClasses = [OFSet setWithArray:excludeClasses];
 	}
 
 	return libraryInfo;
@@ -174,9 +165,7 @@
 
 		OGTKClass *objCClass = [[[OGTKClass alloc] init] autorelease];
 
-		[self mapGIRClass:girClass
-		       toObjCClass:objCClass
-		    usingNamespace:ns];
+		[self mapGIRClass:girClass toObjCClass:objCClass usingNamespace:ns];
 
 		@try {
 			[mapper addClass:objCClass];
@@ -201,8 +190,7 @@
 
 	if (girClass.cType != nil && girClass.cType.length > 0)
 		objCClass.cType = girClass.cType;
-	else if (girClass.glibTypeName != nil &&
-	    girClass.glibTypeName.length > 0)
+	else if (girClass.glibTypeName != nil && girClass.glibTypeName.length > 0)
 		objCClass.cType = girClass.glibTypeName;
 	// TODO else: throw exception here
 
@@ -225,10 +213,9 @@
 
 	[objCClass setCSymbolPrefix:girClass.cSymbolPrefix];
 	[objCClass setNamespace:ns.name];
-	[objCClass setCNSIdentifierPrefix:[self firstOfKommaSeparatedElements:
-	                                            ns.cIdentifierPrefixes]];
-	[objCClass setCNSSymbolPrefix:
-	               [self firstOfKommaSeparatedElements:ns.cSymbolPrefixes]];
+	[objCClass
+	    setCNSIdentifierPrefix:[self firstOfKommaSeparatedElements:ns.cIdentifierPrefixes]];
+	[objCClass setCNSSymbolPrefix:[self firstOfKommaSeparatedElements:ns.cSymbolPrefixes]];
 
 	// Set constructors
 	[self addMappedGIRMethods:girClass.constructors
@@ -246,8 +233,7 @@
 	            usingSelector:@selector(addMethod:)];
 }
 
-+ (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(
-                                id<GIRMethodMapping>) *)girMethodArray
++ (void)addMappedGIRMethods:(OFMutableArray OF_GENERIC(id<GIRMethodMapping>) *)girMethodArray
                 toObjCClass:(OGTKClass *)objCClass
               usingSelector:(SEL)addMethodSelector
 {
@@ -277,8 +263,7 @@
 
 		// Memory management is encapsulated using the ObjC way, so
 		// leave out the GObject API
-		if ([methodName isEqual:@"ref"] ||
-		    [methodName isEqual:@"unref"]) {
+		if ([methodName isEqual:@"ref"] || [methodName isEqual:@"unref"]) {
 
 			[objcMethod release];
 			continue;
@@ -309,18 +294,17 @@
 		objcMethod.documentation = girMethod.doc.docText;
 
 		// Set return type
-		if (girMethod.returnValue.type == nil &&
-		    girMethod.returnValue.array != nil) {
-			[objcMethod
-			    setCReturnType:girMethod.returnValue.array.cType];
+		if (girMethod.returnValue.type == nil && girMethod.returnValue.array != nil) {
+			[objcMethod setCReturnType:girMethod.returnValue.array.cType];
 		} else {
-			[objcMethod
-			    setCReturnType:girMethod.returnValue.type.cType];
+			[objcMethod setCReturnType:girMethod.returnValue.type.cType];
 		}
 
 		// Set return type documentation
-		objcMethod.returnValueDocumentation =
-		    girMethod.returnValue.doc.docText;
+		objcMethod.returnValueDocumentation = girMethod.returnValue.doc.docText;
+
+		// Set return type ownership
+		objcMethod.cOwnershipTransferType = girMethod.returnValue.transferOwnership;
 
 		// Set if throws GError
 		[objcMethod setThrows:girMethod.throws];
@@ -339,12 +323,9 @@
 				cType = param.type.cType;
 			}
 			if ([cType containsString:@"const _"]) {
-				cType = [cType
-				    stringByReplacingOccurrencesOfString:
-				        @"const _"
-				                              withString:
-				                                  @"const "
-				                                  @"struct _"];
+				cType = [cType stringByReplacingOccurrencesOfString:@"const _"
+				                                         withString:@"const "
+				                                                    @"struct _"];
 			}
 			[objcParam setCType:cType];
 
@@ -357,8 +338,7 @@
 		[paramArray release];
 
 		// Add method to class
-		[objCClass performSelector:addMethodSelector
-		                withObject:objcMethod];
+		[objCClass performSelector:addMethodSelector withObject:objcMethod];
 		[objcMethod release];
 	}
 }

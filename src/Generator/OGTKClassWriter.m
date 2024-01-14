@@ -246,7 +246,9 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 		// Process error handling of the GObject init
 		if (ctor.throws)
-			[output appendString:[self errorHandlingForGObjectVar:@"gobjectValue"]];
+			[output appendString:
+			            [self errorHandlingForGObjectVar:@"gobjectValue"
+			                                   ownership:ctor.cOwnershipTransferType]];
 
 		[output appendString:InitTry];
 		[output appendFormat:@"\t\tself = %@;\n",
@@ -335,10 +337,17 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			if (method.throws) {
 				// Generated source: Make sure objects are released in
 				// case of error
-				if ([_mapper isGobjType:method.cReturnType])
-					[output appendString:[self errorHandlingForGObjectVar:
-					                               @"gobjectValue"]];
-				else
+				if ([_mapper isGobjType:method.cReturnType]) {
+
+					// Ownership: Since the wrapper object refs the cType
+					// object, make sure the wrapping method unrefs it if
+					// necessary
+					OFString *errorHandlingString = [self
+					    errorHandlingForGObjectVar:@"gobjectValue"
+					                     ownership:method
+					                                   .cOwnershipTransferType];
+					[output appendString:errorHandlingString];
+				} else
 					[output appendString:[self errorHandling]];
 			}
 
@@ -350,11 +359,14 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			                                      toType:method.returnType]];
 			[output appendString:@";\n"];
 
-			if ([_mapper isGobjType:method.cReturnType])
+			if ([_mapper isGobjType:method.cReturnType] &&
+			    (method.cOwnershipTransferType == kFull ||
+			        method.cOwnershipTransferType == kContainer)) {
 				[output appendString:@"\tg_object_unref(gobjectValue);\n\n"];
-
-			// Return type, but no type conversion for return type
+			}
 		} else {
+			// Return type, but no type conversion for return type
+
 			[output appendFormat:@"\t%@ returnValue = ", method.returnType];
 
 			if (isClassMethod) {
@@ -371,7 +383,10 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 				    ([_mapper numberOfAsterisksIn:method.cReturnType] < 2))
 					varName = @"returnValue";
 
-				[output appendString:[self errorHandlingForGObjectVar:varName]];
+				// Don't take care ownership if we return plain C types (kNone!)
+				// That's the task of the caller in this case
+				[output appendString:[self errorHandlingForGObjectVar:varName
+				                                            ownership:kNone]];
 			}
 		}
 
@@ -383,10 +398,11 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 - (OFString *)errorHandling
 {
-	return [self errorHandlingForGObjectVar:nil];
+	return [self errorHandlingForGObjectVar:nil ownership:kNone];
 }
 
 - (OFString *)errorHandlingForGObjectVar:(OFString *)varName
+                               ownership:(GIROwnershipTransferType)ownershipType
 {
 	OFMutableString *returnString = [OFMutableString string];
 	[returnString appendString:@"\tif(err != NULL) {\n"
@@ -394,7 +410,7 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 	                           @"exceptionWithGError:err];\n"
 	                           @"\t\tg_error_free(err);\n"];
 
-	if (varName != nil) {
+	if (varName != nil && (ownershipType == kFull || ownershipType == kContainer)) {
 		[returnString appendFormat:@"\t\tif(%@ != NULL)\n", varName];
 		[returnString appendFormat:@"\t\t\tg_object_unref(%@);\n", varName];
 	}
