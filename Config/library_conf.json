@@ -19,7 +19,10 @@
     "customName": "OGdk4"
   },
   "Gio-2.0": {
-    "customName": "OGio"
+    "customName": "OGio",
+    "excludeClasses": [
+      "GSettingsBackend"
+    ]
   },
   "GdkPixbuf-2.0": {
     "excludeClasses": [
