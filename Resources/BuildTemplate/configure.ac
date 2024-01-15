@@ -54,8 +54,8 @@ AS_IF([test x"$enable_static" = x"yes" -o x"$enable_shared" = x"no"], [
 
 AC_MSG_CHECKING(for ObjFW package OGObject)
 AS_IF([$OBJFW_CONFIG --package OGObject], [AC_MSG_RESULT(yes)
-	%%UCLIBNAME%%_CPPFLAGS="$%%UCLIBNAME%%_CPPFLAGS $($OBJFW_CONFIG --package OGObject --cppflags)"
-	%%UCLIBNAME%%_LIBS="$%%UCLIBNAME%%_LIBS $($OBJFW_CONFIG --package OGObject --libs)"
+	CPPFLAGS="$CPPFLAGS $($OBJFW_CONFIG --package OGObject --cppflags)"
+	LIBS="$LIBS $($OBJFW_CONFIG --package OGObject --libs)"
 ], [
 	AC_MSG_ERROR(You need ObjFW package OGObject installed.)
 ])
