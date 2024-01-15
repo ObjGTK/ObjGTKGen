@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: GPL-3.0+
  */
 
+#import "../GIR/GIRReturnValue.h"
 #import <ObjFW/ObjFW.h>
 
 @class OGTKClass;
@@ -154,6 +155,18 @@
 - (bool)isTypeSwappable:(OFString *)type;
 
 /**
+ * @brief      Alias for convertType:withName:toType:ownership: adding ownership =
+ * 			   GIRReturnValueOwnershipUnknown as default paramter.
+ *
+ * @param      fromType  The from type
+ * @param      name      The name
+ * @param      toType    To type
+ *
+ * @return     Return value of the called method.
+ */
+- (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType;
+
+/**
  * @brief Provides the string holding the source code snipped to convert
  * ```fromType``` to ```toType``` holding ```name``` as variable name
  * @details This method is the corresponding part to ```swapTypes:```. While
@@ -163,11 +176,15 @@
  * @param name The name of the variable in the source code, defined by fromType.
  * @param toType The ObjC or Gobj type name which the returned code should
  * convert to.
+ * @param ownership GLib Ownership type of the C value, considered for strings
  * @return The source code needed to convert ```fromType``` to
  * ```toType``` holding ```name``` as variable name
  *
  */
-- (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType;
+- (OFString *)convertType:(OFString *)fromType
+                 withName:(OFString *)name
+                   toType:(OFString *)toType
+                ownership:(GIROwnershipTransferType)ownership;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type
@@ -250,6 +267,17 @@
  * @see -convertType:withName:toType:
  */
 + (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType;
+
+/**
+ * @brief Provides the string holding the source code snipped to convert
+ * ```fromType``` to ```toType``` holding ```name``` as variable name. Singleton
+ * access shortcut.
+ * @see -convertType:withName:toType:ownership
+ */
++ (OFString *)convertType:(OFString *)fromType
+                 withName:(OFString *)name
+                   toType:(OFString *)toType
+                ownership:(GIROwnershipTransferType)ownership;
 
 /**
  * @brief Returns the appropriate self referencing method call for the type

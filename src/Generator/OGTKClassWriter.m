@@ -358,9 +358,12 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			// Generated source: Then try to convert the result
 			[output appendFormat:@"\t%@ returnValue = ", method.returnType];
 
-			[output appendString:[OGTKMapper convertType:method.cReturnType
-			                                    withName:@"gobjectValue"
-			                                      toType:method.returnType]];
+			[output
+			    appendString:[OGTKMapper convertType:method.cReturnType
+			                                withName:@"gobjectValue"
+			                                  toType:method.returnType
+			                               ownership:method.cOwnershipTransferType]];
+
 			[output appendString:@";\n"];
 
 			if ([_mapper isGobjType:method.cReturnType] &&

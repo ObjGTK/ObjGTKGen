@@ -240,9 +240,23 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (OFString *)convertType:(OFString *)fromType withName:(OFString *)name toType:(OFString *)toType
 {
+	return [self convertType:fromType
+	                withName:name
+	                  toType:toType
+	               ownership:GIRReturnValueOwnershipUnknown];
+}
+
+- (OFString *)convertType:(OFString *)fromType
+                 withName:(OFString *)name
+                   toType:(OFString *)toType
+                ownership:(GIROwnershipTransferType)ownership
+{
 	// Try to return conversion for string types first
 	// Owned strings
 	if (([fromType isEqual:@"gchar*"] || [fromType isEqual:@"char*"]) &&
+	    (ownership == GIRReturnValueOwnershipFull ||
+	        ownership == GIRReturnValueOwnershipContainer ||
+	        ownership == GIRReturnValueOwnershipUnknown) &&
 	    [toType isEqual:@"OFString*"]) {
 		return
 		    [OFString stringWithFormat:
@@ -251,6 +265,8 @@ static OGTKMapper *sharedMyMapper = nil;
 		              name, name];
 		// Unowned strings
 	} else if (([fromType isEqual:@"const char*"] || [fromType isEqual:@"const gchar*"]) &&
+	    (ownership == GIRReturnValueOwnershipNone ||
+	        ownership == GIRReturnValueOwnershipUnknown) &&
 	    [toType isEqual:@"OFString*"]) {
 		return
 		    [OFString stringWithFormat:
@@ -482,7 +498,20 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
 
-	return [sharedMapper convertType:fromType withName:name toType:toType];
+	return [sharedMapper convertType:fromType
+	                        withName:name
+	                          toType:toType
+	                       ownership:GIRReturnValueOwnershipUnknown];
+}
+
++ (OFString *)convertType:(OFString *)fromType
+                 withName:(OFString *)name
+                   toType:(OFString *)toType
+                ownership:(GIROwnershipTransferType)ownership
+{
+	OGTKMapper *sharedMapper = [OGTKMapper sharedMapper];
+
+	return [sharedMapper convertType:fromType withName:name toType:toType ownership:ownership];
 }
 
 + (OFString *)selfTypeMethodCall:(OFString *)type

@@ -15,7 +15,8 @@
 typedef enum {
 	GIRReturnValueOwnershipNone,
 	GIRReturnValueOwnershipContainer,
-	GIRReturnValueOwnershipFull
+	GIRReturnValueOwnershipFull,
+	GIRReturnValueOwnershipUnknown
 } GIROwnershipTransferType;
 
 @interface GIRReturnValue: GIRBase
