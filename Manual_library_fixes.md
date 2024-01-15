@@ -21,3 +21,12 @@ Because these are in pango-coverage-private.h, which is not part of public heade
 ## Gdk
 
 OGGdkWindow.m/.h needs to remove `- (void)destroyNotify;`, because the C part is not defined in the headers.
+
+## EBook
+
+- e_book_client_view_is_running is private/not in the headers
+
+## Camel
+
+
+- camel_mime_parser_set_header_regex is private/not in the headers
