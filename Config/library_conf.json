@@ -18,6 +18,9 @@
   "Gdk-4.0": {
     "customName": "OGdk4"
   },
+  "Gio-2.0": {
+    "customName": "OGio"
+  },
   "GdkPixbuf-2.0": {
     "excludeClasses": [
       "PixbufNonAnim",

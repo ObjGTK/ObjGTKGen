@@ -11,8 +11,8 @@
 
 @implementation GIRAPI
 
-@synthesize version = _version, package = _package, include = _include,
-            cInclude = _cInclude, namespaces = _namespaces;
+@synthesize version = _version, package = _package, include = _include, cInclude = _cInclude,
+            namespaces = _namespaces;
 
 - (instancetype)init
 {
@@ -53,7 +53,15 @@
 		} else if ([key isEqual:@"version"]) {
 			self.version = value;
 		} else if ([key isEqual:@"package"]) {
-			self.package = [value valueForKey:@"name"];
+			OFMutableDictionary *preResult;
+			if ([value isKindOfClass:[OFMutableArray class]]) {
+				OFMutableArray *myArray = (OFMutableArray *)value;
+				preResult = myArray.firstObject;
+			} else {
+				preResult = value;
+			}
+
+			self.package = [preResult valueForKey:@"name"];
 		} else if ([key isEqual:@"c:include"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRInclude class]

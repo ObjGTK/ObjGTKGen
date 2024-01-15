@@ -5,7 +5,6 @@
   "templateSnippetsDir": "Resources/TemplateSnippets",
   "excludeLibraries": [
     "GObject",
-    "Gio",
     "GLib",
     "GModule",
     "libxml2",

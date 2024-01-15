@@ -99,7 +99,7 @@
 	// Map library information from API
 	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
 	libraryInfo.packageName = api.package;
-	// TODO This can be an array!
+
 	// TODO Throw exception if not present: Can't generate a working
 	// autoconf file without the package name
 
