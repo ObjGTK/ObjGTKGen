@@ -7,7 +7,6 @@
 
 #import <ObjFW/ObjFW.h>
 
-#import "Exceptions/OGTKLibraryAlreadyLoadedException.h"
 #import "Exceptions/OGTKNamespaceContainsNoClassesException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Generator/OGTKClassWriter.h"
@@ -44,8 +43,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 @implementation ObjGTKGen
 
-@synthesize excludeLibraries = _excludeLibraries, girDir = _girDir,
-            sharedMapper = _sharedMapper;
+@synthesize excludeLibraries = _excludeLibraries, girDir = _girDir, sharedMapper = _sharedMapper;
 
 - (void)dealloc
 {
@@ -63,8 +61,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	_sharedMapper = [OGTKMapper sharedMapper];
 
 	OFApplication *app = [OFApplication sharedApplication];
-	if (app.arguments.count < 1 ||
-	    [(OFString *)app.arguments.firstObject length] == 0) {
+	if (app.arguments.count < 1 || [(OFString *)app.arguments.firstObject length] == 0) {
 		OFLog(@"Missing argument!\n"
 		      @"Usage: %@ </path/to/file.gir>\n"
 		      @"Linux distributions often store gir files at "
@@ -74,8 +71,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	}
 
 	OFString *outputDir = [OGTKUtil globalConfigValueFor:@"outputDir"];
-	OFString *baseClassPath =
-	    [OGTKUtil globalConfigValueFor:@"librarySourceAdditionsDir"];
+	OFString *baseClassPath = [OGTKUtil globalConfigValueFor:@"librarySourceAdditionsDir"];
 
 	// Load and parse base API from GIR file
 	OFString *girFile = [app.arguments firstObject];
@@ -99,9 +95,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	for (OFString *namespace in libraries) {
 		OGTKLibrary *library = [libraries objectForKey:namespace];
 
-		[self writeAndCopyLibraryFilesFor:library
-		                          fromDir:baseClassPath
-		                            toDir:outputDir];
+		[self writeAndCopyLibraryFilesFor:library fromDir:baseClassPath toDir:outputDir];
 	}
 
 	OFLog(@"%@", @"Process complete");
@@ -118,21 +112,12 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 
 	OFLog(@"%@", @"Attempting to parse library class information...");
 	OGTKLibrary *libraryInfo = [Gir2Objc generateLibraryInfoFromAPI:api];
-
-	// Only load libraries that are not present in memory already
-	OGTKLibrary *cachedLibrary =
-	    [_sharedMapper libraryInfoByNamespace:libraryInfo.namespace];
-
-	if (cachedLibrary != nil)
-		@throw [OGTKLibraryAlreadyLoadedException exception];
-
 	[_sharedMapper addLibrary:libraryInfo];
 
 	@try {
-		[Gir2Objc
-		    generateClassInfoFromNamespace:api.namespaces.firstObject
-		                        forLibrary:libraryInfo
-		                        intoMapper:_sharedMapper];
+		[Gir2Objc generateClassInfoFromNamespace:api.namespaces.firstObject
+		                              forLibrary:libraryInfo
+		                              intoMapper:_sharedMapper];
 	} @catch (OGTKNamespaceContainsNoClassesException *exception) {
 		[_sharedMapper removeLibrary:libraryInfo];
 		@throw exception;
@@ -155,25 +140,30 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 			if ([excludeLib isEqual:dependency.name])
 				continueLoop = true;
 		}
+
+		// Only load libraries that are not present in memory already
+		OGTKLibrary *cachedLibrary = [_sharedMapper libraryInfoByNamespace:dependency.name];
+
+		if (cachedLibrary != nil) {
+			OFLog(
+			    @"Library %@-%@ already loaded.", dependency.name, dependency.version);
+			continueLoop = true;
+		}
+
 		if (continueLoop)
 			continue;
 
 		OFString *depGirFile =
-		    [OFString stringWithFormat:@"%@-%@.gir", dependency.name,
-		              dependency.version];
-		depGirFile =
-		    [_girDir stringByAppendingPathComponent:depGirFile];
+		    [OFString stringWithFormat:@"%@-%@.gir", dependency.name, dependency.version];
+		depGirFile = [_girDir stringByAppendingPathComponent:depGirFile];
 
 		OGTKLibrary *depLibraryInfo;
 		@try {
 			depLibraryInfo = [self loadAPIFromFile:depGirFile];
 			[self loadLibraryDependenciesOf:depLibraryInfo];
-		} @catch (OGTKLibraryAlreadyLoadedException *exception) {
-			OFLog(@"Library %@-%@ already loaded.", dependency.name,
-			    dependency.version);
 		} @catch (OGTKNamespaceContainsNoClassesException *exception) {
-			OFLog(@"Library %@-%@ contains no classes. Skipping…",
-			    dependency.name, dependency.version);
+			OFLog(@"Library %@-%@ contains no classes. Skipping…", dependency.name,
+			    dependency.version);
 		}
 	}
 }
@@ -182,8 +172,7 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
                             fromDir:(OFString *)baseClassPath
                               toDir:(OFString *)outputDir
 {
-	OFString *libraryOutputDir =
-	    [outputDir stringByAppendingPathComponent:libraryInfo.name];
+	OFString *libraryOutputDir = [outputDir stringByAppendingPathComponent:libraryInfo.name];
 
 	OGTKLibraryWriter *libraryWriter =
 	    [[OGTKLibraryWriter alloc] initWithLibrary:libraryInfo
@@ -198,11 +187,9 @@ OF_APPLICATION_DELEGATE(ObjGTKGen)
 	[libraryWriter writeLibraryAdditionsWithSourcesFromDir:baseClassPath];
 
 	// Prepare and copy build files
-	OFString *templateDir =
-	    [OGTKUtil globalConfigValueFor:@"buildTemplateDir"];
+	OFString *templateDir = [OGTKUtil globalConfigValueFor:@"buildTemplateDir"];
 	OFString *templateSnippetsDir = [[OGTKUtil dataDir]
-	    stringByAppendingPathComponent:
-	        [OGTKUtil globalConfigValueFor:@"templateSnippetsDir"]];
+	    stringByAppendingPathComponent:[OGTKUtil globalConfigValueFor:@"templateSnippetsDir"]];
 
 	[libraryWriter templateAndCopyBuildFilesFromDir:templateDir
 	                           usingSnippetsFromDir:templateSnippetsDir];
