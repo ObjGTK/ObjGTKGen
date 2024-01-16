@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: 2021-2022 Johannes Brakensiek <objfw@codingpastor.de>
- * SPDX-FileCopyrightText: 2021-2022 The ObjGTK authors, see AUTHORS file
+ * SPDX-FileCopyrightText: 2021-2024 Johannes Brakensiek <objfw@codingpastor.de>
+ * SPDX-FileCopyrightText: 2021-2024 The ObjGTK authors, see AUTHORS file
  * SPDX-License-Identifier: GPL-3.0+
  */
 
@@ -16,7 +16,7 @@
 	OFString *_namespace;
 	OFString *_name;
 	OFString *_version;
-	OFString *_packageName;
+	OFMutableSet OF_GENERIC(OFString *) * _packages;
 	OFString *_authorMail;
 	OFMutableSet OF_GENERIC(GIRInclude *) * _dependencies;
 	OFMutableSet OF_GENERIC(GIRInclude *) * _cIncludes;
@@ -50,11 +50,11 @@
 @property (copy, nonatomic) OFString *version;
 
 /**
- * @property packageName
- * @brief This is the name of the system package belonging to the library, f.e.
+ * @property packages
+ * @brief This is a set of package names for this library to be resolved via pkg-config, f.e.
  * gtk+-3.0 for Gtk 3.0.
  */
-@property (copy, nonatomic) OFString *packageName;
+@property (copy, nonatomic) OFMutableSet OF_GENERIC(OFString *) * packages;
 
 /**
  * @property authorMail
@@ -68,16 +68,14 @@
  * @brief A set of names of libraries this library depends on.
  * These names are using the naming convention of the GIR file format.
  */
-@property (readonly, nonatomic) OFMutableSet OF_GENERIC(GIRInclude *) *
-    dependencies;
+@property (readonly, nonatomic) OFMutableSet OF_GENERIC(GIRInclude *) * dependencies;
 
 /**
  * @property cIncludes
  * @brief A set of strings that are the C include paths of the depending
  * libraries.
  */
-@property (readonly, nonatomic) OFMutableSet OF_GENERIC(GIRInclude *) *
-    cIncludes;
+@property (readonly, nonatomic) OFMutableSet OF_GENERIC(GIRInclude *) * cIncludes;
 
 /**
  * @property sharedLibraries

@@ -98,9 +98,7 @@
 
 	// Map library information from API
 	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
-	libraryInfo.packageName = api.package;
-	// TODO This may be an array and we need to generate Makefiles for all packages
-	// TODO see GIRAPI.m and make it's an array always.
+	libraryInfo.packages = api.packages;
 
 	// TODO Throw exception if not present: Can't generate a working
 	// autoconf file without the package name

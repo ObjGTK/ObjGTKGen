@@ -11,8 +11,7 @@
 
 @interface OGTKTemplate ()
 
-- (OFString *)ACSnippetsForDependencies:(OFMutableSet OF_GENERIC(
-                                            GIRInclude *) *)dependencies
+- (OFString *)ACSnippetsForDependencies:(OFMutableSet OF_GENERIC(GIRInclude *) *)dependencies
                         forLibraryNamed:(OFString *)parentLibName;
 
 - (OFString *)ACSnippetForIncludesOf:(OFString *)dependencyName
@@ -38,8 +37,7 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	OF_INVALID_INIT_METHOD
 }
 
-- (instancetype)initWithSnippetDir:(OFString *)snippetDir
-                      sharedMapper:(OGTKMapper *)sharedMapper
+- (instancetype)initWithSnippetDir:(OFString *)snippetDir sharedMapper:(OGTKMapper *)sharedMapper
 {
 	self = [super init];
 
@@ -66,9 +64,8 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[super dealloc];
 }
 
-- (OFDictionary *)
-    dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
-                                    sourceFiles:(OFString *)sourceFiles
+- (OFDictionary *)dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
+                                                  sourceFiles:(OFString *)sourceFiles
 {
 	OFString *authorMail;
 	if (libraryInfo.authorMail != nil)
@@ -76,54 +73,54 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	else
 		authorMail = @"unkown@host.com";
 
-	OFString *acOCChecking =
-	    [self ACSnippetsForDependencies:libraryInfo.dependencies
-	                    forLibraryNamed:libraryInfo.name];
+	OFString *acOCChecking = [self ACSnippetsForDependencies:libraryInfo.dependencies
+	                                         forLibraryNamed:libraryInfo.name];
 
-	OFString *acArgWith =
-	    [self ACSnippetForIncludesOf:libraryInfo.packageName
-	                 forLibraryNamed:libraryInfo.name];
+	OFMutableString *acArgWith = [OFMutableString string];
+	for (OFString *packageName in libraryInfo.packages) {
+		[acArgWith appendString:@"\n\n"];
+		[acArgWith appendString:[self ACSnippetForIncludesOf:packageName
+		                                     forLibraryNamed:libraryInfo.name]];
+	}
 
-	OFString *pkgCheckModules =
-	    [self ACSnippetForPackage:libraryInfo.packageName
-	              forLibraryNamed:libraryInfo.name];
+	OFMutableString *pkgCheckModules = [OFMutableString string];
+	for (OFString *packageName in libraryInfo.packages) {
+		[pkgCheckModules appendString:@"\n\n"];
+		[pkgCheckModules appendString:[self ACSnippetForPackage:packageName
+		                                        forLibraryNamed:libraryInfo.name]];
+	}
 
 	OFDictionary *dict = [OFDictionary
-	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name,
-	    @"%%LIBVERSION%%", libraryInfo.version, @"%%LIBAUTHOREMAIL%%",
-	    authorMail, @"%%UCLIBNAME%%", [libraryInfo.name uppercaseString],
-	    @"%%LCLIBNAME%%", [libraryInfo.name lowercaseString],
-	    @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
-	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor,
-	    @"%%ACOCCHECKING%%", acOCChecking, @"%%ACARGWITH%%", acArgWith,
-	    @"%%PKGCHECKMODULES%%", pkgCheckModules, @"%%SOURCEFILES%%",
-	    sourceFiles, nil];
+	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name, @"%%LIBVERSION%%",
+	    libraryInfo.version, @"%%LIBAUTHOREMAIL%%", authorMail, @"%%UCLIBNAME%%",
+	    [libraryInfo.name uppercaseString], @"%%LCLIBNAME%%",
+	    [libraryInfo.name lowercaseString], @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
+	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACOCCHECKING%%", acOCChecking,
+	    @"%%ACARGWITH%%", acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules,
+	    @"%%SOURCEFILES%%", sourceFiles, nil];
 
 	return dict;
 }
 
-- (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
-    (OGTKLibrary *)libraryInfo
+- (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
 {
-	OFDictionary *dict = [OFDictionary
-	    dictionaryWithKeysAndObjects:@"Template.oc.in",
-	    [OFString stringWithFormat:@"%@.oc.in", libraryInfo.name], nil];
+	OFDictionary *dict =
+	    [OFDictionary dictionaryWithKeysAndObjects:@"Template.oc.in",
+	                  [OFString stringWithFormat:@"%@.oc.in", libraryInfo.name], nil];
 
 	return dict;
 }
 
-- (OFString *)ACSnippetsForDependencies:(OFMutableSet OF_GENERIC(
-                                            GIRInclude *) *)dependencies
+- (OFString *)ACSnippetsForDependencies:(OFMutableSet OF_GENERIC(GIRInclude *) *)dependencies
                         forLibraryNamed:(OFString *)parentLibName
 {
-	OFString *fileName = [self.snippetDir
-	    stringByAppendingPathComponent:kACOCCheckingTemplateFile];
+	OFString *fileName =
+	    [self.snippetDir stringByAppendingPathComponent:kACOCCheckingTemplateFile];
 
 	OFMutableString *result = [OFMutableString string];
 
 	for (GIRInclude *dependency in dependencies) {
-		OFString *objfwPackageSnippet =
-		    [OFString stringWithContentsOfFile:fileName];
+		OFString *objfwPackageSnippet = [OFString stringWithContentsOfFile:fileName];
 
 		OGTKLibrary *libraryInfo =
 		    [self.sharedMapper libraryInfoByNamespace:dependency.name];
@@ -133,17 +130,15 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 
 		OFString *libraryName = libraryInfo.name;
 
-		objfwPackageSnippet = [objfwPackageSnippet
-		    stringByReplacingOccurrencesOfString:@"%%DEPNAME%%"
-		                              withString:libraryName];
+		objfwPackageSnippet =
+		    [objfwPackageSnippet stringByReplacingOccurrencesOfString:@"%%DEPNAME%%"
+		                                                   withString:libraryName];
 
 		objfwPackageSnippet = [objfwPackageSnippet
 		    stringByReplacingOccurrencesOfString:@"%%LIBNAME%%"
-		                              withString:[parentLibName
-		                                             uppercaseString]];
+		                              withString:[parentLibName uppercaseString]];
 
 		[result appendString:objfwPackageSnippet];
-		[result appendString:@"\n\n"];
 	}
 
 	[result deleteEnclosingWhitespaces];
@@ -152,26 +147,22 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	return result;
 }
 
-- (OFString *)ACSnippetForIncludesOf:(OFString *)packageName
-                     forLibraryNamed:(OFString *)libName
+- (OFString *)ACSnippetForIncludesOf:(OFString *)packageName forLibraryNamed:(OFString *)libName
 {
 	if (packageName == nil)
-		@throw [OGTKReceivedNilExpectedStringException
-		    exceptionForParameter:@"packageName"];
+		@throw
+		    [OGTKReceivedNilExpectedStringException exceptionForParameter:@"packageName"];
 	if (libName == nil)
-		@throw [OGTKReceivedNilExpectedStringException
-		    exceptionForParameter:@"libName"];
+		@throw [OGTKReceivedNilExpectedStringException exceptionForParameter:@"libName"];
 
-	OFString *fileName = [self.snippetDir
-	    stringByAppendingPathComponent:kACArgWithTemplateFile];
-	OFMutableString *snippet =
-	    [OFMutableString stringWithContentsOfFile:fileName];
+	OFString *fileName =
+	    [self.snippetDir stringByAppendingPathComponent:kACArgWithTemplateFile];
+	OFMutableString *snippet = [OFMutableString stringWithContentsOfFile:fileName];
 
 	OFString *shortName = [self shortNameFromPackageName:packageName];
 	libName = [libName uppercaseString];
 
-	[snippet replaceOccurrencesOfString:@"%%DEPNAME%%"
-	                         withString:packageName];
+	[snippet replaceOccurrencesOfString:@"%%DEPNAME%%" withString:packageName];
 
 	[snippet replaceOccurrencesOfString:@"%%LCDEPNAME%%"
 	                         withString:[shortName lowercaseString]];
@@ -189,10 +180,9 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 - (OFString *)ACSnippetForPackage:(OFString *)dependencyName
                   forLibraryNamed:(OFString *)parentLibName
 {
-	OFString *fileName = [self.snippetDir
-	    stringByAppendingPathComponent:kPkgCheckModulesTemplateFile];
-	OFMutableString *snippet =
-	    [OFMutableString stringWithContentsOfFile:fileName];
+	OFString *fileName =
+	    [self.snippetDir stringByAppendingPathComponent:kPkgCheckModulesTemplateFile];
+	OFMutableString *snippet = [OFMutableString stringWithContentsOfFile:fileName];
 
 	OFString *shortName = [self shortNameFromPackageName:dependencyName];
 	parentLibName = [parentLibName uppercaseString];
@@ -200,18 +190,14 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[snippet replaceOccurrencesOfString:@"%%LCPKGNAME%%"
 	                         withString:[shortName lowercaseString]];
 
-	[snippet replaceOccurrencesOfString:@"%%PKGNAME%%"
-	                         withString:dependencyName];
+	[snippet replaceOccurrencesOfString:@"%%PKGNAME%%" withString:dependencyName];
 
 	[snippet
 	    replaceOccurrencesOfString:@"%%PKGVERSION%%"
-	                    withString:[OFString
-	                                   stringWithFormat:
-	                                       @"$(pkg-config --modversion %@)",
-	                                   dependencyName]];
+	                    withString:[OFString stringWithFormat:@"$(pkg-config --modversion %@)",
+	                                         dependencyName]];
 
-	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%"
-	                         withString:parentLibName];
+	[snippet replaceOccurrencesOfString:@"%%LIBNAME%%" withString:parentLibName];
 
 	[snippet makeImmutable];
 
@@ -220,8 +206,8 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 
 - (OFString *)shortNameFromPackageName:(OFString *)packageName
 {
-	OFCharacterSet *charSet = [OFCharacterSet
-	    characterSetWithCharactersInString:@"+-_0123456789"];
+	OFCharacterSet *charSet =
+	    [OFCharacterSet characterSetWithCharactersInString:@"+-_0123456789"];
 	size_t index = [packageName indexOfCharacterFromSet:charSet];
 
 	OFString *shortName;
