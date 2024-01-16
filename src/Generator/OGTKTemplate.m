@@ -77,18 +77,18 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	                                         forLibraryNamed:libraryInfo.name];
 
 	OFMutableString *acArgWith = [OFMutableString string];
-	for (OFString *packageName in libraryInfo.packages) {
-		[acArgWith appendString:@"\n\n"];
-		[acArgWith appendString:[self ACSnippetForIncludesOf:packageName
-		                                     forLibraryNamed:libraryInfo.name]];
-	}
-
 	OFMutableString *pkgCheckModules = [OFMutableString string];
 	for (OFString *packageName in libraryInfo.packages) {
 		[pkgCheckModules appendString:@"\n\n"];
 		[pkgCheckModules appendString:[self ACSnippetForPackage:packageName
 		                                        forLibraryNamed:libraryInfo.name]];
+
+		[acArgWith appendString:@"\n\n"];
+		[acArgWith appendString:[self ACSnippetForIncludesOf:packageName
+		                                     forLibraryNamed:libraryInfo.name]];
 	}
+
+	OFString *ocDependencies = [self OCDependenciesFor:libraryInfo.dependencies];
 
 	OFDictionary *dict = [OFDictionary
 	    dictionaryWithKeysAndObjects:@"%%LIBNAME%%", libraryInfo.name, @"%%LIBVERSION%%",
@@ -97,7 +97,7 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	    [libraryInfo.name lowercaseString], @"%%VERSIONLIBMAJOR%%", libraryInfo.versionMajor,
 	    @"%%VERSIONLIBMINOR%%", libraryInfo.versionMinor, @"%%ACOCCHECKING%%", acOCChecking,
 	    @"%%ACARGWITH%%", acArgWith, @"%%PKGCHECKMODULES%%", pkgCheckModules,
-	    @"%%SOURCEFILES%%", sourceFiles, nil];
+	    @"%%OCDEPENDENCIES%%", ocDependencies, @"%%SOURCEFILES%%", sourceFiles, nil];
 
 	return dict;
 }
@@ -144,6 +144,24 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 	[result deleteEnclosingWhitespaces];
 	[result makeImmutable];
 
+	return result;
+}
+
+- (OFString *)OCDependenciesFor:(OFMutableSet OF_GENERIC(GIRInclude *) *)dependencies
+{
+	OFMutableString *result = [OFMutableString string];
+
+	for (GIRInclude *dependency in dependencies) {
+		OGTKLibrary *libraryInfo =
+		    [self.sharedMapper libraryInfoByNamespace:dependency.name];
+
+		if (libraryInfo == nil)
+			continue;
+
+		[result appendFormat:@"package_depends_on %@\n", libraryInfo.name];
+	}
+
+	[result makeImmutable];
 	return result;
 }
 
