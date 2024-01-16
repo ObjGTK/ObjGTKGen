@@ -7,21 +7,18 @@
 #import "OGTKLibrary.h"
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
-@interface OGTKLibrary()
+@interface OGTKLibrary ()
 
 - (OFArray *)splitVersion:(OFString *)versionString;
 
 @end
 
 @implementation OGTKLibrary
-@synthesize namespace = _namespace, name = _name, version = _version,
-            packageName = _packageName, authorMail = _authorMail,
-            dependencies = _dependencies, cIncludes = _cIncludes,
-            sharedLibraries = _sharedLibraries,
-            excludeClasses = _excludeClasses,
-            cNSIdentifierPrefix = _cNSIdentifierPrefix,
-            cNSSymbolPrefix = _cNSSymbolPrefix, visited = _visited,
-			hasAdditionalSourceFiles = _hasAdditionalSourceFiles;
+@synthesize namespace = _namespace, name = _name, version = _version, packages = _packages,
+            authorMail = _authorMail, dependencies = _dependencies, cIncludes = _cIncludes,
+            sharedLibraries = _sharedLibraries, excludeClasses = _excludeClasses,
+            cNSIdentifierPrefix = _cNSIdentifierPrefix, cNSSymbolPrefix = _cNSSymbolPrefix,
+            visited = _visited, hasAdditionalSourceFiles = _hasAdditionalSourceFiles;
 
 - (instancetype)init
 {
@@ -46,7 +43,7 @@
 	[_namespace release];
 	[_name release];
 	[_version release];
-	[_packageName release];
+	[_packages release];
 	[_authorMail release];
 	[_dependencies release];
 	[_cIncludes release];
@@ -68,7 +65,7 @@
 
 - (OFString *)name
 {
-	if(_name != nil)
+	if (_name != nil)
 		return _name;
 
 	return [OFString stringWithFormat:@"OG%@", _namespace];
@@ -86,29 +83,26 @@
 
 - (OFArray *)splitVersion:(OFString *)versionString
 {
-	OFArray *versionParts =
-	    [versionString componentsSeparatedByString:@"."];
+	OFArray *versionParts = [versionString componentsSeparatedByString:@"."];
 
 	OFString *versionMajor = versionParts.firstObject;
 
-	OFMutableString *versionMinor =
-	    [[[OFMutableString alloc] init] autorelease];
+	OFMutableString *versionMinor = [[[OFMutableString alloc] init] autorelease];
 
-	if(versionParts.count == 2)
+	if (versionParts.count == 2)
 		versionMinor = versionParts.lastObject;
 
 	if (versionParts.count > 2) {
 		for (size_t i = 1; i < versionParts.count; i++) {
-			[versionMinor
-			    appendString:[versionParts objectAtIndex:i]];
+			[versionMinor appendString:[versionParts objectAtIndex:i]];
 
 			if (versionParts.count + 1 > i)
 				[versionMinor appendString:@"."];
 		}
 	}
 
-	OFArray *result = [[[OFArray alloc]
-	    initWithObjects:versionMajor, versionMinor, nil] autorelease];
+	OFArray *result =
+	    [[[OFArray alloc] initWithObjects:versionMajor, versionMinor, nil] autorelease];
 
 	return result;
 }
@@ -116,8 +110,7 @@
 - (void)addSharedLibrariesAsString:(OFString *)sharedLibrariesString
 {
 	OFSet *sharedLibrariesSet =
-	    [OFSet setWithArray:[sharedLibrariesString
-	                            componentsSeparatedByString:@","]];
+	    [OFSet setWithArray:[sharedLibrariesString componentsSeparatedByString:@","]];
 
 	OFSet *sharedLibrariesResult =
 	    [_sharedLibraries setByAddingObjectsFromSet:sharedLibrariesSet];

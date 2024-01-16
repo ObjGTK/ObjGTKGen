@@ -11,7 +11,7 @@
 
 @implementation GIRAPI
 
-@synthesize version = _version, package = _package, include = _include, cInclude = _cInclude,
+@synthesize version = _version, packages = _packages, include = _include, cInclude = _cInclude,
             namespaces = _namespaces;
 
 - (instancetype)init
@@ -23,6 +23,7 @@
 		_include = [[OFMutableArray alloc] init];
 		_cInclude = [[OFMutableArray alloc] init];
 		_namespaces = [[OFMutableArray alloc] init];
+		_packages = [[OFMutableSet alloc] init];
 	} @catch (id e) {
 		[self release];
 		@throw e;
@@ -34,7 +35,7 @@
 - (void)dealloc
 {
 	[_version release];
-	[_package release];
+	[_packages release];
 	[_include release];
 	[_cInclude release];
 	[_namespaces release];
@@ -53,15 +54,16 @@
 		} else if ([key isEqual:@"version"]) {
 			self.version = value;
 		} else if ([key isEqual:@"package"]) {
-			OFMutableDictionary *preResult;
+
 			if ([value isKindOfClass:[OFMutableArray class]]) {
 				OFMutableArray *myArray = (OFMutableArray *)value;
-				preResult = myArray.firstObject;
+				for (OFDictionary *element in myArray) {
+					[self.packages addObject:[element valueForKey:@"name"]];
+				}
 			} else {
-				preResult = value;
+				[self.packages addObject:[value valueForKey:@"name"]];
 			}
 
-			self.package = [preResult valueForKey:@"name"];
 		} else if ([key isEqual:@"c:include"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRInclude class]
