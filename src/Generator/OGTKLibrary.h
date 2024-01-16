@@ -54,7 +54,7 @@
  * @brief This is a set of package names for this library to be resolved via pkg-config, f.e.
  * gtk+-3.0 for Gtk 3.0.
  */
-@property (copy, nonatomic) OFMutableSet OF_GENERIC(OFString *) * packages;
+@property (retain, nonatomic) OFMutableSet OF_GENERIC(OFString *) * packages;
 
 /**
  * @property authorMail
@@ -89,7 +89,7 @@
  * @brief A set of names of classes that should be omitted when generating the
  * source code for the library.
  */
-@property (copy, nonatomic) OFSet OF_GENERIC(OFString *) * excludeClasses;
+@property (retain, nonatomic) OFSet OF_GENERIC(OFString *) * excludeClasses;
 
 /**
  * @property cNSIdentifierPrefix

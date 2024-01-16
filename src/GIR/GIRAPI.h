@@ -19,7 +19,7 @@
 }
 
 @property (nonatomic, copy) OFString *version;
-@property (nonatomic, copy) OFMutableSet *packages;
+@property (nonatomic, retain) OFMutableSet *packages;
 @property (nonatomic, retain) OFMutableArray *include;
 @property (nonatomic, retain) OFMutableArray *cInclude;
 @property (nonatomic, retain) OFMutableArray *namespaces;
