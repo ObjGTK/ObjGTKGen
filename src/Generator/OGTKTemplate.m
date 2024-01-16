@@ -139,6 +139,7 @@ OFString *const kPkgCheckModulesTemplateFile = @"pkgcheckmodules.tmpl";
 		                              withString:[parentLibName uppercaseString]];
 
 		[result appendString:objfwPackageSnippet];
+		[result appendString:@"\n\n"];
 	}
 
 	[result deleteEnclosingWhitespaces];
