@@ -14,6 +14,7 @@
 #import "GIR/GIRInclude.h"
 
 #import "Exceptions/OGTKDataProcessingNotImplementedException.h"
+#import "Exceptions/OGTKGIRNoPackageException.h"
 #import "Exceptions/OGTKNamespaceContainsNoClassesException.h"
 #import "Exceptions/OGTKNoGIRAPIException.h"
 #import "Exceptions/OGTKNoGIRDictException.h"
@@ -98,10 +99,10 @@
 
 	// Map library information from API
 	OGTKLibrary *libraryInfo = [[[OGTKLibrary alloc] init] autorelease];
-	libraryInfo.packages = api.packages;
 
-	// TODO Throw exception if not present: Can't generate a working
-	// autoconf file without the package name
+	if (api.packages == nil || api.packages.count == 0)
+		@throw [OGTKGIRNoPackageException exception];
+	libraryInfo.packages = api.packages;
 
 	for (GIRInclude *include in api.cInclude) {
 		[libraryInfo addCInclude:include];
