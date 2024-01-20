@@ -25,9 +25,13 @@
     ]
   },
   "GdkPixbuf-2.0": {
+    "customName": "OGdkPixbuf",
     "excludeClasses": [
       "PixbufNonAnim",
       "PixbufSimpleAnimIter"
     ]
-  }
+  },
+  "Gsk-4.0.gir":  {
+    "customName": "OGsk4"
+  },
 }
