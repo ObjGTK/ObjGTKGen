@@ -17,6 +17,15 @@ OGPangoCoverage.h needs
 
 Because these are in pango-coverage-private.h, which is not part of public headers.
 
+## Gio
+
+OGGSettingsBackend.h requires:
+
+```
+#define G_SETTINGS_ENABLE_BACKEND
+
+#include <gio/gsettingsbackend.h>
+```
 
 ## Gdk
 
@@ -25,9 +34,24 @@ OGGdkWindow.m/.h needs to remove `- (void)destroyNotify;`, because the C part is
 ## EBook
 
 - e_book_client_view_is_running is private/not in the headers
-- `+ (OGEClient*)connectSyncWithSource:(OGESource*)source waitForConnectedSeconds:(guint32)waitForConnectedSeconds cancellable:(GCancellable*)cancellable` needs to return OGEBookClient
+- OGEBookClient: `+ (OGEClient*)connectSyncWithSource:(OGESource*)source waitForConnectedSeconds:(guint32)waitForConnectedSeconds cancellable:(GCancellable*)cancellable` needs to return OGEBookClient
 
 ## Camel
 
-
+-  OGCamelFolderSummary.m: 282 | - (guint32)nextUid is defined twice and needs to be renamed
 - camel_mime_parser_set_header_regex is private/not in the headers
+- OGCamelMessageInfo.m:76:12: 
+```
+error: incompatible pointer types initializing 'OFString *' with an expression of type 'gchar *' (aka 'char *') [-Werror,-Wincompatible-pointer-types]
+   76 |         OFString* returnValue = gobjectValue;
+```
+   seems to be missing info about ownership
+- `OGCamelSExp.m:23:24: error: call to undeclared function 'camel_sexp_to_sql_sexp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   23 |         gchar* gobjectValue = camel_sexp_to_sql_sexp([sexp UTF8String]);`
+
+
+/usr/bin/ld: /usr/local/lib64/libogio.so: undefined reference to `g_io_module_load'
+/usr/bin/ld: /usr/local/lib64/libogebook.so: undefined reference to `e_book_client_view_is_running'
+/usr/bin/ld: /usr/local/lib64/libogio.so: undefined reference to `g_io_module_unload'
+/usr/bin/ld: /usr/local/lib64/libogcamel.so: undefined reference to `camel_mime_parser_set_header_regex'
+/usr/bin/ld: /usr/local/lib64/libogio.so: undefined reference to `g_io_module_query'

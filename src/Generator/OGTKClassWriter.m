@@ -295,14 +295,26 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 	if (method.throws)
 		[output appendString:PrepareErrorHandling];
 
-	OFString *cClassFuncSig = [OFString stringWithFormat:@"%@(%@);\n", method.cIdentifier,
-	                                    [self generateCParameterListString:method.parameters
-	                                                       throwsException:method.throws]];
+	OFString *castMacroBegin = @"";
+	OFString *castMacroEnd = @"";
+	if ([_mapper isGobjType:method.cReturnType]) {
+		OGTKClass *returnTypeDescriptor = [_mapper classInfoByGobjType:method.cReturnType];
+		castMacroBegin =
+		    [OFString stringWithFormat:@"%@(", returnTypeDescriptor.macroCastGObject];
+		castMacroEnd = @")";
+	}
+
+	OFString *cClassFuncSig = [OFString
+	    stringWithFormat:@"%@%@(%@)%@;\n", castMacroBegin, method.cIdentifier,
+	    [self generateCParameterListString:method.parameters throwsException:method.throws],
+	    castMacroEnd];
+
 	OFString *cInstanceFuncSig =
-	    [OFString stringWithFormat:@"%@(%@);\n", method.cIdentifier,
+	    [OFString stringWithFormat:@"%@%@(%@)%@;\n", castMacroBegin, method.cIdentifier,
 	              [self generateCParameterListWithInstanceString:_classDescription.type
 	                                                   andParams:method.parameters
-	                                             throwsException:method.throws]];
+	                                             throwsException:method.throws],
+	              castMacroEnd];
 
 	// No return type/GObject/ObjC object
 	if (method.returnsVoid) {

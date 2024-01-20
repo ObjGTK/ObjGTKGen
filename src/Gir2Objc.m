@@ -280,15 +280,13 @@
 				objcMethod.isSetter = true;
 		}
 
-		if ([methodName hasPrefix:@"get"]) {
+		// Leave "get" because this usually means we want to get a special
+		// object member (not implemented as a property),
+		// but otherwise remove "get" as a prefix for property getters because that's
+		// against ObjC rules.
+		if (![methodName isEqual:@"get"] && [methodName hasPrefix:@"get"]) {
 			methodName = [methodName substringFromIndex:3];
 		}
-
-		// Special case: The method/function name was only "get".
-		// We assume in this case we want to get an instance of
-		// the class (f.e. singleton pattern)
-		if (methodName.length == 0)
-			methodName = @"instance";
 
 		[objcMethod setName:methodName];
 		[objcMethod setCIdentifier:girMethod.cIdentifier];

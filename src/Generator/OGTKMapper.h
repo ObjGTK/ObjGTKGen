@@ -214,9 +214,9 @@
 /**
  * @brief Returns the class info object if found in the dictionary by the Gobj
  * type name given
- * @param gobjType The Gobj type name to look for
+ * @param gobjTypeUnfiltered The Gobj type name to look for. It may contain pointer asterisks (*)
  */
-- (OGTKClass *)classInfoByGobjType:(OFString *)gobjType;
+- (OGTKClass *)classInfoByGobjType:(OFString *)gobjTypeUnfiltered;
 
 /**
  * @brief Returns the library info object if found in the dictionary by the name

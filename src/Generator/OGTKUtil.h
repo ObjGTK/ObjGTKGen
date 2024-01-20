@@ -48,7 +48,7 @@
  * everything is a GObject (FOR FUTURE USE).
  * @param cCtor The constructor call as string.
  * @return The super constructor call in the format of ```[super
- * initWithGObject:(GObject*)gtk_class_new(params)]```
+ * initWithGObject:gtk_class_new(params)]```
  */
 + (OFString *)getFunctionCallForConstructorOfType:(OFString *)cType
                                   withConstructor:(OFString *)cCtor;

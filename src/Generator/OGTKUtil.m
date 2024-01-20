@@ -49,10 +49,9 @@ static OFString *myDataDir;
 			if (previousItemWasSingleChar) {
 				[output appendString:item];
 			} else {
-				[output
-				    appendFormat:@"%@%@",
-				    [[item substringToIndex:1] uppercaseString],
-				    [item substringFromIndex:1]];
+				[output appendFormat:@"%@%@",
+				        [[item substringToIndex:1] uppercaseString],
+				        [item substringFromIndex:1]];
 			}
 			previousItemWasSingleChar = false;
 		} else {
@@ -74,16 +73,15 @@ static OFString *myDataDir;
 	if (range.location == OFNotFound) {
 		return nil;
 	} else {
-		return [OFString stringWithFormat:@"init%@",
-		                 [func substringFromIndex:range.location + 3]];
+		return [OFString
+		    stringWithFormat:@"init%@", [func substringFromIndex:range.location + 3]];
 	}
 }
 
 + (OFString *)getFunctionCallForConstructorOfType:(OFString *)cType
                                   withConstructor:(OFString *)cCtor
 {
-	return [OFString
-	    stringWithFormat:@"[super initWithGObject:(GObject*)%@]", cCtor];
+	return [OFString stringWithFormat:@"[super initWithGObject:%@]", cCtor];
 }
 
 + (bool)isUppercase:(OFString *)character
@@ -117,8 +115,7 @@ static OFString *myDataDir;
 
 		dictGlobalConf = [[OFMutableDictionary alloc]
 		    ogtk_initWithJsonDictionaryOfFile:
-		        [myDataDir stringByAppendingPathComponent:
-		                       @"Config/global_conf.json"]];
+		        [myDataDir stringByAppendingPathComponent:@"Config/global_conf.json"]];
 	}
 
 	return [dictGlobalConf objectForKey:key];
@@ -129,8 +126,7 @@ static OFString *myDataDir;
 	if (dictLibraryConf == nil) {
 		dictLibraryConf = [[OFMutableDictionary alloc]
 		    ogtk_initWithJsonDictionaryOfFile:
-		        [myDataDir stringByAppendingPathComponent:
-		                       @"Config/library_conf.json"]];
+		        [myDataDir stringByAppendingPathComponent:@"Config/library_conf.json"]];
 	}
 
 	return [dictLibraryConf objectForKey:libraryIdentifier];

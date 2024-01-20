@@ -285,9 +285,8 @@ static OGTKMapper *sharedMyMapper = nil;
 	if ([self isGobjType:fromType] && [self isObjcType:toType]) {
 		// Converting from Gobjc -> Objc
 
-		return [OFString stringWithFormat:@"[[[%@ alloc] initWithGObject:(GObject*)%@] "
-		                                  @"autorelease]",
-		                 [self stripAsterisks:toType], name];
+		return [OFString
+		    stringWithFormat:@"[%@ wrapperFor:%@]", [self stripAsterisks:toType], name];
 
 	} else if ([self isObjcType:fromType] && [self isGobjType:toType]) {
 		// Converting from Objc -> Gobj
@@ -351,8 +350,9 @@ static OGTKMapper *sharedMyMapper = nil;
 	@throw [OFInvalidArgumentException exception];
 }
 
-- (OGTKClass *)classInfoByGobjType:(OFString *)gobjType
+- (OGTKClass *)classInfoByGobjType:(OFString *)gobjTypeUnfiltered
 {
+	OFString *gobjType = [self stripAsterisks:gobjTypeUnfiltered];
 	OGTKClass *classInfo = [_gobjTypeToClassMapping objectForKey:gobjType];
 
 	if (classInfo == nil)
