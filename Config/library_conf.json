@@ -31,7 +31,7 @@
       "PixbufSimpleAnimIter"
     ]
   },
-  "Gsk-4.0.gir":  {
+  "Gsk-4.0":  {
     "customName": "OGsk4"
   },
 }
