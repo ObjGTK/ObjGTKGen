@@ -26,11 +26,11 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"type"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"type"] || [key isEqual:@"array"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:type"]) {
 			// Fix if GIR file provides internal type names starting with _
-			if([value characterAtIndex:0] == '_')
+			if ([value characterAtIndex:0] == '_')
 				value = [value substringFromIndex:1];
 
 			self.cType = value;

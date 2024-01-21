@@ -35,7 +35,7 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"array"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:type"]) {
 			self.cType = value;
@@ -48,8 +48,7 @@
 		} else if ([key isEqual:@"zero-terminated"]) {
 			self.zeroTerminated = [value isEqual:@"1"];
 		} else if ([key isEqual:@"type"]) {
-			self.type = [[[GIRType alloc] initWithDictionary:value]
-			    autorelease];
+			self.type = [[[GIRType alloc] initWithDictionary:value] autorelease];
 		} else {
 			[self logUnknownElement:key];
 		}

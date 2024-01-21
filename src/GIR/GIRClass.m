@@ -71,19 +71,16 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		// TODO: Do we need signal?
-		if ([key isEqual:@"text"] ||
-		    [key isEqual:@"glib:type-struct"] ||
-		    [key isEqual:@"glib:get-type"] ||
-		    [key isEqual:@"glib:signal"] ||
-		    [key isEqual:@"glib:fundamental"] ||
-		    [key isEqual:@"source-position"] ||
-		    [key isEqual:@"signal"] ||
+		// TODO: We need to implement "deprecated" otherwise many classes will be generated
+		// unnecessarily
+		if ([key isEqual:@"text"] || [key isEqual:@"glib:type-struct"] ||
+		    [key isEqual:@"glib:get-type"] || [key isEqual:@"glib:signal"] ||
+		    [key isEqual:@"glib:fundamental"] || [key isEqual:@"source-position"] ||
+		    [key isEqual:@"signal"] || [key isEqual:@"deprecated-version"] ||
+		    [key isEqual:@"doc-deprecated"] ||
 		    // The following are used for class "Expression" only it seems
-		    [key isEqual:@"glib:ref-func"] ||
-		    [key isEqual:@"glib:unref-func"] ||
-		    [key isEqual:@"glib:get-value-func"] ||
-		    [key isEqual:@"glib:set-value-func"]) {
+		    [key isEqual:@"glib:ref-func"] || [key isEqual:@"glib:unref-func"] ||
+		    [key isEqual:@"glib:get-value-func"] || [key isEqual:@"glib:set-value-func"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
@@ -91,7 +88,7 @@
 			self.cType = value;
 		} else if ([key isEqual:@"c:symbol-prefix"]) {
 			self.cSymbolPrefix = value;
-		} else if([key isEqual:@"glib:type-name"]) {
+		} else if ([key isEqual:@"glib:type-name"]) {
 			self.glibTypeName = value;
 		} else if ([key isEqual:@"parent"]) {
 			self.parent = value;
@@ -100,8 +97,7 @@
 		} else if ([key isEqual:@"abstract"]) {
 			self.abstract = [value isEqual:@"1"];
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"constructor"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRConstructor class]

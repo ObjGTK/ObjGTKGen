@@ -29,7 +29,8 @@
 		id value = [dict objectForKey:key];
 
 		if ([key isEqual:@"text"] || [key isEqual:@"glib:nick"] ||
-		    [key isEqual:@"glib:name"]) {
+		    [key isEqual:@"glib:name"] || [key isEqual:@"version"] ||
+		    [key isEqual:@"doc-deprecated"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:identifier"]) {
 			self.cIdentifier = value;
@@ -38,8 +39,7 @@
 		} else if ([key isEqual:@"value"]) {
 			self.theValue = [value longLongValue];
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else {
 			[self logUnknownElement:key];
 		}
