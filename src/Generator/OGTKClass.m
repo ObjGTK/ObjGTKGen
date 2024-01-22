@@ -74,6 +74,18 @@
 		}
 
 		return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
+
+	} else if ([self.cNSIdentifierPrefix isEqual:@"G"] && [self.cType hasPrefix:@"G"]) {
+
+		if (_typeWithoutPrefix == nil) {
+			size_t prefixLength = self.cNSIdentifierPrefix.length;
+
+			_typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
+
+			[_typeWithoutPrefix retain];
+		}
+
+		return [OFString stringWithFormat:@"OG%@", _typeWithoutPrefix];
 	}
 	return [OFString stringWithFormat:@"OG%@", self.cType];
 }
