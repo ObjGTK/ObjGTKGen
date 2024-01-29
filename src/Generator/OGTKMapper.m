@@ -322,12 +322,9 @@ static OGTKMapper *sharedMyMapper = nil;
 {
 	// Some shortcut definitions from libraries we do not want to add as
 	// dependencies
-	if ([name isEqual:@"Gio.Application"])
-		return @"GApplication";
-	else if ([name isEqual:@"GObject.InitiallyUnowned"])
+	if ([name isEqual:@"GObject.InitiallyUnowned"])
 		return @"GInitiallyUnowned";
-	else if ([name containsString:@"GObject."] || [name containsString:@"Gio."] ||
-	    [name containsString:@"Soup."])
+	else if ([name containsString:@"GObject."] || [name containsString:@"Soup."])
 		return @"GObject";
 
 	// Case: Name has a namespace prefix
