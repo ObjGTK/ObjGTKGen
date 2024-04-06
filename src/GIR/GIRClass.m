@@ -76,8 +76,8 @@
 		if ([key isEqual:@"text"] || [key isEqual:@"glib:type-struct"] ||
 		    [key isEqual:@"glib:get-type"] || [key isEqual:@"glib:signal"] ||
 		    [key isEqual:@"glib:fundamental"] || [key isEqual:@"source-position"] ||
-		    [key isEqual:@"signal"] || [key isEqual:@"deprecated-version"] ||
-		    [key isEqual:@"doc-deprecated"] ||
+		    [key isEqual:@"signal"] || [key isEqual:@"deprecated"] ||
+		    [key isEqual:@"deprecated-version"] || [key isEqual:@"doc-deprecated"] ||
 		    // The following are used for class "Expression" only it seems
 		    [key isEqual:@"glib:ref-func"] || [key isEqual:@"glib:unref-func"] ||
 		    [key isEqual:@"glib:get-value-func"] || [key isEqual:@"glib:set-value-func"]) {
