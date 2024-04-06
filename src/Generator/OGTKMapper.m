@@ -183,8 +183,7 @@ static OGTKMapper *sharedMyMapper = nil;
 - (OFString *)swapTypes:(OFString *)type
 {
 	// Convert basic types by hardcoding
-	if ([type isEqual:@"GApplication"] || [type isEqual:@"GInitiallyUnowned"] ||
-	    [type isEqual:@"GObject"] || [type isEqual:@"GMountOperation"])
+	if ([type isEqual:@"GInitiallyUnowned"] || [type isEqual:@"GObject"])
 		return @"OGObject";
 	else if ([type isEqual:@"const gchar*"] || [type isEqual:@"gchar*"] ||
 	    [type isEqual:@"const char*"] || [type isEqual:@"gchar*"])
