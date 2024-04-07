@@ -13,7 +13,13 @@
     "customName": "OGdk3"
   },
   "Gtk-4.0": {
-    "customName": "ObjGTK4"
+    "customName": "ObjGTK4",
+    "excludeClasses": [
+      "PageSetupUnixDialog",
+      "PrintJob",
+      "PrintUnixDialog",
+      "Printer"
+    ]
   },
   "Gdk-4.0": {
     "customName": "OGdk4"
@@ -32,6 +38,11 @@
     ]
   },
   "Gsk-4.0":  {
-    "customName": "OGsk4"
+    "customName": "OGsk4",
+    "excludeClasses": [
+      "BroadwayRenderer",
+      "GLRenderer",
+      "NglRenderer"
+    ]
   },
 }

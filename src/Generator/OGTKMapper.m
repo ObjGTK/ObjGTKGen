@@ -148,6 +148,8 @@ static OGTKMapper *sharedMyMapper = nil;
 
 - (void)determineClassDependencies
 {
+	OFMutableArray *classesToRemove = [[OFMutableArray alloc] init];
+
 	for (OFString *className in _objcTypeToClassMapping) {
 		OGTKClass *classInfo = [_objcTypeToClassMapping objectForKey:className];
 
@@ -162,7 +164,24 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		for (OGTKMethod *method in classInfo.methods)
 			[self addDependenciesFromMethod:method to:classInfo];
+
+		if (classInfo.parentName == nil ||
+		    [classInfo.parentName isEqual:@"GObject.Object"] ||
+		    [classInfo.parentName isEqual:@"GObject.InitiallyUnowned"])
+			continue;
+
+		if (![self isGobjType:classInfo.cParentType]) {
+			OFLog(@"Parent c type of %@ is not in the GObject inheritance chain, "
+			      @"parent: %@, \n"
+			      @"Removing class…",
+			    classInfo.cName, classInfo.parentName);
+			[classesToRemove addObject:classInfo];
+		}
 	}
+
+	for (OGTKClass *currentClass in classesToRemove)
+		[self removeClass:currentClass];
+	[classesToRemove release];
 }
 
 - (void)detectAndMarkCircularClassDependencies
