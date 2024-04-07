@@ -71,7 +71,10 @@ static OFString *myDataDir;
 	}
 
 	if (range.location == OFNotFound) {
-		return nil;
+		OFString *outputFormat =
+		    [OFString stringWithFormat:@"%@%@", [[func substringToIndex:1] uppercaseString],
+		              [func substringFromIndex:1]];
+		return [OFString stringWithFormat:@"init%@", outputFormat];
 	} else {
 		return [OFString
 		    stringWithFormat:@"init%@", [func substringFromIndex:range.location + 3]];
