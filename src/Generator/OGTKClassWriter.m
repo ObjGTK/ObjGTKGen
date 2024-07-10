@@ -248,6 +248,13 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 		[output appendFormat:@"\t%@* gobjectValue = %@;\n\n", _classDescription.cType,
 		        constructorCall];
 
+		if (_classDescription.derivedFromInitiallyUnowned) {
+			[output
+			    appendFormat:@"\t// Class is derived from GInitiallyUnowned, so this "
+			                 @"reference is floating. Own it:\n"];
+			[output appendFormat:@"\tg_object_ref_sink(gobjectValue);\n\n"];
+		}
+
 		// Process error handling of the GObject init
 		if (ctor.throws)
 			[output appendString:

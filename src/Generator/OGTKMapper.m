@@ -444,11 +444,18 @@ static OGTKMapper *sharedMyMapper = nil;
 
 		[stack setObject:@"1" forKey:classInfo.cParentType];
 		[self walkDependencyTreeFrom:parentClassInfo usingStack:stack];
+
+		if (parentClassInfo.derivedFromInitiallyUnowned)
+			classInfo.derivedFromInitiallyUnowned = true;
+
 	} else if (parentClassInfo == nil) {
 		// OFLog(@"Marked class %@ as topmost node. Parent cType is
 		// %@.",
 		//     classInfo.cName, classInfo.cParentType);
 		classInfo.topMostGraphNode = true;
+
+		if ([classInfo.cParentType isEqual:@"GInitiallyUnowned"])
+			classInfo.derivedFromInitiallyUnowned = true;
 	}
 
 	// OFLog(@"Checking dependencies of %@.", classInfo.cType);

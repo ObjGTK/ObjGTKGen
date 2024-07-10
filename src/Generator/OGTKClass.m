@@ -14,7 +14,8 @@
             cNSSymbolPrefix = _cNSSymbolPrefix, cNSIdentifierPrefix = _cNSIdentifierPrefix,
             documentation = _documentation, dependsOnClasses = _dependsOnClasses,
             forwardDeclarationForClasses = _forwardDeclarationForClasses, visited = _visited,
-            topMostGraphNode = _topMostGraphNode;
+            topMostGraphNode = _topMostGraphNode,
+            derivedFromInitiallyUnowned = _derivedFromInitiallyUnowned;
 
 - (instancetype)init
 {
@@ -28,6 +29,7 @@
 		_forwardDeclarationForClasses = [[OFMutableSet alloc] init];
 		_visited = false;
 		_topMostGraphNode = false;
+		_derivedFromInitiallyUnowned = false;
 	} @catch (id e) {
 		[self release];
 		@throw e;

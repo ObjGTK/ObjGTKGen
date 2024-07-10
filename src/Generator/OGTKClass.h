@@ -29,6 +29,7 @@
 	OFMutableSet *_forwardDeclarationForClasses;
 	bool _visited;
 	bool _topMostGraphNode;
+	bool _derivedFromInitiallyUnowned;
 
       @private
 	OFString *_typeWithoutPrefix;
@@ -54,6 +55,7 @@
 @property (readonly, nonatomic) OFMutableSet *forwardDeclarationForClasses;
 @property bool visited;
 @property bool topMostGraphNode;
+@property bool derivedFromInitiallyUnowned;
 
 /**
  * @brief      Return the Gobject cast macro for this class
