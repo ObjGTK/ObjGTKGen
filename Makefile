@@ -1,6 +1,6 @@
 SUBDIRS = src
-PROG = objgtkgen
-OBJS_EXTRA = src/objgtkgen.a
+PROG = gir2objc
+OBJS_EXTRA = src/gir2objc.a
 
 include buildsys.mk
 

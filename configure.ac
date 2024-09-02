@@ -1,4 +1,4 @@
-AC_INIT(ObjGTKGen, 0.2, objfw@codingpastor.de)
+AC_INIT(gir2objc, 0.2, objfw@devbeejohn.de)
 AC_CONFIG_SRCDIR(src)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(build-aux/m4)

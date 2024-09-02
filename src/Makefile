@@ -3,7 +3,7 @@ SUBDIRS = Exceptions \
 	GIR \
 	XMLReader
 
-STATIC_LIB_NOINST = objgtkgen.a
+STATIC_LIB_NOINST = gir2objc.a
 
 OBJS_EXTRA = Exceptions/lib.a \
 	Generator/lib.a \
@@ -11,7 +11,7 @@ OBJS_EXTRA = Exceptions/lib.a \
 	XMLReader/lib.a
 
 SRCS = Gir2Objc.m \
-	ObjGTKGen.m
+	Gir2ObjcApplication.m
 
 include ../buildsys.mk
 

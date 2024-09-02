@@ -12,7 +12,8 @@ autom4te.cache
 build
 build-dir
 .flatpak-builder
-objgtkgen
+gir2objc
 .DS_Store
 Output
 *.sublime-workspace
+*~

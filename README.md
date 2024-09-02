@@ -1,27 +1,26 @@
-ObjGTKGen
+gir2objc
 ==========
 
-ObjGTKGen is a utility that generates Objective-C language bindings for GNOME GLib/Gobject based libraries using GObject Introspection (GOI), which it does by parsing GIR files.
+gir2objc is a utility that generates Objective-C language bindings for GNOME GLib/Gobject based libraries using GObject Introspection (GOI), which it does by parsing GIR files.
 
-ObjGTK is a fork of [CoreGTK](https://github.com/coregtk)(Gen) by Tyler Burton for use
-with [ObjFW](https://objfw.nil.im/) by Jonathan Schleifer.
+It belongs to the ObjGTK project, which is a fork of [CoreGTK](https://github.com/coregtk), originally by Tyler Burton, now for use with [ObjFW](https://objfw.nil.im/) by Jonathan Schleifer.
 
 ## Usage
 
-You may run `objgtkgen` as installed binary (f.e. within a flatpak app) or locally. it expects `Config`, `Resources` and `LibrarySourceAdditions` directories with the corresponding files to work with. It will look for these either in the configured data path (f.e. `/usr/share/ObjGTKGen/`) or `.` if the configured path is empty. You may tweak the app configuration and behaviour using the `global_conf.json` and `library_conf.json` files.
+You may run `gir2objc` as installed binary (f.e. within a flatpak app) or locally. it expects `Config`, `Resources` and `LibrarySourceAdditions` directories with the corresponding files to work with. It will look for these either in the configured data path (f.e. `/usr/share/gir2objc/`) or `.` if the configured path is empty. You may tweak the app configuration and behaviour using the `global_conf.json` and `library_conf.json` files.
 
 Run it like so:
 
 ```
-objgtkgen </path/to/file.gir>
+gir2objc </path/to/file.gir>
 ```
 
 f.e.
 ```
-objgtkgen /usr/share/gir-1.0/Gtk-3.0.gir
+gir2objc /usr/share/gir-1.0/Gtk-4.0.gir
 ```
 
-This will generate the library definition for GTK3 into the output dir specified by the config file. The output will include all the library dependencies specified by `Gtk-3.0.gir`.
+This will generate the library definition for GTK3 into the output dir specified by the config file. The output will include all the library dependencies specified by `Gtk-4.0.gir`.
 
 The generator is going to lookup these dependencies recursively at the path of the gir file specified as argument. You may exclude library and class dependencies of each library by modifying `global_conf.json` and `library_conf.json`.
 
@@ -45,8 +44,7 @@ The generator is going to lookup these dependencies recursively at the path of t
 
 ### GIR files
 
-You may use the GIR files and libraries provided by your Linux distribution. F.e. for Debian Unstable and GTK3 use `apt install gir1.2-gtk-3.0`.
-  - see packages starting with `gir1.2` for further library introspection provided by Debian you may use to generate ObjC/ObjFW bindings
+You may use the GIR files and libraries provided by your Linux distribution. F.e. for Debian Unstable and GTK 4 use `apt install libgtk-4-dev`.
 
 If you don't use a rolling Linux distribution, the GIR packages and its library sets may be out of date and lack features required by this generator. It then may be more appropriate to use some more recent library releases. If you want to get the current libraries (read: daily builds of the GNOME SDK) you may use flatpak (see below).
 
@@ -67,15 +65,15 @@ flatpak install org.gnome.Sdk//master -y --noninteractive
 flatpak install org.freedesktop.Sdk.Extension.llvm17 -y --noninteractive
 
 # Build binary and install it in its sandbox
-flatpak-builder build-dir --force-clean org.codeberg.objgtk.objgtkgen.yml --user --install
+flatpak-builder build-dir --force-clean org.codeberg.objgtk.gir2objc.yml --user --install
 
 # Run the app: This will use the most current GIR files from the SDK and output ObjGTK4 to your local working directory:
-flatpak run org.codeberg.ObjGTK.ObjGTKGen /usr/share/gir-1.0/Gtk-4.0.gir
+flatpak run org.codeberg.ObjGTK.gir2objc /usr/share/gir-1.0/Gtk-4.0.gir
 ```
 
 ## Licensing
 
-ObjGTKGen is free software. Its source files Tyler Burton originally released under
+gir2objc is free software. Its source files Tyler Burton originally released under
 GNU LGPL 2.1 or later. This licensing was kept for the files existing and for the directory LibrarySourceAdditions, which is meant to be part of the generated libraries and is NOT part of the generator.
 
 In consent with Tyler Burton the generator itself is released under GNU GPL 3.0 or later.

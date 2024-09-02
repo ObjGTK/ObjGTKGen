@@ -1,8 +1,8 @@
-app-id: org.codeberg.ObjGTK.ObjGTKGen
+app-id: org.codeberg.ObjGTK.gir2objc
 runtime: org.gnome.Sdk//master
 sdk: org.gnome.Sdk//master
 sdk-extensions: ['org.freedesktop.Sdk.Extension.llvm17']
-command: objgtkgen
+command: gir2objc
 finish-args:
   - --filesystem=home
   # X11 + XShm access
@@ -35,7 +35,7 @@ modules:
         url: https://codeberg.org/ObjGTK/OGObject.git
         branch: main
 
-  - name: objgtkgen
+  - name: gir2objc
     sources:
       - type: git
         branch: main

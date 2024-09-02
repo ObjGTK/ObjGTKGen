@@ -14,7 +14,7 @@
 #import "Generator/OGTKLibraryWriter.h"
 #import "Gir2Objc.h"
 
-@interface ObjGTKGen: OFObject <OFApplicationDelegate>
+@interface Gir2ObjcApplication: OFObject <OFApplicationDelegate>
 {
 
       @private
@@ -29,7 +29,7 @@
 
 @end
 
-@interface ObjGTKGen ()
+@interface Gir2ObjcApplication ()
 - (OGTKLibrary *)loadAPIFromFile:(OFString *)girFile;
 
 - (void)loadLibraryDependenciesOf:(OGTKLibrary *)baseLibraryInfo;
@@ -39,9 +39,9 @@
                               toDir:(OFString *)outputDir;
 @end
 
-OF_APPLICATION_DELEGATE(ObjGTKGen)
+OF_APPLICATION_DELEGATE(Gir2ObjcApplication)
 
-@implementation ObjGTKGen
+@implementation Gir2ObjcApplication
 
 @synthesize excludeLibraries = _excludeLibraries, girDir = _girDir, sharedMapper = _sharedMapper;
 
