@@ -60,13 +60,13 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		// If this class was needed we would need to implement "deprecated"
 		if ([key isEqual:@"text"] || [key isEqual:@"glib:type-name"] ||
 		    [key isEqual:@"glib:type-struct"] || [key isEqual:@"glib:signal"] ||
 		    [key isEqual:@"glib:get-type"] || [key isEqual:@"source-position"] ||
 		    [key isEqual:@"version"] || [key isEqual:@"signal"] ||
 		    [key isEqual:@"deprecated-version"] || [key isEqual:@"doc-deprecated"] ||
-		    [key isEqual:@"deprecated"]) {
+		    [key isEqual:@"deprecated"] || [key isEqual:@"callback"] ||
+		    [key isEqual:@"constant"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
