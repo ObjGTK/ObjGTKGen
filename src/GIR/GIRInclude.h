@@ -12,7 +12,7 @@
 @interface GIRInclude: GIRBase
 {
 	OFString *_name;
-    OFString *_version;
+	OFString *_version;
 }
 
 @property (nonatomic, copy) OFString *name;

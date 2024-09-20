@@ -33,7 +33,7 @@
 
 /**
  * @brief A comma separated list of shared libraries
- * 
+ *
  */
 @property (nonatomic, copy) OFString *sharedLibrary;
 @property (nonatomic, copy) OFString *cSymbolPrefixes;

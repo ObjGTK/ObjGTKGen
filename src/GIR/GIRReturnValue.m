@@ -49,8 +49,10 @@ OFString *const kOwnershipTransferTypeFloating = @"floating";
 		id value = [dict objectForKey:key];
 
 		// TODO: Do we need to translate nullable into ObjC?
+		// TODO: Handle scope and closure for returning blocks?
 		if ([key isEqual:@"text"] || [key isEqual:@"nullable"] ||
-		    [key isEqual:@"attribute"]) {
+		    [key isEqual:@"attribute"] || [key isEqual:@"scope"] ||
+		    [key isEqual:@"closure"] || [key isEqual:@"destroy"]) {
 			// Do nothing
 		} else if ([key isEqual:@"transfer-ownership"]) {
 			if ([value isEqual:kOwnershipTransferTypeNone] ||

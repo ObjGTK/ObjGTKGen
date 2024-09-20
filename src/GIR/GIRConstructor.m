@@ -65,34 +65,22 @@
 		} else if ([key isEqual:@"throws"]) {
 			self.throws = [value isEqual:@"1"];
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"doc-deprecated"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"return-value"]) {
-			self.returnValue = [[[GIRReturnValue alloc]
-			    initWithDictionary:value] autorelease];
+			self.returnValue =
+			    [[[GIRReturnValue alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"parameters"]) {
 			for (OFString *paramKey in value) {
 				if ([paramKey isEqual:@"parameter"]) {
-					[self processArrayOrDictionary:
-					          [value objectForKey:paramKey]
-					                     withClass:
-					                         [GIRParameter
-					                             class]
-					                      andArray:
-					                          _parameters];
-				} else if ([paramKey
-				               isEqual:@"instance-parameter"]) {
-					[self
-					    processArrayOrDictionary:
-					        [value objectForKey:paramKey]
-					                   withClass:
-					                       [GIRParameter
-					                           class]
-					                    andArray:
-					                        _instanceParameters];
+					[self processArrayOrDictionary:[value objectForKey:paramKey]
+					                     withClass:[GIRParameter class]
+					                      andArray:_parameters];
+				} else if ([paramKey isEqual:@"instance-parameter"]) {
+					[self processArrayOrDictionary:[value objectForKey:paramKey]
+					                     withClass:[GIRParameter class]
+					                      andArray:_instanceParameters];
 				}
 			}
 		} else {

@@ -46,8 +46,6 @@ typedef enum LogLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 } LogLevel;
  * Extracts information from the array or dictionary (values) into the provided
  * array using the provided class type
  */
-- (void)processArrayOrDictionary:(id)values
-                       withClass:(Class)clazz
-                        andArray:(OFMutableArray *)array;
+- (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray *)array;
 
 @end

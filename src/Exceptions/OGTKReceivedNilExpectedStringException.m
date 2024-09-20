@@ -38,9 +38,8 @@
 {
 	if (_parameterName != nil)
 		return [OFString
-		    stringWithFormat:
-		        @"Invalid type: Received nil value as parameter for %@ "
-		        @"but expected instance of OFString.",
+		    stringWithFormat:@"Invalid type: Received nil value as parameter for %@ "
+		                     @"but expected instance of OFString.",
 		    _parameterName];
 	else
 		return @"Invalid format: Received nil value as parameter but "

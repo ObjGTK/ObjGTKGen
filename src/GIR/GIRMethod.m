@@ -74,8 +74,11 @@
 
 - (bool)tryParseWithKey:(OFString *)key andValue:(id)value
 {
+	// TODO: Use async parameters for async/block API
 	if ([key isEqual:@"text"] || [key isEqual:@"source-position"] ||
-	    [key isEqual:@"moved-to"] || [key isEqual:@"doc-version"]) {
+	    [key isEqual:@"moved-to"] || [key isEqual:@"doc-version"] ||
+	    [key isEqual:@"glib:finish-func"] || [key isEqual:@"glib:async-func"] ||
+	    [key isEqual:@"glib:sync-func"]) {
 		// Do nothing
 	} else if ([key isEqual:@"name"]) {
 		self.name = value;
@@ -93,14 +96,11 @@
 	} else if ([key isEqual:@"glib:set-property"]) {
 		self.glibSetForProperty = value;
 	} else if ([key isEqual:@"return-value"]) {
-		self.returnValue = [[[GIRReturnValue alloc]
-		    initWithDictionary:value] autorelease];
+		self.returnValue = [[[GIRReturnValue alloc] initWithDictionary:value] autorelease];
 	} else if ([key isEqual:@"doc"]) {
-		self.doc =
-		    [[[GIRDoc alloc] initWithDictionary:value] autorelease];
+		self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 	} else if ([key isEqual:@"doc-deprecated"]) {
-		self.docDeprecated =
-		    [[[GIRDoc alloc] initWithDictionary:value] autorelease];
+		self.docDeprecated = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 	} else if ([key isEqual:@"deprecated"]) {
 		self.deprecated = [value isEqual:@"1"];
 	} else if ([key isEqual:@"deprecated-version"]) {
@@ -118,18 +118,13 @@
 	} else if ([key isEqual:@"parameters"]) {
 		for (OFString *paramKey in value) {
 			if ([paramKey isEqual:@"parameter"]) {
-				[self processArrayOrDictionary:
-				          [value objectForKey:paramKey]
-				                     withClass:[GIRParameter
-				                                   class]
+				[self processArrayOrDictionary:[value objectForKey:paramKey]
+				                     withClass:[GIRParameter class]
 				                      andArray:_parameters];
 			} else if ([paramKey isEqual:@"instance-parameter"]) {
-				[self processArrayOrDictionary:
-				          [value objectForKey:paramKey]
-				                     withClass:[GIRParameter
-				                                   class]
-				                      andArray:
-				                          _instanceParameters];
+				[self processArrayOrDictionary:[value objectForKey:paramKey]
+				                     withClass:[GIRParameter class]
+				                      andArray:_instanceParameters];
 			}
 		}
 	} else {

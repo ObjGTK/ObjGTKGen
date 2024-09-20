@@ -65,9 +65,7 @@ static LogLevel logLevel = Info;
 	return self;
 }
 
-- (void)processArrayOrDictionary:(id)values
-                       withClass:(Class)clazz
-                        andArray:(OFMutableArray *)array;
+- (void)processArrayOrDictionary:(id)values withClass:(Class)clazz andArray:(OFMutableArray *)array;
 {
 	// If the values are a dictionary call it directly
 	if ([values isKindOfClass:[OFDictionary class]]) {
@@ -79,9 +77,7 @@ static LogLevel logLevel = Info;
 		}
 	} else if ([values isKindOfClass:[OFArray class]]) {
 		for (id object in values) {
-			[self processArrayOrDictionary:object
-			                     withClass:clazz
-			                      andArray:array];
+			[self processArrayOrDictionary:object withClass:clazz andArray:array];
 		}
 	} else
 		@throw [OFInvalidArgumentException exception];
@@ -93,15 +89,13 @@ static LogLevel logLevel = Info;
 		self.unknownElements = [OFMutableDictionary dictionary];
 	}
 
-	OFString *hopefullyUniqueKey = [OFString
-	    stringWithFormat:@"%@--%@", self.elementTypeName, element];
+	OFString *hopefullyUniqueKey =
+	    [OFString stringWithFormat:@"%@--%@", self.elementTypeName, element];
 
 	if ([self.unknownElements objectForKey:hopefullyUniqueKey] != nil) {
-		[self.unknownElements setObject:hopefullyUniqueKey
-		                         forKey:hopefullyUniqueKey];
+		[self.unknownElements setObject:hopefullyUniqueKey forKey:hopefullyUniqueKey];
 	} else {
-		[GIRBase log:[OFString stringWithFormat:
-		                           @"[%@]: Found unknown element: [%@]",
+		[GIRBase log:[OFString stringWithFormat:@"[%@]: Found unknown element: [%@]",
 		                       self.elementTypeName, element]
 		    andLevel:Warning];
 	}

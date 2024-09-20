@@ -38,14 +38,14 @@
 			self.isPrivate = [value isEqual:@"1"];
 		} else if ([key isEqual:@"readable"]) {
 			self.readable = [value isEqual:@"1"];
+		} else if ([key isEqual:@"writable"]) {
+			self.writable = [value isEqual:@"1"];
 		} else if ([key isEqual:@"bits"]) {
 			self.bits = [value longLongValue];
 		} else if ([key isEqual:@"type"]) {
-			self.type = [[[GIRType alloc] initWithDictionary:value]
-			    autorelease];
+			self.type = [[[GIRType alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"array"]) {
-			self.array = [[[GIRArray alloc]
-			    initWithDictionary:value] autorelease];
+			self.array = [[[GIRArray alloc] initWithDictionary:value] autorelease];
 		} else {
 			[self logUnknownElement:key];
 		}

@@ -25,8 +25,7 @@
  * @param      girFile  The GIR file name
  * @param      girDict  The target dictionary
  */
-+ (void)parseGirFromFile:(OFString *)girFile
-          intoDictionary:(OFDictionary **)girDict;
++ (void)parseGirFromFile:(OFString *)girFile intoDictionary:(OFDictionary **)girDict;
 
 /**
  * Iterates through the OFDictionary recursively looking for the first "api" or

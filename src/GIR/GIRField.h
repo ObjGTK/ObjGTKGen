@@ -16,6 +16,7 @@
 	OFString *_name;
 	bool _isPrivate;
 	bool _readable;
+	bool _writable;
 	int _bits;
 	GIRType *_type;
 	GIRArray *_array;
@@ -24,6 +25,7 @@
 @property (nonatomic, retain) OFString *name;
 @property (nonatomic) bool isPrivate;
 @property (nonatomic) bool readable;
+@property (nonatomic) bool writable;
 @property (nonatomic) int bits;
 @property (nonatomic, retain) GIRType *type;
 @property (nonatomic, retain) GIRArray *array;

@@ -41,8 +41,7 @@
 		id value = [dict objectForKey:key];
 
 		if ([key isEqual:@"text"] || [key isEqual:@"source-position"] ||
-		    [key isEqual:@"glib:type-name"] ||
-		    [key isEqual:@"glib:get-type"] ||
+		    [key isEqual:@"glib:type-name"] || [key isEqual:@"glib:get-type"] ||
 		    [key isEqual:@"glib:error-domain"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:type"]) {
@@ -56,11 +55,10 @@
 		} else if ([key isEqual:@"deprecated"]) {
 			self.deprecated = [value isEqual:@"1"];
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"doc-deprecated"]) {
-			self.docDeprecated = [[[GIRDoc alloc]
-			    initWithDictionary:value] autorelease];
+			self.docDeprecated =
+			    [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"member"]) {
 			[self processArrayOrDictionary:value
 			                     withClass:[GIRMember class]
@@ -85,9 +83,7 @@
 	}
 
 	if ([object isKindOfClass:[OFDictionary class]]) {
-		[_members
-		    addObject:[[[GIRMember alloc] initWithDictionary:object]
-		                  autorelease]];
+		[_members addObject:[[[GIRMember alloc] initWithDictionary:object] autorelease]];
 	}
 }
 
@@ -102,8 +98,7 @@
 
 	if ([object isKindOfClass:[OFDictionary class]]) {
 		[_functions
-		    addObject:[[[GIRFunction alloc] initWithDictionary:object]
-		                  autorelease]];
+		    addObject:[[[GIRFunction alloc] initWithDictionary:object] autorelease]];
 	}
 }
 

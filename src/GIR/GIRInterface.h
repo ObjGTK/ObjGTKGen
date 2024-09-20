@@ -27,7 +27,7 @@
 	OFMutableArray *_methods;
 	OFMutableArray *_virtualMethods;
 	OFMutableArray *_properties;
-	OFMutableArray OF_GENERIC(GIRPrerequisite*) *_prerequisites;
+	OFMutableArray OF_GENERIC(GIRPrerequisite *) * _prerequisites;
 }
 
 @property (nonatomic, retain) OFString *name;
@@ -39,6 +39,6 @@
 @property (nonatomic, retain) OFMutableArray *methods;
 @property (nonatomic, retain) OFMutableArray *virtualMethods;
 @property (nonatomic, retain) OFMutableArray *properties;
-@property (nonatomic, retain) OFMutableArray OF_GENERIC(GIRPrerequisite*) *prerequisites;
+@property (nonatomic, retain) OFMutableArray OF_GENERIC(GIRPrerequisite *) * prerequisites;
 
 @end

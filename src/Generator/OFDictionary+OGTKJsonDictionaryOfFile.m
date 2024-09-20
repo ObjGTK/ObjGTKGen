@@ -12,12 +12,10 @@ int _OFDictionary_OGTKJsonDictionaryOfFile_reference;
 
 - (instancetype)ogtk_initWithJsonDictionaryOfFile:(OFString *)filePath
 {
-	id object =
-	    [[OFString stringWithContentsOfFile:filePath] objectByParsingJSON];
+	id object = [[OFString stringWithContentsOfFile:filePath] objectByParsingJSON];
 	if (![object isKindOfClass:[OFDictionary class]])
 		@throw [OFInvalidJSONException
-		    exceptionWithString:
-		        @"JSON file does not contain a dictionary."
+		    exceptionWithString:@"JSON file does not contain a dictionary."
 		                   line:0];
 
 	self = [self initWithDictionary:object];

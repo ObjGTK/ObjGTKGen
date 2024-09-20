@@ -10,9 +10,8 @@
 @implementation GIRNamespace
 
 @synthesize name = _name, version = _version, sharedLibrary = _sharedLibrary,
-            cSymbolPrefixes = _cSymbolPrefixes,
-            cIdentifierPrefixes = _cIdentifierPrefixes, classes = _classes,
-            functions = _functions, enumerations = _enumerations,
+            cSymbolPrefixes = _cSymbolPrefixes, cIdentifierPrefixes = _cIdentifierPrefixes,
+            classes = _classes, functions = _functions, enumerations = _enumerations,
             constants = _constants, interfaces = _interfaces;
 
 - (instancetype)init
@@ -55,10 +54,10 @@
 	for (OFString *key in dict) {
 		id value = [dict objectForKey:key];
 
-		if ([key isEqual:@"text"] || [key isEqual:@"record"] ||
-		    [key isEqual:@"callback"] || [key isEqual:@"bitfield"] ||
-		    [key isEqual:@"alias"] || [key isEqual:@"function-macro"] ||
-		    [key isEqual:@"docsection"] || [key isEqual:@"union"]) {
+		if ([key isEqual:@"text"] || [key isEqual:@"record"] || [key isEqual:@"callback"] ||
+		    [key isEqual:@"bitfield"] || [key isEqual:@"alias"] ||
+		    [key isEqual:@"function-macro"] || [key isEqual:@"docsection"] ||
+		    [key isEqual:@"union"] || [key isEqual:@"c:prefix"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;

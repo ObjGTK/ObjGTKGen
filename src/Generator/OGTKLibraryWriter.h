@@ -58,8 +58,7 @@
  * @param      content      The content string
  * @param      replaceDict  The replace dictionary (replace keys by values)
  */
-+ (OFString *)forFileContent:(OFString *)content
-                replaceUsing:(OFDictionary *)replaceDict;
++ (OFString *)forFileContent:(OFString *)content replaceUsing:(OFDictionary *)replaceDict;
 
 /**
  * @brief      Initializes the with library description object which is then
@@ -101,8 +100,7 @@
  * @param      additionalHeaderDir  The directory to look into for additional
  * headers
  */
-- (void)generateUmbrellaHeaderFileWithAdditionalHeadersFromDir:
-    (OFString *)additionalHeaderDir;
+- (void)generateUmbrellaHeaderFileWithAdditionalHeadersFromDir:(OFString *)additionalHeaderDir;
 
 /**
  * @brief      Copies the files for the build system for our library. To adjust

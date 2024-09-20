@@ -39,8 +39,7 @@
  * @param      sharedMapper  The mapper object holding the class definition
  *                           files for a library
  */
-- (instancetype)initWithSnippetDir:(OFString *)snippetDir
-                      sharedMapper:(OGTKMapper *)sharedMapper;
+- (instancetype)initWithSnippetDir:(OFString *)snippetDir sharedMapper:(OGTKMapper *)sharedMapper;
 
 /**
  * @brief      Returns a dictionary that holds keys that need to be replaced
@@ -54,9 +53,8 @@
  * @return     The dictionary holding strings as keys that need to be replaced
  *             by values within the autoconf/buildsys files.
  */
-- (OFDictionary *)
-    dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
-                                    sourceFiles:(OFString *)sourceFiles;
+- (OFDictionary *)dictWithReplaceValuesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo
+                                                  sourceFiles:(OFString *)sourceFiles;
 
 /**
  * @brief      Returns a dictionary that holds keys of file names that need to
@@ -67,7 +65,6 @@
  * @return     The dictionary holding file names as keys that need to be renamed
  *             to values.
  */
-- (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:
-    (OGTKLibrary *)libraryInfo;
+- (OFDictionary *)dictWithRenamesForBuildFilesOfLibrary:(OGTKLibrary *)libraryInfo;
 
 @end

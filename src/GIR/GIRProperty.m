@@ -59,8 +59,7 @@
 		id value = [dict objectForKey:key];
 
 		if ([key isEqual:@"text"] || [key isEqual:@"introspectable"] ||
-		    [key isEqual:@"attribute"] ||
-		    [key isEqual:@"default-value"]) {
+		    [key isEqual:@"attribute"] || [key isEqual:@"default-value"]) {
 			// Do nothing
 		} else if ([key isEqual:@"name"]) {
 			self.name = value;
@@ -71,14 +70,12 @@
 		} else if ([key isEqual:@"deprecated-version"]) {
 			self.deprecatedVersion = value;
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"doc-deprecated"]) {
-			self.docDeprecated = [[[GIRDoc alloc]
-			    initWithDictionary:value] autorelease];
+			self.docDeprecated =
+			    [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"type"]) {
-			self.type = [[[GIRType alloc] initWithDictionary:value]
-			    autorelease];
+			self.type = [[[GIRType alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"allow-none"]) {
 			self.allowNone = [value isEqual:@"1"];
 		} else if ([key isEqual:@"construct-only"]) {
@@ -96,8 +93,7 @@
 		} else if ([key isEqual:@"setter"]) {
 			self.setter = value;
 		} else if ([key isEqual:@"array"]) {
-			self.array = [[[GIRArray alloc]
-			    initWithDictionary:value] autorelease];
+			self.array = [[[GIRArray alloc] initWithDictionary:value] autorelease];
 		} else {
 			[self logUnknownElement:key];
 		}

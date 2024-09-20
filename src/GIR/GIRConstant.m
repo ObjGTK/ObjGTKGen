@@ -39,7 +39,7 @@
 		id value = [dict objectForKey:key];
 
 		if ([key isEqual:@"text"] || [key isEqual:@"type"] ||
-		    [key isEqual:@"source-position"]) {
+		    [key isEqual:@"source-position"] || [key isEqual:@"c:identifier"]) {
 			// Do nothing
 		} else if ([key isEqual:@"c:type"]) {
 			self.cType = value;
@@ -54,14 +54,12 @@
 		} else if ([key isEqual:@"deprecated"]) {
 			self.deprecated = [value isEqual:@"1"];
 		} else if ([key isEqual:@"doc"]) {
-			self.doc = [[[GIRDoc alloc] initWithDictionary:value]
-			    autorelease];
+			self.doc = [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"doc-deprecated"]) {
-			self.docDeprecated = [[[GIRDoc alloc]
-			    initWithDictionary:value] autorelease];
+			self.docDeprecated =
+			    [[[GIRDoc alloc] initWithDictionary:value] autorelease];
 		} else if ([key isEqual:@"type"]) {
-			self.type = [[[GIRType alloc] initWithDictionary:value]
-			    autorelease];
+			self.type = [[[GIRType alloc] initWithDictionary:value] autorelease];
 		} else {
 			[self logUnknownElement:key];
 		}
