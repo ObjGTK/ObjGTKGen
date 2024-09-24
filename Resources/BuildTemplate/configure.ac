@@ -77,5 +77,5 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(%%UCLIBNAME%%_CPPFLAGS)
 AC_SUBST(%%UCLIBNAME%%_LIBS)
 
-AC_CONFIG_FILES([buildsys.mk extra.mk %%LIBNAME%%.oc])
+AC_CONFIG_FILES([buildsys.mk extra.mk %%LIBNAME%%.oc src/Info.plist])
 AC_OUTPUT
