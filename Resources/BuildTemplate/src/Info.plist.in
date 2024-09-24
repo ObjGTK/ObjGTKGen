@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleExecutable</key>
-	<string>%%LCLIBNAME%%</string>
+	<string>@PACKAGE_NAME@</string>
 	<key>CFBundleName</key>
-	<string>%%LIBNAME%%</string>
+	<string>@PACKAGE_NAME@</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.codeberg.objgtk.%%LCLIBNAME%%</string>
 	<key>CFBundleInfoDictionaryVersion</key>
