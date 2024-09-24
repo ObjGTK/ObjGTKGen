@@ -56,6 +56,7 @@ AC_MSG_CHECKING(for ObjFW package OGObject)
 AS_IF([$OBJFW_CONFIG --package OGObject], [AC_MSG_RESULT(yes)
 	CPPFLAGS="$CPPFLAGS $($OBJFW_CONFIG --package OGObject --cppflags)"
 	LIBS="$LIBS $($OBJFW_CONFIG --package OGObject --libs)"
+	FRAMEWORK_LIBS="$($OBJFW_CONFIG --package OGObject --framework-libs) $FRAMEWORK_LIBS"
 ], [
 	AC_MSG_ERROR(You need ObjFW package OGObject installed.)
 ])

@@ -2,6 +2,7 @@ AC_MSG_CHECKING(for ObjFW package %%DEPNAME%%)
 AS_IF([$OBJFW_CONFIG --package %%DEPNAME%%], [AC_MSG_RESULT(yes)
 	CPPFLAGS="$CPPFLAGS $($OBJFW_CONFIG --package %%DEPNAME%% --cppflags)"
 	LIBS="$LIBS $($OBJFW_CONFIG --package %%DEPNAME%% --libs)"
+	FRAMEWORK_LIBS="$($OBJFW_CONFIG --package %%DEPNAME%% --framework-libs) $FRAMEWORK_LIBS"
 ], [
 	AC_MSG_ERROR(You need ObjFW package %%DEPNAME%% installed.)
 ])
