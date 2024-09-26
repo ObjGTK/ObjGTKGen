@@ -94,7 +94,7 @@
 
 - (OFString *)macroCastGObject
 {
-	return [[OFString stringWithFormat:@"%@_%@", _cNSSymbolPrefix, _cSymbolPrefix]
+	return [[OFString stringWithFormat:@"%@_%@", _cNSIdentifierPrefix, _cSymbolPrefix]
 	    uppercaseString];
 }
 
