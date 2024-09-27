@@ -6,6 +6,7 @@
  */
 
 #import "OGTKClass.h"
+#include <ObjFW/OFString.h>
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
@@ -55,8 +56,6 @@
 	[_dependsOnClasses release];
 	[_forwardDeclarationForClasses release];
 
-	[_typeWithoutPrefix release];
-
 	[super dealloc];
 }
 
@@ -65,37 +64,18 @@
 	if (self.cType == nil)
 		@throw [OGTKReceivedNilExpectedStringException exception];
 
-	if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] && [self.cType hasPrefix:@"Gtk"]) {
+	if ([self.cNSIdentifierPrefix isEqual:@"Gtk"] && [self.cType hasPrefix:@"Gtk"])
+		return [OFString stringWithFormat:@"OGTK%@", _cName];
 
-		if (_typeWithoutPrefix == nil) {
-			size_t prefixLength = self.cNSIdentifierPrefix.length;
+	if ([self.cNSIdentifierPrefix isEqual:@"G"] && [self.cType hasPrefix:@"G"])
+		return [OFString stringWithFormat:@"OG%@", _cName];
 
-			_typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
-
-			[_typeWithoutPrefix retain];
-		}
-
-		return [OFString stringWithFormat:@"OGTK%@", _typeWithoutPrefix];
-
-	} else if ([self.cNSIdentifierPrefix isEqual:@"G"] && [self.cType hasPrefix:@"G"]) {
-
-		if (_typeWithoutPrefix == nil) {
-			size_t prefixLength = self.cNSIdentifierPrefix.length;
-
-			_typeWithoutPrefix = [self.cType substringFromIndex:prefixLength];
-
-			[_typeWithoutPrefix retain];
-		}
-
-		return [OFString stringWithFormat:@"OG%@", _typeWithoutPrefix];
-	}
 	return [OFString stringWithFormat:@"OG%@", self.cType];
 }
 
-- (OFString *)macroCastGObject
+- (OFString *)castGObjectMacro:(OFString *)variableName
 {
-	return [[OFString stringWithFormat:@"%@_%@", _cNSIdentifierPrefix, _cSymbolPrefix]
-	    uppercaseString];
+	return [OFString stringWithFormat:@"G_TYPE_CHECK_INSTANCE_CAST(%@, %@, %@)", variableName, _cType, _cType];
 }
 
 - (void)addConstructor:(OGTKMethod *)constructor

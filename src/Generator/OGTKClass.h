@@ -30,9 +30,6 @@
 	bool _visited;
 	bool _topMostGraphNode;
 	bool _derivedFromInitiallyUnowned;
-
-      @private
-	OFString *_typeWithoutPrefix;
 }
 
 @property (copy, nonatomic) OFString *cName;
@@ -60,7 +57,7 @@
 /**
  * @brief      Return the Gobject cast macro for this class
  */
-- (OFString *)macroCastGObject;
+- (OFString *)castGObjectMacro:(OFString *)variableName;
 - (void)addConstructor:(OGTKMethod *)ctor;
 - (void)addFunction:(OGTKMethod *)fun;
 - (void)addMethod:(OGTKMethod *)meth;

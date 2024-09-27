@@ -328,9 +328,7 @@ static OGTKMapper *sharedMyMapper = nil;
 		OGTKClass *classInfo =
 		    [_gobjTypeToClassMapping objectForKey:[self stripAsterisks:type]];
 
-		OFString *functionMacroName = classInfo.macroCastGObject;
-
-		return [OFString stringWithFormat:@"%@%@", functionMacroName, @"([self gObject])"];
+		return [classInfo castGObjectMacro:@"[self gObject]"];
 	}
 
 	return type;

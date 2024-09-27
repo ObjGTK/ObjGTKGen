@@ -6,6 +6,9 @@
  */
 
 #import "OGTKClassWriter.h"
+#include "OGTKClass.h"
+#include <ObjFW/OFString.h>
+#include <ObjFW/OFMutableString.h>
 
 @interface OGTKClassWriter ()
 - (OFString *)importForDependency:(OFString *)dependencyGobjType;
@@ -238,15 +241,14 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 
 		// Init GObject and hold result
 		OFMutableString *constructorCall =
-		    [OFMutableString stringWithString:_classDescription.macroCastGObject];
-		[constructorCall appendString:@"("];
-		[constructorCall appendFormat:@"%@(%@)", ctor.cIdentifier,
-		                 [self generateCParameterListString:ctor.parameters
-		                                    throwsException:ctor.throws]];
-		[constructorCall appendString:@")"];
+		    [OFMutableString stringWithFormat:@"%@(%@)", ctor.cIdentifier,
+		                     [self generateCParameterListString:ctor.parameters
+		                                        throwsException:ctor.throws]];
+		OFString *castedConstructorCall =
+		    [_classDescription castGObjectMacro:constructorCall];
 
 		[output appendFormat:@"\t%@* gobjectValue = %@;\n\n", _classDescription.cType,
-		        constructorCall];
+		        castedConstructorCall];
 
 		if (_classDescription.derivedFromInitiallyUnowned) {
 			[output
@@ -302,35 +304,31 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 	if (method.throws)
 		[output appendString:PrepareErrorHandling];
 
-	OFString *castMacroBegin = @"";
-	OFString *castMacroEnd = @"";
-	if ([_mapper isGobjType:method.cReturnType]) {
-		OGTKClass *returnTypeDescriptor = [_mapper classInfoByGobjType:method.cReturnType];
-		castMacroBegin =
-		    [OFString stringWithFormat:@"%@(", returnTypeDescriptor.macroCastGObject];
-		castMacroEnd = @")";
-	}
+	OGTKClass *returnTypeDescriptor = nil;
 
-	OFString *cClassFuncSig = [OFString
-	    stringWithFormat:@"%@%@(%@)%@;\n", castMacroBegin, method.cIdentifier,
-	    [self generateCParameterListString:method.parameters throwsException:method.throws],
-	    castMacroEnd];
+	if ([_mapper isGobjType:method.cReturnType])
+		returnTypeDescriptor = [_mapper classInfoByGobjType:method.cReturnType];
+
+	OFString *cClassFuncSig = [OFString stringWithFormat:@"%@(%@)", method.cIdentifier,
+	                                    [self generateCParameterListString:method.parameters
+	                                                       throwsException:method.throws]];
 
 	OFString *cInstanceFuncSig =
-	    [OFString stringWithFormat:@"%@%@(%@)%@;\n", castMacroBegin, method.cIdentifier,
+	    [OFString stringWithFormat:@"%@(%@)", method.cIdentifier,
 	              [self generateCParameterListWithInstanceString:_classDescription.type
 	                                                   andParams:method.parameters
-	                                             throwsException:method.throws],
-	              castMacroEnd];
+	                                             throwsException:method.throws]];
 
 	// No return type/GObject/ObjC object
 	if (method.returnsVoid) {
 		if (isClassMethod) {
 			[output appendString:@"\t"];
 			[output appendString:cClassFuncSig];
+			[output appendString:@";\n"];
 		} else {
 			[output appendString:@"\t"];
 			[output appendString:cInstanceFuncSig];
+			[output appendString:@";\n"];
 		}
 
 		if (method.throws) {
@@ -349,12 +347,20 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 			[output appendFormat:@"\t%@ gobjectValue = ", method.cReturnType];
 
 			if (isClassMethod) {
-				[output appendString:cClassFuncSig];
+				if(returnTypeDescriptor != nil)
+					[output appendString:[returnTypeDescriptor castGObjectMacro:cClassFuncSig]];
+				else
+					[output appendString:cClassFuncSig];
 			} else {
-				[output appendString:cInstanceFuncSig];
+				if(returnTypeDescriptor != nil)
+					[output
+					    appendString:[returnTypeDescriptor
+					                     castGObjectMacro:cInstanceFuncSig]];
+				else
+					[output appendString:cInstanceFuncSig];
 			}
 
-			[output appendString:@"\n"];
+			[output appendString:@";\n\n"];
 
 			// Generated source: Process error handling of the API call
 			if (method.throws) {
@@ -402,7 +408,7 @@ static OFString *const InitCatch = @"\t} @catch (id e) {\n"
 				[output appendString:cInstanceFuncSig];
 			}
 
-			[output appendString:@"\n"];
+			[output appendString:@";\n\n"];
 
 			if (method.throws) {
 				OFString *varName = nil;
