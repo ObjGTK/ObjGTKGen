@@ -6,9 +6,6 @@
  */
 
 #import "OGTKClassWriter.h"
-#include "OGTKClass.h"
-#include <ObjFW/OFString.h>
-#include <ObjFW/OFMutableString.h>
 
 @interface OGTKClassWriter ()
 - (OFString *)importForDependency:(OFString *)dependencyGobjType;

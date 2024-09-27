@@ -6,7 +6,6 @@
  */
 
 #import "OGTKClass.h"
-#include <ObjFW/OFString.h>
 #import "../Exceptions/OGTKReceivedNilExpectedStringException.h"
 
 @implementation OGTKClass
